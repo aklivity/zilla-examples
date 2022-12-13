@@ -20,9 +20,9 @@ services:
       - "8080:8080"
       - "9090:9090"
 
-  http2:
+  nginx:
     image: "nginx:latest"
-    hostname: "http2.internal.net"
+    hostname: "nginx.internal.net"
     tty: true
     volumes:
       - ./server/cert.pem:/ssl/cert.pem:ro

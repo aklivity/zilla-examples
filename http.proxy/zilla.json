@@ -99,8 +99,8 @@
             "options":
             {
                 "trustcacerts": true,
-                "trust": ["http2.internal.net"],
-                "sni": ["http2.internal.net"],
+                "trust": ["nginx.internal.net"],
+                "sni": ["nginx.internal.net"],
                 "alpn": [ "h2" ]
             },
             "exit": "tcp_client0"
@@ -111,7 +111,7 @@
             "kind": "client",
             "options":
             {
-                "host": "http2.internal.net",
+                "host": "nginx.internal.net",
                 "port": 443
             }
         }

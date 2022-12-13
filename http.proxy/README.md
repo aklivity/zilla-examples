@@ -1,4 +1,4 @@
-# sse.proxy.jwt
+# http.proxy
 Listens on https port `9090` and will response back whatever is hosted in `nginx` on that path.
 
 ### Requirements

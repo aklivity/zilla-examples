@@ -23,7 +23,7 @@ Creating service example_zilla
 ### Verify behavior
 
 ```bash
-nghttp -ans https://localhost:9090/demo.html                                                                                                                                          ──(Tue,Dec13)─┘
+nghttp -ansy https://localhost:9090/demo.html
 ***** Statistics *****
 
 Request timing:

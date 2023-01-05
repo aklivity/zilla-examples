@@ -9,7 +9,7 @@
             {
                 "keys":
                 {
-                    "store": "localhost.p12",
+                    "store": "/etc/zilla/ssl/localhost.p12",
                     "type": "pkcs12",
                     "password": "generated"
                 }
@@ -175,7 +175,7 @@
             "kind": "server",
             "options":
             {
-                "location": "web/"
+                "location": "/var/www/"
             }
         },
         "sse_server0":

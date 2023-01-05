@@ -9,7 +9,7 @@
             {
                 "trust":
                 {
-                    "store": "truststore.p12",
+                    "store": "/etc/zilla/ssl/truststore.p12",
                     "type": "pkcs12",
                     "password": "generated"
                 }
@@ -22,7 +22,7 @@
             {
                 "keys":
                 {
-                    "store": "localhost.p12",
+                    "store": "/etc/zilla/ssl/localhost.p12",
                     "type": "pkcs12",
                     "password": "generated"
                 }

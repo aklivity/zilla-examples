@@ -9,10 +9,32 @@
             {
                 "keys":
                 {
-                    "store": "/etc/zilla/ssl/localhost.p12",
+                    "store": "tls/localhost.p12",
                     "type": "pkcs12",
                     "password": "generated"
                 }
+            }
+        }
+    },
+    "guards":
+    {
+        "jwt0":
+        {
+            "type": "jwt",
+            "options":
+            {
+                "issuer": "https://auth.example.com",
+                "audience": "https://api.example.com",
+                "keys":
+                [
+                    {
+                        "kty":"RSA",
+                        "n": "qqEu50hX+43Bx4W1UYWnAVKwFm+vDbP0kuIOSLVNa+HKQdHTf+3Sei5UCnkskn796izA29D0DdCy3ET9oaKRHIJyKbqFl0rv6f516QzOoXKC6N01sXBHBE/ovs0wwDvlaW+gFGPgkzdcfUlyrWLDnLV7LcuQymhTND2uH0oR3wJnNENN/OFgM1KGPPDOe19YsIKdLqARgxrhZVsh06OurEviZTXOBFI5r+yac7haDwOQhLHXNv+Y9MNvxs5QLWPFIM3bNUWfYrJnLrs4hGJS+y/KDM9Si+HL30QAFXy4YNO33J8DHjZ7ddG5n8/FqplOKvRtUgjcKWlxoGY4VdVaDQ==",
+                        "e":"AQAB",
+                        "alg":"RS256",
+                        "kid":"example"
+                    }
+                ]
             }
         }
     },
@@ -25,9 +47,9 @@
             "options":
             {
                 "host": "0.0.0.0",
-                "port": 9090
+                "port": 8080
             },
-            "exit": "tls_server0"
+            "exit": "http_server0"
         },
         "tcp_server1":
         {
@@ -36,9 +58,9 @@
             "options":
             {
                 "host": "0.0.0.0",
-                "port": 8080
+                "port": 9090
             },
-            "exit": "http_server0"
+            "exit": "tls_server0"
         },
         "tls_server0":
         {
@@ -57,9 +79,29 @@
         {
             "type" : "http",
             "kind": "server",
+            "options":
+            {
+                "authorization":
+                {
+                    "jwt0":
+                    {
+                        "credentials":
+                        {
+                            "headers":
+                            {
+                                "authorization": "Bearer {credentials}"
+                            }
+                        }
+                    }
+                }
+            },
             "routes":
             [
                 {
+                    "guarded":
+                    {
+                        "jwt0": [ "echo:stream" ]
+                    },
                     "when":
                     [
                         {
@@ -77,70 +119,14 @@
                             }
                         }
                     ],
-                    "exit": "http_kafka_proxy0"
+                    "exit": "echo_server0"
                 }
             ]
         },
-        "http_kafka_proxy0":
+        "echo_server0":
         {
-            "type" : "http-kafka",
-            "kind": "proxy",
-            "routes":
-            [
-                {
-                    "when":
-                    [
-                        {
-                            "path": "/events"
-                        }
-                    ],
-                    "exit": "kafka_cache_client0",
-                    "with":
-                    {
-                        "capability": "produce",
-                        "topic": "events"
-                    }
-                }
-            ]
-        },
-        "kafka_cache_client0":
-        {
-            "type" : "kafka",
-            "kind": "cache_client",
-            "exit": "kafka_cache_server0"
-        },
-        "kafka_cache_server0":
-        {
-            "type" : "kafka",
-            "kind": "cache_server",
-            "exit": "kafka_client0"
-        },
-        "kafka_client0":
-        {
-            "type" : "kafka",
-            "kind": "client",
-            "exit": "tcp_client0"
-        },
-        "tcp_client0":
-        {
-            "type" : "tcp",
-            "kind": "client",
-            "options":
-            {
-                "host": "kafka.internal.net",
-                "port": 29092
-            },
-            "routes":
-            [
-                {
-                    "when":
-                    [
-                        {
-                            "cidr": "0.0.0.0/0"
-                        }
-                    ]
-                }
-            ]
+            "type" : "echo",
+            "kind": "server"
         }
     }
 }

@@ -9,7 +9,7 @@
             {
                 "keys":
                 {
-                    "store": "/etc/zilla/ssl/localhost.p12",
+                    "store": "tls/localhost.p12",
                     "type": "pkcs12",
                     "password": "generated"
                 }
@@ -25,9 +25,9 @@
             "options":
             {
                 "host": "0.0.0.0",
-                "port": 8080
+                "port": 9090
             },
-            "exit": "http_server0"
+            "exit": "tls_server0"
         },
         "tcp_server1":
         {
@@ -36,9 +36,9 @@
             "options":
             {
                 "host": "0.0.0.0",
-                "port": 9090
+                "port": 8080
             },
-            "exit": "tls_server0"
+            "exit": "http_server0"
         },
         "tls_server0":
         {
@@ -48,7 +48,8 @@
             "options":
             {
                 "keys": [ "localhost" ],
-                "sni": [ "localhost" ]
+                "sni": [ "localhost" ],
+                "alpn": [ "http/1.1", "h2" ]
             },
             "exit": "http_server0"
         },
@@ -76,32 +77,79 @@
                             }
                         }
                     ],
-                    "exit": "ws_server0"
+                    "exit": "http_kafka_proxy0"
                 }
             ]
         },
-        "ws_server0":
+        "http_kafka_proxy0":
         {
-            "type" : "ws",
-            "kind": "server",
+            "type" : "http-kafka",
+            "kind": "proxy",
             "routes":
             [
                 {
                     "when":
                     [
                         {
-                            "protocol": "echo"
+                            "path": "/events"
                         }
                     ],
-                    "exit": "echo_server0"
+                    "exit": "kafka_cache_client0",
+                    "with":
+                    {
+                        "capability": "produce",
+                        "topic": "events"
+                    }
                 }
             ]
         },
-        "echo_server0":
+        "kafka_cache_client0":
         {
-            "type" : "echo",
-            "kind": "server"
+            "type" : "kafka",
+            "kind": "cache_client",
+            "exit": "kafka_cache_server0"
+        },
+        "kafka_cache_server0":
+        {
+            "type" : "kafka",
+            "kind": "cache_server",
+            "exit": "kafka_client0"
+        },
+        "kafka_client0":
+        {
+            "type" : "kafka",
+            "kind": "client",
+            "options":
+            {
+                "sasl":
+                {
+                    "mechanism": "scram-sha-256",
+                    "username": "user",
+                    "password": "bitnami"
+                }
+            },
+            "exit": "tcp_client0"
+        },
+        "tcp_client0":
+        {
+            "type" : "tcp",
+            "kind": "client",
+            "options":
+            {
+                "host": "kafka.internal.net",
+                "port": 29091
+            },
+            "routes":
+            [
+                {
+                    "when":
+                    [
+                        {
+                            "cidr": "0.0.0.0/0"
+                        }
+                    ]
+                }
+            ]
         }
     }
 }
-

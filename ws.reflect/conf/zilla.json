@@ -9,7 +9,7 @@
             {
                 "keys":
                 {
-                    "store": "/etc/zilla/ssl/localhost.p12",
+                    "store": "tls/localhost.p12",
                     "type": "pkcs12",
                     "password": "generated"
                 }
@@ -48,8 +48,7 @@
             "options":
             {
                 "keys": [ "localhost" ],
-                "sni": [ "localhost" ],
-                "alpn": [ "http/1.1", "h2" ]
+                "sni": [ "localhost" ]
             },
             "exit": "http_server0"
         },
@@ -77,9 +76,32 @@
                             }
                         }
                     ],
-                    "exit": "echo_server0"
+                    "exit": "ws_server0"
                 }
             ]
+        },
+        "ws_server0":
+        {
+            "type" : "ws",
+            "kind": "server",
+            "routes":
+            [
+                {
+                    "when":
+                    [
+                        {
+                            "protocol": "echo"
+                        }
+                    ],
+                    "exit": "fan_server0"
+                }
+            ]
+        },
+        "fan_server0":
+        {
+            "type" : "fan",
+            "kind": "server",
+            "exit": "echo_server0"
         },
         "echo_server0":
         {
@@ -88,3 +110,4 @@
         }
     }
 }
+

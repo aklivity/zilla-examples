@@ -9,7 +9,7 @@
             {
                 "keys":
                 {
-                    "store": "/etc/zilla/ssl/localhost.p12",
+                    "store": "tls/localhost.p12",
                     "type": "pkcs12",
                     "password": "generated"
                 }
@@ -77,13 +77,13 @@
                             }
                         }
                     ],
-                    "exit": "http_filesystem_proxy0"
+                    "exit": "http_kafka_proxy0"
                 }
             ]
         },
-        "http_filesystem_proxy0":
+        "http_kafka_proxy0":
         {
-            "type" : "http-filesystem",
+            "type" : "http-kafka",
             "kind": "proxy",
             "routes":
             [
@@ -91,25 +91,73 @@
                     "when":
                     [
                         {
-                            "path": "/{path}"
+                            "method": "GET",
+                            "path": "/items/{id};{correlationId}"
+                        },
+                        {
+                            "path": "/items/{id}"
                         }
                     ],
-                    "exit": "filesystem_server0",
+                    "exit": "kafka_cache_client0",
                     "with":
                     {
-                        "path": "${params.path}"
+                        "capability": "produce",
+                        "topic": "items-requests",
+                        "key": "${params.id}",
+                        "reply-to": "items-responses",
+                        "async":
+                        {
+                            "location": "/items/${params.id};${correlationId}"
+                        }
                     }
                 }
             ]
         },
-        "filesystem_server0":
+        "kafka_cache_client0":
         {
-            "type" : "filesystem",
-            "kind": "server",
+            "type" : "kafka",
+            "kind": "cache_client",
+            "exit": "kafka_cache_server0"
+        },
+        "kafka_cache_server0":
+        {
+            "type" : "kafka",
+            "kind": "cache_server",
             "options":
             {
-                "location": "/var/www/"
-            }
+                "bootstrap":
+                [
+                    "items-responses"
+                ]
+            },
+            "exit": "kafka_client0"
+        },
+        "kafka_client0":
+        {
+            "type" : "kafka",
+            "kind": "client",
+            "exit": "tcp_client0"
+        },
+        "tcp_client0":
+        {
+            "type" : "tcp",
+            "kind": "client",
+            "options":
+            {
+                "host": "kafka.internal.net",
+                "port": 29092
+            },
+            "routes":
+            [
+                {
+                    "when":
+                    [
+                        {
+                            "cidr": "0.0.0.0/0"
+                        }
+                    ]
+                }
+            ]
         }
     }
 }

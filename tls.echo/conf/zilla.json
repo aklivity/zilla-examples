@@ -9,7 +9,7 @@
             {
                 "keys":
                 {
-                    "store": "/etc/zilla/ssl/localhost.p12",
+                    "store": "tls/localhost.p12",
                     "type": "pkcs12",
                     "password": "generated"
                 }
@@ -25,18 +25,7 @@
             "options":
             {
                 "host": "0.0.0.0",
-                "port": 5672
-            },
-            "exit": "amqp_server0"
-        },
-        "tcp_server1":
-        {
-            "type" : "tcp",
-            "kind": "server",
-            "options":
-            {
-                "host": "0.0.0.0",
-                "port": 5671
+                "port": 23456
             },
             "exit": "tls_server0"
         },
@@ -48,32 +37,21 @@
             "options":
             {
                 "keys": [ "localhost" ],
-                "sni": [ "localhost" ]
+                "sni": [ "localhost" ],
+                "alpn": [ "echo" ]
             },
-            "exit": "amqp_server0"
-        },
-        "amqp_server0":
-        {
-            "type" : "amqp",
-            "kind": "server",
             "routes":
             [
                 {
                     "when":
                     [
                         {
-                            "address": "zilla"
+                            "alpn": "echo"
                         }
                     ],
-                    "exit": "fan_server0"
-                }   
+                    "exit": "echo_server0"
+                }
             ]
-        },
-        "fan_server0":
-        {
-            "type" : "fan",
-            "kind": "server",
-            "exit": "echo_server0"
         },
         "echo_server0":
         {
@@ -82,3 +60,4 @@
         }
     }
 }
+

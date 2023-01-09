@@ -9,7 +9,7 @@ services:
   zilla:
     image: "ghcr.io/aklivity/zilla:latest"
     hostname: "zilla"
-    command: [ "start", "-v", "-e", "-c", "file:/etc/zilla/zilla.json" ]
+    command: [ "start", "-v", "-e" ]
     volumes:
       - ./zilla.json:/etc/zilla/zilla.json:ro
     networks:

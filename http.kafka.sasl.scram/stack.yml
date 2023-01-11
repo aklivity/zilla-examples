@@ -7,7 +7,7 @@ networks:
 services:
 
   zilla:
-    image: "ghcr.io/aklivity/zilla:latest"
+    image: "ghcr.io/aklivity/zilla:develop-SNAPSHOT"
     hostname: "zilla"
     command: [ "start", "-v", "-e" ]
     volumes:
@@ -15,6 +15,10 @@ services:
       - ./localhost.p12:/localhost.p12:ro
     networks:
       - net0
+    environment:
+      - SASL_USERNAME=user
+      - SASL_PASSWORD=bitnami
+      - KEYSTORE_PWD=generated
     ports:
       - "8080:8080"
       - "9090:9090"

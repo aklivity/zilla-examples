@@ -18,7 +18,7 @@ services:
     environment:
       - SASL_USERNAME=user
       - SASL_PASSWORD=bitnami
-      - KEYSTORE_PWD=generated
+      - KEYSTORE_PASSWORD=generated
     ports:
       - "8080:8080"
       - "9090:9090"

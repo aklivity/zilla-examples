@@ -9,7 +9,7 @@
             {
                 "keys":
                 {
-                    "store": "localhost.p12",
+                    "store": "tls/localhost.p12",
                     "type": "pkcs12",
                     "password": "${{env.KEYSTORE_PASSWORD}}"
                 }
@@ -91,16 +91,14 @@
                     "when":
                     [
                         {
-                            "path": "/items/{id}"
+                            "path": "/events"
                         }
                     ],
                     "exit": "kafka_cache_client0",
                     "with":
                     {
                         "capability": "produce",
-                        "topic": "items-requests",
-                        "key": "${params.id}",
-                        "reply-to": "items-responses"
+                        "topic": "events"
                     }
                 }
             ]
@@ -115,13 +113,6 @@
         {
             "type" : "kafka",
             "kind": "cache_server",
-            "options":
-            {
-                "bootstrap":
-                [
-                    "items-responses"
-                ]
-            },
             "exit": "kafka_client0"
         },
         "kafka_client0":

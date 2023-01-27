@@ -104,7 +104,7 @@ HTTP/2 204
 
 `DELETE` request to delete specific item.
 ```bash
-curl -k -v -X PUT https://localhost:9090/items/1
+curl -k -v -X DELETE https://localhost:9090/items/1
 ```
 
 ```bash

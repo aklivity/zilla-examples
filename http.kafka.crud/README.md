@@ -7,7 +7,10 @@ This simple http.kafka.crud example illustrates how to configure zilla to expose
 
 ### Start kafka broker and zilla engine
 ```bash
-$ docker stack deploy -c stack.yml example --resolve-image never
+docker stack deploy -c stack.yml example --resolve-image never
+```
+
+```bash
 Creating network example_net0
 Creating service example_zilla
 Creating service example_kafka
@@ -17,7 +20,7 @@ Creating service example_kafka
 When `example_kafka` service has finished starting up, execute the following commands to create the topic if it does not already exist:
 
 ```bash
-$ docker exec -it $(docker ps -q -f name=example_kafka) \
+docker exec -it $(docker ps -q -f name=example_kafka) \
     /opt/bitnami/kafka/bin/kafka-topics.sh \
         --bootstrap-server localhost:9092 \
         --create \
@@ -48,7 +51,7 @@ Note the `cleanup.policy=compact` topic configuration.
 Note: You can remove `-H 'Idempotency-Key: 1'` to generate random key.
 
 ```bash
-$ curl -k -v -X POST https://localhost:9090/items -H 'Idempotency-Key: 1'  -H 'Content-Type: application/json' -d '{"greeting":"Hello, world1"}'
+curl -k -v -X POST https://localhost:9090/items -H 'Idempotency-Key: 1'  -H 'Content-Type: application/json' -d '{"greeting":"Hello, world1"}'
 ```
 
 ```bash
@@ -67,7 +70,7 @@ HTTP/2 204
 
 `GET` request to fetch specific item. 
 ```bash
-$ curl -k -v  https://localhost:9090/items/1
+curl -k -v  https://localhost:9090/items/1
 ```
 
 ```bash
@@ -83,7 +86,7 @@ $ curl -k -v  https://localhost:9090/items/1
 
 `PUT` request to update specific item.
 ```bash
-$ curl -k -v -X PUT https://localhost:9090/items/1 -H 'Content-Type: application/json' -d '{"greeting":"Hello, world2"}'
+curl -k -v -X PUT https://localhost:9090/items/1 -H 'Content-Type: application/json' -d '{"greeting":"Hello, world2"}'
 ```
 
 ```bash
@@ -101,7 +104,7 @@ HTTP/2 204
 
 `DELETE` request to delete specific item.
 ```bash
-$ curl -k -v -X PUT https://localhost:9090/items/1
+curl -k -v -X PUT https://localhost:9090/items/1
 ```
 
 ```bash
@@ -127,7 +130,7 @@ $ docker exec -it $(docker ps -q -f name=example_kafka) \
 
 ### Stop Kafka broker and Zilla engine
 ```bash
-$ docker stack rm example
+docker stack rm example
 ```
 
 ```bash

@@ -48,7 +48,7 @@ Note the `cleanup.policy=compact` topic configuration.
 Note: You can remove `-H 'Idempotency-Key: 1'` to generate random key.
 
 ```bash
-$ curl -k -X POST https://localhost:9090/items -H 'Idempotency-Key: 1'  -H 'Content-Type: application/json' -d '{"greeting":"Hello, world1"}'
+$ curl -k -v -X POST https://localhost:9090/items -H 'Idempotency-Key: 1'  -H 'Content-Type: application/json' -d '{"greeting":"Hello, world1"}'
 ```
 
 ```bash

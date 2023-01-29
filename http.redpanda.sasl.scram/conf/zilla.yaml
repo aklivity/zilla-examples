@@ -7,7 +7,7 @@ vaults:
       keys:
         store: tls/localhost.p12
         type: pkcs12
-        password: "${{env.KEYSTORE_PASSWORD}}"
+        password: ${{env.KEYSTORE_PASSWORD}}
 bindings:
   tcp_server0:
     type: tcp
@@ -72,8 +72,8 @@ bindings:
     options:
       sasl:
         mechanism: scram-sha-256
-        username: "${{env.SASL_USERNAME}}"
-        password: "${{env.SASL_PASSWORD}}"
+        username: ${{env.SASL_USERNAME}}
+        password: ${{env.SASL_PASSWORD}}
     exit: tcp_client0
   tcp_client0:
     type: tcp

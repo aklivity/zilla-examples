@@ -7,7 +7,7 @@ vaults:
       trust:
         store: tls/truststore.p12
         type: pkcs12
-        password: "${{env.KEYSTORE_PASSWORD}}"
+        password: ${{env.KEYSTORE_PASSWORD}}
   server:
     type: filesystem
     options:

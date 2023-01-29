@@ -7,7 +7,7 @@ vaults:
       keys:
         store: tls/localhost.p12
         type: pkcs12
-        password: "${{env.KEYSTORE_PASSWORD}}"
+        password: ${{env.KEYSTORE_PASSWORD}}
 bindings:
   tcp_server0:
     type: tcp

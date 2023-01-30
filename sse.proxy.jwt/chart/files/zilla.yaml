@@ -118,5 +118,5 @@ bindings:
     type: tcp
     kind: client
     options:
-      host: sse.internal.net
+      host: sse-server
       port: 8001

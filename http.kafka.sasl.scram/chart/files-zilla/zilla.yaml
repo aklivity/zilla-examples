@@ -79,7 +79,7 @@ bindings:
     type: tcp
     kind: client
     options:
-      host: kafka.internal.net
+      host: kafka
       port: 29091
     routes:
       - when:

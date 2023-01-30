@@ -22,15 +22,15 @@ bindings:
     vault: server
     options:
       keys:
-      - localhost
+        - localhost
       sni:
-      - localhost
+        - localhost
       alpn:
-      - echo
+        - echo
     routes:
-    - when:
-      - alpn: echo
-      exit: fan_server0
+      - when:
+          - alpn: echo
+        exit: fan_server0
   fan_server0:
     type: fan
     kind: server

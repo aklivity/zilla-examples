@@ -25,10 +25,18 @@ spec:
           env:
             - name: KEYSTORE_PASSWORD
               value: generated
+            - name: JAVA_TOOL_OPTIONS
+              value: '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Djdk.internal.httpclient.debug=true'
           ports:
             - containerPort: 8080
             - containerPort: 8088
+            - containerPort: 5005
             - containerPort: 9090
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 5
           volumeMounts:
             - name: config-http
               mountPath: /etc/zilla
@@ -60,6 +68,8 @@ spec:
       port: 8080
     - name: http-after
       port: 8088
+    - name: debug
+      port: 5005
     - name: https
       port: 9090
   type: ClusterIP

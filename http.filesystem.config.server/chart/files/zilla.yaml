@@ -61,3 +61,4 @@ bindings:
     kind: server
     options:
       location: /var/www/
+      symlinks: follow

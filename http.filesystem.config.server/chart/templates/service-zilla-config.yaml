@@ -22,11 +22,8 @@ spec:
           env:
             - name: KEYSTORE_PASSWORD
               value: generated
-            - name: JAVA_TOOL_OPTIONS
-              value: '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'
           ports:
             - containerPort: 8081
-            - containerPort: 5005
             - containerPort: 9091
           readinessProbe:
             tcpSocket:
@@ -48,7 +45,7 @@ spec:
           projected:
             sources:
             - configMap:
-                name: configmap-served
+                name: zilla-served
             - secret:
                 name: tls-served
                 items:
@@ -72,7 +69,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: configmap-served
+  name: zilla-served
 data:
   zilla.yaml: |-
 {{ .Files.Get "www/zilla.yaml" | indent 4 }}
@@ -107,6 +104,4 @@ spec:
       port: 8081
     - name: https
       port: 9091
-    - name: debug
-      port: 5005
   type: ClusterIP

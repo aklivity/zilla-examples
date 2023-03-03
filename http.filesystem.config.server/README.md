@@ -118,18 +118,25 @@ The Zilla HTTP echo server currently echoes only for the /echo HTTP path. Let's 
 $ ./change_config.sh
 + kubectl --namespace zilla-config-server create configmap configmap-served --from-file zilla.yaml -o yaml --dry-run=client
 + kubectl apply -f -
++ curl -s -f -d 'Hello, World' -H 'Content-Type: text/plain' -X POST -v http://localhost:8080/echo_changed
 + sleep 10
++ curl -s -f -d 'Hello, World' -H 'Content-Type: text/plain' -X POST -v http://localhost:8080/echo_changed
 + sleep 10
++ curl -s -f -d 'Hello, World' -H 'Content-Type: text/plain' -X POST -v http://localhost:8080/echo_changed
 + sleep 10
++ curl -s -f -d 'Hello, World' -H 'Content-Type: text/plain' -X POST -v http://localhost:8080/echo_changed
 + sleep 10
++ curl -s -f -d 'Hello, World' -H 'Content-Type: text/plain' -X POST -v http://localhost:8080/echo_changed
 + sleep 10
++ curl -s -f -d 'Hello, World' -H 'Content-Type: text/plain' -X POST -v http://localhost:8080/echo_changed
 + sleep 10
++ curl -s -f -d 'Hello, World' -H 'Content-Type: text/plain' -X POST -v http://localhost:8080/echo_changed
 ```
 Note: Kubernetes will not apply the changed configmap immediately, only after ~60 seconds.
 
 ### Verify behavior of the reconfigured Zilla HTTP echo server
 
-### Verify the `/echo` path is not echoing anymore
+### Verify the `/echo` path is no longer working
 ```bash
 $ curl -d "Hello, world" -H "Content-Type: text/plain" -X "POST" http://localhost:8080/echo
 

@@ -20,8 +20,7 @@ spec:
           command: [ '/bin/sh', '-c', 'until nc -w 2 zilla-config 8081; do echo . && sleep 5; done' ]
       containers:
         - name: zilla-http
-          # TODO: change to latest when it gets merged
-          image: "ghcr.io/aklivity/zilla:develop-SNAPSHOT"
+          image: "ghcr.io/aklivity/zilla:latest"
           args: ["start", "-v", "-e", "-p", "/etc/zilla/zilla.properties"]
           env:
             - name: KEYSTORE_PASSWORD

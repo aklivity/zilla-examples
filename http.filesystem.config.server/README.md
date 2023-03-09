@@ -27,11 +27,17 @@ The `setup.sh` script:
 $ ./setup.sh
 + helm install zilla-config-server chart --namespace zilla-config-server --create-namespace --wait
 NAME: zilla-config-server
-LAST DEPLOYED: Thu Mar  2 16:26:49 2023
+LAST DEPLOYED: Thu Mar  9 13:35:48 2023
 NAMESPACE: zilla-config-server
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
+++ kubectl get pods --namespace zilla-config-server --selector app.kubernetes.io/instance=zilla-config -o json
+++ jq -r '.items[0].metadata.name'
++ ZILLA_POD=zilla-config-5bb9d6cc4c-9b7nv
++ kubectl cp --namespace zilla-config-server www zilla-config-5bb9d6cc4c-9b7nv:/var/
++ kubectl run busybox-pod --image=busybox:1.28 --namespace zilla-config-server --rm --restart=Never -i -t -- /bin/sh -c 'until nc -w 2 zilla-http 8080; do echo . && sleep 5; done'
++ kubectl wait --namespace zilla-config-server --for=delete pod/busybox-pod
 + kubectl port-forward --namespace zilla-config-server service/zilla-config 8081 9091
 + nc -z localhost 8081
 + kubectl port-forward --namespace zilla-config-server service/zilla-http 8080 9090
@@ -116,23 +122,16 @@ The Zilla HTTP echo server currently echoes only for the /echo HTTP path. Let's 
 
 ```bash
 $ ./change_config.sh
-+ kubectl --namespace zilla-config-server create configmap configmap-served --from-file zilla.yaml -o yaml --dry-run=client
-+ kubectl apply -f -
+++ kubectl get pods --namespace zilla-config-server --selector app.kubernetes.io/instance=zilla-config -o json
+++ jq -r '.items[0].metadata.name'
++ ZILLA_POD=zilla-config-5bb9d6cc4c-9b7nv
++ kubectl cp --namespace zilla-config-server zilla.yaml zilla-config-5bb9d6cc4c-9b7nv:/var/www/zilla.yaml
 + curl -s -f -d 'Hello, World' -H 'Content-Type: text/plain' -X POST -v http://localhost:8080/echo_changed
-+ sleep 10
++ sleep 1
 + curl -s -f -d 'Hello, World' -H 'Content-Type: text/plain' -X POST -v http://localhost:8080/echo_changed
-+ sleep 10
-+ curl -s -f -d 'Hello, World' -H 'Content-Type: text/plain' -X POST -v http://localhost:8080/echo_changed
-+ sleep 10
-+ curl -s -f -d 'Hello, World' -H 'Content-Type: text/plain' -X POST -v http://localhost:8080/echo_changed
-+ sleep 10
-+ curl -s -f -d 'Hello, World' -H 'Content-Type: text/plain' -X POST -v http://localhost:8080/echo_changed
-+ sleep 10
-+ curl -s -f -d 'Hello, World' -H 'Content-Type: text/plain' -X POST -v http://localhost:8080/echo_changed
-+ sleep 10
++ sleep 1
 + curl -s -f -d 'Hello, World' -H 'Content-Type: text/plain' -X POST -v http://localhost:8080/echo_changed
 ```
-Note: Kubernetes will not apply the changed configmap immediately, only after ~60 seconds.
 
 ### Verify behavior of the reconfigured Zilla HTTP echo server
 

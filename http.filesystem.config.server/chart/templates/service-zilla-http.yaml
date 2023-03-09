@@ -29,11 +29,6 @@ spec:
           ports:
             - containerPort: 8080
             - containerPort: 9090
-          readinessProbe:
-            tcpSocket:
-              port: 8080
-            initialDelaySeconds: 3
-            periodSeconds: 5
           volumeMounts:
             - name: config-http
               mountPath: /etc/zilla

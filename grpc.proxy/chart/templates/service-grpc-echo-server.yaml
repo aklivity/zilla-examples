@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpc-echo-server
+  labels:
+    app.kubernetes.io/instance: grpc-echo-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: grpc-echo-server
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: grpc-echo-server
+    spec:
+      containers:
+        - name: grpc-echo-server
+          image: "zilla-examples/grpc-echo-server:latest"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9090
+          readinessProbe:
+            tcpSocket:
+              port: 9090
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          tty: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpc-echo-server
+spec:
+  selector:
+    app.kubernetes.io/instance: grpc-echo-server
+  ports:
+    - name: grpc-echo
+      port: 8001
+  type: ClusterIP

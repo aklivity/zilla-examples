@@ -31,10 +31,10 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /etc/zilla
-            - name: proto
-              mountPath: /etc/zilla/proto
             - name: tls
               mountPath: /etc/zilla/tls
+            - name: proto
+              mountPath: /etc/zilla/proto
       volumes:
         - name: proto
           configMap:

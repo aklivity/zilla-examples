@@ -15,7 +15,7 @@
 
 syntax = "proto3";
 
-package com.example;
+package example;
 
 option java_multiple_files = true;
 option java_outer_classname = "EchoProto";
@@ -35,4 +35,3 @@ message EchoMessage
 {
   string message = 1;
 }
-

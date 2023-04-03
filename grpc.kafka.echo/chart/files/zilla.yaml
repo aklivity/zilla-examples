@@ -1,4 +1,3 @@
----
 name: example
 vaults:
   server:
@@ -39,8 +38,8 @@ bindings:
     routes:
       - when:
           - headers:
-              :scheme: https
-              :authority: localhost:9090
+              ':scheme': https
+              ':authority': 'localhost:9090'
         exit: grpc_server0
   grpc_server0:
     type: grpc
@@ -50,20 +49,37 @@ bindings:
         - proto/echo.proto
     routes:
       - when:
-          - method: example.EchoService/EchoUnary
-        exit: echo_server0
+          - method: example.EchoService/*
+        exit: grpc_kafka0
+  grpc_kafka0:
+    type: grpc_kafka
+    kind: proxy
+    routes:
       - when:
-          - method: example.EchoService/EchoClientStream
-        exit: echo_server0
+          - service: example.EchoService
+        exit: kafka_cache_client0
+        with:
+          topic: echo-commands
+          acks: leader_only
+          reply-to: echo-commands
+  kafka_cache_client0:
+    type: kafka
+    kind: cache_client
+    exit: kafka_cache_server0
+  kafka_cache_server0:
+    type: kafka
+    kind: cache_server
+    exit: kafka_client0
+  kafka_client0:
+    type: kafka
+    kind: client
+    exit: tcp_client0
+  tcp_client0:
+    type: tcp
+    kind: client
+    options:
+      host: kafka
+      port: 29092
+    routes:
       - when:
-          - method: example.EchoService/EchoClientStream
-        exit: echo_server0
-      - when:
-          - method: example.EchoService/EchoServerStream
-        exit: echo_server0
-      - when:
-          - method: example.EchoService/EchoStream
-        exit: echo_server0
-  echo_server0:
-    type: echo
-    kind: server
+          - cidr: 0.0.0.0/0

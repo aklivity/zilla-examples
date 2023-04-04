@@ -50,13 +50,7 @@ bindings:
         - proto/echo.proto
     routes:
       - when:
-          - method: example.EchoService/EchoUnary
-        exit: echo_server0
-      - when:
-          - method: example.EchoService/EchoClientStream
-        exit: echo_server0
-      - when:
-          - method: example.EchoService/EchoStream
+          - method: example.EchoService/*
         exit: echo_server0
   echo_server0:
     type: echo

@@ -19,7 +19,7 @@ The `setup.sh` script:
 ```bash
 $ ./setup.sh
 + helm install zilla-./setup.sh
-echo chart --namespace zilla-+ helm install zilla-grpc-kafka chart --namespace zilla-grpc-kafka --create-namespace --wait-echo --create-namespace --wait
+echo chart --namespace zilla-grpc-kafka-echo helm install zilla-grpc-kafka-echo chart --namespace zilla-grpc-kafka-echo --create-namespace --wait-echo --create-namespace --wait
 NAME: zilla-NAME: zilla-grpc-kafka-echo
 LAST DEPLOYED: Mon Apr  3 14:18:19 2023
 NAMESPACE: zilla-LAST DEPLOYED: Mon Apr  3 14:18:19 2023-echo
@@ -43,6 +43,10 @@ Connection to localhost port 9092 [tcp/XmlIpcRegSvc] succeeded!
 
 ```bash
 grpcurl -insecure -proto chart/files/proto/echo.proto -H "idempotency-key: $( uuidgen )"  -d '{"message":"Hello World"}' localhost:9090 example.EchoService.EchoUnary
+```
+
+```bash
+grpcurl -insecure -proto chart/files/proto/echo.proto -H "idempotency-key: $( uuidgen )"  -d @ localhost:9090 example.EchoService.EchoBidiStream
 ```
 
 ### Teardown

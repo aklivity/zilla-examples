@@ -10,7 +10,7 @@ kubectl exec --namespace zilla-grpc-kafka-echo "$KAFKA_POD" -- \
     /opt/bitnami/kafka/bin/kafka-topics.sh \
         --bootstrap-server localhost:9092 \
         --create \
-        --topic echo-commands \
+        --topic echo-messages \
         --if-not-exists
 
 # Start port forwarding

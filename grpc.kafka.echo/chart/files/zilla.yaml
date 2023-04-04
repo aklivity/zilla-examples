@@ -59,9 +59,9 @@ bindings:
           - service: example.EchoService
         exit: kafka_cache_client0
         with:
-          topic: echo-commands
+          topic: echo-messages
           acks: leader_only
-          reply-to: echo-commands
+          reply-to: echo-messages
   kafka_cache_client0:
     type: kafka
     kind: cache_client

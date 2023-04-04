@@ -17,10 +17,10 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ helm install zilla-tcp-echo chart --namespace zilla-grpc-echo --create-namespace --wait
++ helm install zilla-grpc-echo chart --namespace zilla-grpc-echo --create-namespace --wait
 NAME: zilla-grpc-echo
 LAST DEPLOYED: [...]
-NAMESPACE: zilla-tcp-echo
+NAMESPACE: zilla-grpc-echo
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
@@ -35,6 +35,10 @@ Connection to localhost port 9090 [tcp/italk] succeeded!
 
 ```bash
 grpcurl -insecure -proto chart/files/proto/echo.proto  -d '{"message":"Hello World"}' localhost:9090 example.EchoService.EchoUnary
+```
+
+```bash
+grpcurl -insecure -proto chart/files/proto/echo.proto -d @ localhost:9090 example.EchoService.EchoBidiStream
 ```
 
 ### Teardown

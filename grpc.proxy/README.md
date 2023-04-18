@@ -12,11 +12,7 @@ Listens on https port `9090` and will echo back whatever is published to `grpc_e
 ### Build the grpc-echo docker image
 
 ```bash
-docker build -t zilla-examples/grpc-echo:latest .
-```
-
-```bash
-#Output
+$ docker build -t zilla-examples/grpc-echo:latest .
  => exporting to image
   => => exporting layers
  => => writing image sha256:8ad3819be40334045c01d189000c63a1dfe22b2a97ef376d0c6e56616de132c7 
@@ -30,11 +26,7 @@ The `setup.sh` script:
 - starts port forwarding
 
 ```bash
-./setup.sh
-```
-
-```bash
-#Output
+$ ./setup.sh
 docker image inspect zilla-examples/grpc-echo:latest --format 'Image Found {{.RepoTags}}'
 
 + helm install zilla-grpc-proxy chart --namespace zilla-grpc-proxy --create-namespace --wait --timeout 2m
@@ -70,10 +62,6 @@ The `teardown.sh` script stops port forwarding, uninstalls Zilla and deletes the
 
 ```bash
 $ ./teardown.sh
-```
-
-```bash
-#Output
 + pgrep kubectl
 24494
 24495

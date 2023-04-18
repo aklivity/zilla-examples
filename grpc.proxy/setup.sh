@@ -1,6 +1,9 @@
 #!/bin/bash
 set -ex
 
+# Verify Grpc Echo image already available locally
+docker image inspect zilla-examples/grpc-echo:latest --format 'Image Found {{.RepoTags}}'
+
 # Install Zilla to the Kubernetes cluster with helm and wait for the pod to start up
 helm install zilla-grpc-proxy chart --namespace zilla-grpc-proxy --create-namespace --wait --timeout 2m
 

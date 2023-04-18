@@ -9,6 +9,20 @@ Listens on https port `9090` and will echo back whatever is published to `grpc_e
 - kubectl
 - helm 3.0+
 
+### Build the grpc-echo docker image
+
+```bash
+docker build -t zilla-examples/grpc-echo:latest .
+```
+
+```bash
+#Output
+ => exporting to image
+  => => exporting layers
+ => => writing image sha256:8ad3819be40334045c01d189000c63a1dfe22b2a97ef376d0c6e56616de132c7 
+ => => naming to docker.io/zilla-examples/grpc-echo:latest
+```
+
 ### Setup
 
 The `setup.sh` script:
@@ -20,6 +34,9 @@ The `setup.sh` script:
 ```
 
 ```bash
+#Output
+docker image inspect zilla-examples/grpc-echo:latest --format 'Image Found {{.RepoTags}}'
+
 + helm install zilla-grpc-proxy chart --namespace zilla-grpc-proxy --create-namespace --wait --timeout 2m
 NAME: zilla-grpc-proxy
 LAST DEPLOYED: Tue Apr 18 14:46:24 2023
@@ -56,6 +73,7 @@ $ ./teardown.sh
 ```
 
 ```bash
+#Output
 + pgrep kubectl
 24494
 24495

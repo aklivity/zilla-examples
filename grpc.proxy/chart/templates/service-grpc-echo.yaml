@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: grpc-echo
-          image: "zilla-examples/grpc-echo:develop-SNAPSHOT"
+          image: "zilla-examples/grpc-echo:latest"
           ports:
             - containerPort: 8080
           readinessProbe:
@@ -25,6 +25,7 @@ spec:
             initialDelaySeconds: 3
             periodSeconds: 5
           tty: true
+          imagePullPolicy: Never
 ---
 apiVersion: v1
 kind: Service

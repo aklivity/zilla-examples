@@ -60,9 +60,7 @@ bindings:
         exit: kafka_cache_client0
         with:
           capability: produce
-          topic: echo-messages
-          acks: leader_only
-          reply-to: echo-messages
+          topic: messages
   kafka_cache_client0:
     type: kafka
     kind: cache_client

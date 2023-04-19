@@ -46,20 +46,20 @@ bindings:
     kind: server
     options:
       services:
-        - proto/echo.proto
+        - proto/fanout.proto
     routes:
       - when:
-          - method: example.EchoService/*
+          - method: example.FanoutService/*
         exit: grpc_kafka0
   grpc_kafka0:
     type: grpc-kafka
     kind: proxy
     routes:
       - when:
-          - service: example.EchoService
+          - service: example.FanoutService
         exit: kafka_cache_client0
         with:
-          capability: produce
+          capability: fetch
           topic: messages
   kafka_cache_client0:
     type: kafka

@@ -1,4 +1,4 @@
-# grpc.kafka.echo
+# grpc.kafka.fanout
 
 Listens on https port `9090` and fanout messages from `messages` topic in Kafka.
 
@@ -18,21 +18,20 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ helm install zilla-./setup.sh
-echo chart --namespace zilla-grpc-kafka-echo helm install zilla-grpc-kafka-echo chart --namespace zilla-grpc-kafka-echo --create-namespace --wait-echo --create-namespace --wait
-NAME: zilla-NAME: zilla-grpc-kafka-echo
-LAST DEPLOYED: Mon Apr  3 14:18:19 2023
-NAMESPACE: zilla-LAST DEPLOYED: Mon Apr  3 14:18:19 2023-echo
++ helm install zilla-grpc-kafka-fanout chart --namespace zilla-grpc-kafka-fanout --create-namespace --wait
+NAME: zilla-grpc-kafka-fanout
+LAST DEPLOYED: Wed Apr 19 10:28:50 2023
+NAMESPACE: zilla-grpc-kafka-fanout
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
-++ kubectl get pods --namespace zilla-NAMESPACE: zilla-grpc-kafka-echo --selector app.kubernetes.io/instance=kafka -o name
-+ KAFKA_POD=pod/kafka-969789cc9-sn7jt
-+ kubectl exec --namespace zilla-STATUS: deployed-echo pod/kafka-969789cc9-sn7jt -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic echo-commands --if-not-exists
-Created topic echo-commands.
+++ kubectl get pods --namespace zilla-grpc-kafka-fanout --selector app.kubernetes.io/instance=kafka -o name
++ KAFKA_POD=pod/kafka-969789cc9-mxd98
++ kubectl exec --namespace zilla-grpc-kafka-fanout pod/kafka-969789cc9-mxd98 -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic messages --if-not-exists
+Created topic messages.
++ kubectl port-forward --namespace zilla-grpc-kafka-fanout service/zilla 9090
 + nc -z localhost 9090
-+ kubectl port-forward --namespace zilla-REVISION: 1-echo service/zilla 9090
-+ kubectl port-forward --namespace zilla-TEST SUITE: None-echo service/kafka 9092 29092
++ kubectl port-forward --namespace zilla-grpc-kafka-fanout service/kafka 9092 29092
 + sleep 1
 + nc -z localhost 9090
 Connection to localhost port 9090 [tcp/websm] succeeded!
@@ -42,11 +41,11 @@ Connection to localhost port 9092 [tcp/XmlIpcRegSvc] succeeded!
 ### Verify behavior
 
 ```bash
-grpcurl -insecure -proto chart/files/proto/echo.proto -H "idempotency-key: $( uuidgen )"  -d '{"message":"Hello World"}' localhost:9090 example.EchoService.EchoUnary
+grpcurl -insecure -proto chart/files/proto/fanout.proto -d '' localhost:9090 example.FanoutService.FanoutServerStream
 ```
 
 ```bash
-grpcurl -insecure -proto chart/files/proto/echo.proto -H "idempotency-key: $( uuidgen )"  -d @ localhost:9090 example.EchoService.EchoBidiStream
+echo '\x00' > binary.data | echo 'message: "test"' | protoc --encode=example.FanoutMessage ./chart/files/proto/fanout.proto > binary.data | kcat -P -b localhost:9092 -t messages -e ./binary.data
 ```
 
 ### Teardown
@@ -58,8 +57,8 @@ $ ./teardown.sh
 + pgrep kubectl
 99999
 + killall kubectl
-+ helm uninstall zilla-grpc-kafka-echo --namespace zilla-grpc-kafka-echo
-release "zilla-grpc-kafka-echo" uninstalled
-+ kubectl delete namespace zilla-grpc-echo
-namespace "zilla-grpc-kafka-echo" deleted
++ helm uninstall zilla-grpc-kafka-fanout --namespace zilla-grpc-kafka-fanout
+release "zilla-grpc-kafka-fanout" uninstalled
++ kubectl delete namespace zilla-grpc-fanout
+namespace "zilla-grpc-kafka-fanout" deleted
 ```

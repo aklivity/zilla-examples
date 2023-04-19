@@ -18,20 +18,18 @@ syntax = "proto3";
 package example;
 
 option java_multiple_files = true;
-option java_outer_classname = "EchoProto";
+option java_outer_classname = "FanoutProto";
 
-service EchoService
+service FanoutService
 {
-  rpc EchoUnary(EchoMessage) returns (EchoMessage);
-
-  rpc EchoClientStream(stream EchoMessage) returns (EchoMessage);
-
-  rpc EchoServerStream( EchoMessage) returns (stream EchoMessage);
-
-  rpc EchoBidiStream(stream EchoMessage) returns (stream EchoMessage);
+  rpc FanoutServerStream(EmptyMessage) returns (stream FanoutMessage);
 }
 
-message EchoMessage
+message FanoutMessage
 {
   string message = 1;
+}
+
+message EmptyMessage
+{
 }

@@ -38,15 +38,34 @@ Connection to localhost port 9090 [tcp/websm] succeeded!
 + nc -z localhost 9092
 Connection to localhost port 9092 [tcp/XmlIpcRegSvc] succeeded!
 ```
-### Verify behavior
+### Verify unreliable streaming behavior
 
 ```bash
 grpcurl -insecure -proto chart/files/proto/fanout.proto -d '' localhost:9090 example.FanoutService.FanoutServerStream
 ```
 
 ```bash
-echo '\x00' > binary.data | echo 'message: "test"' | protoc --encode=example.FanoutMessage ./chart/files/proto/fanout.proto > binary.data | kcat -P -b localhost:9092 -t messages -e ./binary.data
+echo 'message: "test"' | protoc --encode=example.FanoutMessage chart/files/proto/fanout.proto > binary.data
+kcat -P -b localhost:9092 -t messages -k -e ./binary.data
 ```
+
+### Verify reliable streaming behavior
+
+```bash
+cd grpc.reliable.streaming/
+./mvnw clean install
+java -jar target/grpc-example-develop-SNAPSHOT-jar-with-dependencies.jar
+```
+
+Once connected and received messages restart zilla container.
+
+```bash
+echo 'message: "test1"' | protoc --encode=example.FanoutMessage chart/files/proto/fanout.proto > binary.data
+kcat -P -b localhost:9092 -t messages -k -e ./binary.data
+```
+
+Now you should receive only one message.
+
 
 ### Teardown
 

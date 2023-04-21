@@ -1,6 +1,6 @@
 # grpc.kafka.echo
 
-Listens on https port `9090` and will exchange grpc message in probuf format through the `echo-commands` topic in Kafka.
+Listens on https port `9090` and will exchange grpc message in probuf format through the `echo-messages` topic in Kafka.
 
 ### Requirements
 
@@ -13,7 +13,7 @@ Listens on https port `9090` and will exchange grpc message in probuf format thr
 
 The `setup.sh` script:
 - installs Zilla and Kafka to the Kubernetes cluster with helm and waits for the pods to start up
-- creates the `echo-commands` topic in Kafka.
+- creates the `echo-messages` topic in Kafka.
 - starts port forwarding
 
 ```bash

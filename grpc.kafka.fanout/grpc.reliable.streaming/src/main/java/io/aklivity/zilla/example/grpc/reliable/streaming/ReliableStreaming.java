@@ -17,8 +17,6 @@ import java.util.logging.Logger;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
-import io.aklivity.zilla.example.grpc.reliable.streaming.intercepter.RequestInterceptor;
-import io.aklivity.zilla.example.grpc.reliable.streaming.intercepter.ResponseInterceptor;
 import io.grpc.ChannelCredentials;
 import io.grpc.Grpc;
 import io.grpc.ManagedChannel;
@@ -58,11 +56,8 @@ public class ReliableStreaming
             .trustManager(caCert)
             .build();
 
-        ResponseInterceptor responseInterceptor = new ResponseInterceptor();
-        RequestInterceptor requestInterceptor = new RequestInterceptor(responseInterceptor);
-
         ManagedChannelBuilder<?> channelBuilder = Grpc.newChannelBuilderForAddress(host, port, creds)
-            .intercept(responseInterceptor, requestInterceptor);
+            .intercept(new LastMessageIdInterceptor());
 
         if (enableRetries)
         {

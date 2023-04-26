@@ -1,4 +1,4 @@
-# autoscaling
+# kubernetes.prometheus.autoscale
 
 Listens on http port `8080` and will echo back whatever is sent to the server.
 

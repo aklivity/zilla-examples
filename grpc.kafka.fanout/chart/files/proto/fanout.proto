@@ -17,19 +17,14 @@ syntax = "proto3";
 
 package example;
 
-option java_multiple_files = true;
-option java_outer_classname = "FanoutProto";
+import "google/protobuf/empty.proto";
 
 service FanoutService
 {
-  rpc FanoutServerStream(EmptyMessage) returns (stream FanoutMessage);
+  rpc FanoutServerStream(google.protobuf.Empty) returns (stream FanoutMessage);
 }
 
 message FanoutMessage
 {
   string message = 1;
-}
-
-message EmptyMessage
-{
 }

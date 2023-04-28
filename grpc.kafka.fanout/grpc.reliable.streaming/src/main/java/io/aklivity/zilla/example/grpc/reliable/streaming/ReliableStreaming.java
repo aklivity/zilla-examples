@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import com.google.protobuf.Empty;
 
 import io.grpc.ChannelCredentials;
 import io.grpc.Grpc;
@@ -76,7 +77,7 @@ public class ReliableStreaming
      */
     public void stream()
     {
-        EmptyMessage request = EmptyMessage.newBuilder().build();
+        Empty request = Empty.newBuilder().build();
         Iterator<FanoutMessage> response = null;
         try
         {

@@ -61,9 +61,9 @@ bindings:
         exit: kafka_cache_client0
         with:
           capability: produce
-          topic: requests
+          topic: echo-requests
           acks: leader_only
-          reply-to: responses
+          reply-to: echo-responses
   kafka_cache_client0:
     type: kafka
     kind: cache_client
@@ -94,8 +94,8 @@ bindings:
     routes:
       - exit: grpc_client0
         when:
-          - topic: requests
-            reply-to: responses
+          - topic: echo-requests
+            reply-to: echo-responses
         with:
           scheme: http
           authority: localhost:9090

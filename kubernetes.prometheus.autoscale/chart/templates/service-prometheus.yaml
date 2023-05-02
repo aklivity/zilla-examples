@@ -115,4 +115,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: prometheus
-    namespace: zilla-autoscaling
+    namespace: zilla-kubernetes-prometheus-autoscale

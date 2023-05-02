@@ -22,7 +22,7 @@ spec:
             - --secure-port=443
             - --cert-dir=/tmp/cert
             - --logtostderr=true
-            - --prometheus-url=http://prometheus.zilla-autoscaling.svc.cluster.local:9090
+            - --prometheus-url=http://prometheus.zilla-kubernetes-prometheus-autoscale.svc.cluster.local:9090
             - --metrics-relist-interval=1m
             - --v=4
             - --config=/etc/prometheus-adapter/config.yaml
@@ -92,7 +92,7 @@ metadata:
 spec:
   service:
     name: prometheus-adapter
-    namespace: zilla-autoscaling
+    namespace: zilla-kubernetes-prometheus-autoscale
     port: 443
   group: custom.metrics.k8s.io
   version: v1beta1
@@ -154,7 +154,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: prometheus-adapter
-    namespace: zilla-autoscaling
+    namespace: zilla-kubernetes-prometheus-autoscale
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -169,7 +169,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: prometheus-adapter
-    namespace: zilla-autoscaling
+    namespace: zilla-kubernetes-prometheus-autoscale
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -184,7 +184,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: prometheus-adapter
-    namespace: zilla-autoscaling
+    namespace: zilla-kubernetes-prometheus-autoscale
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -199,4 +199,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: prometheus-adapter
-    namespace: zilla-autoscaling
+    namespace: zilla-kubernetes-prometheus-autoscale

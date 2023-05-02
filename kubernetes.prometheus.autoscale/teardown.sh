@@ -5,5 +5,5 @@ set -x
 pgrep kubectl && killall kubectl
 
 # Uninstall Zilla engine
-helm uninstall zilla-autoscaling --namespace zilla-autoscaling
-kubectl delete namespace zilla-autoscaling
+helm uninstall zilla-kubernetes-prometheus-autoscale --namespace zilla-kubernetes-prometheus-autoscale
+kubectl delete namespace zilla-kubernetes-prometheus-autoscale

@@ -21,16 +21,16 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ helm install zilla-autoscaling chart --namespace zilla-autoscaling --create-namespace --wait
-NAME: zilla-autoscaling
++ helm install zilla-kubernetes-prometheus-autoscale chart --namespace zilla-kubernetes-prometheus-autoscale --create-namespace --wait
+NAME: zilla-kubernetes-prometheus-autoscale
 LAST DEPLOYED: [...]
-NAMESPACE: zilla-autoscaling
+NAMESPACE: zilla-kubernetes-prometheus-autoscale
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
-+ kubectl port-forward --namespace zilla-autoscaling service/zilla 8080
++ kubectl port-forward --namespace zilla-kubernetes-prometheus-autoscale service/zilla 8080
 + nc -z localhost 8080
-+ kubectl port-forward --namespace zilla-autoscaling service/prometheus 9090
++ kubectl port-forward --namespace zilla-kubernetes-prometheus-autoscale service/prometheus 9090
 + sleep 1
 + nc -z localhost 8080
 Connection to localhost port 8080 [tcp/http-alt] succeeded!
@@ -64,7 +64,8 @@ Prometheus API:
           "__name__": "stream_active_received",
         },
         "value": [
-          "0"
+          1683013504.619, # timestamp
+          "0" # value
 ...
 }
 
@@ -99,9 +100,9 @@ Open 21 connections to zilla.
 ```bash
 # Open 21 instances of netcat in the background.
 $ for i in `seq 1 21`; do nc localhost 8080 &; done
-[42] 88888
+[42] 88886
 [43] 88887
-[44] 88886
+[44] 88888
 ...
 
 # There should be 21 open connections in the background now.
@@ -120,7 +121,8 @@ Prometheus API:
           "__name__": "stream_active_received",
         },
         "value": [
-          "21"
+          1683013504.619, # timestamp
+          "21" # value
 ...
 }
 
@@ -157,9 +159,9 @@ Open 21 more connections to zilla.
 ```bash
 # Open 21 more instances of netcat in the background.
 $ for i in `seq 1 21`; do nc localhost 8080 &; done
-[77] 77777
+[77] 77775
 [78] 77776
-[79] 77775
+[79] 77777
 ...
 
 # There should be 42 open connections in the background now.
@@ -178,7 +180,8 @@ Prometheus API:
           "__name__": "stream_active_received",
         },
         "value": [
-          "42"
+          1683013504.619, # timestamp
+          "42" # value
 ...
 }
 
@@ -238,7 +241,8 @@ Prometheus API:
           "__name__": "stream_active_received",
         },
         "value": [
-          "0"
+          1683013504.619, # timestamp
+          "0" # value
 ...
 }
 
@@ -278,8 +282,8 @@ $ ./teardown.sh
 99999
 99998
 + killall kubectl
-+ helm uninstall zilla-autoscaling --namespace zilla-autoscaling
-release "zilla-autoscaling" uninstalled
-+ kubectl delete namespace zilla-autoscaling
-namespace "zilla-autoscaling" deleted
++ helm uninstall zilla-kubernetes-prometheus-autoscale --namespace zilla-kubernetes-prometheus-autoscale
+release "zilla-kubernetes-prometheus-autoscale" uninstalled
++ kubectl delete namespace zilla-kubernetes-prometheus-autoscale
+namespace "zilla-kubernetes-prometheus-autoscale" deleted
 ```

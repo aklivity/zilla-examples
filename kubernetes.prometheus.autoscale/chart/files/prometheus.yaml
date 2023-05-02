@@ -5,7 +5,7 @@ scrape_configs:
       - role: endpoints
         namespaces:
           names:
-            - zilla-autoscaling
+            - zilla-kubernetes-prometheus-autoscale
     relabel_configs:
       - source_labels:
           - __meta_kubernetes_pod_name

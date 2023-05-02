@@ -10,4 +10,4 @@ curl -s http://localhost:9090/api/v1/query\?query\=stream_active_received | jq
 echo
 
 echo -e "${BOLD}Kubernetes custom metrics API:${END}"
-kubectl get --raw '/apis/custom.metrics.k8s.io/v1beta1/namespaces/zilla-autoscaling/pod/*/stream_active_received' | jq
+kubectl get --raw '/apis/custom.metrics.k8s.io/v1beta1/namespaces/zilla-kubernetes-prometheus-autoscale/pod/*/stream_active_received' | jq

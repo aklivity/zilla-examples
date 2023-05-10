@@ -17,15 +17,18 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ helm install zilla-tcp-echo chart --namespace zilla-tcp-echo --create-namespace --wait
++ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
++ helm install zilla-tcp-echo ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-tcp-echo [...]
 NAME: zilla-tcp-echo
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-tcp-echo
 STATUS: deployed
 REVISION: 1
-TEST SUITE: None
+NOTES:
+Zilla has been installed.
+[...]
 + nc -z localhost 12345
-+ kubectl port-forward --namespace zilla-tcp-echo service/zilla 12345
++ kubectl port-forward --namespace zilla-tcp-echo service/zilla-tcp-echo 12345
 + sleep 1
 + nc -z localhost 12345
 Connection to localhost port 12345 [tcp/italk] succeeded!

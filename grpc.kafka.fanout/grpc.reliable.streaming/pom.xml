@@ -73,11 +73,6 @@
             <artifactId>grpc-stub</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.confluent</groupId>
-            <artifactId>kafka-protobuf-serializer</artifactId>
-            <version>7.3.3</version>
-        </dependency>
-        <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java-util</artifactId>
             <version>${protobuf.version}</version>

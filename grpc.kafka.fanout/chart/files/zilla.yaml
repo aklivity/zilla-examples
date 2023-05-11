@@ -77,8 +77,8 @@ bindings:
     type: tcp
     kind: client
     options:
-      host: kafka
-      port: 29092
+      host: localhost
+      port: 9092
     routes:
       - when:
           - cidr: 0.0.0.0/0

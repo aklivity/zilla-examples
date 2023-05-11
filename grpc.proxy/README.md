@@ -1,6 +1,6 @@
 # grpc.proxy
 
-Listens on https port `9090` and will echo back whatever is published to `grpc_proxy` on tcp port `8080`.
+Listens on https port `9090` and will echo back whatever is published to `grpc-proxy` on tcp port `8080`.
 
 ### Requirements
 
@@ -48,6 +48,8 @@ Connection to localhost port 8080 [tcp/http-alt] succeeded!
 
 ### Verify behavior
 
+#### Unary Stream
+
 Echo `{"message":"Hello World"}` message via unary rpc.
 
 ```bash
@@ -57,11 +59,14 @@ grpcurl -insecure -proto chart/files/proto/echo.proto  -d '{"message":"Hello Wor
 }
 ```
 
+#### Bidirectional streaming
+
 Echo messages via bidirectional streaming rpc.
 
 ```bash
 grpcurl -insecure -proto chart/files/proto/echo.proto -d @ localhost:9090 example.EchoService.EchoBidiStream
 ```
+
 Paste below message.
 
 ```

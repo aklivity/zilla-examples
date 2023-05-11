@@ -58,9 +58,6 @@ Stream messages via server streaming rpc.
 
 ```bash
 grpcurl -insecure -proto chart/files/proto/fanout.proto -d '' localhost:9090 example.FanoutService.FanoutServerStream
-```
-
-```bash
 {
   "message": "test"
 }
@@ -89,8 +86,16 @@ INFO: Found message: message: "test"
 
 Simulate connection loss by stopping the `zilla` service in the `docker` stack.
 
-```
+```bash
 $ kubectl scale --replicas=0 --namespace=zilla-grpc-kafka-fanout deployment/zilla
+```
+
+Simulate connection recovery by starting the `zilla` service again.
+
+```bash
+$ kubectl scale --replicas=1 --namespace=zilla-grpc-kafka-fanout deployment/zilla
+# you need to restart the port-forward now
+$ kubectl port-forward --namespace zilla-grpc-kafka-fanout service/zilla 9090 > /tmp/kubectl-zilla.log 2>&1 &
 ```
 
 Then produce another protobuf message to Kafka, repeat to produce multiple messages.
@@ -99,12 +104,12 @@ Then produce another protobuf message to Kafka, repeat to produce multiple messa
 kcat -P -b localhost:9092 -t messages -k -e ./binary.data
 ```
 
-The reliable streaming client will recover from the zilla container restart and deliver only the remaining messages.
+The reliable streaming client will recover and zilla deliver only the new message.
 
 ```
 ...
 INFO: Found message: message: "test"
-32767: "\001\002\000\f"
+32767: "\001\002\000\004"
 ```
 
 This output repeats for each message produced to Kafka after the zilla service is restart.

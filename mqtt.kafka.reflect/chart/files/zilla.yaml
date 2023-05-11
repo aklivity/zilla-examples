@@ -36,11 +36,7 @@ bindings:
   mqtt_server0:
     type: mqtt
     kind: server
-    routes:
-      - when:
-          - topic: zilla
-          - topic: zilla2
-        exit: mqtt_kafka_proxy0
+    exit: mqtt_kafka_proxy0
   mqtt_kafka_proxy0:
     type: mqtt-kafka
     kind: proxy

@@ -4,7 +4,7 @@ Listens on https port `9090` and fanout messages from `messages` topic in Kafka.
 
 ### Requirements
 
-- bash, jq, nc, grpcurl
+- bash, jq, nc, grpcurl, protoc
 - Kubernetes (e.g. Docker Desktop with Kubernetes enabled)
 - kubectl
 - helm 3.0+
@@ -40,9 +40,9 @@ Connection to localhost port 9092 [tcp/XmlIpcRegSvc] succeeded!
 ```
 ### Verify behavior
 
-#### Server streaming
+#### Unreliable server streaming
 
-Prepare protobuf message for Kafka topic.
+Prepare protobuf message to send to Kafka topic.
 
 ```bash
 echo 'message: "test"' | protoc --encode=example.FanoutMessage chart/files/proto/fanout.proto > binary.data
@@ -59,16 +59,18 @@ Stream messages via server streaming rpc.
 ```bash
 grpcurl -insecure -proto chart/files/proto/fanout.proto -d '' localhost:9090 example.FanoutService.FanoutServerStream
 ```
-```
+
+```bash
 {
   "message": "test"
 }
 ```
+
 This output repeats for each message produced to Kafka.
 
 #### Reliable server streaming
 
-Build the reliable streaming client.
+Build the reliable streaming client which uses `32767` field as last message id to send as metadata to resume streaming from last received message.
 
 ```bash
 cd grpc.reliable.streaming/
@@ -80,16 +82,19 @@ Connect with the reliable streaming client.
 
 ```bash
 java -jar grpc.reliable.streaming/target/grpc-example-develop-SNAPSHOT-jar-with-dependencies.jar
-```
-```
 ...
 INFO: Found message: message: "test"
 32767: "\001\002\000\002"
 ```
 
-Without stopping the reliable streaming client, restart the zilla container in kubernetes.
+Simulate connection loss by stopping the `zilla` service in the `docker` stack.
+
+```
+$ kubectl scale --replicas=0 --namespace=zilla-grpc-kafka-fanout deployment/zilla
+```
 
 Then produce another protobuf message to Kafka, repeat to produce multiple messages.
+
 ```bash
 kcat -P -b localhost:9092 -t messages -k -e ./binary.data
 ```
@@ -101,7 +106,8 @@ The reliable streaming client will recover from the zilla container restart and 
 INFO: Found message: message: "test"
 32767: "\001\002\000\f"
 ```
-This output repeats for each message produced to Kafka after the zilla container restart.
+
+This output repeats for each message produced to Kafka after the zilla service is restart.
 
 ### Teardown
 

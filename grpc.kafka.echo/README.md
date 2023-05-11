@@ -41,15 +41,17 @@ Connection to localhost port 9092 [tcp/XmlIpcRegSvc] succeeded!
 ```
 ### Verify behavior
 
-Echo one message via unary rpc.
+#### Unary Stream
+
+Echo `{"message":"Hello World"}` message via unary rpc using `grpcurl` client.
+
 ```bash
 grpcurl -insecure -proto chart/files/proto/echo.proto  -d '{"message":"Hello World"}' localhost:9090 example.EchoService.EchoUnary
-```
-```
 {
   "message": "Hello World"
 }
 ```
+
 
 Verify the message payload, followed by a tombstone to mark the end of the request.
 ```bash
@@ -95,25 +97,16 @@ kcat -C -b localhost:9092 -t echo-messages -J -u | jq .
 % Reached end of topic echo-messages [0] at offset 2
 ```
 
-Echo each message via bidirectional streaming rpc.
+#### Bidirectional Stream
+
+Echo messages via bidirectional streaming rpc.
+
 ```bash
 grpcurl -insecure -proto chart/files/proto/echo.proto -d @ localhost:9090 example.EchoService.EchoBidiStream
 ```
-```
-{
-  "message": "Hello World"
-}
-```
-```
-{
-  "message": "Hello World"
-}
-```
-```
-{
-  "message": "Hello World"
-}
-```
+
+Paste below message.
+
 ```
 {
   "message": "Hello World"

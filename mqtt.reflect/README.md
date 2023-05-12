@@ -27,7 +27,8 @@ LAST DEPLOYED: [...]
 NAMESPACE: zilla-mqtt-reflect
 STATUS: deployed
 REVISION: 1
-TEST SUITE: None
+NOTES:
+Zilla has been installed.
 [...]
 + nc -z localhost 1883
 + kubectl port-forward --namespace zilla-mqtt-reflect service/zilla-mqtt-reflect 1883 8883

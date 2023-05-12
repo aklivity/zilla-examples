@@ -26,7 +26,8 @@ LAST DEPLOYED: [...]
 NAMESPACE: zilla-http-echo
 STATUS: deployed
 REVISION: 1
-TEST SUITE: None
+NOTES:
+Zilla has been installed.
 [...]
 + nc -z localhost 8080
 + kubectl port-forward --namespace zilla-http-echo service/zilla-http-echo 8080 9090

@@ -24,7 +24,8 @@ LAST DEPLOYED: [...]
 NAMESPACE: zilla-tcp-reflect
 STATUS: deployed
 REVISION: 1
-TEST SUITE: None
+NOTES:
+Zilla has been installed.
 [...]
 + nc -z localhost 12345
 + kubectl port-forward --namespace zilla-tcp-reflect service/zilla-tcp-reflect 12345

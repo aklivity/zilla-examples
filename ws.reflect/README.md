@@ -26,7 +26,8 @@ LAST DEPLOYED: [...]
 NAMESPACE: zilla-ws-reflect
 STATUS: deployed
 REVISION: 1
-TEST SUITE: None
+NOTES:
+Zilla has been installed.
 [...]
 + nc -z localhost 8080
 + kubectl port-forward --namespace zilla-ws-reflect service/zilla-ws-reflect 8080 9090

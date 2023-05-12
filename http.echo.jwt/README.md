@@ -35,7 +35,8 @@ LAST DEPLOYED: [...]
 NAMESPACE: zilla-http-echo-jwt
 STATUS: deployed
 REVISION: 1
-TEST SUITE: None
+NOTES:
+Zilla has been installed.
 [...]
 + nc -z localhost 8080
 + kubectl port-forward --namespace zilla-http-echo-jwt service/zilla-http-echo-jwt 8080 9090

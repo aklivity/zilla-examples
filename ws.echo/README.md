@@ -26,7 +26,8 @@ LAST DEPLOYED: [...]
 NAMESPACE: zilla-ws-echo
 STATUS: deployed
 REVISION: 1
-TEST SUITE: None
+NOTES:
+Zilla has been installed.
 [...]
 + nc -z localhost 8080
 + kubectl port-forward --namespace zilla-ws-echo service/zilla-ws-echo 8080 9090

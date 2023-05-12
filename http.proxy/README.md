@@ -27,14 +27,22 @@ The `setup.sh` script:
 ```bash
 $ ./setup.sh
 + ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
-+ helm install zilla-http-proxy chart --namespace zilla-http-proxy --create-namespace --wait [...]
++ helm install zilla-http-proxy ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-http-proxy --create-namespace --wait [...]
 NAME: zilla-http-proxy
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-http-proxy
 STATUS: deployed
 REVISION: 1
-TEST SUITE: None
+NOTES:
+Zilla has been installed.
 [...]
++ helm install zilla-http-proxy-nginx chart --namespace zilla-http-proxy --create-namespace --wait
+NAME: zilla-http-proxy-nginx
+LAST DEPLOYED: [...]
+NAMESPACE: zilla-http-proxy
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
 ++ kubectl get pods --namespace zilla-http-proxy --selector app.kubernetes.io/instance=nginx -o json
 ++ jq -r '.items[0].metadata.name'
 + NGINX_POD=nginx-1234567890-abcde

@@ -25,7 +25,8 @@ LAST DEPLOYED: [...]
 NAMESPACE: zilla-tls-echo
 STATUS: deployed
 REVISION: 1
-TEST SUITE: None
+NOTES:
+Zilla has been installed.
 [...]
 + nc -z localhost 23456
 + kubectl port-forward --namespace zilla-tls-echo service/zilla-tls-echo  23456

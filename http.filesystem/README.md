@@ -27,8 +27,9 @@ LAST DEPLOYED: [...]
 NAMESPACE: zilla-http-filesystem
 STATUS: deployed
 REVISION: 1
-TEST SUITE: None
- [...]
+NOTES:
+Zilla has been installed.
+[...]
 ++ kubectl get pods --namespace zilla-http-filesystem --selector app.kubernetes.io/instance=zilla -o json
 ++ jq -r '.items[0].metadata.name'
 + ZILLA_POD=zilla-1234567890-abcde

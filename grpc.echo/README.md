@@ -24,7 +24,8 @@ LAST DEPLOYED: [...]
 NAMESPACE: zilla-grpc-echo
 STATUS: deployed
 REVISION: 1
-TEST SUITE: None
+NOTES:
+Zilla has been installed.
 [...]
 + nc -z localhost 9090
 + kubectl port-forward --namespace zilla-grpc-echo service/zilla-grpc-echo 9090

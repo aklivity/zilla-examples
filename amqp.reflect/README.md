@@ -27,7 +27,8 @@ LAST DEPLOYED: [...]
 NAMESPACE: zilla-amqp-reflect
 STATUS: deployed
 REVISION: 1
-TEST SUITE: None
+NOTES:
+Zilla has been installed.
 [...]
 + nc -z localhost 5671
 + kubectl port-forward --namespace zilla-amqp-reflect service/zilla-amqp-reflect 5671 5672

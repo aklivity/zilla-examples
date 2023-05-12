@@ -41,7 +41,7 @@ Zilla has been installed.
 [...]
 + helm install zilla-http-kafka-async-kafka chart --namespace zilla-http-kafka-async --create-namespace --wait
 NAME: zilla-http-kafka-async-kafka
-LAST DEPLOYED: Fri May 12 11:54:27 2023
+LAST DEPLOYED: [...]
 NAMESPACE: zilla-http-kafka-async
 STATUS: deployed
 REVISION: 1

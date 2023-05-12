@@ -86,8 +86,9 @@ $ ./teardown.sh
 + pgrep kubectl
 99999
 + killall kubectl
-+ helm uninstall zilla-mqtt-reflect --namespace zilla-mqtt-reflect
-release "zilla-mqtt-reflect" uninstalled
-+ kubectl delete namespace zilla-mqtt-reflect
-namespace "zilla-mqtt-reflect" deleted
++ helm uninstall zilla-mqtt-kafka-reflect zilla-mqtt-kafka-reflect-kafka --namespace zilla-mqtt-kafka-reflect
+release "zilla-mqtt-kafka-reflect" uninstalled
+release "zilla-mqtt-kafka-reflect-kafka" uninstalled
++ kubectl delete namespace zilla-mqtt-kafka-reflect
+namespace "zilla-mqtt-kafka-reflect" deleted
 ```

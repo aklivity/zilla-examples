@@ -27,16 +27,26 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-docker image inspect zilla-examples/grpc-echo:latest --format 'Image Found {{.RepoTags}}'
-
-+ helm install zilla-grpc-proxy chart --namespace zilla-grpc-proxy --create-namespace --wait --timeout 2m
++ docker image inspect zilla-examples/grpc-echo:latest --format 'Image Found {{.RepoTags}}'
+Image Found [zilla-examples/grpc-echo:latest]
++ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
++ helm install zilla-grpc-proxy ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-grpc-proxy --create-namespace --wait [...]
 NAME: zilla-grpc-proxy
-LAST DEPLOYED: Tue Apr 18 14:46:24 2023
+LAST DEPLOYED: [...]
+NAMESPACE: zilla-grpc-proxy
+STATUS: deployed
+REVISION: 1
+NOTES:
+Zilla has been installed.
+[...]
++ helm install zilla-grpc-proxy-grpc-echo chart --namespace zilla-grpc-proxy --create-namespace --wait --timeout 2m
+NAME: zilla-grpc-proxy-grpc-echo
+LAST DEPLOYED: [...]
 NAMESPACE: zilla-grpc-proxy
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
-+ kubectl port-forward --namespace zilla-grpc-proxy service/zilla 9090
++ kubectl port-forward --namespace zilla-grpc-proxy service/zilla-grpc-proxy 9090
 + nc -z localhost 9090
 + kubectl port-forward --namespace zilla-grpc-proxy service/grpc-echo 8080
 + sleep 1
@@ -68,6 +78,7 @@ $ ./teardown.sh
 + killall kubectl
 + helm uninstall zilla-grpc-proxy --namespace zilla-grpc-proxy
 release "zilla-grpc-proxy" uninstalled
+release "zilla-grpc-proxy-grpc-echo" uninstalled
 + kubectl delete namespace zilla-grpc-proxy
 namespace "zilla-grpc-proxy" deleted
 ```

@@ -1,4 +1,4 @@
-# tcp.echo
+# grpc.echo
 
 Listens on tcp port `9090` and will echo grpc message sent by client.
 
@@ -17,15 +17,17 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ helm install zilla-grpc-echo chart --namespace zilla-grpc-echo --create-namespace --wait
++ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
++ helm install zilla-grpc-echo ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-grpc-echo [...]
 NAME: zilla-grpc-echo
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-grpc-echo
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
+[...]
 + nc -z localhost 9090
-+ kubectl port-forward --namespace zilla-grpc-echo service/zilla 9090
++ kubectl port-forward --namespace zilla-grpc-echo service/zilla-grpc-echo 9090
 + sleep 1
 + nc -z localhost 9090
 Connection to localhost port 9090 [tcp/italk] succeeded!
@@ -34,11 +36,21 @@ Connection to localhost port 9090 [tcp/italk] succeeded!
 ### Verify behavior
 
 ```bash
-grpcurl -insecure -proto chart/files/proto/echo.proto  -d '{"message":"Hello World"}' localhost:9090 example.EchoService.EchoUnary
+$ grpcurl -insecure -proto proto/echo.proto  -d '{"message":"Hello World"}' localhost:9090 example.EchoService.EchoUnary
+{
+  "message": "Hello World"
+}
 ```
 
 ```bash
-grpcurl -insecure -proto chart/files/proto/echo.proto -d @ localhost:9090 example.EchoService.EchoBidiStream
+$ grpcurl -insecure -proto proto/echo.proto -d @ localhost:9090 example.EchoService.EchoBidiStream
+# type this:
+{"message":"Hello World"}
+# response:
+{
+  "message": "Hello World"
+}
+# ^d
 ```
 
 ### Teardown

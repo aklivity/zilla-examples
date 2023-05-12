@@ -85,9 +85,10 @@ The `teardown.sh` script stops port forwarding, uninstalls Zilla and deletes the
 ```bash
 $ ./teardown.sh
 + pgrep kubectl
+99998
 99999
 + killall kubectl
-+ helm uninstall zilla-grpc-kafka-fanout --namespace zilla-grpc-kafka-fanout
++ helm uninstall zilla-grpc-kafka-fanout zilla-grpc-kafka-fanout-kafka --namespace zilla-grpc-kafka-fanout
 release "zilla-grpc-kafka-fanout" uninstalled
 release "zilla-grpc-kafka-fanout-kafka" uninstalled
 + kubectl delete namespace zilla-grpc-fanout

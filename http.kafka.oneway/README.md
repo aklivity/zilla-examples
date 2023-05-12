@@ -49,7 +49,7 @@ TEST SUITE: None
 + KAFKA_POD=pod/kafka-1234567890-abcde
 + kubectl exec --namespace zilla-http-kafka-oneway pod/kafka-1234567890-abcde -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic events --if-not-exists
 Created topic events.
-+ kubectl port-forward --namespace zilla-http-kafka-oneway service/zilla 8080 9090
++ kubectl port-forward --namespace zilla-http-kafka-oneway service/zilla-http-kafka-oneway-kafka 8080 9090
 + nc -z localhost 8080
 + kubectl port-forward --namespace zilla-http-kafka-oneway service/kafka 9092 29092
 + sleep 1

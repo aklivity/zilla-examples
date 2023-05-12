@@ -9,7 +9,7 @@ helm install zilla-grpc-kafka-echo $ZILLA_CHART --namespace zilla-grpc-kafka-ech
     --set-file configMaps.proto.data.echo\\.proto=proto/echo.proto \
     --set-file secrets.tls.data.localhost\\.p12=tls/localhost.p12
 
-# Install Kafka to the Kubernetes cluster with helm and wait for the pods to start up
+# Install Kafka to the Kubernetes cluster with helm and wait for the pod to start up
 helm install zilla-grpc-kafka-echo-kafka chart --namespace zilla-grpc-kafka-echo --create-namespace --wait
 
 # Create the echo-commands topic in Kafka

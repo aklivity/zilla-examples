@@ -8,7 +8,7 @@ helm install zilla-sse-kafka-fanout $ZILLA_CHART --namespace zilla-sse-kafka-fan
     --set-file zilla\\.yaml=zilla.yaml \
     --set-file secrets.tls.data.localhost\\.p12=tls/localhost.p12
 
-# Install Kafka to the Kubernetes cluster with helm and wait for the pods to start up
+# Install Kafka to the Kubernetes cluster with helm and wait for the pod to start up
 helm install zilla-sse-kafka-fanout-kafka chart --namespace zilla-sse-kafka-fanout --create-namespace --wait
 
 # Copy web files to the persistent volume mounted in the pod's filesystem

@@ -106,7 +106,7 @@ Additional messages produced to the `events` Kafka topic then arrive at the brow
 Simulate connection loss by stopping the `zilla` service in the `docker` stack.
 
 ```
-$ kubectl scale --replicas=0 --namespace=zilla-sse-kafka-fanout deployment/zilla
+$ kubectl scale --replicas=0 --namespace=zilla-sse-kafka-fanout deployment/zilla-sse-kafka-fanout
 ```
 
 This causes errors to be logged in the browser console during repeated attempts to automatically reconnect.
@@ -114,9 +114,9 @@ This causes errors to be logged in the browser console during repeated attempts 
 Simulate connection recovery by starting the `zilla` service again.
 
 ```
-$ kubectl scale --replicas=1 --namespace=zilla-sse-kafka-fanout deployment/zilla
+$ kubectl scale --replicas=1 --namespace=zilla-sse-kafka-fanout deployment/zilla-sse-kafka-fanout
 # you need to restart the port-forward now
-$ kubectl port-forward --namespace zilla-sse-kafka-fanout service/zilla 8080 9090 > /tmp/kubectl-zilla.log 2>&1 &
+$ kubectl port-forward --namespace zilla-sse-kafka-fanout service/zilla-sse-kafka-fanout 8080 9090 > /tmp/kubectl-zilla.log 2>&1 &
 ```
 
 Any messages produced to the `events` Kafka topic while the browser was attempting to reconnect are now delivered immediately.
@@ -133,8 +133,9 @@ $ ./teardown.sh
 99999
 99998
 + killall kubectl
-+ helm uninstall zilla-sse-kafka-fanout --namespace zilla-sse-kafka-fanout
++ helm uninstall zilla-sse-kafka-fanout zilla-sse-kafka-fanout-kafka --namespace zilla-sse-kafka-fanout
 release "zilla-sse-kafka-fanout" uninstalled
+release "zilla-sse-kafka-fanout-kafka" uninstalled
 + kubectl delete namespace zilla-sse-kafka-fanout
 namespace "zilla-sse-kafka-fanout" deleted
 ```

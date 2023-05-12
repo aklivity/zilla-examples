@@ -93,7 +93,7 @@ $ ./teardown.sh
 + pgrep kubectl
 99999
 + killall kubectl
-+ helm uninstall zilla-http-proxy --namespace zilla-http-proxy
++ helm uninstall zilla-http-proxy zilla-http-proxy-nginx --namespace zilla-http-proxy
 release "zilla-http-proxy" uninstalled
 release "zilla-http-proxy-nginx" uninstalled
 + kubectl delete namespace zilla-http-proxy

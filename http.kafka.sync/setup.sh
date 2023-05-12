@@ -8,7 +8,7 @@ helm install zilla-http-kafka-sync $ZILLA_CHART --namespace zilla-http-kafka-syn
     --set-file zilla\\.yaml=zilla.yaml \
     --set-file secrets.tls.data.localhost\\.p12=tls/localhost.p12
 
-# Install Kafka to the Kubernetes cluster with helm and wait for the pods to start up
+# Install Kafka to the Kubernetes cluster with helm and wait for the pod to start up
 helm install zilla-http-kafka-sync-kafka chart --namespace zilla-http-kafka-sync --create-namespace --wait
 
 # Create the items-requests and items-responses topics in Kafka

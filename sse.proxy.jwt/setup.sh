@@ -11,7 +11,7 @@ helm install zilla-sse-proxy-jwt $ZILLA_CHART --namespace zilla-sse-proxy-jwt --
     --set-file zilla\\.yaml=zilla.yaml \
     --set-file secrets.tls.data.localhost\\.p12=tls/localhost.p12
 
-# Install SSE server to the Kubernetes cluster with helm and wait for the pods to start up
+# Install SSE server to the Kubernetes cluster with helm and wait for the pod to start up
 helm install zilla-sse-proxy-jwt-sse chart --namespace zilla-sse-proxy-jwt --create-namespace --wait
 
 # Copy www files to the persistent volume mounted in the pod's filesystem

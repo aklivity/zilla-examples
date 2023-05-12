@@ -34,19 +34,20 @@ NAMESPACE: zilla-grpc-kafka-echo
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
-++ kubectl get pods --namespace zilla-NAMESPACE: zilla-grpc-kafka-echo --selector app.kubernetes.io/instance=kafka -o name
-+ KAFKA_POD=pod/kafka-969789cc9-sn7jt
-+ kubectl exec --namespace zilla-STATUS: deployed-echo pod/kafka-969789cc9-sn7jt -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic echo-commands --if-not-exists
-Created topic echo-commands.
+++ kubectl get pods --namespace zilla-grpc-kafka-echo --selector app.kubernetes.io/instance=kafka -o name
++ KAFKA_POD=pod/kafka-74675fbb8-kpkm8
++ kubectl exec --namespace zilla-grpc-kafka-echo pod/kafka-74675fbb8-kpkm8 -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic echo-messages --if-not-exists
+Created topic echo-messages.
++ kubectl port-forward --namespace zilla-grpc-kafka-echo service/zilla-grpc-kafka-echo 9090
 + nc -z localhost 9090
-+ kubectl port-forward --namespace zilla-REVISION: 1-echo service/zilla 9090
-+ kubectl port-forward --namespace zilla-TEST SUITE: None-echo service/kafka 9092 29092
++ kubectl port-forward --namespace zilla-grpc-kafka-echo service/kafka 9092 29092
 + sleep 1
 + nc -z localhost 9090
 Connection to localhost port 9090 [tcp/websm] succeeded!
 + nc -z localhost 9092
 Connection to localhost port 9092 [tcp/XmlIpcRegSvc] succeeded!
 ```
+
 ### Verify behavior
 
 ```bash
@@ -64,9 +65,10 @@ The `teardown.sh` script stops port forwarding, uninstalls Zilla and deletes the
 ```bash
 $ ./teardown.sh
 + pgrep kubectl
+99998
 99999
 + killall kubectl
-+ helm uninstall zilla-grpc-kafka-echo --namespace zilla-grpc-kafka-echo
++ helm uninstall zilla-grpc-kafka-echo zilla-grpc-kafka-echo-kafka --namespace zilla-grpc-kafka-echo
 release "zilla-grpc-kafka-echo" uninstalled
 release "zilla-grpc-kafka-echo-kafka" uninstalled
 + kubectl delete namespace zilla-grpc-echo

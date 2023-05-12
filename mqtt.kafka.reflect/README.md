@@ -132,7 +132,7 @@ The `teardown.sh` script stops port forwarding, uninstalls Zilla and Kafka and d
 99998
 99999
 + killall kubectl
-+ helm uninstall zilla-mqtt-kafka --namespace zilla-mqtt-kafka
++ helm uninstall zilla-mqtt-kafka-reflect zilla-mqtt-kafka-reflect-kafka --namespace zilla-mqtt-kafka
 release "zilla-mqtt-kafka-reflect" uninstalled
 release "zilla-mqtt-kafka-reflect-kafka" uninstalled
 + kubectl delete namespace zilla-mqtt-kafka

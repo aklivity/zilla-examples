@@ -8,7 +8,7 @@ helm install zilla-http-kafka-cache $ZILLA_CHART --namespace zilla-http-kafka-ca
     --set-file zilla\\.yaml=zilla.yaml \
     --set-file secrets.tls.data.localhost\\.p12=tls/localhost.p12
 
-# Install Kafka to the Kubernetes cluster with helm and wait for the pods to start up
+# Install Kafka to the Kubernetes cluster with helm and wait for the pod to start up
 helm install zilla-http-kafka-cache-kafka chart --namespace zilla-http-kafka-cache --create-namespace --wait
 
 # Create the items-snapshots topic in Kafka with the cleanup.policy=compact topic configuration

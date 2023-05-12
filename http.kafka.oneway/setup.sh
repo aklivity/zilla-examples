@@ -8,7 +8,7 @@ helm install zilla-http-kafka-oneway $ZILLA_CHART --namespace zilla-http-kafka-o
     --set-file zilla\\.yaml=zilla.yaml \
     --set-file secrets.tls.data.localhost\\.p12=tls/localhost.p12
 
-# Install Kafka to the Kubernetes cluster with helm and wait for the pods to start up
+# Install Kafka to the Kubernetes cluster with helm and wait for the pod to start up
 helm install zilla-http-kafka-oneway-kafka chart --namespace zilla-http-kafka-oneway --create-namespace --wait
 
 # Create the events topic in Kafka

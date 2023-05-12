@@ -47,8 +47,8 @@ STATUS: deployed
 REVISION: 1
 TEST SUITE: None
 + kubectl port-forward --namespace zilla-grpc-proxy service/zilla-grpc-proxy 9090
-+ nc -z localhost 9090
 + kubectl port-forward --namespace zilla-grpc-proxy service/grpc-echo 8080
++ nc -z localhost 9090
 + sleep 1
 + nc -z localhost 9090
 Connection to localhost port 9090 [tcp/websm] succeeded!
@@ -73,10 +73,10 @@ The `teardown.sh` script stops port forwarding, uninstalls Zilla and deletes the
 ```bash
 $ ./teardown.sh
 + pgrep kubectl
-24494
-24495
+99998
+99999
 + killall kubectl
-+ helm uninstall zilla-grpc-proxy --namespace zilla-grpc-proxy
++ helm uninstall zilla-grpc-proxy zilla-grpc-proxy-grpc-echo --namespace zilla-grpc-proxy
 release "zilla-grpc-proxy" uninstalled
 release "zilla-grpc-proxy-grpc-echo" uninstalled
 + kubectl delete namespace zilla-grpc-proxy

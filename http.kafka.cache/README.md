@@ -194,7 +194,7 @@ $ ./teardown.sh
 99998
 99999
 + killall kubectl
-+ helm uninstall zilla-http-kafka-cache --namespace zilla-http-kafka-cache
++ helm uninstall zilla-http-kafka-cache zilla-http-kafka-cache-kafka --namespace zilla-http-kafka-cache
 release "zilla-http-kafka-cache" uninstalled
 release "zilla-http-kafka-cache-kafka" uninstalled
 + kubectl delete namespace zilla-http-kafka-cache

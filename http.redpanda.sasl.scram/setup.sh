@@ -8,7 +8,7 @@ helm install zilla-http-redpanda-sasl-scram $ZILLA_CHART --namespace zilla-http-
     --set-file zilla\\.yaml=zilla.yaml \
     --set-file secrets.tls.data.localhost\\.p12=tls/localhost.p12
 
-# Install Redpanda to the Kubernetes cluster with helm and wait for the pods to start up
+# Install Redpanda to the Kubernetes cluster with helm and wait for the pod to start up
 helm install zilla-http-redpanda-sasl-scram-redpanda chart --namespace zilla-http-redpanda-sasl-scram --create-namespace --wait
 
 # Create the user "user"

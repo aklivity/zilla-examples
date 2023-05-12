@@ -178,8 +178,9 @@ $ ./teardown.sh
 + pgrep kubectl
 99999
 + killall kubectl
-+ helm uninstall zilla-sse-proxy-jwt --namespace zilla-sse-proxy-jwt
++ helm uninstall zilla-sse-proxy-jwt zilla-sse-proxy-jwt-sse --namespace zilla-sse-proxy-jwt
 release "zilla-sse-proxy-jwt" uninstalled
+release "zilla-sse-proxy-jwt-sse" uninstalled
 + kubectl delete namespace zilla-sse-proxy-jwt
 namespace "zilla-sse-proxy-jwt" deleted
 ```

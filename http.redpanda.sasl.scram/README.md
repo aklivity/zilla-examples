@@ -53,7 +53,7 @@ Created user "user".
 + kubectl exec --namespace zilla-http-redpanda-sasl-scram pod/redpanda-1234567890-abcde -- rpk topic create events --user user --password redpanda --sasl-mechanism SCRAM-SHA-256
 TOPIC   STATUS
 events  OK
-+ kubectl port-forward --namespace zilla-http-redpanda-sasl-scram service/zilla 8080 9090
++ kubectl port-forward --namespace zilla-http-redpanda-sasl-scram service/zilla-http-redpanda-sasl-scram 8080 9090
 + nc -z localhost 8080
 + kubectl port-forward --namespace zilla-http-redpanda-sasl-scram service/redpanda 9092
 + sleep 1
@@ -109,7 +109,7 @@ $ ./teardown.sh
 99999
 99998
 + killall kubectl
-+ helm uninstall zilla-http-redpanda-sasl-scram --namespace zilla-http-redpanda-sasl-scram
++ helm uninstall zilla-http-redpanda-sasl-scram zilla-http-redpanda-sasl-scram-redpanda --namespace zilla-http-redpanda-sasl-scram
 release "zilla-http-redpanda-sasl-scram" uninstalled
 release "zilla-http-redpanda-sasl-scram-redpanda" uninstalled
 + kubectl delete namespace zilla-http-redpanda-sasl-scram

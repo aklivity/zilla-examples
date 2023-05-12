@@ -139,7 +139,7 @@ $ ./teardown.sh
 99999
 99998
 + killall kubectl
-+ helm uninstall zilla-http-kafka-sync --namespace zilla-http-kafka-sync
++ helm uninstall zilla-http-kafka-sync zilla-http-kafka-sync-kafka --namespace zilla-http-kafka-sync
 release "zilla-http-kafka-sync" uninstalled
 release "zilla-http-kafka-sync-kafka" uninstalled
 + kubectl delete namespace zilla-http-kafka-sync

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-# Install Zilla to the Kubernetes cluster with helm and wait for the pods to start up
+# Install Zilla to the Kubernetes cluster with helm and wait for the pod to start up
 ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
 helm install zilla-kubernetes-prometheus-autoscale $ZILLA_CHART --namespace zilla-kubernetes-prometheus-autoscale --create-namespace --wait \
     --values values.yaml \

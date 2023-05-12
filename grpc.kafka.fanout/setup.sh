@@ -8,7 +8,7 @@ helm install zilla-grpc-kafka-fanout $ZILLA_CHART --namespace zilla-grpc-kafka-f
     --set-file configMaps.proto.data.fanout\\.proto=proto/fanout.proto \
     --set-file secrets.tls.data.localhost\\.p12=tls/localhost.p12
 
-# Install Zilla and Kafka to the Kubernetes cluster with helm and wait for the pods to start up
+# Install Zilla and Kafka to the Kubernetes cluster with helm and wait for the pod to start up
 helm install zilla-grpc-kafka-fanout-kafka chart --namespace zilla-grpc-kafka-fanout --create-namespace --wait
 
 # Create the messages topic in Kafka

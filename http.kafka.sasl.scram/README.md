@@ -103,7 +103,7 @@ $ ./teardown.sh
 + pgrep kubectl
 99998
 99999
-+ helm uninstall zilla-http-kafka-sasl-scram --namespace zilla-http-kafka-sasl-scram
++ helm uninstall zilla-http-kafka-sasl-scram zilla-http-kafka-sasl-scram-kafka --namespace zilla-http-kafka-sasl-scram
 release "zilla-http-kafka-sasl-scram" uninstalled
 release "zilla-http-kafka-sasl-scram-kafka" uninstalled
 + kubectl delete namespace zilla-http-kafka-sasl-scram

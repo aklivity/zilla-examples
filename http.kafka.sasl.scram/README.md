@@ -28,8 +28,18 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ helm install zilla-http-kafka-sasl-scram chart --namespace zilla-http-kafka-sasl-scram --create-namespace --wait
++ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
++ helm install zilla-http-kafka-sasl-scram ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-http-kafka-sasl-scram --create-namespace --wait [...]
 NAME: zilla-http-kafka-sasl-scram
+LAST DEPLOYED: [...]
+NAMESPACE: zilla-http-kafka-sasl-scram
+STATUS: deployed
+REVISION: 1
+NOTES:
+Zilla has been installed.
+[...]
++ helm install zilla-http-kafka-sasl-scram-kafka chart --namespace zilla-http-kafka-sasl-scram --create-namespace --wait
+NAME: zilla-http-kafka-sasl-scram-kafka
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-http-kafka-sasl-scram
 STATUS: deployed
@@ -42,7 +52,7 @@ Created topic events.
 + kubectl exec --namespace zilla-http-kafka-sasl-scram pod/kafka-1234567890-abcde --container kafka -- /opt/bitnami/kafka/bin/kafka-configs.sh --bootstrap-server localhost:9092 --alter --add-config 'SCRAM-SHA-256=[iterations=8192,password=bitnami],SCRAM-SHA-512=[password=bitnami]' --entity-type users --entity-name user
 Completed updating config for user user.
 + nc -z localhost 8080
-+ kubectl port-forward --namespace zilla-http-kafka-sasl-scram service/zilla 8080 9090
++ kubectl port-forward --namespace zilla-http-kafka-sasl-scram service/zilla-http-kafka-sasl-scram 8080 9090
 + kubectl port-forward --namespace zilla-http-kafka-sasl-scram service/kafka 9092 29092
 + sleep 1
 + nc -z localhost 8080
@@ -91,10 +101,11 @@ The `teardown.sh` script stops port forwarding, uninstalls Zilla, Kafka and Zook
 ```bash
 $ ./teardown.sh
 + pgrep kubectl
-99999
 99998
+99999
 + helm uninstall zilla-http-kafka-sasl-scram --namespace zilla-http-kafka-sasl-scram
 release "zilla-http-kafka-sasl-scram" uninstalled
+release "zilla-http-kafka-sasl-scram-kafka" uninstalled
 + kubectl delete namespace zilla-http-kafka-sasl-scram
 namespace "zilla-http-kafka-sasl-scram" deleted
 ```

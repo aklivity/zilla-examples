@@ -29,8 +29,18 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ helm install zilla-http-redpanda-sasl-scram chart --namespace zilla-http-redpanda-sasl-scram --create-namespace --wait
++ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
++ helm install zilla-http-redpanda-sasl-scram ./zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-http-redpanda-sasl-scram --create-namespace --wait [...]
 NAME: zilla-http-redpanda-sasl-scram
+LAST DEPLOYED: [...]
+NAMESPACE: zilla-http-redpanda-sasl-scram
+STATUS: deployed
+REVISION: 1
+NOTES:
+Zilla has been installed.
+[...]
++ helm install zilla-http-redpanda-sasl-scram-redpanda chart --namespace zilla-http-redpanda-sasl-scram --create-namespace --wait
+NAME: zilla-http-redpanda-sasl-scram-redpanda
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-http-redpanda-sasl-scram
 STATUS: deployed
@@ -101,6 +111,7 @@ $ ./teardown.sh
 + killall kubectl
 + helm uninstall zilla-http-redpanda-sasl-scram --namespace zilla-http-redpanda-sasl-scram
 release "zilla-http-redpanda-sasl-scram" uninstalled
+release "zilla-http-redpanda-sasl-scram-redpanda" uninstalled
 + kubectl delete namespace zilla-http-redpanda-sasl-scram
 namespace "zilla-http-redpanda-sasl-scram" deleted
 ```

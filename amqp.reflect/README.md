@@ -20,15 +20,17 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ helm install zilla-amqp-reflect chart --namespace zilla-amqp-reflect --create-namespace --wait
++ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
++ helm install zilla-amqp-reflect chart --namespace zilla-amqp-reflect --create-namespace --wait [...]
 NAME: zilla-amqp-reflect
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-amqp-reflect
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
+[...]
 + nc -z localhost 5671
-+ kubectl port-forward --namespace zilla-amqp-reflect service/zilla 5671 5672
++ kubectl port-forward --namespace zilla-amqp-reflect service/zilla-amqp-reflect 5671 5672
 + sleep 1
 + nc -z localhost 5671
 Connection to localhost port 5671 [tcp/*] succeeded!

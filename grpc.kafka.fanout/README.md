@@ -18,9 +18,19 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ helm install zilla-grpc-kafka-fanout chart --namespace zilla-grpc-kafka-fanout --create-namespace --wait
++ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
++ helm install zilla-grpc-kafka-fanout ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-grpc-kafka-fanout --create-namespace --wait [...]
 NAME: zilla-grpc-kafka-fanout
-LAST DEPLOYED: Wed Apr 19 10:28:50 2023
+LAST DEPLOYED: [...]
+NAMESPACE: zilla-grpc-kafka-fanout
+STATUS: deployed
+REVISION: 1
+NOTES:
+Zilla has been installed.
+[...]
++ helm install zilla-grpc-kafka-fanout-kafka chart --namespace zilla-grpc-kafka-fanout --create-namespace --wait
+NAME: zilla-grpc-kafka-fanout-kafka
+LAST DEPLOYED: [...]
 NAMESPACE: zilla-grpc-kafka-fanout
 STATUS: deployed
 REVISION: 1
@@ -29,7 +39,7 @@ TEST SUITE: None
 + KAFKA_POD=pod/kafka-969789cc9-mxd98
 + kubectl exec --namespace zilla-grpc-kafka-fanout pod/kafka-969789cc9-mxd98 -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic messages --if-not-exists
 Created topic messages.
-+ kubectl port-forward --namespace zilla-grpc-kafka-fanout service/zilla 9090
++ kubectl port-forward --namespace zilla-grpc-kafka-fanout service/zilla-grpc-kafka-fanout 9090
 + nc -z localhost 9090
 + kubectl port-forward --namespace zilla-grpc-kafka-fanout service/kafka 9092 29092
 + sleep 1
@@ -38,6 +48,7 @@ Connection to localhost port 9090 [tcp/websm] succeeded!
 + nc -z localhost 9092
 Connection to localhost port 9092 [tcp/XmlIpcRegSvc] succeeded!
 ```
+
 ### Verify unreliable streaming behavior
 
 ```bash
@@ -78,6 +89,7 @@ $ ./teardown.sh
 + killall kubectl
 + helm uninstall zilla-grpc-kafka-fanout --namespace zilla-grpc-kafka-fanout
 release "zilla-grpc-kafka-fanout" uninstalled
+release "zilla-grpc-kafka-fanout-kafka" uninstalled
 + kubectl delete namespace zilla-grpc-fanout
 namespace "zilla-grpc-kafka-fanout" deleted
 ```

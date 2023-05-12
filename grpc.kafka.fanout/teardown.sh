@@ -5,5 +5,5 @@ set -x
 pgrep kubectl && killall kubectl
 
 # Uninstall Zilla engine
-helm uninstall zilla-grpc-kafka-fanout --namespace zilla-grpc-kafka-fanout
+helm uninstall zilla-grpc-kafka-fanout zilla-grpc-kafka-fanout-kafka --namespace zilla-grpc-kafka-fanout
 kubectl delete namespace zilla-grpc-kafka-fanout

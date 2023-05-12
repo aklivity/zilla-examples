@@ -27,16 +27,23 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-docker image inspect zilla-examples/grpc-echo:latest --format 'Image Found {{.RepoTags}}'
-
-+ helm install zilla-grpc-kafka-proxy chart --namespace zilla-grpc-kafka-proxy --create-namespace --wait --timeout 3m
++ docker image inspect zilla-examples/grpc-echo:latest --format 'Image Found {{.RepoTags}}'
+Image Found [zilla-examples/grpc-echo:latest]
++ helm install zilla-grpc-kafka-proxy chart --namespace zilla-grpc-kafka-proxy --create-namespace --wait [...]
 NAME: zilla-grpc-kafka-proxy
-LAST DEPLOYED: Tue Apr 18 14:46:24 2023
+LAST [...]
 NAMESPACE: zilla-grpc-kafka-proxy
 STATUS: deployed
 REVISION: 1
-TEST SUITE: None
-+ kubectl port-forward --namespace zilla-grpc-kafka-proxy service/zilla 9090
+Zilla has been installed.
+[...]
++ helm install zilla-grpc-kafka-proxy-kafka chart --namespace zilla-grpc-kafka-proxy --create-namespace --wait --timeout 2m
+NAME: zilla-grpc-kafka-proxy-kafka
+LAST DEPLOYED: [...]
+NAMESPACE: zilla-grpc-kafka-proxy
+STATUS: deployed
+REVISION: 1
++ kubectl port-forward --namespace zilla-grpc-kafka-proxy service/zilla-grpc-kafka-proxy 9090
 + nc -z localhost 9090
 + kubectl port-forward --namespace zilla-grpc-kafka-proxy service/grpc-echo 8080
 + sleep 1
@@ -68,6 +75,7 @@ $ ./teardown.sh
 + killall kubectl
 + helm uninstall zilla-grpc-kafka-proxy --namespace zilla-grpc-kafka-proxy
 release "zilla-grpc-kafka-proxy" uninstalled
+release "zilla-grpc-kafka-proxy-kafka" uninstalled
 + kubectl delete namespace zilla-grpc-kafka-proxy
 namespace "zilla-grpc-kafka-proxy" deleted
 ```

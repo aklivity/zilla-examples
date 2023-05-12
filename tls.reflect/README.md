@@ -18,15 +18,17 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ helm install zilla-tls-reflect chart --namespace zilla-tls-reflect --create-namespace --wait
++ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
++ helm install zilla-tls-reflect chart --namespace zilla-tls-reflect --create-namespace --wait [...]
 NAME: zilla-tls-reflect
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-tls-reflect
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
+[...]
 + nc -z localhost 23456
-+ kubectl port-forward --namespace zilla-tls-reflect service/zilla 23456
++ kubectl port-forward --namespace zilla-tls-reflect service/zilla-tls-reflect 23456
 + sleep 1
 + nc -z localhost 23456
 Connection to localhost port 23456 [tcp/*] succeeded!

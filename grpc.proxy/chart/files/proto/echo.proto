@@ -25,7 +25,7 @@ service EchoService
 
   rpc EchoServerStream( EchoMessage) returns (stream EchoMessage);
 
-  rpc EchoStream(stream EchoMessage) returns (stream EchoMessage);
+  rpc EchoBidiStream(stream EchoMessage) returns (stream EchoMessage);
 }
 
 message EchoMessage

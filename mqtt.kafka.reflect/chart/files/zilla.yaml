@@ -1,3 +1,4 @@
+---
 name: example
 vaults:
   server:
@@ -13,7 +14,14 @@ bindings:
     kind: server
     options:
       host: 0.0.0.0
-      port: 9090
+      port: 1883
+    exit: mqtt_server0
+  tcp_server1:
+    type: tcp
+    kind: server
+    options:
+      host: 0.0.0.0
+      port: 8883
     exit: tls_server0
   tls_server0:
     type: tls
@@ -24,43 +32,15 @@ bindings:
         - localhost
       sni:
         - localhost
-      alpn:
-        - h2
-    exit: http_server0
-  http_server0:
-    type: http
+    exit: mqtt_server0
+  mqtt_server0:
+    type: mqtt
     kind: server
-    options:
-      versions:
-        - h2
-      access-control:
-        policy: cross-origin
-    routes:
-      - when:
-          - headers:
-              ':scheme': https
-              ':authority': 'localhost:9090'
-        exit: grpc_server0
-  grpc_server0:
-    type: grpc
-    kind: server
-    options:
-      services:
-        - proto/fanout.proto
-    routes:
-      - when:
-          - method: example.FanoutService/*
-        exit: grpc_kafka0
-  grpc_kafka0:
-    type: grpc-kafka
+    exit: mqtt_kafka_proxy0
+  mqtt_kafka_proxy0:
+    type: mqtt-kafka
     kind: proxy
-    routes:
-      - when:
-          - method: example.FanoutService/*
-        exit: kafka_cache_client0
-        with:
-          capability: fetch
-          topic: messages
+    exit: kafka_cache_client0
   kafka_cache_client0:
     type: kafka
     kind: cache_client
@@ -82,3 +62,4 @@ bindings:
     routes:
       - when:
           - cidr: 0.0.0.0/0
+

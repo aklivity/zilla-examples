@@ -13,7 +13,7 @@ kubectl exec --namespace zilla-grpc-kafka-proxy "$KAFKA_POD" -- \
     /opt/bitnami/kafka/bin/kafka-topics.sh \
         --bootstrap-server localhost:9092 \
         --create \
-        --topic requests \
+        --topic echo-requests \
         --if-not-exists
 
 KAFKA_POD=$(kubectl get pods --namespace zilla-grpc-kafka-proxy --selector app.kubernetes.io/instance=kafka -o name)
@@ -21,7 +21,7 @@ kubectl exec --namespace zilla-grpc-kafka-proxy "$KAFKA_POD" -- \
     /opt/bitnami/kafka/bin/kafka-topics.sh \
         --bootstrap-server localhost:9092 \
         --create \
-        --topic responses \
+        --topic echo-responses \
         --if-not-exists
 
 # Start port forwarding

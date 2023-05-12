@@ -57,13 +57,13 @@ bindings:
     kind: proxy
     routes:
       - when:
-          - service: example.EchoService
+          - method: example.EchoService/*
         exit: kafka_cache_client0
         with:
           capability: produce
-          topic: requests
+          topic: echo-requests
           acks: leader_only
-          reply-to: responses
+          reply-to: echo-responses
   kafka_cache_client0:
     type: kafka
     kind: cache_client
@@ -88,16 +88,18 @@ bindings:
   remote_server0:
     type: kafka-grpc
     kind: remote_server
+    entry: kafka_cache_client0
     options:
-      scheme: http
-      authority: localhost:9090
-      entry: kafka_cache_client0
       acks: leader_only
     routes:
       - exit: grpc_client0
         when:
-          - topic: requests
-            reply-to: responses
+          - topic: echo-requests
+            reply-to: echo-responses
+            method: example.EchoService/*
+        with:
+          scheme: http
+          authority: localhost:9090
   grpc_client0:
     type: grpc
     kind: client

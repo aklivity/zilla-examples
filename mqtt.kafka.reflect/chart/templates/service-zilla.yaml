@@ -16,29 +16,25 @@ spec:
     spec:
       containers:
         - name: zilla
-          image: "ghcr.io/aklivity/zilla:latest"
-          args: ["start", "-v", "-e"]
+          image: "ghcr.io/aklivity/zilla:develop-SNAPSHOT"
+          args: ["start", "-v", "-e", "-P", "zilla.binding.mqtt.sessions.available=false"]
           env:
             - name: KEYSTORE_PASSWORD
               value: generated
           ports:
-            - containerPort: 9090
+            - containerPort: 1883
+            - containerPort: 8883
           readinessProbe:
             tcpSocket:
-              port: 9090
+              port: 1883
             initialDelaySeconds: 3
             periodSeconds: 5
           volumeMounts:
             - name: config
               mountPath: /etc/zilla
-            - name: proto
-              mountPath: /etc/zilla/proto
             - name: tls
               mountPath: /etc/zilla/tls
       volumes:
-        - name: proto
-          configMap:
-            name: proto
         - name: config
           configMap:
             name: zilla
@@ -48,13 +44,6 @@ spec:
             items:
               - key: localhost.p12
                 path: localhost.p12
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: proto
-data:
-{{ (.Files.Glob "files/proto/*").AsConfig | indent 2 }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -81,6 +70,8 @@ spec:
   selector:
     app.kubernetes.io/instance: zilla
   ports:
-    - name: https
-      port: 9090
+    - name: mqtt
+      port: 1883
+    - name: mqtts
+      port: 8883
   type: ClusterIP

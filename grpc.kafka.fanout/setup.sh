@@ -21,7 +21,7 @@ kubectl exec --namespace zilla-grpc-kafka-fanout "$KAFKA_POD" -- \
         --if-not-exists
 
 # Start port forwarding
-kubectl port-forward --namespace zilla-grpc-kafka-fanout service/zilla 9090 > /tmp/kubectl-zilla.log 2>&1 &
+kubectl port-forward --namespace zilla-grpc-kafka-fanout service/zilla-grpc-kafka-fanout 9090 > /tmp/kubectl-zilla.log 2>&1 &
 kubectl port-forward --namespace zilla-grpc-kafka-fanout service/kafka 9092 29092 > /tmp/kubectl-kafka.log 2>&1 &
 until nc -z localhost 9090; do sleep 1; done
 until nc -z localhost 9092; do sleep 1; done

@@ -29,7 +29,8 @@ The `setup.sh` script:
 $ ./setup.sh
 + docker image inspect zilla-examples/grpc-echo:latest --format 'Image Found {{.RepoTags}}'
 Image Found [zilla-examples/grpc-echo:latest]
-+ helm install zilla-grpc-kafka-proxy chart --namespace zilla-grpc-kafka-proxy --create-namespace --wait [...]
++ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
++ helm install zilla-grpc-kafka-proxy ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-grpc-kafka-proxy --create-namespace --wait [...]
 NAME: zilla-grpc-kafka-proxy
 LAST [...]
 NAMESPACE: zilla-grpc-kafka-proxy

@@ -12,7 +12,7 @@ helm install zilla-grpc-kafka-proxy $ZILLA_CHART --namespace zilla-grpc-kafka-pr
     --set-file configMaps.proto.data.echo\\.proto=proto/echo.proto \
     --set-file secrets.tls.data.localhost\\.p12=tls/localhost.p12
 
-# Install Grpc Echo and Kafka to the Kubernetes cluster with helm and wait for the pod to start up
+# Install Grpc Echo and Kafka to the Kubernetes cluster with helm and wait for the pods to start up
 helm install zilla-grpc-kafka-proxy-kafka chart --namespace zilla-grpc-kafka-proxy --create-namespace --wait --timeout 2m
 
 # Create the requests and responses topic in Kafka

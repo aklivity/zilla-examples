@@ -18,15 +18,17 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ helm install zilla-tls-echo chart --namespace zilla-tls-echo --create-namespace --wait
++ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
++ helm install zilla-tls-echo chart --namespace zilla-tls-echo --create-namespace --wait [...]
 NAME: zilla-tls-echo
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-tls-echo
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
+[...]
 + nc -z localhost 23456
-+ kubectl port-forward --namespace zilla-tls-echo service/zilla 23456
++ kubectl port-forward --namespace zilla-tls-echo service/zilla-tls-echo  23456
 + sleep 1
 + nc -z localhost 23456
 Connection to localhost port 23456 [tcp/*] succeeded!

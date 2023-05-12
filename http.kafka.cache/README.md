@@ -25,10 +25,19 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ helm install zilla-http-kafka-cache chart --namespace zilla-http-kafka-cache --create-namespace --wait
++ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
++ helm install zilla-http-kafka-cache ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-http-kafka-cache --create-namespace --wait [...]
 NAME: zilla-http-kafka-cache
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-http-kafka-cache
+STATUS: deployed
+REVISION: 1
+Zilla has been installed.
+[...]
++ helm install zilla-http-kafka-cache-kafka chart --namespace zilla-http-kafka-cache --create-namespace --wait
+NAME: zilla-http-kafka-async-kafka
+LAST DEPLOYED: [...]
+NAMESPACE: zilla-http-kafka-async
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
@@ -36,7 +45,7 @@ TEST SUITE: None
 + KAFKA_POD=pod/1234567890-abcde
 + kubectl exec --namespace zilla-http-kafka-cache pod/1234567890-abcde -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic items-snapshots --config cleanup.policy=compact --if-not-exists
 Created topic items-snapshots.
-+ kubectl port-forward --namespace zilla-http-kafka-cache service/zilla 8080 9090
++ kubectl port-forward --namespace zilla-http-kafka-cache service/zilla-http-kafka-cache 8080 9090
 + nc -z localhost 8080
 + kubectl port-forward --namespace zilla-http-kafka-cache service/kafka 9092 29092
 + sleep 1
@@ -187,6 +196,8 @@ $ ./teardown.sh
 + killall kubectl
 + helm uninstall zilla-http-kafka-cache --namespace zilla-http-kafka-cache
 release "zilla-http-kafka-cache" uninstalled
++ kubectl delete namespace zilla-http-kafka-cache
+release "zilla-http-kafka-cache-kafka" uninstalled
 + kubectl delete namespace zilla-http-kafka-cache
 namespace "zilla-http-kafka-cache" deleted
 ```

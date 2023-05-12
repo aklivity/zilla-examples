@@ -35,7 +35,6 @@ LAST DEPLOYED: [...]
 NAMESPACE: zilla-http-kafka-async
 STATUS: deployed
 REVISION: 1
-TEST SUITE: None
 NOTES:
 Zilla has been installed.
 [...]
@@ -46,14 +45,6 @@ NAMESPACE: zilla-http-kafka-async
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
-++ kubectl get pods --namespace zilla-http-kafka-async --selector app.kubernetes.io/instance=kafka -o name
-+ KAFKA_POD=pod/kafka-1234567890-abcde
-+ kubectl exec --namespace zilla-http-kafka-async pod/kafka-1234567890-abcde -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic items-requests --if-not-exists
-Created topic items-requests.
-+ kubectl exec --namespace zilla-http-kafka-async pod/kafka-1234567890-abcde -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic items-responses --if-not-exists
-Created topic items-responses.
-+ kubectl port-forward --namespace zilla-http-kafka-async service/zilla-http-kafka-async 8080 9090
-+ nc -z localhost 8080
 + kubectl port-forward --namespace zilla-http-kafka-async service/kafka 9092 29092
 + sleep 1
 + nc -z localhost 8080
@@ -163,8 +154,8 @@ The `teardown.sh` script stops port forwarding, uninstalls Zilla and Kafka and d
 ```bash
 $ ./teardown.sh
 + pgrep kubectl
-99999
 99998
+99999
 + killall kubectl
 + helm uninstall zilla-http-kafka-async --namespace zilla-http-kafka-async
 release "zilla-http-kafka-async" uninstalled

@@ -191,12 +191,11 @@ The `teardown.sh` script stops port forwarding, uninstalls Zilla and Kafka and d
 ```bash
 $ ./teardown.sh
 + pgrep kubectl
-99999
 99998
+99999
 + killall kubectl
 + helm uninstall zilla-http-kafka-cache --namespace zilla-http-kafka-cache
 release "zilla-http-kafka-cache" uninstalled
-+ kubectl delete namespace zilla-http-kafka-cache
 release "zilla-http-kafka-cache-kafka" uninstalled
 + kubectl delete namespace zilla-http-kafka-cache
 namespace "zilla-http-kafka-cache" deleted

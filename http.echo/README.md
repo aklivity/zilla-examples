@@ -19,15 +19,17 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ helm install zilla-http-echo chart --namespace zilla-http-echo --create-namespace --wait
++ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
++ helm install zilla-http-echo ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-http-echo [...]
 NAME: zilla-http-echo
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-http-echo
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
+[...]
 + nc -z localhost 8080
-+ kubectl port-forward --namespace zilla-http-echo service/zilla 8080 9090
++ kubectl port-forward --namespace zilla-http-echo service/zilla-http-echo 8080 9090
 + sleep 1
 + nc -z localhost 8080
 Connection to localhost port 8080 [tcp/http-alt] succeeded!

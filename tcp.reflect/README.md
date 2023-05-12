@@ -17,15 +17,17 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ helm install zilla-tcp-reflect chart --namespace zilla-tcp-reflect --create-namespace --wait
++ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
++ helm install zilla-tcp-reflect ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-tcp-reflect [...]
 NAME: zilla-tcp-reflect
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-tcp-reflect
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
+[...]
 + nc -z localhost 12345
-+ kubectl port-forward --namespace zilla-tcp-reflect service/zilla 12345
++ kubectl port-forward --namespace zilla-tcp-reflect service/zilla-tcp-reflect 12345
 + sleep 1
 + nc -z localhost 12345
 Connection to localhost port 12345 [tcp/italk] succeeded!

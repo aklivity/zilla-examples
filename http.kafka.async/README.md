@@ -28,9 +28,20 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ helm install zilla-http-kafka-async chart --namespace zilla-http-kafka-async --create-namespace --wait
++ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
++ helm install zilla-http-kafka-async ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-http-kafka-async --create-namespace --wait [...]
 NAME: zilla-http-kafka-async
 LAST DEPLOYED: [...]
+NAMESPACE: zilla-http-kafka-async
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+Zilla has been installed.
+[...]
++ helm install zilla-http-kafka-async-kafka chart --namespace zilla-http-kafka-async --create-namespace --wait
+NAME: zilla-http-kafka-async-kafka
+LAST DEPLOYED: Fri May 12 11:54:27 2023
 NAMESPACE: zilla-http-kafka-async
 STATUS: deployed
 REVISION: 1
@@ -41,7 +52,7 @@ TEST SUITE: None
 Created topic items-requests.
 + kubectl exec --namespace zilla-http-kafka-async pod/kafka-1234567890-abcde -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic items-responses --if-not-exists
 Created topic items-responses.
-+ kubectl port-forward --namespace zilla-http-kafka-async service/zilla 8080 9090
++ kubectl port-forward --namespace zilla-http-kafka-async service/zilla-http-kafka-async 8080 9090
 + nc -z localhost 8080
 + kubectl port-forward --namespace zilla-http-kafka-async service/kafka 9092 29092
 + sleep 1

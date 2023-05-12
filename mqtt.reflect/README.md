@@ -20,15 +20,17 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ helm install zilla-mqtt-reflect chart --namespace zilla-mqtt-reflect --create-namespace --wait
++ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
++ helm install zilla-mqtt-reflect chart --namespace zilla-mqtt-reflect [...]
 NAME: zilla-mqtt-reflect
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-mqtt-reflect
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
+[...]
 + nc -z localhost 1883
-+ kubectl port-forward --namespace zilla-mqtt-reflect service/zilla 1883 8883
++ kubectl port-forward --namespace zilla-mqtt-reflect service/zilla-mqtt-reflect 1883 8883
 + sleep 1
 + nc -z localhost 1883
 Connection to localhost port 1883 [tcp/ibm-mqisdp] succeeded!

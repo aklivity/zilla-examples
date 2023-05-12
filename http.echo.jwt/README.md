@@ -28,15 +28,17 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ helm install zilla-http-echo-jwt chart --namespace zilla-http-echo-jwt --create-namespace --wait
++ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
++ helm install zilla-http-echo-jwt chart --namespace zilla-http-echo-jwt --create-namespace --wait [...]
 NAME: zilla-http-echo-jwt
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-http-echo-jwt
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
+[...]
 + nc -z localhost 8080
-+ kubectl port-forward --namespace zilla-http-echo-jwt service/zilla 8080 9090
++ kubectl port-forward --namespace zilla-http-echo-jwt service/zilla-http-echo-jwt 8080 9090
 + sleep 1
 + nc -z localhost 8080
 Connection to localhost port 8080 [tcp/http-alt] succeeded!

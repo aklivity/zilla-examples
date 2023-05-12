@@ -46,12 +46,12 @@ STATUS: deployed
 TEST SUITE: None
 ++ kubectl get pods --namespace zilla-grpc-kafka-proxy --selector app.kubernetes.io/instance=kafka -o name
 + KAFKA_POD=pod/kafka-74675fbb8-7knvx
-+ kubectl exec --namespace zilla-grpc-kafka-proxy pod/kafka-74675fbb8-7knvx -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic requests --if-not-exists
-Created topic requests.
++ kubectl exec --namespace zilla-grpc-kafka-proxy pod/kafka-74675fbb8-7knvx -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic echo-requests --if-not-exists
+Created topic echo-requests.
 ++ kubectl get pods --namespace zilla-grpc-kafka-proxy --selector app.kubernetes.io/instance=kafka -o name
 + KAFKA_POD=pod/kafka-74675fbb8-7knvx
-+ kubectl exec --namespace zilla-grpc-kafka-proxy pod/kafka-74675fbb8-7knvx -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic responses --if-not-exists
-Created topic responses.
++ kubectl exec --namespace zilla-grpc-kafka-proxy pod/kafka-74675fbb8-7knvx -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic echo-responses --if-not-exists
+Created topic echo-responses.
 + kubectl port-forward --namespace zilla-grpc-kafka-proxy service/zilla-grpc-kafka-proxy 9090
 + kubectl port-forward --namespace zilla-grpc-kafka-proxy service/kafka 9092 29092
 + nc -z localhost 9090
@@ -67,12 +67,301 @@ Connection to localhost port 8080 [tcp/http-alt] succeeded!
 
 ### Verify behavior
 
+Echo one message via unary rpc.
 ```bash
-grpcurl -insecure -proto chart/files/proto/echo.proto  -d '{"message":"World"}' localhost:9090 example.EchoService.EchoUnary
+$ grpcurl -insecure -proto proto/echo.proto -d '{"message":"Hello World"}' localhost:9090 example.EchoService.EchoUnary
+```
+```
+{
+  "message": "Hello World"
+}
 ```
 
+Verify the message payload, followed by a tombstone to mark the end of the request.
 ```bash
-grpcurl -insecure -proto chart/files/proto/echo.proto -H  -d @ localhost:9090 example.EchoService.EchoStream
+$ kcat -C -b localhost:9092 -t echo-requests -J -u | jq .
+```
+```
+{
+  "topic": "echo-requests",
+  "partition": 0,
+  "offset": 0,
+  "tstype": "create",
+  "ts": 1682639950943,
+  "broker": 1,
+  "headers": [
+    "zilla:service",
+    "example.EchoService",
+    "zilla:method",
+    "EchoUnary",
+    "zilla:correlation-id",
+    "457e5954-ca4d-4794-9f4f-407103c99c5e-d41d8cd98f00b204e9800998ecf8427e"
+  ],
+  "key": "457e5954-ca4d-4794-9f4f-407103c99c5e-d41d8cd98f00b204e9800998ecf8427e",
+  "payload": "\n\u000bHello World"
+}
+{
+  "topic": "echo-requests",
+  "partition": 0,
+  "offset": 1,
+  "tstype": "create",
+  "ts": 1682639950945,
+  "broker": 1,
+  "headers": [
+    "zilla:service",
+    "example.EchoService",
+    "zilla:method",
+    "EchoUnary",
+    "zilla:correlation-id",
+    "457e5954-ca4d-4794-9f4f-407103c99c5e-d41d8cd98f00b204e9800998ecf8427e"
+  ],
+  "key": "457e5954-ca4d-4794-9f4f-407103c99c5e-d41d8cd98f00b204e9800998ecf8427e",
+  "payload": null
+}
+% Reached end of topic echo-requests [0] at offset 2
+```
+
+Verify the message payload, followed by a tombstone to mark the end of the response.
+```bash
+$ kcat -C -b localhost:9092 -t echo-responses -J -u | jq .
+```
+```
+{
+  "topic": "echo-responses",
+  "partition": 0,
+  "offset": 0,
+  "tstype": "create",
+  "ts": 1682639951093,
+  "broker": 1,
+  "headers": [
+    "zilla:correlation-id",
+    "457e5954-ca4d-4794-9f4f-407103c99c5e-d41d8cd98f00b204e9800998ecf8427e"
+  ],
+  "key": "457e5954-ca4d-4794-9f4f-407103c99c5e-d41d8cd98f00b204e9800998ecf8427e",
+  "payload": "\n\u000bHello World"
+}
+{
+  "topic": "echo-responses",
+  "partition": 0,
+  "offset": 1,
+  "tstype": "create",
+  "ts": 1682639951094,
+  "broker": 1,
+  "headers": [
+    "zilla:correlation-id",
+    "457e5954-ca4d-4794-9f4f-407103c99c5e-d41d8cd98f00b204e9800998ecf8427e",
+    "zilla:status",
+    "0"
+  ],
+  "key": "457e5954-ca4d-4794-9f4f-407103c99c5e-d41d8cd98f00b204e9800998ecf8427e",
+  "payload": null
+}
+% Reached end of topic echo-responses [0] at offset 2
+```
+
+Echo each message via bidirectional streaming rpc.
+```bash
+$ grpcurl -insecure -proto proto/echo.proto -d @ localhost:9090 example.EchoService.EchoBidiStream
+```
+```
+{
+  "message": "Hello World"
+}
+```
+```
+{
+  "message": "Hello World"
+}
+```
+```
+{
+  "message": "Hello World"
+}
+```
+```
+{
+  "message": "Hello World"
+}
+```
+
+Verify the message payloads, followed by a tombstone to mark the end of each request.
+```bash
+$ kcat -C -b localhost:9092 -t echo-requests -J -u | jq .
+```
+```
+{
+  "topic": "echo-requests",
+  "partition": 0,
+  "offset": 0,
+  "tstype": "create",
+  "ts": 1682639950943,
+  "broker": 1,
+  "headers": [
+    "zilla:service",
+    "example.EchoService",
+    "zilla:method",
+    "EchoUnary",
+    "zilla:correlation-id",
+    "457e5954-ca4d-4794-9f4f-407103c99c5e-d41d8cd98f00b204e9800998ecf8427e"
+  ],
+  "key": "457e5954-ca4d-4794-9f4f-407103c99c5e-d41d8cd98f00b204e9800998ecf8427e",
+  "payload": "\n\u000bHello World"
+}
+{
+  "topic": "echo-requests",
+  "partition": 0,
+  "offset": 1,
+  "tstype": "create",
+  "ts": 1682639950945,
+  "broker": 1,
+  "headers": [
+    "zilla:service",
+    "example.EchoService",
+    "zilla:method",
+    "EchoUnary",
+    "zilla:correlation-id",
+    "457e5954-ca4d-4794-9f4f-407103c99c5e-d41d8cd98f00b204e9800998ecf8427e"
+  ],
+  "key": "457e5954-ca4d-4794-9f4f-407103c99c5e-d41d8cd98f00b204e9800998ecf8427e",
+  "payload": null
+}
+{
+  "topic": "echo-requests",
+  "partition": 0,
+  "offset": 2,
+  "tstype": "create",
+  "ts": 1682640151057,
+  "broker": 1,
+  "headers": [
+    "zilla:service",
+    "example.EchoService",
+    "zilla:method",
+    "EchoStream",
+    "zilla:correlation-id",
+    "2de3f344-150a-42e2-bcf8-e7c7150d51bf-d41d8cd98f00b204e9800998ecf8427e"
+  ],
+  "key": "2de3f344-150a-42e2-bcf8-e7c7150d51bf-d41d8cd98f00b204e9800998ecf8427e",
+  "payload": "\n\u000bHello World"
+}
+{
+  "topic": "echo-requests",
+  "partition": 0,
+  "offset": 3,
+  "tstype": "create",
+  "ts": 1682640159066,
+  "broker": 1,
+  "headers": [
+    "zilla:service",
+    "example.EchoService",
+    "zilla:method",
+    "EchoStream",
+    "zilla:correlation-id",
+    "2de3f344-150a-42e2-bcf8-e7c7150d51bf-d41d8cd98f00b204e9800998ecf8427e"
+  ],
+  "key": "2de3f344-150a-42e2-bcf8-e7c7150d51bf-d41d8cd98f00b204e9800998ecf8427e",
+  "payload": "\n\u000bHello World"
+}
+{
+  "topic": "echo-requests",
+  "partition": 0,
+  "offset": 4,
+  "tstype": "create",
+  "ts": 1682640161636,
+  "broker": 1,
+  "headers": [
+    "zilla:service",
+    "example.EchoService",
+    "zilla:method",
+    "EchoStream",
+    "zilla:correlation-id",
+    "2de3f344-150a-42e2-bcf8-e7c7150d51bf-d41d8cd98f00b204e9800998ecf8427e"
+  ],
+  "key": "2de3f344-150a-42e2-bcf8-e7c7150d51bf-d41d8cd98f00b204e9800998ecf8427e",
+  "payload": null
+}
+% Reached end of topic echo-requests [0] at offset 5
+```
+
+Verify the message payloads, followed by a tombstone to mark the end of each response.
+```bash
+$ kcat -C -b localhost:9092 -t echo-responses -J -u | jq .
+```
+```
+{
+  "topic": "echo-responses",
+  "partition": 0,
+  "offset": 0,
+  "tstype": "create",
+  "ts": 1682639951093,
+  "broker": 1,
+  "headers": [
+    "zilla:correlation-id",
+    "457e5954-ca4d-4794-9f4f-407103c99c5e-d41d8cd98f00b204e9800998ecf8427e"
+  ],
+  "key": "457e5954-ca4d-4794-9f4f-407103c99c5e-d41d8cd98f00b204e9800998ecf8427e",
+  "payload": "\n\u000bHello World"
+}
+{
+  "topic": "echo-responses",
+  "partition": 0,
+  "offset": 1,
+  "tstype": "create",
+  "ts": 1682639951094,
+  "broker": 1,
+  "headers": [
+    "zilla:correlation-id",
+    "457e5954-ca4d-4794-9f4f-407103c99c5e-d41d8cd98f00b204e9800998ecf8427e",
+    "zilla:status",
+    "0"
+  ],
+  "key": "457e5954-ca4d-4794-9f4f-407103c99c5e-d41d8cd98f00b204e9800998ecf8427e",
+  "payload": null
+}
+{
+  "topic": "echo-responses",
+  "partition": 0,
+  "offset": 2,
+  "tstype": "create",
+  "ts": 1682640151072,
+  "broker": 1,
+  "headers": [
+    "zilla:correlation-id",
+    "2de3f344-150a-42e2-bcf8-e7c7150d51bf-d41d8cd98f00b204e9800998ecf8427e"
+  ],
+  "key": "2de3f344-150a-42e2-bcf8-e7c7150d51bf-d41d8cd98f00b204e9800998ecf8427e",
+  "payload": "\n\u000bHello World"
+}
+{
+  "topic": "echo-responses",
+  "partition": 0,
+  "offset": 3,
+  "tstype": "create",
+  "ts": 1682640159073,
+  "broker": 1,
+  "headers": [
+    "zilla:correlation-id",
+    "2de3f344-150a-42e2-bcf8-e7c7150d51bf-d41d8cd98f00b204e9800998ecf8427e"
+  ],
+  "key": "2de3f344-150a-42e2-bcf8-e7c7150d51bf-d41d8cd98f00b204e9800998ecf8427e",
+  "payload": "\n\u000bHello World"
+}
+{
+  "topic": "echo-responses",
+  "partition": 0,
+  "offset": 4,
+  "tstype": "create",
+  "ts": 1682640161646,
+  "broker": 1,
+  "headers": [
+    "zilla:correlation-id",
+    "2de3f344-150a-42e2-bcf8-e7c7150d51bf-d41d8cd98f00b204e9800998ecf8427e",
+    "zilla:status",
+    "0"
+  ],
+  "key": "2de3f344-150a-42e2-bcf8-e7c7150d51bf-d41d8cd98f00b204e9800998ecf8427e",
+  "payload": null
+}
+% Reached end of topic echo-responses [0] at offset 5
 ```
 
 ### Teardown

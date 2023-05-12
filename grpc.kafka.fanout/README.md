@@ -48,6 +48,7 @@ Connection to localhost port 9090 [tcp/websm] succeeded!
 + nc -z localhost 9092
 Connection to localhost port 9092 [tcp/XmlIpcRegSvc] succeeded!
 ```
+
 ### Verify behavior
 
 #### Server streaming
@@ -55,19 +56,19 @@ Connection to localhost port 9092 [tcp/XmlIpcRegSvc] succeeded!
 Prepare protobuf message for Kafka topic.
 
 ```bash
-echo 'message: "test"' | protoc --encode=example.FanoutMessage chart/files/proto/fanout.proto > binary.data
+$ echo 'message: "test"' | protoc --encode=example.FanoutMessage proto/fanout.proto > binary.data
 ```
 
 Produce protobuf message to Kafka topic, repeat to produce multiple messages.
 
 ```bash
-kcat -P -b localhost:9092 -t messages -k -e ./binary.data
+$ kcat -P -b localhost:9092 -t messages -k -e ./binary.data
 ```
 
 Stream messages via server streaming rpc.
 
 ```bash
-grpcurl -insecure -proto chart/files/proto/fanout.proto -d '' localhost:9090 example.FanoutService.FanoutServerStream
+$ grpcurl -insecure -proto proto/fanout.proto -d '' localhost:9090 example.FanoutService.FanoutServerStream
 ```
 ```
 {
@@ -81,15 +82,15 @@ This output repeats for each message produced to Kafka.
 Build the reliable streaming client.
 
 ```bash
-cd grpc.reliable.streaming/
-./mvnw clean install
-cd ..
+$ cd grpc.reliable.streaming/
+$ ./mvnw clean install
+$ cd ..
 ```
 
 Connect with the reliable streaming client.
 
 ```bash
-java -jar grpc.reliable.streaming/target/grpc-example-develop-SNAPSHOT-jar-with-dependencies.jar
+$ java -jar grpc.reliable.streaming/target/grpc-example-develop-SNAPSHOT-jar-with-dependencies.jar
 ```
 ```
 ...
@@ -101,7 +102,7 @@ Without stopping the reliable streaming client, restart the zilla container in k
 
 Then produce another protobuf message to Kafka, repeat to produce multiple messages.
 ```bash
-kcat -P -b localhost:9092 -t messages -k -e ./binary.data
+$ kcat -P -b localhost:9092 -t messages -k -e ./binary.data
 ```
 
 The reliable streaming client will recover from the zilla container restart and deliver only the remaining messages.

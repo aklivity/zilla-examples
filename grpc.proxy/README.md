@@ -9,7 +9,7 @@ Listens on https port `9090` and will echo back whatever is published to `grpc_e
 - kubectl
 - helm 3.0+
 
-### Build the grpc-echo docker image
+### Build `grpc-echo` service
 
 ```bash
 $ docker build -t zilla-examples/grpc-echo:latest .
@@ -58,12 +58,35 @@ Connection to localhost port 8080 [tcp/http-alt] succeeded!
 
 ### Verify behavior
 
+Echo one message via unary rpc.
 ```bash
-grpcurl -insecure -proto chart/files/proto/echo.proto  -d '{"message":"World"}' localhost:9090 example.EchoService.EchoUnary
+$ grpcurl -insecure -proto proto/echo.proto  -d '{"message":"Hello World"}' localhost:9090 example.EchoService.EchoUnary
+```
+```
+{
+  "message": "Hello World"
+}
 ```
 
+Echo each message via bidirectional streaming rpc.
 ```bash
-grpcurl -insecure -proto chart/files/proto/echo.proto -H  -d @ localhost:9090 example.EchoService.EchoStream
+$ grpcurl -insecure -proto proto/echo.proto -d @ localhost:9090 example.EchoService.EchoBidiStream
+```
+```
+{
+  "message": "Hello World"
+}
+{
+  "message": "Hello World"
+}
+```
+```
+{
+  "message": "Hello World"
+}
+{
+  "message": "Hello World"
+}
 ```
 
 ### Teardown

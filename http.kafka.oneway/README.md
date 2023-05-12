@@ -28,8 +28,18 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ helm install zilla-http-kafka-oneway chart --namespace zilla-http-kafka-oneway --create-namespace --wait
++ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
++ helm install zilla-http-kafka-oneway ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-http-kafka-oneway --create-namespace --wait [...]
 NAME: zilla-http-kafka-oneway
+LAST DEPLOYED: [...]
+NAMESPACE: zilla-http-kafka-oneway
+STATUS: deployed
+REVISION: 1
+NOTES:
+Zilla has been installed.
+[...]
++ helm install zilla-http-kafka-oneway-kafka chart --namespace zilla-http-kafka-oneway --create-namespace --wait
+NAME: zilla-http-kafka-oneway-kafka
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-http-kafka-oneway
 STATUS: deployed
@@ -92,11 +102,12 @@ The `teardown.sh` script stops port forwarding, uninstalls Zilla and Kafka and d
 ```bash
 $ ./teardown.sh
 + pgrep kubectl
-99999
 99998
+99999
 + killall kubectl
-+ helm uninstall zilla-http-kafka-oneway --namespace zilla-http-kafka-oneway
++ helm uninstall zilla-http-kafka-oneway zilla-http-kafka-oneway-kafka --namespace zilla-http-kafka-oneway
 release "zilla-http-kafka-oneway" uninstalled
+release "zilla-http-kafka-oneway-kafka" uninstalled
 + kubectl delete namespace zilla-http-kafka-oneway
 namespace "zilla-http-kafka-oneway" deleted
 ```

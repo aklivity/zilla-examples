@@ -41,7 +41,7 @@ Connection to localhost port 9090 [tcp/italk] succeeded!
 Echo `{"message":"Hello World"}` message via unary rpc using `grpcurl` command.
 
 ```bash
-$ grpcurl -insecure -proto chart/files/proto/echo.proto  -d '{"message":"Hello World"}' localhost:9090 example.EchoService.EchoUnary
+$ grpcurl -insecure -proto proto/echo.proto  -d '{"message":"Hello World"}' localhost:9090 example.EchoService.EchoUnary
 {
   "message": "Hello World"
 }
@@ -52,7 +52,7 @@ $ grpcurl -insecure -proto chart/files/proto/echo.proto  -d '{"message":"Hello W
 Echo messages via bidirectional streaming rpc.
 
 ```bash
-$  grpcurl -insecure -proto proto/echo.proto -d @ localhost:9090 example.EchoService.EchoBidiStream
+$ grpcurl -insecure -proto proto/echo.proto -d @ localhost:9090 example.EchoService.EchoBidiStream
 ```
 
 Paste below message.

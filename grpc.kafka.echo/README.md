@@ -18,11 +18,19 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ helm install zilla-./setup.sh
-echo chart --namespace zilla-grpc-kafka-echo helm install zilla-grpc-kafka-echo chart --namespace zilla-grpc-kafka-echo --create-namespace --wait-echo --create-namespace --wait
-NAME: zilla-NAME: zilla-grpc-kafka-echo
-LAST DEPLOYED: Mon Apr  3 14:18:19 2023
-NAMESPACE: zilla-LAST DEPLOYED: Mon Apr  3 14:18:19 2023-echo
++ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
++ helm install zilla-grpc-kafka-echo ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-grpc-kafka-echo [...]
+NAME: zilla-grpc-kafka-echo
+LAST DEPLOYED: [...]
+NAMESPACE: zilla-grpc-kafka-echo
+STATUS: deployed
+NOTES:
+Zilla has been installed.
+[...]
++ helm install zilla-grpc-kafka-echo-kafka chart --namespace zilla-grpc-kafka-echo --create-namespace --wait
+NAME: zilla-grpc-kafka-echo-kafka
+LAST DEPLOYED: [...]
+NAMESPACE: zilla-grpc-kafka-echo
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
@@ -60,6 +68,7 @@ $ ./teardown.sh
 + killall kubectl
 + helm uninstall zilla-grpc-kafka-echo --namespace zilla-grpc-kafka-echo
 release "zilla-grpc-kafka-echo" uninstalled
+release "zilla-grpc-kafka-echo-kafka" uninstalled
 + kubectl delete namespace zilla-grpc-echo
 namespace "zilla-grpc-kafka-echo" deleted
 ```

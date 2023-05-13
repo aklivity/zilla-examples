@@ -48,8 +48,6 @@ TEST SUITE: None
 + KAFKA_POD=pod/kafka-74675fbb8-7knvx
 + kubectl exec --namespace zilla-grpc-kafka-proxy pod/kafka-74675fbb8-7knvx -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic echo-requests --if-not-exists
 Created topic echo-requests.
-++ kubectl get pods --namespace zilla-grpc-kafka-proxy --selector app.kubernetes.io/instance=kafka -o name
-+ KAFKA_POD=pod/kafka-74675fbb8-7knvx
 + kubectl exec --namespace zilla-grpc-kafka-proxy pod/kafka-74675fbb8-7knvx -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic echo-responses --if-not-exists
 Created topic echo-responses.
 + kubectl port-forward --namespace zilla-grpc-kafka-proxy service/zilla-grpc-kafka-proxy 9090
@@ -125,6 +123,22 @@ $ kcat -C -b localhost:9092 -t echo-requests -J -u | jq .
 % Reached end of topic echo-requests [0] at offset 2
 ```
 
+#### Bidirectional streaming
+
+Echo messages via bidirectional streaming rpc.
+
+```bash
+$ grpcurl -insecure -proto proto/echo.proto -d @ localhost:9090 example.EchoService.EchoBidiStream
+```
+
+Past below message.
+
+```
+{
+  "message": "Hello World"
+}
+```
+
 Verify the message payload, followed by a tombstone to mark the end of the response.
 
 ```bash
@@ -162,22 +176,6 @@ $ kcat -C -b localhost:9092 -t echo-responses -J -u | jq .
   "payload": null
 }
 % Reached end of topic echo-responses [0] at offset 2
-```
-
-#### Bidirectional streaming 
-
-Echo messages via bidirectional streaming rpc.
-
-```bash
-$ grpcurl -insecure -proto proto/echo.proto -d @ localhost:9090 example.EchoService.EchoBidiStream
-```
-
-Past below message.
-
-```
-{
-  "message": "Hello World"
-}
 ```
 
 ### Teardown

@@ -18,7 +18,7 @@ The `setup.sh` script:
 ```bash
 $ ./setup.sh
 + ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
-+ helm install zilla-grpc-echo ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-grpc-echo [...]
++ helm install zilla-grpc-echo ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-grpc-echo --wait [...]
 NAME: zilla-grpc-echo
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-grpc-echo

@@ -46,10 +46,10 @@ STATUS: deployed
 REVISION: 1
 TEST SUITE: None
 ++ kubectl get pods --namespace zilla-http-kafka-async --selector app.kubernetes.io/instance=kafka -o name
-+ KAFKA_POD=pod/kafka-74675fbb8-sv2r2
-+ kubectl exec --namespace zilla-http-kafka-async pod/kafka-74675fbb8-sv2r2 -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic items-requests --if-not-exists
++ KAFKA_POD=pod/kafka-1234567890-abcde
++ kubectl exec --namespace zilla-http-kafka-async pod/kafka-1234567890-abcde -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic items-requests --if-not-exists
 Created topic items-requests.
-+ kubectl exec --namespace zilla-http-kafka-async pod/kafka-74675fbb8-sv2r2 -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic items-responses --if-not-exists
++ kubectl exec --namespace zilla-http-kafka-async pod/kafka-1234567890-abcde -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic items-responses --if-not-exists
 Created topic items-responses.
 + kubectl port-forward --namespace zilla-http-kafka-async service/zilla-http-kafka-async 8080 9090
 + nc -z localhost 8080

@@ -12,7 +12,7 @@ helm install zilla-grpc-kafka-echo $ZILLA_CHART --namespace zilla-grpc-kafka-ech
 # Install Kafka to the Kubernetes cluster with helm and wait for the pod to start up
 helm install zilla-grpc-kafka-echo-kafka chart --namespace zilla-grpc-kafka-echo --create-namespace --wait
 
-# Create the echo-commands topic in Kafka
+# Create the echo-messages topic in Kafka
 KAFKA_POD=$(kubectl get pods --namespace zilla-grpc-kafka-echo --selector app.kubernetes.io/instance=kafka -o name)
 kubectl exec --namespace zilla-grpc-kafka-echo "$KAFKA_POD" -- \
     /opt/bitnami/kafka/bin/kafka-topics.sh \

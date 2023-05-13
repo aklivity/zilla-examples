@@ -81,6 +81,7 @@ Subscribed (mid: 1): 0
 Client 2b77314a-163f-4f18-908c-2913645e4f56 received PUBLISH (d0, q0, r0, m0, 'zilla', ... (12 bytes))
 Hello, world
 ```
+
 ```bash
 $ mosquitto_sub -V '5' -t 'zilla' --cafile test-ca.crt -d
 Client null sending CONNECT
@@ -91,6 +92,7 @@ Subscribed (mid: 1): 0
 Client 26ab67d8-4a61-4e14-9d95-6a383c0cbdd7 received PUBLISH (d0, q0, r0, m0, 'zilla', ... (12 bytes))
 Hello, world
 ```
+
 ```bash
 $ mosquitto_pub -V '5' -t 'zilla' -m 'Hello, world' -d
 Client null sending CONNECT

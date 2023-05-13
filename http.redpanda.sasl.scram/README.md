@@ -29,8 +29,8 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
-+ helm install zilla-http-redpanda-sasl-scram ./zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-http-redpanda-sasl-scram --create-namespace --wait [...]
++ ZILLA_CHART=../zilla-0.1.0.tgz
++ helm install zilla-http-redpanda-sasl-scram ./zilla-0.1.0.tgz --namespace zilla-http-redpanda-sasl-scram --create-namespace --wait [...]
 NAME: zilla-http-redpanda-sasl-scram
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-http-redpanda-sasl-scram

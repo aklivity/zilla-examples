@@ -19,8 +19,8 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
-+ helm install zilla-ws-reflect chart --namespace zilla-ws-reflect --create-namespace --wait [...]
++ ZILLA_CHART=../zilla-0.1.0.tgz
++ helm install zilla-ws-reflect ../zilla-0.1.0.tgz --namespace zilla-ws-reflect --create-namespace --wait [...]
 NAME: zilla-ws-reflect
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-ws-reflect

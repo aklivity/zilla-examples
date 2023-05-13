@@ -21,8 +21,8 @@ The `setup.sh` script:
 
 ```bash
 $./setup.sh   
-+ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
-+ helm install zilla-mqtt-kafka-reflect ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-mqtt-kafka-reflect --create-namespace --wait [...]
++ ZILLA_CHART=../zilla-0.1.0.tgz
++ helm install zilla-mqtt-kafka-reflect ../zilla-0.1.0.tgz --namespace zilla-mqtt-kafka-reflect --create-namespace --wait [...]
 NAME: zilla-mqtt-kafka-reflect
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-mqtt-kafka-reflect

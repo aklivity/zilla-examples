@@ -19,8 +19,8 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
-+ helm install zilla-http-kafka-crud ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-http-kafka-crud --create-namespace --wait [...]
++ ZILLA_CHART=../zilla-0.1.0.tgz
++ helm install zilla-http-kafka-crud ../zilla-0.1.0.tgz --namespace zilla-http-kafka-crud --create-namespace --wait [...]
 NAME: zilla-http-kafka-crud
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-http-kafka-crud

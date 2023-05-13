@@ -17,8 +17,8 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
-+ helm install zilla-tcp-echo ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-tcp-echo [...]
++ ZILLA_CHART=../zilla-0.1.0.tgz
++ helm install zilla-tcp-echo ../zilla-0.1.0.tgz --namespace zilla-tcp-echo [...]
 NAME: zilla-tcp-echo
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-tcp-echo

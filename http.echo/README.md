@@ -19,8 +19,8 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
-+ helm install zilla-http-echo ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-http-echo --wait [...]
++ ZILLA_CHART=../zilla-0.1.0.tgz
++ helm install zilla-http-echo ../zilla-0.1.0.tgz --namespace zilla-http-echo --wait [...]
 NAME: zilla-http-echo
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-http-echo

@@ -17,8 +17,8 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
-+ helm install zilla-tcp-reflect ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-tcp-reflect [...]
++ ZILLA_CHART=../zilla-0.1.0.tgz
++ helm install zilla-tcp-reflect ../zilla-0.1.0.tgz --namespace zilla-tcp-reflect [...]
 NAME: zilla-tcp-reflect
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-tcp-reflect

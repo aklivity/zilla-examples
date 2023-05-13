@@ -19,8 +19,8 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
-+ helm install zilla-ws-echo chart --namespace zilla-ws-echo --create-namespace --wait [...]
++ ZILLA_CHART=../zilla-0.1.0.tgz
++ helm install zilla-ws-echo ../zilla-0.1.0.tgz --namespace zilla-ws-echo --create-namespace --wait [...]
 NAME: zilla-ws-echo
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-ws-echo

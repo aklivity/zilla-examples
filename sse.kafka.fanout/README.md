@@ -37,8 +37,8 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
-+ helm install zilla-sse-kafka-fanout ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-sse-kafka-fanout --create-namespace --wait [...]
++ ZILLA_CHART=../zilla-0.1.0.tgz
++ helm install zilla-sse-kafka-fanout ../zilla-0.1.0.tgz --namespace zilla-sse-kafka-fanout --create-namespace --wait [...]
 NAME: zilla-sse-kafka-fanout
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-sse-kafka-fanout

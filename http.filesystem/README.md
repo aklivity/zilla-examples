@@ -20,8 +20,8 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
-+ helm install zilla-http-filesystem chart --namespace zilla-http-filesystem --create-namespace --wait [...]
++ ZILLA_CHART=../zilla-0.1.0.tgz
++ helm install zilla-http-filesystem ../zilla-0.1.0.tgz --namespace zilla-http-filesystem --create-namespace --wait [...]
 NAME: zilla-http-filesystem
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-http-filesystem

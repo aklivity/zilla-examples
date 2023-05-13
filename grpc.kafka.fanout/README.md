@@ -18,8 +18,8 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
-+ helm install zilla-grpc-kafka-fanout ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-grpc-kafka-fanout --create-namespace --wait [...]
++ ZILLA_CHART=../zilla-0.1.0.tgz
++ helm install zilla-grpc-kafka-fanout ../zilla-0.1.0.tgz --namespace zilla-grpc-kafka-fanout --create-namespace --wait [...]
 NAME: zilla-grpc-kafka-fanout
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-grpc-kafka-fanout

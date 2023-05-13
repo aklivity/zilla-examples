@@ -26,8 +26,8 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
-+ helm install zilla-http-proxy ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-http-proxy --create-namespace --wait [...]
++ ZILLA_CHART=../zilla-0.1.0.tgz
++ helm install zilla-http-proxy ../zilla-0.1.0.tgz --namespace zilla-http-proxy --create-namespace --wait [...]
 NAME: zilla-http-proxy
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-http-proxy

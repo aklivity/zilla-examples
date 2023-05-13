@@ -18,8 +18,8 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
-+ helm install zilla-grpc-kafka-echo ../zilla-0.1.0-develop-SNAPSHOT.tgz --namespace zilla-grpc-kafka-echo --wait [...]
++ ZILLA_CHART=../zilla-0.1.0.tgz
++ helm install zilla-grpc-kafka-echo ../zilla-0.1.0.tgz --namespace zilla-grpc-kafka-echo --wait [...]
 NAME: zilla-grpc-kafka-echo
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-grpc-kafka-echo

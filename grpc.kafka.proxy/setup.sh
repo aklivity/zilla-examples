@@ -5,7 +5,7 @@ set -ex
 docker image inspect zilla-examples/grpc-echo:latest --format 'Image Found {{.RepoTags}}'
 
 # Install Zilla to the Kubernetes cluster with helm and wait for the pod to start up
-ZILLA_CHART=../zilla-0.1.0-develop-SNAPSHOT.tgz
+ZILLA_CHART=../zilla-0.1.0.tgz
 helm install zilla-grpc-kafka-proxy $ZILLA_CHART --namespace zilla-grpc-kafka-proxy --create-namespace --wait \
     --values values.yaml \
     --set-file zilla\\.yaml=zilla.yaml \

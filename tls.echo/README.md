@@ -18,8 +18,9 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ ZILLA_CHART=../zilla-0.1.0.tgz
-+ helm install zilla-tls-echo ../zilla-0.1.0.tgz --namespace zilla-tls-echo --create-namespace --wait [...]
++ ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
++ VERSION=0.9.45
++ helm install zilla-tls-echo oci://ghcr.io/aklivity/charts/zilla --version 0.9.45 --namespace zilla-tls-echo --create-namespace --wait [...]
 NAME: zilla-tls-echo
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-tls-echo

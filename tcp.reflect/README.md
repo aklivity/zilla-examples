@@ -17,8 +17,9 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ ZILLA_CHART=../zilla-0.1.0.tgz
-+ helm install zilla-tcp-reflect ../zilla-0.1.0.tgz --namespace zilla-tcp-reflect [...]
++ ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
++ VERSION=0.9.45
++ helm install zilla-tcp-reflect oci://ghcr.io/aklivity/charts/zilla --version 0.9.45 --namespace zilla-tcp-reflect [...]
 NAME: zilla-tcp-reflect
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-tcp-reflect

@@ -18,8 +18,9 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ ZILLA_CHART=../zilla-0.1.0.tgz
-+ helm install zilla-grpc-kafka-fanout ../zilla-0.1.0.tgz --namespace zilla-grpc-kafka-fanout --create-namespace --wait [...]
++ ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
++ VERSION=0.9.45
++ helm install zilla-grpc-kafka-fanout oci://ghcr.io/aklivity/charts/zilla --version 0.9.45 --namespace zilla-grpc-kafka-fanout --create-namespace --wait [...]
 NAME: zilla-grpc-kafka-fanout
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-grpc-kafka-fanout

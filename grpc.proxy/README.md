@@ -29,8 +29,9 @@ The `setup.sh` script:
 $ ./setup.sh
 + docker image inspect zilla-examples/grpc-echo:latest --format 'Image Found {{.RepoTags}}'
 Image Found [zilla-examples/grpc-echo:latest]
-+ ZILLA_CHART=../zilla-0.1.0.tgz
-+ helm install zilla-grpc-proxy ../zilla-0.1.0.tgz --namespace zilla-grpc-proxy --create-namespace --wait [...]
++ ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
++ VERSION=0.9.45
++ helm install zilla-grpc-proxy oci://ghcr.io/aklivity/charts/zilla --version 0.9.45 --namespace zilla-grpc-proxy --create-namespace --wait [...]
 NAME: zilla-grpc-proxy
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-grpc-proxy

@@ -40,8 +40,9 @@ The `setup.sh` script:
 $ ./setup.sh
 + docker image inspect zilla-examples/sse-server:latest --format 'Image Found {{.RepoTags}}'
 Image Found [zilla-examples/sse-server:latest]
-+ ZILLA_CHART=../zilla-0.1.0.tgz
-+ helm install zilla-sse-proxy-jwt ../zilla-0.1.0.tgz --namespace zilla-sse-proxy-jwt --create-namespace --wait [...]
++ ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
++ VERSION=0.9.45
++ helm install zilla-sse-proxy-jwt oci://ghcr.io/aklivity/charts/zilla --version 0.9.45 --namespace zilla-sse-proxy-jwt --create-namespace --wait [...]
 NAME: zilla-sse-proxy-jwt
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-sse-proxy-jwt

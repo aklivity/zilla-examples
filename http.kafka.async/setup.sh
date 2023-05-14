@@ -2,8 +2,9 @@
 set -ex
 
 # Install Zilla to the Kubernetes cluster with helm and wait for the pod to start up
-ZILLA_CHART=../zilla-0.1.0.tgz
-helm install zilla-http-kafka-async $ZILLA_CHART --namespace zilla-http-kafka-async --create-namespace --wait \
+ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
+VERSION=0.9.45
+helm install zilla-http-kafka-async $ZILLA_CHART --version $VERSION --namespace zilla-http-kafka-async --create-namespace --wait \
     --values values.yaml \
     --set-file zilla\\.yaml=zilla.yaml \
     --set-file secrets.tls.data.localhost\\.p12=tls/localhost.p12

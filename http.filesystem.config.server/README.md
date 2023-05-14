@@ -28,8 +28,9 @@ The `setup.sh` script:
 
 ```bash
 $ ./setup.sh
-+ ZILLA_CHART=../zilla-0.1.0.tgz
-+ helm install zilla-config-server-config ../zilla-0.1.0.tgz --namespace zilla-config-server --create-namespace --wait --values zilla-config/values.yaml --set-file 'zilla\.yaml=zilla-config/zilla.yaml' --set-file 'secrets.tls.data.localhost\.p12=tls/localhost.p12'
++ ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
++ VERSION=0.9.45
++ helm install zilla-config-server-config oci://ghcr.io/aklivity/charts/zilla --version 0.9.45 --namespace zilla-config-server --create-namespace --wait --values zilla-config/values.yaml --set-file 'zilla\.yaml=zilla-config/zilla.yaml' --set-file 'secrets.tls.data.localhost\.p12=tls/localhost.p12'
 NAME: zilla-config-server-config
 LAST DEPLOYED: Sat May 13 14:30:38 2023
 NAMESPACE: zilla-config-server
@@ -42,7 +43,7 @@ Zilla has been installed.
 ++ jq -r '.items[0].metadata.name'
 + ZILLA_CONFIG_POD=zilla-config-server-config-bc455d4d6-fshdl
 + kubectl cp --namespace zilla-config-server www zilla-config-server-config-bc455d4d6-fshdl:/var/
-+ helm install zilla-config-server-http ../zilla-0.1.0.tgz --namespace zilla-config-server --create-namespace --wait --values zilla-http/values.yaml --set-file 'configMaps.prop.data.zilla\.properties=zilla-http/zilla.properties'
++ helm install zilla-config-server-http oci://ghcr.io/aklivity/charts/zilla --version 0.9.45 --namespace zilla-config-server --create-namespace --wait --values zilla-http/values.yaml --set-file 'configMaps.prop.data.zilla\.properties=zilla-http/zilla.properties'
 NAME: zilla-config-server-http
 LAST DEPLOYED: Sat May 13 14:30:50 2023
 NAMESPACE: zilla-config-server

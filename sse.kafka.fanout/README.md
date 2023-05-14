@@ -38,8 +38,8 @@ The `setup.sh` script:
 ```bash
 $ ./setup.sh
 + ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
-+ VERSION=0.9.45
-+ helm install zilla-sse-kafka-fanout oci://ghcr.io/aklivity/charts/zilla --version 0.9.45 --namespace zilla-sse-kafka-fanout --create-namespace --wait [...]
++ VERSION=0.9.46
++ helm install zilla-sse-kafka-fanout oci://ghcr.io/aklivity/charts/zilla --version 0.9.46 --namespace zilla-sse-kafka-fanout --create-namespace --wait [...]
 NAME: zilla-sse-kafka-fanout
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-sse-kafka-fanout

@@ -29,8 +29,8 @@ The `setup.sh` script:
 ```bash
 $ ./setup.sh
 + ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
-+ VERSION=0.9.45
-+ helm install zilla-http-kafka-async oci://ghcr.io/aklivity/charts/zilla --version 0.9.45 --namespace zilla-http-kafka-async --create-namespace --wait [...]
++ VERSION=0.9.46
++ helm install zilla-http-kafka-async oci://ghcr.io/aklivity/charts/zilla --version 0.9.46 --namespace zilla-http-kafka-async --create-namespace --wait [...]
 NAME: zilla-http-kafka-async
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-http-kafka-async

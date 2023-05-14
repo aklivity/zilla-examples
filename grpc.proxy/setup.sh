@@ -6,7 +6,7 @@ docker image inspect zilla-examples/grpc-echo:latest --format 'Image Found {{.Re
 
 # Install Zilla to the Kubernetes cluster with helm and wait for the pod to start up
 ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
-VERSION=0.9.45
+VERSION=0.9.46
 helm install zilla-grpc-proxy $ZILLA_CHART --version $VERSION --namespace zilla-grpc-proxy --create-namespace --wait \
     --values values.yaml \
     --set-file zilla\\.yaml=zilla.yaml \

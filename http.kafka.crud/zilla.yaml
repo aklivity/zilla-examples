@@ -39,11 +39,6 @@ bindings:
   http_server0:
     type: http
     kind: server
-    spec:
-      openapi: 3.0.0
-      info:
-        version: 1.0.0
-        title: openapi crud example
     routes:
       - when:
           - headers:
@@ -99,9 +94,6 @@ bindings:
           topic: items-snapshots
           filters:
             - key: ${params.id}
-        responses:
-              '200':
-                content-type: application/json
   kafka_cache_client0:
     type: kafka
     kind: cache_client

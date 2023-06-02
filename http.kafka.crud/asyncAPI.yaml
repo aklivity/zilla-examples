@@ -1,0 +1,33 @@
+asyncapi: 3.0.0
+info:
+  title: Kafka CRUD Example
+  version: 1.0.0
+  license:
+    name:  Aklivity Community License
+servers:
+  kafka-cluster:
+    url: 'localhost:9092'
+    protocol: kafka
+    protocolVersion: 3.1.0
+    description: Kafka Cluster info
+channels:
+  items-snapshots:
+    subscribe:
+      summary: Get events
+      message:
+        $ref: '#/components/events/event'
+    publish:
+      summary: Send events
+      message:
+        $ref: '#/components/events/event'
+components:
+  events:
+    event:
+      name: event
+      title: An event
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/event"
+  schemas:
+    event:
+      type: string

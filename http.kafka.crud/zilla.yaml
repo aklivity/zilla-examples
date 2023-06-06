@@ -39,6 +39,12 @@ bindings:
   http_server0:
     type: http
     kind: server
+    openapi: 3.0.0
+    info:
+      version: 1.0.0
+      title: Zilla CRUD
+      license:
+        name: Aklivity Community License
     routes:
       - when:
           - headers:
@@ -55,6 +61,7 @@ bindings:
       - when:
           - method: POST
             path: /items
+            response: '204'
         exit: kafka_cache_client0
         with:
           capability: produce
@@ -63,6 +70,7 @@ bindings:
       - when:
           - method: PUT
             path: /items/{id}
+            response: '204'
         exit: kafka_cache_client0
         with:
           capability: produce
@@ -71,6 +79,7 @@ bindings:
       - when:
           - method: DELETE
             path: /items/{id}
+            response: '204'
         exit: kafka_cache_client0
         with:
           capability: produce
@@ -79,6 +88,7 @@ bindings:
       - when:
           - method: GET
             path: /items
+            response: '200'
         exit: kafka_cache_client0
         with:
           capability: fetch
@@ -89,6 +99,7 @@ bindings:
         when:
           - method: GET
             path: /items/{id}
+            response: '200'
         with:
           capability: fetch
           topic: items-snapshots

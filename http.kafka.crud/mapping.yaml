@@ -1,0 +1,52 @@
+- openapi: 3.0.0
+  info:
+    version: 1.0.0
+    title: Zilla CRUD
+    license:
+      name: Aklivity Community License
+  servers:
+    - url: bindings.http_server0.routes.when.headers.authority
+  paths:
+    - bindings.http_kafka_proxy0.routes.when.path:
+        post: bindings.http_kafka_proxy0.routes.when.method
+        get: bindings.http_kafka_proxy0.routes.when.method
+    - bindings.http_kafka_proxy0.routes.when.path:
+        get: 
+          mapping: bindings.http_kafka_proxy0.routes.when.method
+          parameters:
+            - name: id
+              in: path
+              required: true
+              mapping: bindings.http_kafka_proxy0.routes.with.filters.key
+        put: 
+          mapping: bindings.http_kafka_proxy0.routes.when.method
+          parameters:
+            - name: id
+              in: path
+              required: true
+              mapping: bindings.http_kafka_proxy0.routes.with.key
+        delete: 
+          mapping: bindings.http_kafka_proxy0.routes.when.method
+          parameters:
+            - name: id
+              in: path
+              required: true
+              mapping: bindings.http_kafka_proxy0.routes.with.key
+
+#-------------------
+
+- asyncapi: 3.0.0
+  info:
+    title: Kafka CRUD Example
+    version: 1.0.0
+    license:
+      name:  Aklivity Community License
+  servers:
+    kafka-cluster:
+      url: bindings.tcp_client0.options.host:port
+      protocol: kafka
+      protocolVersion: '3.2'
+  channels:
+    bindings.http_kafka_proxy0.routes.with.topic:
+      
+      

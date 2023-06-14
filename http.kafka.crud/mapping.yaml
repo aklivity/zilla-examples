@@ -48,5 +48,27 @@
       protocolVersion: '3.2'
   channels:
     bindings.http_kafka_proxy0.routes.with.topic:
-      
+      address: bindings.http_kafka_proxy0.routes.with.topic
+      title: Events channel
+      messages:
+        items:
+          $ref: '#/components/messages/item'
+      servers:
+        - $ref: '#/servers/kafka-cluster'
+  operations:
+    sendEvents:
+      action: send
+      channel:
+        $ref: '#/channels/items-snapshots'
+    receiveEvents:
+      action: receive
+      channel:
+        $ref: '#/channels/items-snapshots'
+  components:
+  correlationIds:
+    itemsCorrelationId:
+      location: bindings.http_kafka_proxy0.routes.with.key
+  # schemas: (yet to discuss on this)
+
+
       

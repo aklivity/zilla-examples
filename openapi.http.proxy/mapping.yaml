@@ -1,0 +1,91 @@
+---
+name: example
+vaults:
+  client:
+    type: filesystem
+    options:
+      trust:
+        store: Info unavailable
+        type: Info unavailable
+        password: Info unavailable
+  server:
+    type: filesystem
+    options:
+      keys:
+        store: Info unavailable
+        type: Info unavailable
+        password: Info unavailable
+bindings:
+  tcp_server0:
+    type: tcp
+    kind: server
+    options:
+      host: 0.0.0.0 
+      port: {{servers.url(prefix) == https == servers.url.port}}
+    exit: tls_server0
+  tcp_server1:
+    type: tcp
+    kind: server
+    options:
+      host: 0.0.0.0 
+      port:  {{servers.url(prefix) == http == servers.url.port}}
+    exit: http_server0
+  tls_server0:
+    type: tls
+    kind: server
+    vault: server
+    options:
+      keys:
+        - localhost
+      sni:
+        - localhost
+      alpn:
+        - h2
+    exit: http_server0
+  http_server0:
+    type: http
+    kind: server
+    options:
+      access-control:
+        policy: cross-origin
+    routes:
+      - when:
+          - headers:
+              :path: {{servers.paths.(0)}}
+              :method: {{servers.paths.(0).(0)}}
+          - headers:
+              :path: {{servers.paths.(0)}}
+              :method: {{servers.paths.(0).(1)}}
+          - headers:
+              :path: {{servers.paths.(1)}}
+              :method: {{servers.paths.(1).(0)}}
+          - headers:
+              :path: {{servers.paths.(1)}}
+              :method: {{servers.paths.(1).(1)}}
+          - headers:
+              :path: {{servers.paths.(1)}}
+              :method: {{servers.paths.(1).(2)}}
+        exit: http_client0
+  http_client0:
+    type: http
+    kind: client
+    exit: tls_client0
+  tls_client0:
+    type: tls
+    kind: client
+    vault: client
+    options:
+      trustcacerts: true
+      trust:
+        - nginx
+      sni:
+        - nginx
+      alpn:
+        - h2
+    exit: tcp_client0
+  tcp_client0:
+    type: tcp
+    kind: client
+    options:
+      host: nginx
+      port: 443

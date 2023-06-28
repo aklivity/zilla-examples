@@ -15,6 +15,37 @@ vaults:
         store: tls/localhost.p12
         type: pkcs12
         password: ${{env.KEYSTORE_PASSWORD}}
+guards:
+  jwt0:
+    type: jwt
+    options:
+      issuer: https://auth.example.com
+      audience: https://api.example.com
+      keys:
+        - kty: RSA
+          n: qqEu50hX+43Bx4W1UYWnAVKwFm+vDbP0kuIOSLVNa+HKQdHTf+3Sei5UCnkskn796izA29D0DdCy3ET9oaKRHIJyKbqFl0rv6f516QzOoXKC6N01sXBHBE/ovs0wwDvlaW+gFGPgkzdcfUlyrWLDnLV7LcuQymhTND2uH0oR3wJnNENN/OFgM1KGPPDOe19YsIKdLqARgxrhZVsh06OurEviZTXOBFI5r+yac7haDwOQhLHXNv+Y9MNvxs5QLWPFIM3bNUWfYrJnLrs4hGJS+y/KDM9Si+HL30QAFXy4YNO33J8DHjZ7ddG5n8/FqplOKvRtUgjcKWlxoGY4VdVaDQ==
+          e: AQAB
+          alg: RS256
+          kid: example
+schemas:
+  schema0:
+    type: inline
+    options:
+      format: JSON
+      source: "#/components/schemas/Item"
+  schema1:
+    type: registry
+    options:
+      format: AVRO
+      compatibility: forward
+      source: http://localhost:8081
+      version: V1
+      id: schema1
+  schema2:
+    type: filesystem
+    options:
+      format: JSON
+      source: schema/v3_schema.yaml
 bindings:
   tcp_server0:
     type: tcp
@@ -46,16 +77,30 @@ bindings:
     type: http
     kind: server
     options:
+      authorization:
+        jwt0:
+          credentials:
+            headers:
+              authorization: Bearer {credentials}
       access-control:
         policy: cross-origin
     routes:
-      - when:
+      - guarded:
+          jwt0:
+            - echo:stream
+        when:
           - headers:
               :path: /items
-              :method: POST
+              :method: POST 
           - headers:
               :path: /items
               :method: GET
+              :query: 
+                - limit: 
+                    required: false
+                    type: int32
+        exit: http_client0
+      - when:
           - headers:
               :path: /items/{id}
               :method: GET

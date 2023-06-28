@@ -1,0 +1,59 @@
+asyncapi: 3.0.0
+info:
+  title: Kafka Zilla Example
+  version: 1.0.0
+  license:
+    name:  Aklivity Community License
+servers:
+  kafka-cluster:
+    url: localhost:9092
+    protocol: kafka
+    protocolVersion: '3.2'
+    description: Kafka Cluster info
+defaultContentType: application/json
+channels:
+  items-snapshots:
+    address: items-snapshots
+    title: Events channel
+    messages:
+      items:
+        $ref: '#/components/messages/item'
+    servers:
+      - $ref: '#/servers/kafka-cluster'
+operations:
+  sendEvents:
+    action: send
+    channel:
+      $ref: '#/channels/items-snapshots'
+  receiveEvents:
+    action: receive
+    channel:
+      $ref: '#/channels/items-snapshots'
+components:
+  correlationIds:
+    itemsCorrelationId:
+      location: '$message.header#/Idempotency-Key'
+  messages:
+    item:
+      name: event
+      title: An event
+      correlationId:
+        $ref: "#/components/correlationIds/itemsCorrelationId"
+      headers:
+        type: object
+        properties:
+          Idempotency-Key:
+            description: Unique identifier for a given event
+            type: string
+      contentType: application/json
+      payload:
+        type: object
+        properties:
+          item:
+            $ref: "#/components/schemas/item"
+  schemas:
+    item:
+      type: object
+      properties:
+        greeting:
+          type: string

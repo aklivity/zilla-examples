@@ -1,13 +1,15 @@
 openapi: 3.1.0
 info:
   version: 1.0.0
-  title: Zilla CRUD
+  title: Zilla CRUD V1
   license:
     name: Aklivity Community License
 servers:
   - url: https://localhost:9090
 paths:
   /items:
+    servers:
+      - url: https://items.com:9090
     post:
       summary: Create an item
       operationId: createItem
@@ -22,6 +24,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+      servers:
+        - url: https://postitems.com:9090
+      security:
+        - bearerAuth: []
     get:
       summary: List all items
       operationId: listItems
@@ -54,6 +60,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+      security:
+        - bearerAuth: []
   /items/{id}:
     get:
       summary: Get an item
@@ -149,3 +157,10 @@ components:
           format: int32
         message:
           type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      
+

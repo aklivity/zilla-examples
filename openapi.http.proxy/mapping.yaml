@@ -5,30 +5,61 @@ vaults:
     type: filesystem
     options:
       trust:
-        store: Info unavailable
-        type: Info unavailable
-        password: Info unavailable
+        store: tls/truststore.p12
+        type: pkcs12
+        password: ${{env.KEYSTORE_PASSWORD}}
   server:
     type: filesystem
     options:
       keys:
-        store: Info unavailable
-        type: Info unavailable
-        password: Info unavailable
+        store: tls/localhost.p12
+        type: pkcs12
+        password: ${{env.KEYSTORE_PASSWORD}}
+guards:
+  jwt0:
+    type: {components.securitySchemes.bearerFormat}
+    options:
+      issuer: https://auth.example.com
+      audience: https://api.example.com
+      keys:
+        - kty: RSA
+          n: qqEu50hX+43Bx4W1UYWnAVKwFm+vDbP0kuIOSLVNa+HKQdHTf+3Sei5UCnkskn796izA29D0DdCy3ET9oaKRHIJyKbqFl0rv6f516QzOoXKC6N01sXBHBE/ovs0wwDvlaW+gFGPgkzdcfUlyrWLDnLV7LcuQymhTND2uH0oR3wJnNENN/OFgM1KGPPDOe19YsIKdLqARgxrhZVsh06OurEviZTXOBFI5r+yac7haDwOQhLHXNv+Y9MNvxs5QLWPFIM3bNUWfYrJnLrs4hGJS+y/KDM9Si+HL30QAFXy4YNO33J8DHjZ7ddG5n8/FqplOKvRtUgjcKWlxoGY4VdVaDQ==
+          e: AQAB
+          alg: RS256
+          kid: example
+schemas:
+  schema0:
+    type: inline
+    options:
+      format: JSON
+      source: "#/components/schemas/Item"
+  schema1:
+    type: registry
+    options:
+      format: AVRO
+      compatibility: forward
+      source: http://localhost:8081
+      version: V1
+      id: schema1
+  schema2:
+    type: filesystem
+    options:
+      format: JSON
+      source: schema/v3_schema.yaml
 bindings:
   tcp_server0:
     type: tcp
     kind: server
     options:
-      host: 0.0.0.0 
-      port: {{servers.url(prefix) == https == servers.url.port}}
+      host: 0.0.0.0
+      port: {servers.url(prefix) == https == servers.url.port}
     exit: tls_server0
   tcp_server1:
     type: tcp
     kind: server
     options:
-      host: 0.0.0.0 
-      port:  {{servers.url(prefix) == http == servers.url.port}}
+      host: 0.0.0.0
+      port: {servers.url(prefix) == http == servers.url.port}
     exit: http_server0
   tls_server0:
     type: tls
@@ -46,25 +77,39 @@ bindings:
     type: http
     kind: server
     options:
+      authorization:
+        jwt0:
+          credentials:
+            headers:
+              authorization: Bearer {credentials}
       access-control:
         policy: cross-origin
     routes:
+      - guarded:
+          jwt0:
+            - echo:stream
+        when:
+          - headers:
+              :path: {paths.(0)}
+              :method: {paths.(0).(0)}
+          - headers:
+              :path: {paths.(0)}
+              :method: {paths.(0).(1)}
+              :query: 
+                - {paths.(0).(1).parameters.name}: 
+                    required: {paths.(0).(1).parameters.required}
+                    type: {paths.(0).(1).parameters.schema.format}
+        exit: http_client0
       - when:
           - headers:
-              :path: {{servers.paths.(0)}}
-              :method: {{servers.paths.(0).(0)}}
+              :path: {paths.(1)}
+              :method: {paths.(1).(0)}
           - headers:
-              :path: {{servers.paths.(0)}}
-              :method: {{servers.paths.(0).(1)}}
+              :path: {paths.(1)}
+              :method: {paths.(1).(1)}
           - headers:
-              :path: {{servers.paths.(1)}}
-              :method: {{servers.paths.(1).(0)}}
-          - headers:
-              :path: {{servers.paths.(1)}}
-              :method: {{servers.paths.(1).(1)}}
-          - headers:
-              :path: {{servers.paths.(1)}}
-              :method: {{servers.paths.(1).(2)}}
+              :path: {paths.(1)}
+              :method: {paths.(1).(2)}
         exit: http_client0
   http_client0:
     type: http

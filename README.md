@@ -48,13 +48,3 @@ Join the [Slack community][community-join].
 
 [zilla-docs]: https://docs.aklivity.io/zilla
 [zilla-examples]: https://github.com/aklivity/zilla-examples
-
-## missing proto file
-Jun 29, 2023 1:28:14 PM org.eclipse.yasson.internal.Unmarshaller deserializeItem
-SEVERE: Problem adapting object of type class io.aklivity.zilla.runtime.engine.config.NamespaceConfig to interface jakarta.json.JsonObject in class class io.aklivity.zilla.runtime.engine.internal.config.NamespaceAdapter
-Configuration parsing error: Problem adapting object of type class io.aklivity.zilla.runtime.engine.config.NamespaceConfig to interface jakarta.json.JsonObject in class class io.aklivity.zilla.runtime.engine.internal.config.NamespaceAdapter
-
-
-## sending json over http
-java.lang.IndexOutOfBoundsException: index=-1694 length=1734 capacity=65536
-stopped

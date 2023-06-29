@@ -1,8 +1,8 @@
-name: REST-example
+name: quickstart
 bindings:
 
 # Gateway ingress config
-  api_tcp_server:
+  tcp_server:
     type: tcp
     kind: server
     options:
@@ -16,20 +16,6 @@ bindings:
       access-control:
         policy: cross-origin
     routes:
-      # - when:
-      #     - headers:
-      #         :scheme: http
-      #         :authority: localhost:8080
-      #         :path: /api
-              # content-type: application/json
-      #   exit: http_api_kafka_proxy
-      # - when:
-      #     - headers:
-      #         :scheme: http
-      #         :authority: localhost:8080
-      #         :path: /grpc
-              # content-type: application/grpc
-      #   exit: grpc_server
       - when:
           - headers:
               :scheme: http
@@ -40,37 +26,63 @@ bindings:
           - headers:
               :scheme: http
               :authority: localhost:8080
-              content-type: application/json
+              :path: /sse/*
         exit: sse_http_kafka_proxy
       - when:
           - headers:
               :scheme: http
               :authority: localhost:8080
-        exit: http_filesystem_proxy
-
-# # Proxy REST endpoints to Kafka a topic
-#   http_api_kafka_proxy:
-#     type: http-kafka
-#     kind: proxy
-#     routes:
-#       - when:
-#           - method: POST
-#             path: /items
-#         exit: kafka_cache_client
-#         with:
-#           capability: produce
-#           topic: items-snapshots
-#       - when:
-#           - method: GET
-#             path: /items
-#         exit: kafka_cache_client
-#         with:
-#           capability: fetch
-#           topic: items-snapshots
-#           merge:
-#             content-type: application/json
+              :path: /api/*
+        exit: api_http_kafka_proxy
 
 # Proxy REST endpoints to Kafka a topic
+  api_http_kafka_proxy:
+    type: http-kafka
+    kind: proxy
+    routes:
+      - when:
+          - method: POST
+            path: /api/items
+        exit: kafka_cache_client
+        with:
+          capability: produce
+          topic: items-snapshots
+          key: ${idempotencyKey}
+      - when:
+          - method: PUT
+            path: /api/items/{id}
+        exit: kafka_cache_client
+        with:
+          capability: produce
+          topic: items-snapshots
+          key: ${params.id}
+      - when:
+          - method: DELETE
+            path: /api/items/{id}
+        exit: kafka_cache_client
+        with:
+          capability: produce
+          topic: items-snapshots
+          key: ${params.id}
+      - when:
+          - method: GET
+            path: /api/items
+        exit: kafka_cache_client
+        with:
+          capability: fetch
+          topic: items-snapshots
+          merge:
+            content-type: application/json
+      - exit: kafka_cache_client
+        when:
+          - method: GET
+            path: /api/items/{id}
+        with:
+          capability: fetch
+          topic: items-snapshots
+          filters:
+            - key: ${params.id}
+
   sse_http_kafka_proxy:
     type: http-kafka
     kind: proxy
@@ -108,32 +120,6 @@ bindings:
         with:
           topic: sse-events
 
-# # gRPC service definition
-#   grpc_server:
-#     type: grpc
-#     kind: server
-#     options:
-#       services:
-#         - proto/echo.proto
-#     routes:
-#       - when:
-#           - method: example.EchoService/*
-#         exit: grpc_kafka
-
-# # Proxy a gRPC service to a Kafka topic
-#   grpc_kafka:
-#     type: grpc-kafka
-#     kind: proxy
-#     routes:
-#       - when:
-#           - method: example.EchoService/*
-#         exit: kafka_cache_client
-#         with:
-#           capability: produce
-#           topic: echo-messages
-#           acks: leader_only
-#           reply-to: echo-messages
-
 # Kafka caching layer
   kafka_cache_client:
     type: kafka
@@ -142,7 +128,6 @@ bindings:
       bootstrap:
         - items-snapshots
         - sse-events
-        - echo-messages
     exit: kafka_cache_server
   kafka_cache_server:
     type: kafka
@@ -163,19 +148,3 @@ bindings:
     routes:
       - when:
           - cidr: 0.0.0.0/0
-
-# UI html file server
-  http_filesystem_proxy:
-    type: http-filesystem
-    kind: proxy
-    routes:
-      - when:
-          - path: /
-        with:
-          path: index.html
-        exit: filesystem_server
-  filesystem_server:
-    type: filesystem
-    kind: server
-    options:
-      location: /var/www/

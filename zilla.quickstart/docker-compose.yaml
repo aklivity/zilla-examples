@@ -42,9 +42,8 @@ services:
       - "8080:8080"
     volumes:
       - ./zilla.yaml:/etc/zilla/zilla.yaml
-      - ./index.html:/var/www/index.html
       - ./echo.proto:/etc/zilla/proto/echo.proto
-    command: start -v
+    command: start -v -e
 
 networks:
   default:

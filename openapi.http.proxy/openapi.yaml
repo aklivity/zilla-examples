@@ -15,6 +15,11 @@ paths:
       operationId: createItem
       tags:
         - items
+      requestBody:
+        content: 
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Item'
       responses:
         '204':
           description: No Content

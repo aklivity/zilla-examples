@@ -32,7 +32,14 @@ schemas:
     type: inline
     options:
       format: JSON
-      source: "#/components/schemas/Item"
+      source:
+        - Item:
+            type: object
+            properties:
+              greeting:
+                type: string
+            required:
+              - greeting
   schema1:
     type: registry
     options:
@@ -88,10 +95,17 @@ bindings:
       - guarded:
           jwt0:
             - echo:stream
+        schemas:
+          - schema0
         when:
           - headers:
               :path: /items
               :method: POST 
+        exit: http_client0
+      - guarded:
+          jwt0:
+            - echo:stream
+        when:
           - headers:
               :path: /items
               :method: GET

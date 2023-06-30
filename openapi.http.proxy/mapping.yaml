@@ -31,8 +31,15 @@ schemas:
   schema0:
     type: inline
     options:
-      format: JSON
-      source: "#/components/schemas/Item"
+      format: {components.schemas.Item.type == object == JSON}
+      source: 
+        - Item:
+            type: {components.schemas.Item.type}
+            properties:
+              greeting:
+                type: {components.schemas.Item.properties.greeting.type}
+            required:
+            - {components.schemas.Item.required}
   schema1:
     type: registry
     options:
@@ -88,10 +95,17 @@ bindings:
       - guarded:
           jwt0:
             - echo:stream
+        schemas:
+          - {paths.(0).(0).requestBody.content.(0).schema.$ref}
         when:
           - headers:
               :path: {paths.(0)}
               :method: {paths.(0).(0)}
+        exit: http_client0
+      - guarded:
+          jwt0:
+            - echo:stream
+        when:
           - headers:
               :path: {paths.(0)}
               :method: {paths.(0).(1)}

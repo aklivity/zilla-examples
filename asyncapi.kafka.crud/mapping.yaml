@@ -8,6 +8,32 @@ vaults:
         store: tls/localhost.p12
         type: pkcs12
         password: ${{env.KEYSTORE_PASSWORD}}
+schemas:
+  schema0:
+    type: inline
+    options:
+      format: {components.schemas.item.type == object ==JSON}
+      source:
+        - Item:
+            type: {components.schemas.item.type}
+            properties:
+              greeting:
+                type: {components.schemas.item.properties.greeting.type}
+            required:
+              - {components.schemas.item.required}
+  schema1:
+    type: registry
+    options:
+      format: AVRO
+      compatibility: forward
+      source: http://localhost:8081
+      version: V1
+      id: schema1
+  schema2:
+    type: filesystem
+    options:
+      format: JSON
+      source: schema/v3_schema.yaml
 bindings:
   tcp_server0:
     type: tcp
@@ -52,7 +78,9 @@ bindings:
     type: http-kafka
     kind: proxy
     routes:
-      - when:
+      - schemas:
+          - {channels.items-snapshots.messages.items.$ref}
+        when:
           - method: POST
             path: /items
         exit: kafka_cache_client0
@@ -85,10 +113,10 @@ bindings:
           topic: {channels.items-snapshots || channels.items-snapshots.address}
           merge:
             content-type: {defaultContentType}
-      - exit: kafka_cache_client0
-        when:
+      - when:
           - method: GET
             path: /items/{id}
+        exit: kafka_cache_client0
         with:
           capability: {(operations.receiveEvents.action == receive) == fetch}
           topic: {channels.items-snapshots || channels.items-snapshots.address}
@@ -108,6 +136,11 @@ bindings:
   kafka_client0:
     type: {servers.kafka-cluster.protocol}
     kind: client
+    options:
+      sasl:
+        mechanism: {components.securitySchemes.mainSecurity.type == scramSha512 == scram-sha-512}
+        username: ${{env.SASL_USERNAME}}
+        password: ${{env.SASL_PASSWORD}}
     exit: tcp_client0
   tcp_client0:
     type: tcp

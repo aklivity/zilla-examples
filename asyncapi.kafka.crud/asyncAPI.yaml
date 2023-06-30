@@ -6,10 +6,12 @@ info:
     name:  Aklivity Community License
 servers:
   kafka-cluster:
-    url: localhost:9092
+    host: localhost:9092
     protocol: kafka
     protocolVersion: '3.2'
     description: Kafka Cluster info
+    security:
+      - mainSecurity: []
 defaultContentType: application/json
 channels:
   items-snapshots:
@@ -57,3 +59,8 @@ components:
       properties:
         greeting:
           type: string
+      required:
+      - greeting
+  securitySchemes:
+    mainSecurity:
+      type: scramSha512

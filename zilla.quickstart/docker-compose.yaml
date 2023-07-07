@@ -4,8 +4,8 @@ services:
     image: docker.io/bitnami/kafka:latest
     container_name: kafka
     ports:
-      - "9092:9092"
-      - "29092:9092"
+      - 9092:9092
+      - 29092:9092
     environment:
       ALLOW_PLAINTEXT_LISTENER: "yes"
       KAFKA_CFG_NODE_ID: "1"
@@ -26,12 +26,26 @@ services:
       - "/bin/bash"
       - "-c"
       -  | 
-        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic items-snapshots
-        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic sse-events
-        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic echo-messages
+        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic items-crud --config cleanup.policy=compact
+        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic events-sse
+        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic echo-service-messages
+        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic route-guide-requests
+        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic route-guide-responses
     depends_on:
       - kafka
     init: true
+
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - 80:8080
+    depends_on:
+      kafka-init:
+        condition: service_completed_successfully
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
 
   zilla:
     image: ghcr.io/aklivity/zilla:latest
@@ -39,11 +53,26 @@ services:
     depends_on:
       - kafka
     ports:
-      - "8080:8080"
+      - 8080:8080
     volumes:
       - ./zilla.yaml:/etc/zilla/zilla.yaml
-      - ./echo.proto:/etc/zilla/proto/echo.proto
+      - ./grpc/echo.proto:/etc/zilla/proto/echo.proto
+      - ./grpc/route_guide.proto:/etc/zilla/proto/route_guide.proto
     command: start -v -e
+
+  route_guide_server:
+    build: ./grpc/route_guide/server
+    container_name: route_guide_server
+    ports:
+      - 50051:50051
+
+  route_guide_client:
+    build: ./grpc/route_guide/client
+    container_name: route_guide_client
+    depends_on:
+      - route_guide_server
+    command: "-addr=route_guide_server:50051"
+
 
 networks:
   default:

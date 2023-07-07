@@ -54,6 +54,7 @@ services:
       - kafka
     ports:
       - 8080:8080
+      - 9090:9090
     volumes:
       - ./zilla.yaml:/etc/zilla/zilla.yaml
       - ./grpc/echo.proto:/etc/zilla/proto/echo.proto

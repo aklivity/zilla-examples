@@ -8,6 +8,9 @@ bindings:
     options:
       host: 0.0.0.0
       port: 8080
+    telemetry:
+      metrics:
+        - stream.*
     exit: http_server
   http_server:
     type: http
@@ -39,6 +42,9 @@ bindings:
               :scheme: http
               :authority: localhost:8080
         exit: grpc_server
+    telemetry:
+      metrics:
+        - http.*
 
 # REST proxy endpoints to Kafka a topic
   http_api_kafka_proxy:
@@ -153,6 +159,9 @@ bindings:
       - when:
           - method: routeguide.RouteGuide/*
         exit: grpc_kafka
+    telemetry:
+      metrics:
+        - grpc.*
 
 # gRPC RoutGuide server
   route_guide_server_grpc_client:
@@ -243,3 +252,26 @@ bindings:
     routes:
       - when:
           - cidr: 0.0.0.0/0
+
+telemetry:
+  attributes:
+    service.namespace: zilla-quickstart
+
+  # Desired metrics to track
+  metrics:
+    - http.request.size
+    - http.response.size
+    - stream.opens.sent
+    - stream.closes.sent
+    - grpc.requests.per.rpc
+    - grpc.responses.per.rpc
+
+  # Prometheus endpoint definition
+  exporters:
+    prometheus_metric_exporter:
+      type: prometheus
+      options:
+        endpoints:
+          - scheme: http
+            path: /metrics
+            port: 9090

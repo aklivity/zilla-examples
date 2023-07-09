@@ -154,9 +154,6 @@ bindings:
           - method: example.EchoService/*
         exit: grpc_kafka
       - when:
-          - method: routeguide.RouteGuide/GetFeature
-        exit: route_guide_server_grpc_client
-      - when:
           - method: routeguide.RouteGuide/*
         exit: grpc_kafka
     telemetry:

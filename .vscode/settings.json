@@ -1,0 +1,6 @@
+{
+    "yaml.schemas": {
+        "async_v3.0.0_schema.json": "/Users/ankit/Downloads/3.0.0.json",
+        "file:///Users/ankit/Aklivity/brain/zilla-examples/async_v3.0.0_schema.json": "file:///Users/ankit/Aklivity/brain/zilla-examples/asyncapi.kafka/asyncapi.yaml"
+    }
+}

@@ -1,0 +1,52 @@
+---
+name: example
+vaults:
+  server:
+    type: filesystem
+    options:
+      keys:
+        store: tls/localhost.p12
+        type: pkcs12
+        password: ${{env.KEYSTORE_PASSWORD}}
+bindings:
+  tcp_server0:
+    type: tcp
+    kind: server
+    options:
+      host: 0.0.0.0
+      port: {servers.local.host || servers.local.variable.port}
+    exit: mqtt_server0
+  tcp_server1:
+    type: tcp
+    kind: server
+    options:
+      host: 0.0.0.0
+      port: {servers.local.host || servers.local.variable.port}
+    exit: tls_server0
+  tls_server0:
+    type: tls
+    kind: server
+    vault: server
+    options:
+      keys:
+        - localhost
+      sni:
+        - localhost
+    exit: mqtt_server0
+  mqtt_server0:
+    type: {servers.local.protocol}
+    kind: server
+    exit: mqtt_client0
+  mqtt_client0:
+    type: {servers.local.protocol}
+    kind: client
+    exit: tcp_client0
+  tcp_client0:
+    type: tcp
+    kind: client
+    options:
+      host: test.mosquitto.org
+      port: 1883
+    routes:
+      - when:
+          - cidr: 0.0.0.0/0

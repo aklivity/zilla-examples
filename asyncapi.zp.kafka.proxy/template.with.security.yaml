@@ -1,0 +1,90 @@
+---
+name: example
+vaults:
+  external:
+    type: filesystem
+    options:
+      keys:
+        store: external/server/keys
+        type: pkcs12
+        password: generated
+      trust:
+        store: external/server/trust
+        type: pkcs12
+        password: generated
+  internal:
+  type: filesystem
+  options:
+    keys:
+      store: internal/client/keys
+      type: pkcs12
+      password: generated
+    trust:
+      store: internal/client/trust
+      type: pkcs12
+      password: generated
+    signers:
+      store: internal/client/signers
+      type: pkcs12
+      password: generated
+bindings:
+  server9092:
+    type: tcp
+    kind: server
+    options:
+      host: 0.0.0.0
+      port:
+        - {servers.local.host.port}
+    exit: kafka-proxy0
+  server9093:
+    type: tcp
+    kind: server
+    options:
+      host: 0.0.0.0
+      port: {servers.local.host.port (if secure exit to tls server)}
+    exit: secure-server9093
+  secure-server9093:
+    type: tls
+    kind: server
+    vault: external
+    options:
+      keys:
+        - external.net
+      trust:
+        - clientca
+      mutual: required
+    exit: kafka-proxy0
+  kafka-proxy0:
+    type: kafka-proxy
+    kind: proxy
+    options:
+      external:
+        host: {servers.local.host.hostname}
+        port: {servers.local.host.port}
+      internal:
+        host: kafka-#.internal.net
+        port: 9094
+      sasl:
+        mechanism: {components.securitySchemes.mainSecurity.x-sasl.mechanism}
+        username: ${{env.SASL_USERNAME}}
+        password: ${{env.SASL_PASSWORD}}
+    exit: secure-client0
+  secure-client0:
+    type: tls
+    kind: client
+    vault: internal
+    options:
+      trust:
+        - serverca
+      signers:
+        - clientca
+    exit: client0
+  client0:
+    type: tcp
+    kind: client
+    options:
+      host: kafka.internal.net
+      port: 9094
+    routes:
+      - when:
+          - cidr: 0.0.0.0/0

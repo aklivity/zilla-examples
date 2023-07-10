@@ -1,0 +1,77 @@
+asyncapi: 3.0.0
+info:
+  title: Zilla MQTT Proxy
+  version: 1.0.0
+  license:
+    name:  Aklivity Community License
+servers:
+  local:
+    host: test.mosquitto.org:{port}
+    protocol: mqtt
+    variables:
+      port:
+        description: Secure connection (TLS) is available through port 8883.
+        default: '1883'
+        enum:
+          - '1883'
+          - '8883'
+    description: MQTT Broker
+defaultContentType: application/json
+
+channels:
+  smartylighting:
+    address: "smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured"
+    title: MQTT Topic to produce & consume topic. 
+    parameters:
+      streetlightId:
+        $ref: '#/components/parameters/streetlightId'
+    messages:
+      items:
+        $ref: '#/components/messages/item'
+    servers:
+      - $ref: '#/servers/local'
+
+operations:
+  sendEvents:
+    action: send
+    channel:
+      $ref: '#/channels/smartylighting'
+
+  receiveEvents:
+    action: receive
+    channel:
+      $ref: '#/channels/smartylighting'
+
+components:
+  parameters:
+    streetlightId:
+      description: Street Light ID
+      location: $message.header#/id
+  messages:
+    item:
+      name: event
+      title: An event
+      headers:
+        type: object
+        properties:
+          Idempotency-Key:
+            description: Unique identifier for a given event
+            type: string
+          id:
+            description: Street Light ID
+            type: string
+      contentType: application/json
+      payload:
+        type: object
+        properties:
+          item:
+            $ref: "#/components/schemas/item"
+
+  schemas:
+    item:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+      - status

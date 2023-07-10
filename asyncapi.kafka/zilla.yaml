@@ -1,0 +1,86 @@
+---
+name: example
+vaults:
+  server:
+    type: filesystem
+    options:
+      keys:
+        store: tls/localhost.p12
+        type: pkcs12
+        password: ${{env.KEYSTORE_PASSWORD}}
+schemas:
+  schema0:
+    type: inline
+    options:
+      format: JSON
+      source:
+        - Item:
+            type: object
+            properties:
+              greeting:
+                type: string
+            required:
+              - greeting
+bindings:
+  tcp_server0:
+    type: tcp
+    kind: server
+    options:
+      host: 0.0.0.0
+      port: 9093
+    exit: tls_server0
+  tcp_server1:
+    type: tcp
+    kind: server
+    options:
+      host: 0.0.0.0
+      port: 9092
+    exit: kafka_server0
+  tls_server0:
+    type: tls
+    kind: server
+    vault: server
+    options:
+      keys:
+        - localhost
+      trust:
+      - clientca
+      mutual: required
+    exit: kafka_server0
+  kafka_server0:
+    type: kafka
+    kind: server
+    routes:
+      - when:
+          - topic: items-snapshots
+            capability: produce
+        with:
+          key: ${idempotencyKey}
+          acks: leader_only
+        exit: kafka_client0
+      - when:
+        - topic: items-snapshots
+          capability: fetch
+        exit: kafka_client0
+      - when:
+          - topic: items-responses
+            capability: fetch
+        exit: kafka_client0 
+  kafka_client0:
+    type: kafka
+    kind: client
+    options:
+      sasl:
+        mechanism: scram-sha-512
+        username: ${{env.SASL_USERNAME}}
+        password: ${{env.SASL_PASSWORD}}
+    exit: tcp_client0
+  tcp_client0:
+    type: tcp
+    kind: client
+    options:
+      host: kafka
+      port: 29092
+    routes:
+      - when:
+          - cidr: 0.0.0.0/0

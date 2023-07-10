@@ -1,0 +1,150 @@
+---
+name: example
+vaults:
+  client:
+    type: filesystem
+    options:
+      trust:
+        store: tls/truststore.p12
+        type: pkcs12
+        password: ${{env.KEYSTORE_PASSWORD}}
+  server:
+    type: filesystem
+    options:
+      keys:
+        store: tls/localhost.p12
+        type: pkcs12
+        password: ${{env.KEYSTORE_PASSWORD}}
+guards:
+  jwt0:
+    type: jwt
+    options:
+      issuer: https://auth.example.com
+      audience: https://api.example.com
+      keys:
+        - kty: RSA
+          n: qqEu50hX+43Bx4W1UYWnAVKwFm+vDbP0kuIOSLVNa+HKQdHTf+3Sei5UCnkskn796izA29D0DdCy3ET9oaKRHIJyKbqFl0rv6f516QzOoXKC6N01sXBHBE/ovs0wwDvlaW+gFGPgkzdcfUlyrWLDnLV7LcuQymhTND2uH0oR3wJnNENN/OFgM1KGPPDOe19YsIKdLqARgxrhZVsh06OurEviZTXOBFI5r+yac7haDwOQhLHXNv+Y9MNvxs5QLWPFIM3bNUWfYrJnLrs4hGJS+y/KDM9Si+HL30QAFXy4YNO33J8DHjZ7ddG5n8/FqplOKvRtUgjcKWlxoGY4VdVaDQ==
+          e: AQAB
+          alg: RS256
+          kid: example
+schemas:
+  schema0:
+    type: inline
+    options:
+      format: JSON
+      source:
+        - Item:
+            type: object
+            properties:
+              greeting:
+                type: string
+            required:
+              - greeting
+  schema1:
+    type: registry
+    options:
+      format: AVRO
+      compatibility: forward
+      source: http://localhost:8081
+      version: V1
+      id: schema1
+  schema2:
+    type: filesystem
+    options:
+      format: JSON
+      source: schema/v3_schema.yaml
+bindings:
+  tcp_server0:
+    type: tcp
+    kind: server
+    options:
+      host: 0.0.0.0
+      port: 9090
+    exit: tls_server0
+  tcp_server1:
+    type: tcp
+    kind: server
+    options:
+      host: 0.0.0.0
+      port:  8080
+    exit: http_server0
+  tls_server0:
+    type: tls
+    kind: server
+    vault: server
+    options:
+      keys:
+        - localhost
+      sni:
+        - localhost
+      alpn:
+        - h2
+    exit: http_server0
+  http_server0:
+    type: http
+    kind: server
+    options:
+      authorization:
+        jwt0:
+          credentials:
+            headers:
+              authorization: Bearer {credentials}
+      access-control:
+        policy: cross-origin
+    routes:
+      - guarded:
+          jwt0:
+            - echo:stream
+        schemas:
+          - schema0
+        when:
+          - headers:
+              :path: /items
+              :method: POST 
+        exit: http_client0
+      - guarded:
+          jwt0:
+            - echo:stream
+        when:
+          - headers:
+              :path: /items
+              :method: GET
+              :query: 
+                - limit: 
+                    required: false
+                    type: int32
+        exit: http_client0
+      - when:
+          - headers:
+              :path: /items/{id}
+              :method: GET
+          - headers:
+              :path: /items/{id}
+              :method: PUT
+          - headers:
+              :path: /items/{id}
+              :method: DELETE
+        exit: http_client0
+  http_client0:
+    type: http
+    kind: client
+    exit: tls_client0
+  tls_client0:
+    type: tls
+    kind: client
+    vault: client
+    options:
+      trustcacerts: true
+      trust:
+        - nginx
+      sni:
+        - nginx
+      alpn:
+        - h2
+    exit: tcp_client0
+  tcp_client0:
+    type: tcp
+    kind: client
+    options:
+      host: nginx
+      port: 443

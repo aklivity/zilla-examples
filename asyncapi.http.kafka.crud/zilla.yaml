@@ -28,7 +28,7 @@ schemas:
       compatibility: forward
       source: http://localhost:8081
       version: V1
-      id: schema1
+      id: schema1 # makes it more specific / make it more generic
   schema2:
     type: filesystem
     options:
@@ -116,12 +116,15 @@ bindings:
       - when:
           - method: GET
             path: /items/{id}
+          - path: /items/{id};{correlationId}
         exit: kafka_cache_client0
         with:
-          capability: fetch
+          capability: produce
           topic: items-snapshots
-          filters:
-            - key: ${params.id}
+          key: ${params.id}
+          reply-to: items-responses
+          async:
+            location: /items/${params.id};${correlationId}
   kafka_cache_client0:
     type: kafka
     kind: cache_client
@@ -132,6 +135,9 @@ bindings:
   kafka_cache_server0:
     type: kafka
     kind: cache_server
+    options:
+      bootstrap:
+        - items-responses
     exit: kafka_client0
   kafka_client0:
     type: kafka

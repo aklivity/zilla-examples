@@ -116,12 +116,15 @@ bindings:
       - when:
           - method: GET
             path: /items/{id}
+          - path: /items/{id};{correlationId}
         exit: kafka_cache_client0
         with:
-          capability: {(operations.receiveEvents.action == receive) == fetch}
+          capability: {(operations.sendEvents.action == send) == produce}
           topic: {channels.items-snapshots || channels.items-snapshots.address}
-          filters:
-            - key: ${params.id}
+          key: ${params.id}
+          reply-to: {operations.sendEvents.reply.address.location}
+          async:
+            location: /items/${params.id};${correlationId}
   kafka_cache_client0:
     type: {servers.kafka-cluster.protocol}
     kind: cache_client
@@ -132,13 +135,16 @@ bindings:
   kafka_cache_server0:
     type: {servers.kafka-cluster.protocol}
     kind: cache_server
+    options:
+      bootstrap:
+        - items-responses
     exit: kafka_client0
   kafka_client0:
     type: {servers.kafka-cluster.protocol}
     kind: client
     options:
       sasl:
-        mechanism: {components.securitySchemes.mainSecurity.type == scramSha512 == scram-sha-512}
+        mechanism: {components.securitySchemes.mainSecurity.x-sasl.mechanism}
         username: ${{env.SASL_USERNAME}}
         password: ${{env.SASL_PASSWORD}}
     exit: tcp_client0

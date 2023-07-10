@@ -1,0 +1,31 @@
+---
+name: example
+bindings:
+  server9092:
+    type: tcp
+    kind: server
+    options:
+      host: 0.0.0.0
+      port:
+        - {servers.local.host.port}
+    exit: kafka-proxy0
+  kafka-proxy0:
+    type: kafka-proxy
+    kind: proxy
+    options:
+      external:
+        host: {servers.local.host.hostname}
+        port: {servers.local.host.port}
+      internal:
+        host: kafka-#.internal.net
+        port: 9092
+    exit: client0
+  client0:
+    type: tcp
+    kind: client
+    options:
+      host: kafka.internal.net
+      port: 9092
+    routes:
+      - when:
+          - cidr: 0.0.0.0/0

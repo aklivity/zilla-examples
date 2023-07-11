@@ -31,7 +31,6 @@ schemas:
   schema0:
     type: inline
     options:
-      format: {components.schemas.item.type == object ==JSON}
       schema:
         - Item:
             type: {components.schemas.item.type}
@@ -82,7 +81,7 @@ bindings:
         password: ${{env.SASL_PASSWORD}}
       schemas: 
           schema0:
-            format: JSON
+            format: {components.schemas.item.type == object ==JSON}
     routes:
       - when:
           - topic: {channels.items-requests.address || channels.items-requests}

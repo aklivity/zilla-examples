@@ -50,7 +50,8 @@ bindings:
     kind: server
     options:
       schemas: 
-          schema0
+          schema0:
+            format: {components.schemas.item.type == object ==JSON}
     exit: mqtt_client0
   mqtt_client0:
     type: mqtt

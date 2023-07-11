@@ -5,26 +5,24 @@ info:
   license:
     name:  Aklivity Community License
 servers:
-  local:
-    host: localhost:9092
-    protocol: kafka-secure
-    protocolVersion: '3.2'
-    description: Local Kafka Cluster info
-    security:
-      - sasl-scram: []
   dev:
     host: "dev.url:9092"
     protocol: kafka-secure
     description: Kafka DEV cluster for `dev` and `sit` environments
     security:
       - sasl-scram: []
+  prod:
+    host: "prod.kafka.cluster:9093"
+    protocol: kafka-secure
+    description: Kafka DEV cluster for `dev` and `sit` environments
+    security:
+      - ssl-sasl-scram: []
 defaultContentType: application/json
 
 
 channels:
-  items-snapshots:
-    address: "{env}-items-snapshots"
-    title: Events channel
+  items-requests:
+    address: "{env}-items-requests"
     parameters:
       env:
         $ref: "#/components/parameters/env"
@@ -32,7 +30,7 @@ channels:
       items:
         $ref: '#/components/messages/item'
     servers:
-      - $ref: '#/servers/local'
+      - $ref: '#/servers/prod'
 
   items-responses:
     title: Responses channel
@@ -40,24 +38,24 @@ channels:
       items:
         $ref: '#/components/messages/item'
     servers:
-      - $ref: '#/servers/local'
+      - $ref: '#/servers/prod'
 
 
 operations:
-  sendEvents:
+  requestEvent:
     action: send
     channel:
-      $ref: '#/channels/items-snapshots'
+      $ref: '#/channels/items-requests'
     reply: 
       address:
-        location: 'items-responses'
-        channel: 
-           $ref: '#/channels/items-responses'
+        location: '$message.header#/REPLY_TOPIC'
+      channel: 
+          $ref: '#/channels/items-responses'
 
-  receiveEvents:
+  getEventResponse:
     action: receive
     channel:
-      $ref: '#/channels/items-snapshots'
+      $ref: '#/channels/items-responses'
 
 
 components:
@@ -69,14 +67,12 @@ components:
       name: event
       title: An event
       correlationId:
-        $ref: "#/components/messages/item/bindings/kafka/key"
-      bindings:
-          kafka:
-            key:
-              type: string
+        $ref: "#/components/correlationIds/idempotencyKey"
       headers:
         type: object
         properties:
+          REPLY_TOPIC:
+            $ref: "#/components/schemas/ReplyTopic"
           Idempotency-Key:
             description: Unique identifier for a given event
             type: string
@@ -101,6 +97,9 @@ components:
       location: $message.header#/env
 
   schemas:
+    ReplyTopic:
+      type: string
+      description: The Kafka topic where to send the greeting response.
     item:
       type: object
       properties:
@@ -109,10 +108,17 @@ components:
       required:
       - greeting
   securitySchemes:
-     sasl-scram:
+    sasl-scram:
       type: scramSha512
       x-sasl.jaas.config: >-
         org.apache.kafka.common.security.scram.ScramLoginModule required
         username="${{env.SASL_USERNAME}}" password="${{env.SASL_PASSWORD}}";
       x-security.protocol: SASL_PLAINTEXT
+      x-sasl.mechanism: SCRAM-SHA-512
+    ssl-sasl-scram:
+      type: scramSha512
+      x-sasl.jaas.config: >-
+        org.apache.kafka.common.security.scram.ScramLoginModule required
+        username="${{env.SASL_USERNAME}}" password="${{env.SASL_PASSWORD}}";
+      x-security.protocol: SASL_SSL
       x-sasl.mechanism: SCRAM-SHA-512

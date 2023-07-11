@@ -8,6 +8,18 @@ vaults:
         store: tls/localhost.p12
         type: pkcs12
         password: ${{env.KEYSTORE_PASSWORD}}
+schemas:
+  schema0:
+    type: inline
+    options:
+      schema:
+        - Item:
+            type: {components.schemas.item.type}
+            properties:
+              greeting:
+                type: {components.schemas.item.properties.greeting.type}
+            required:
+              - {components.schemas.item.required}
 bindings:
   tcp_server0:
     type: tcp
@@ -34,11 +46,14 @@ bindings:
         - localhost
     exit: mqtt_server0
   mqtt_server0:
-    type: {servers.local.protocol}
+    type: mqtt
     kind: server
+    options:
+      schemas: 
+          schema0
     exit: mqtt_client0
   mqtt_client0:
-    type: {servers.local.protocol}
+    type: mqtt
     kind: client
     exit: tcp_client0
   tcp_client0:

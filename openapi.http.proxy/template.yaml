@@ -17,7 +17,7 @@ vaults:
         password: ${{env.KEYSTORE_PASSWORD}}
 guards:
   jwt0:
-    type: jwt
+    type: {components.securitySchemes.bearerFormat}
     options:
       issuer: https://auth.example.com
       audience: https://api.example.com
@@ -27,20 +27,33 @@ guards:
           e: AQAB
           alg: RS256
           kid: example
+schemas:
+  schema0:
+    type: inline
+    options:
+      format: {components.schemas.Item.type == object == JSON}
+      source: 
+        - Item:
+            type: {components.schemas.Item.type}
+            properties:
+              greeting:
+                type: {components.schemas.Item.properties.greeting.type}
+            required:
+            - {components.schemas.Item.required}
 bindings:
   tcp_server0:
     type: tcp
     kind: server
     options:
       host: 0.0.0.0
-      port: 9090
+      port: {servers.url(prefix) == https == servers.url.port}
     exit: tls_server0
   tcp_server1:
     type: tcp
     kind: server
     options:
       host: 0.0.0.0
-      port:  8080
+      port: {servers.url(prefix) == http == servers.url.port}
     exit: http_server0
   tls_server0:
     type: tls
@@ -69,19 +82,34 @@ bindings:
       - guarded:
           jwt0:
             - echo:stream
+        schemas:
+          - {paths.(0).(0).requestBody.content.(0).schema.$ref}
         when:
           - headers:
-              :path: /items
-              :method: POST 
+              :path: {paths.(0)}
+              :method: {paths.(0).(0)}
+        exit: http_client0
+      - guarded:
+          jwt0:
+            - echo:stream
+        when:
+          - headers:
+              :path: {paths.(0)}
+              :method: {paths.(0).(1)}
+              :query: 
+                - {paths.(0).(1).parameters.name}: 
+                    type: {paths.(0).(1).parameters.schema.format}
         exit: http_client0
       - when:
           - headers:
-              :path: /items/{id}
-              :method: GET
-              :query: 
-                - limit: 
-                    required: false
-                    type: int32
+              :path: {paths.(1)}
+              :method: {paths.(1).(0)}
+          - headers:
+              :path: {paths.(1)}
+              :method: {paths.(1).(1)}
+          - headers:
+              :path: {paths.(1)}
+              :method: {paths.(1).(2)}
         exit: http_client0
   http_client0:
     type: http

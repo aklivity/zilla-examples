@@ -8,6 +8,18 @@ vaults:
         store: tls/localhost.p12
         type: pkcs12
         password: ${{env.KEYSTORE_PASSWORD}}
+schemas:
+  schema0:
+    type: inline
+    options:
+      schema:
+        - Item:
+            type: object
+            properties:
+              status:
+                type: string
+            required:
+              - status
 bindings:
   tcp_server0:
     type: tcp
@@ -36,6 +48,9 @@ bindings:
   mqtt_server0:
     type: mqtt
     kind: server
+    options:
+      schemas: 
+          schema0
     exit: mqtt_client0
   mqtt_client0:
     type: mqtt

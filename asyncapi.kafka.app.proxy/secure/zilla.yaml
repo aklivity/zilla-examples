@@ -1,0 +1,126 @@
+---
+name: example
+vaults:
+  registry:
+    type: filesystem
+    options:
+      keys:
+        store: registry/keys
+        type: pkcs12
+        password: ${{env.REGISTRY_KEYSTORE_PASSWORD}}
+      trust:
+        store: registry/trust
+        type: pkcs12
+        password: ${{env.REGISTRY_TRUSTSTORE_PASSWORD}}
+  external:
+    type: filesystem
+    options:
+      keys:
+        store: external/server/keys
+        type: pkcs12
+        password: ${{env.EXTERNAL_KEYSTORE_PASSWORD}}
+      trust:
+        store: external/server/trust
+        type: pkcs12
+        password: ${{env.EXTERNAL_TRUSTSTORE_PASSWORD}}
+  internal:
+    type: filesystem
+    options:
+      keys:
+        store: internal/client/keys
+        type: pkcs12
+        password: ${{env.INTERNAL_KEYSTORE_PASSWORD}}
+      trust:
+        store: internal/client/trust
+        type: pkcs12
+        password: ${{env.INTERNAL_TRUSTSTORE_PASSWORD}}
+      signers:
+        store: internal/client/signers
+        type: pkcs12
+        password: ${{env.INTERNAL_SIGNERS_PASSWORD}}
+schemas:
+  schema1:
+    type: registry
+    options:
+      host: my-schema-registry.com
+      port: 443
+      vendor: confluent
+      vault: registry
+      cache_expiry:
+        metadata: 300ms
+bindings:
+  tcp_server0:
+    type: tcp
+    kind: server
+    options:
+      host: 0.0.0.0
+      port: 9093
+    exit: tls_server0
+  tls_server0:
+    type: tls
+    kind: server
+    vault: server
+    options:
+      keys:
+        - localhost
+      trust:
+      - clientca
+      mutual: required
+    exit: kafka_server0
+  kafka_server0:
+    type: kafka
+    kind: server  
+    options:
+      schemas: 
+          schema1:
+            format: AVRO
+            compatibility: forward
+    routes:
+      - when:
+        - topic: items-requests
+          capability: produce
+        with:
+          key: ${idempotencyKey}
+          acks: leader_only
+          schemas: 
+            schema1:
+              version: V1
+              id: item-schema
+        exit: kafka_client0
+      - when:
+        - topic: items-responses
+          capability: 
+        with:
+          schemas: 
+            schema1:
+              version: V1
+              id: response-schema
+        exit: kafka_client0
+  kafka_client0:
+    type: kafka
+    kind: client
+    options:
+      sasl:
+        mechanism: scram-sha-512
+        username: ${{env.SASL_USERNAME}}
+        password: ${{env.SASL_PASSWORD}}
+    exit: secure-client0
+  secure-client0:
+    type: tls
+    kind: client
+    vault: internal
+    options:
+      trust:
+        - serverca
+      signers:
+        - clientca
+    exit: tcp_client0
+  tcp_client0:
+    type: tcp
+    kind: client
+    options:
+      host: kafka
+      port: 29092
+    routes:
+      - when:
+          - cidr: 0.0.0.0/0

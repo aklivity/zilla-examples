@@ -17,7 +17,7 @@ vaults:
         password: ${{env.KEYSTORE_PASSWORD}}
 guards:
   jwt0:
-    type: {components.securitySchemes.bearerFormat}
+    type: {components.securitySchemes.httpBearerToken.bearerFormat}
     options:
       issuer: https://auth.example.com
       audience: https://api.example.com
@@ -27,46 +27,20 @@ guards:
           e: AQAB
           alg: RS256
           kid: example
-schemas:
-  schema0:
-    type: inline
-    options:
-      format: {components.schemas.Item.type == object == JSON}
-      source: 
-        - Item:
-            type: {components.schemas.Item.type}
-            properties:
-              greeting:
-                type: {components.schemas.Item.properties.greeting.type}
-            required:
-            - {components.schemas.Item.required}
-  schema1:
-    type: registry
-    options:
-      format: AVRO
-      compatibility: forward
-      source: http://localhost:8081
-      version: V1
-      id: schema1
-  schema2:
-    type: filesystem
-    options:
-      format: JSON
-      source: schema/v3_schema.yaml
 bindings:
   tcp_server0:
     type: tcp
     kind: server
     options:
       host: 0.0.0.0
-      port: {servers.url(prefix) == https == servers.url.port}
+      port: {servers.production.host.port (if host schema == https)}
     exit: tls_server0
   tcp_server1:
     type: tcp
     kind: server
     options:
       host: 0.0.0.0
-      port: {servers.url(prefix) == http == servers.url.port}
+      port:  {servers.dev.host.port}
     exit: http_server0
   tls_server0:
     type: tls
@@ -88,42 +62,23 @@ bindings:
         jwt0:
           credentials:
             headers:
-              authorization: Bearer {credentials}
+              authorization: Bearer {components.messages.headers.authorization}
       access-control:
         policy: cross-origin
     routes:
       - guarded:
           jwt0:
             - echo:stream
-        schemas:
-          - {paths.(0).(0).requestBody.content.(0).schema.$ref}
         when:
           - headers:
-              :path: {paths.(0)}
-              :method: {paths.(0).(0)}
-        exit: http_client0
-      - guarded:
-          jwt0:
-            - echo:stream
-        when:
+              :path: {channels.items.address}
+              :method: {operations.postEvents.bindings.http.method} 
           - headers:
-              :path: {paths.(0)}
-              :method: {paths.(0).(1)}
+              :path: {channels.itemsbyid.address}
+              :method: {operations.getEvents.bindings.http.method} 
               :query: 
-                - {paths.(0).(1).parameters.name}: 
-                    required: {paths.(0).(1).parameters.required}
-                    type: {paths.(0).(1).parameters.schema.format}
-        exit: http_client0
-      - when:
-          - headers:
-              :path: {paths.(1)}
-              :method: {paths.(1).(0)}
-          - headers:
-              :path: {paths.(1)}
-              :method: {paths.(1).(1)}
-          - headers:
-              :path: {paths.(1)}
-              :method: {paths.(1).(2)}
+                - {operations.getEvents.bindings.http.query.properties.limit}: 
+                    type: {operations.getEvents.bindings.http.query.properties.limit.type}
         exit: http_client0
   http_client0:
     type: http

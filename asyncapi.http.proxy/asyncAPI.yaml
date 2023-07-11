@@ -11,24 +11,56 @@ servers:
     protocolVersion: '1.1'
     security:
       - httpBearerToken: []
+  dev:
+    host: http://localhost:8080
+    protocol: http
+    protocolVersion: '1.1'
 defaultContentType: application/json
+
 channels:
-  /items:
-    title: Events channel
+  items:
+    address: /items
     messages:
       items:
         $ref: '#/components/messages/item'
     servers:
       - $ref: '#/servers/production'
+  itemsbyid:
+    address: /items/{id}
+    parameters:
+      id:
+        description: Event ID.
+        schema:
+          type: string
+    messages:
+      items:
+        $ref: '#/components/messages/item'
+    servers:
+      - $ref: '#/servers/production'
+
 operations:
-  sendEvents:
+  postEvents:
     action: send
+    bindings:
+        http:
+          type: request
+          method: POST
     channel:
       $ref: '#/channels/items'
-  receiveEvents:
+  getEvents:
     action: receive
+    bindings:
+        http:
+          type: request
+          method: GET
+          query:
+            type: object
+            properties:
+              limit:
+                type: number
     channel:
-      $ref: '#/channels/items'
+      $ref: '#/channels/itemsbyid'
+      
 components:
   correlationIds:
     itemsCorrelationId:
@@ -44,6 +76,9 @@ components:
         properties:
           Idempotency-Key:
             description: Unique identifier for a given event
+            type: string
+          authorization:
+            description: Bearer credentials
             type: string
       contentType: application/json
       payload:

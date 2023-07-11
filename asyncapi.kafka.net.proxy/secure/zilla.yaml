@@ -1,0 +1,113 @@
+---
+name: example
+vaults:
+  external:
+    type: filesystem
+    options:
+      keys:
+        store: external/server/keys
+        type: pkcs12
+        password: ${{env.EXTERNAL_KEYSTORE_PASSWORD}}
+      trust:
+        store: external/server/trust
+        type: pkcs12
+        password: ${{env.EXTERNAL_TRUSTSTORE_PASSWORD}}
+  internal:
+    type: filesystem
+    options:
+      keys:
+        store: internal/client/keys
+        type: pkcs12
+        password: ${{env.INTERNAL_KEYSTORE_PASSWORD}}
+      trust:
+        store: internal/client/trust
+        type: pkcs12
+        password: ${{env.INTERNAL_TRUSTSTORE_PASSWORD}}
+      signers:
+        store: internal/client/signers
+        type: pkcs12
+        password: ${{env.INTERNAL_SIGNERS_PASSWORD}}
+schemas:
+  schema0:
+    type: inline
+    options:
+      schema:
+        - Item:
+            type: object
+            properties:
+              greeting:
+                type: string
+            required:
+              - greeting
+bindings:
+  server9093:
+    type: tcp
+    kind: server
+    options:
+      host: 0.0.0.0
+      port: 9093
+    exit: secure-server9093
+  secure-server9093:
+    type: tls
+    kind: server
+    vault: external
+    options:
+      keys:
+        - external.net
+      trust:
+        - clientca
+      mutual: required
+    exit: kafka-proxy0
+  kafka-proxy0:
+    type: kafka-proxy
+    kind: proxy
+    options:
+      external:
+        host: kafka-#.external.net
+        port: 9093
+      internal:
+        host: kafka-#.internal.net
+        port: 9094
+      sasl:
+        mechanism: scram-sha-512
+        username: ${{env.SASL_USERNAME}}
+        password: ${{env.SASL_PASSWORD}}
+      schemas: 
+          schema0:
+            format: JSON
+    routes:
+      - when:
+          - topic: items-requests
+            capability: produce
+        with:
+          key: ${idempotencyKey}
+          acks: leader_only
+          schemas: 
+            schema0
+        exit: secure-client0
+      - when:
+          - topic: items-responses
+            capability: fetch
+        exit: secure-client0
+        with:
+          schemas: 
+            schema0
+  secure-client0:
+    type: tls
+    kind: client
+    vault: internal
+    options:
+      trust:
+        - serverca
+      signers:
+        - clientca
+    exit: client0
+  client0:
+    type: tcp
+    kind: client
+    options:
+      host: kafka.internal.net
+      port: 9094
+    routes:
+      - when:
+          - cidr: 0.0.0.0/0

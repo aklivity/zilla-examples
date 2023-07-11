@@ -1,0 +1,102 @@
+asyncapi: 3.0.0
+info:
+  title: Kafka Zilla Example
+  version: 1.0.0
+  license:
+    name:  Aklivity Community License
+servers:
+  local:
+    host: localhost:9092
+    protocol: kafka
+    protocolVersion: '3.2'
+    description: Local Kafka Cluster info
+defaultContentType: application/json
+
+
+channels:
+  items-requests:
+    address: "{env}-items-requests"
+    parameters:
+      env:
+        $ref: "#/components/parameters/env"
+    messages:
+      items:
+        $ref: '#/components/messages/item'
+    servers:
+      - $ref: '#/servers/local'
+
+  items-responses:
+    title: Responses channel
+    messages:
+      items:
+        $ref: '#/components/messages/item'
+    servers:
+      - $ref: '#/servers/local'
+
+
+operations:
+  requestEvent:
+    action: send
+    channel:
+      $ref: '#/channels/items-requests'
+    reply: 
+      address:
+        location: '$message.header#/REPLY_TOPIC'
+      channel: 
+          $ref: '#/channels/items-responses'
+
+  getEventResponse:
+    action: receive
+    channel:
+      $ref: '#/channels/items-responses'
+
+
+components:
+  correlationIds:
+    idempotencyKey:
+      location: '$message.header#/Idempotency-Key'
+  messages:
+    item:
+      name: event
+      title: An event
+      correlationId:
+        $ref: "#/components/correlationIds/idempotencyKey"
+      headers:
+        type: object
+        properties:
+          REPLY_TOPIC:
+            $ref: "#/components/schemas/ReplyTopic"
+          Idempotency-Key:
+            description: Unique identifier for a given event
+            type: string
+          env:
+            description: environment type
+            type: string
+      contentType: application/json
+      payload:
+        type: object
+        properties:
+          item:
+            $ref: "#/components/schemas/item"
+
+  parameters:
+    env:
+      description: Kafka Environement
+      default: dev
+      enum:
+        - dev
+        - preprod
+        - prod
+      location: $message.header#/env
+
+  schemas:
+    ReplyTopic:
+      type: string
+      description: The Kafka topic where to send the greeting response.
+    item:
+      type: object
+      properties:
+        greeting:
+          type: string
+      required:
+      - greeting

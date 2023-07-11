@@ -1,0 +1,41 @@
+---
+name: example
+bindings:
+  server9092:
+    type: tcp
+    kind: server
+    options:
+      host: 0.0.0.0
+      port: 9092
+    exit: kafka-proxy0
+  kafka-proxy0:
+    type: kafka-proxy
+    kind: proxy
+    options:
+      external:
+        host: kafka-#.external.net
+        port: 9092
+      internal:
+        host: kafka-#.internal.net
+        port: 29092
+    routes:
+      - when:
+          - topic: items-requests
+            capability: produce
+        with:
+          key: ${idempotencyKey}
+          acks: leader_only
+        exit: kafka_client0
+      - when:
+          - topic: items-responses
+            capability: fetch
+        exit: client0
+  client0:
+    type: tcp
+    kind: client
+    options:
+      host: kafka.internal.net
+      port: 29092
+    routes:
+      - when:
+          - cidr: 0.0.0.0/0

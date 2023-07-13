@@ -89,7 +89,7 @@ bindings:
         exit: kafka_client0
       - when:
         - topic: items-responses
-          capability: 
+          capability: fetch
         with:
           schemas: 
             schema1:

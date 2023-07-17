@@ -41,10 +41,10 @@ vaults:
 schemas:
   schema1:
     type: registry
+    vendor: confluent
     options:
       host: my-schema-registry.com
       port: 443
-      vendor: confluent
       vault: registry
       cache_expiry:
         metadata: 300ms
@@ -71,7 +71,7 @@ bindings:
     type: kafka
     kind: server  
     options:
-      schemas: 
+      schemas:
           schema1:
             format: AVRO
             compatibility: forward
@@ -82,19 +82,10 @@ bindings:
         with:
           key: ${idempotencyKey}
           acks: leader_only
-          schemas: 
-            schema1:
-              version: V1
-              id: item-schema
         exit: kafka_client0
       - when:
         - topic: items-responses
           capability: fetch
-        with:
-          schemas: 
-            schema1:
-              version: V1
-              id: response-schema
         exit: kafka_client0
   kafka_client0:
     type: kafka
@@ -104,6 +95,20 @@ bindings:
         mechanism: scram-sha-512
         username: ${{env.SASL_USERNAME}}
         password: ${{env.SASL_PASSWORD}}
+      schemas: 
+            schema1:
+              topic: items-requests
+              context: default
+              subject_name_strategy: TopicRecordNameStrategy
+              id: 1
+              version: latest
+              is_key: false
+              serializer:
+                key: StringDeserializer
+                value: KafkaAvroDeserializer
+              deserializer:
+                key: StringDeserializer
+                value: KafkaAvroDeserializer
     exit: secure-client0
   secure-client0:
     type: tls

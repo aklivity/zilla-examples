@@ -45,6 +45,7 @@ schemas:
     options:
       host: my-schema-registry.com
       port: 443
+      context: default
       vault: registry
       cache_expiry:
         metadata: 300ms
@@ -98,7 +99,6 @@ bindings:
       schemas: 
             schema1:
               topic: items-requests
-              context: default
               subject_name_strategy: TopicRecordNameStrategy
               id: 1
               version: latest

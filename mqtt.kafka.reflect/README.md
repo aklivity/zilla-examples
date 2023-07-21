@@ -102,6 +102,7 @@ Client 44181407-f1bc-4a6b-b94d-9f37d37ea395 sending PUBLISH (d0, q0, r0, m1, 'zi
 Client 44181407-f1bc-4a6b-b94d-9f37d37ea395 sending DISCONNECT
 ```
 
+Check the internal mqtt_messages topic in Kafka
 ```bash
 $ kcat -C -b localhost:9092 -t mqtt_messages -J -u | jq .
 {
@@ -123,6 +124,26 @@ $ kcat -C -b localhost:9092 -t mqtt_messages -J -u | jq .
   "payload": "Hello, world"
 }
 % Reached end of topic mqtt_messages [0] at offset 1
+```
+
+Verify retained messages
+```bash
+$ mosquitto_pub -V '5' -t 'zilla' -m 'Retained message' -d --retain
+Client null sending CONNECT
+Client 42adb530-b483-4c73-9682-6fcc370ba871 received CONNACK (0)
+Client 42adb530-b483-4c73-9682-6fcc370ba871 sending PUBLISH (d0, q0, r1, m1, 'zilla', ... (16 bytes))
+Client 42adb530-b483-4c73-9682-6fcc370ba871 sending DISCONNECT
+```
+
+```bash
+$ mosquitto_sub -V '5' -t 'zilla' -d
+Client null sending CONNECT
+Client 5454fc22-ac7a-4b59-902f-26cdc2a4756a received CONNACK (0)
+Client 5454fc22-ac7a-4b59-902f-26cdc2a4756a sending SUBSCRIBE (Mid: 1, Topic: zilla, QoS: 0, Options: 0x00)
+Client 5454fc22-ac7a-4b59-902f-26cdc2a4756a received SUBACK
+Subscribed (mid: 1): 0
+Client 5454fc22-ac7a-4b59-902f-26cdc2a4756a received PUBLISH (d0, q0, r0, m0, 'zilla', ... (16 bytes))
+Retained message
 ```
 
 ### Teardown

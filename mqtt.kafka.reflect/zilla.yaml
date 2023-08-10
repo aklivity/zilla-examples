@@ -48,6 +48,9 @@ bindings:
   kafka_cache_server0:
     type: kafka
     kind: cache_server
+    options:
+      bootstrap:
+        - mqtt_retained
     exit: kafka_client0
   kafka_client0:
     type: kafka

@@ -38,13 +38,13 @@ NAMESPACE: zilla-mqtt-kafka-reflect
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
-++ kubectl get pods --namespace zilla-mqtt-kafka --selector app.kubernetes.io/instance=kafka -o name
+++ kubectl get pods --namespace zilla-mqtt-kafka-reflect --selector app.kubernetes.io/instance=kafka -o name
 + KAFKA_POD=pod/kafka-74675fbb8-g56l9
-+ kubectl exec --namespace zilla-mqtt-kafka pod/kafka-74675fbb8-g56l9 -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic mqtt_messages --if-not-exists
++ kubectl exec --namespace zilla-mqtt-kafka-reflect pod/kafka-74675fbb8-g56l9 -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic mqtt_messages --if-not-exists
 Created topic mqtt_messages.
-+ kubectl port-forward --namespace zilla-mqtt-kafka service/zilla-mqtt-kafka-reflect 1883 8883
++ kubectl port-forward --namespace zilla-mqtt-kafka-reflect service/zilla-mqtt-kafka-reflect 1883 8883
 + nc -z localhost 1883
-+ kubectl port-forward --namespace zilla-mqtt-kafka service/kafka 9092 29092
++ kubectl port-forward --namespace zilla-mqtt-kafka-reflect service/kafka 9092 29092
 + sleep 1
 + nc -z localhost 1883
 Connection to localhost port 1883 [tcp/ibm-mqisdp] succeeded!
@@ -136,15 +136,33 @@ Client 42adb530-b483-4c73-9682-6fcc370ba871 sending DISCONNECT
 ```
 
 ```bash
+$ mosquitto_pub -V '5' -t 'zilla' -m 'Retained message - latest' -d --retain
+Client null sending CONNECT
+Client 517dc705-1f01-4fbc-af01-2595fcd7d78b received CONNACK (0)
+Client 517dc705-1f01-4fbc-af01-2595fcd7d78b sending PUBLISH (d0, q0, r1, m1, 'zilla', ... (25 bytes))
+Client 517dc705-1f01-4fbc-af01-2595fcd7d78b sending DISCONNECT
+```
+
+```bash
+$ mosquitto_pub -V '5' -t 'zilla' -m 'Non-retained message' -d
+Client null sending CONNECT
+Client 0e383f18-65ca-45fd-9438-b17d4659686d received CONNACK (0)
+Client 0e383f18-65ca-45fd-9438-b17d4659686d sending PUBLISH (d0, q0, r0, m1, 'zilla', ... (20 bytes))
+Client 0e383f18-65ca-45fd-9438-b17d4659686d sending DISCONNECT
+```
+
+```bash
 $ mosquitto_sub -V '5' -t 'zilla' -d
 Client null sending CONNECT
-Client 5454fc22-ac7a-4b59-902f-26cdc2a4756a received CONNACK (0)
-Client 5454fc22-ac7a-4b59-902f-26cdc2a4756a sending SUBSCRIBE (Mid: 1, Topic: zilla, QoS: 0, Options: 0x00)
-Client 5454fc22-ac7a-4b59-902f-26cdc2a4756a received SUBACK
+Client cf8c4c46-77e0-4086-910e-33d3ba54ad76 received CONNACK (0)
+Client cf8c4c46-77e0-4086-910e-33d3ba54ad76 sending SUBSCRIBE (Mid: 1, Topic: zilla, QoS: 0, Options: 0x00)
+Client cf8c4c46-77e0-4086-910e-33d3ba54ad76 received SUBACK
 Subscribed (mid: 1): 0
-Client 5454fc22-ac7a-4b59-902f-26cdc2a4756a received PUBLISH (d0, q0, r0, m0, 'zilla', ... (16 bytes))
-Retained message
+Client cf8c4c46-77e0-4086-910e-33d3ba54ad76 received PUBLISH (d0, q0, r0, m0, 'zilla', ... (25 bytes))
+Retained message - latest
 ```
+
+Only the latest retained message was delivered, and the non-retained message was not.
 
 ### Teardown
 

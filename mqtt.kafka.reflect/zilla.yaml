@@ -51,6 +51,7 @@ bindings:
     options:
       bootstrap:
         - mqtt_retained
+        - mqtt_sessions
     exit: kafka_client0
   kafka_client0:
     type: kafka

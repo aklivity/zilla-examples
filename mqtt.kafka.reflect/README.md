@@ -42,6 +42,10 @@ TEST SUITE: None
 + KAFKA_POD=pod/kafka-74675fbb8-g56l9
 + kubectl exec --namespace zilla-mqtt-kafka-reflect pod/kafka-74675fbb8-g56l9 -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic mqtt_messages --if-not-exists
 Created topic mqtt_messages.
++ kubectl exec --namespace zilla-mqtt-kafka-reflect pod/kafka-74675fbb8-w42xt -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic mqtt_retained --config cleanup.policy=compact --if-not-exists
+Created topic mqtt_retained.
++ kubectl exec --namespace zilla-mqtt-kafka-reflect pod/kafka-74675fbb8-w42xt -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic mqtt_sessions --config cleanup.policy=compact --if-not-exists
+Created topic mqtt_sessions.
 + kubectl port-forward --namespace zilla-mqtt-kafka-reflect service/zilla-mqtt-kafka-reflect 1883 8883
 + nc -z localhost 1883
 + kubectl port-forward --namespace zilla-mqtt-kafka-reflect service/kafka 9092 29092

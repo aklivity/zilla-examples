@@ -1,7 +1,7 @@
 image:
   tag: develop-SNAPSHOT
 
-args: ["start", "-v", "-e", "-P", "zilla.binding.mqtt.sessions.available=false"]
+args: ["start", "-v", "-e"]
 
 env:
   - name: KEYSTORE_PASSWORD

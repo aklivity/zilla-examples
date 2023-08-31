@@ -7,11 +7,19 @@ bindings:
     kind: server
     options:
       host: 0.0.0.0
-      port: 8080
+      port: 
+        - 8080
+        - 1883
+    routes:
+        - when: 
+            - port: 8080
+          exit: http_server
+        - when: 
+            - port: 1883
+          exit: mqtt_server
     telemetry:
       metrics:
         - stream.*
-    exit: http_server
   http_server:
     type: http
     kind: server
@@ -37,6 +45,18 @@ bindings:
               :authority: localhost:8080
               :path: /api/*
         exit: http_api_kafka_proxy
+      - when:
+          - headers:
+              :scheme: http
+              :authority: localhost:8080
+              :path: /iot/sse
+        exit: sse_server
+      - when:
+          - headers:
+              :scheme: http
+              :authority: localhost:8080
+              :path: /iot/*
+        exit: mqtt_http_kafka_proxy
       - when:
           - headers:
               :scheme: http
@@ -93,6 +113,24 @@ bindings:
           topic: items-crud
           filters:
             - key: ${params.id}
+      - when:
+          - method: GET
+            path: /iot/items
+        exit: kafka_cache_client
+        with:
+          capability: fetch
+          topic: iot-messages
+          merge:
+            content-type: application/json
+      - when:
+          - method: GET
+            path: /iot/retained/{id}
+        exit: kafka_cache_client
+        with:
+          capability: fetch
+          topic: iot-retained
+          filters:
+            - key: ${params.id}
 
 # SSE proxy endpoints to Kafka a topic
   sse_http_kafka_proxy:
@@ -140,6 +178,11 @@ bindings:
         exit: kafka_cache_client
         with:
           topic: events-sse
+      - when:
+          - path: /iot/sse
+        exit: kafka_cache_client
+        with:
+          topic: iot-messages
 
 # gRPC service definition
   grpc_server:
@@ -176,8 +219,8 @@ bindings:
     type: tcp
     kind: client
     options:
-      host: route_guide_server
-      port: 50051
+      host: ${{env.ROUTE_GUIDE_SERVER_HOST}}
+      port: ${{env.ROUTE_GUIDE_SERVER_PORT}}
 
 # gRPC proxy service to Kafka topics
   grpc_kafka:
@@ -215,8 +258,47 @@ bindings:
             method: routeguide.RouteGuide/*
         with:
           scheme: http
-          authority: route_guide_server:50051
+          authority: ${{env.ROUTE_GUIDE_SERVER_HOST}}:${{env.ROUTE_GUIDE_SERVER_PORT}}
         exit: route_guide_server_grpc_client
+
+# MQTT proxy endpoints to Kafka a topics
+  mqtt_http_kafka_proxy:
+    type: http-kafka
+    kind: proxy
+    routes:
+      - when:
+          - method: GET
+            path: /iot/{topic}/{id}
+        exit: kafka_cache_client
+        with:
+          capability: fetch
+          topic: ${params.topic}
+          merge:
+            content-type: application/json
+      - when:
+          - method: GET
+            path: /iot/{topic}
+        exit: kafka_cache_client
+        with:
+          capability: fetch
+          topic: ${params.topic}
+          merge:
+            content-type: application/json
+
+# MQTT Server With an exit to Kafka
+  mqtt_server:
+    type: mqtt
+    kind: server
+    exit: mqtt_kafka_proxy
+  mqtt_kafka_proxy:
+    type: mqtt-kafka
+    kind: proxy
+    options:
+      topics:
+        sessions: iot-sessions
+        messages: iot-messages
+        retained: iot-retained
+    exit: kafka_cache_client
 
 # Kafka caching layer
   kafka_cache_client:
@@ -225,10 +307,9 @@ bindings:
     options:
       bootstrap:
         - items-crud
-        - events-sse
-        - echo-service-messages
-        - route-guide-requests
-        - route-guide-responses
+        - iot-messages
+        - iot-sessions
+        - iot-retained
     exit: kafka_cache_server
   kafka_cache_server:
     type: kafka

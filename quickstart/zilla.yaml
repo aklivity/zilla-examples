@@ -17,6 +17,7 @@ bindings:
         - when: 
             - port: 1883
           exit: mqtt_server
+    exit: http_server
     telemetry:
       metrics:
         - stream.*
@@ -111,24 +112,6 @@ bindings:
         with:
           capability: fetch
           topic: items-crud
-          filters:
-            - key: ${params.id}
-      - when:
-          - method: GET
-            path: /iot/items
-        exit: kafka_cache_client
-        with:
-          capability: fetch
-          topic: iot-messages
-          merge:
-            content-type: application/json
-      - when:
-          - method: GET
-            path: /iot/retained/{id}
-        exit: kafka_cache_client
-        with:
-          capability: fetch
-          topic: iot-retained
           filters:
             - key: ${params.id}
 
@@ -273,8 +256,8 @@ bindings:
         with:
           capability: fetch
           topic: ${params.topic}
-          merge:
-            content-type: application/json
+          filters:
+            - key: ${params.id}
       - when:
           - method: GET
             path: /iot/{topic}
@@ -304,16 +287,15 @@ bindings:
   kafka_cache_client:
     type: kafka
     kind: cache_client
-    options:
-      bootstrap:
-        - items-crud
-        - iot-messages
-        - iot-sessions
-        - iot-retained
     exit: kafka_cache_server
   kafka_cache_server:
     type: kafka
     kind: cache_server
+    options:
+      bootstrap:
+        - items-crud
+        - iot-sessions
+        - iot-retained
     exit: kafka_client
 
 # Connect to local Kafka

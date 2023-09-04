@@ -50,12 +50,6 @@ services:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
 
-  # mqtt-explorer:
-  #   container_name: mqtt-explorer-zq
-  #   image: smeagolworms4/mqtt-explorer
-  #   ports:
-  #     - 4000:4000
-
   zilla:
     image: ghcr.io/aklivity/zilla:develop-SNAPSHOT
     container_name: zilla-zq
@@ -73,6 +67,14 @@ services:
       - ./grpc/echo.proto:/etc/zilla/proto/echo.proto
       - ./grpc/route_guide.proto:/etc/zilla/proto/route_guide.proto
     command: start -v -e
+
+  mqtt-simulator:
+    build: ./mqtt
+    container_name: mqtt-simulator-zq
+    restart: on-failure
+    depends_on:
+      kafka-init:
+        condition: service_completed_successfully
 
   route-guide-server:
     build: ./grpc/route_guide/server

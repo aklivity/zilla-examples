@@ -10,6 +10,7 @@ bindings:
       port: 
         - 8080
         - 1883
+        - 8083
     routes:
         - when: 
             - port: 8080
@@ -17,6 +18,9 @@ bindings:
         - when: 
             - port: 1883
           exit: mqtt_server
+        - when: 
+            - port: 8083
+          exit: mqtt_ws_server
     exit: http_server
     telemetry:
       metrics:
@@ -267,6 +271,16 @@ bindings:
           topic: ${params.topic}
           merge:
             content-type: application/json
+
+  mqtt_ws_server:
+    type: ws
+    kind: server
+    routes:
+      - when:
+          - protocol: mqtt
+            authority: localhost:8083
+            path: /mqtt
+        exit: mqtt_server
 
 # MQTT Server With an exit to Kafka
   mqtt_server:

@@ -58,6 +58,7 @@ services:
     ports:
       - 1883:1883
       - 8080:8080
+      - 8083:8083
       - 9090:9090
     environment:
       ROUTE_GUIDE_SERVER_HOST: route-guide-server
@@ -69,7 +70,7 @@ services:
     command: start -v -e
 
   mqtt-simulator:
-    build: ./mqtt
+    build: https://github.com/DamascenoRafael/mqtt-simulator.git
     container_name: mqtt-simulator-zq
     restart: on-failure
     depends_on:

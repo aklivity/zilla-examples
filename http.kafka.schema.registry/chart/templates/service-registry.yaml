@@ -1,33 +1,46 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: registry
+  name: karapace-registry
   labels:
-    app.kubernetes.io/instance: registry
+    app.kubernetes.io/instance: karapace-registry
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/instance: registry
+      app.kubernetes.io/instance: karapace-registry
   template:
     metadata:
       labels:
-        app.kubernetes.io/instance: registry
+        app.kubernetes.io/instance: karapace-registry
     spec:
-      initContainers:
-        - name: wait-for-kafka
-          image: "busybox:latest"
-          command: ['/bin/sh', '-c', 'until echo srvr | nc -w 2 kafka 29092 2>/dev/null; do echo . && sleep 5; done']
       containers:
-        - name: registry
-          image: "confluentinc/cp-schema-registry:7.5.0"
+        - name: karapace-registry
+          image: "ghcr.io/aiven/karapace:latest"
+          command:
+            - /bin/bash
+          args: ["-c", "/opt/karapace/start.sh registry"]
           env:
-            - name: SCHEMA_REGISTRY_HOST_NAME
-              value: "schema-registry"
-            - name: SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS
+            - name: KARAPACE_ADVERTISED_HOSTNAME
+              value: "karapace-registry"
+            - name: KARAPACE_BOOTSTRAP_URI
               value: "kafka:29092"
-            - name: SCHEMA_REGISTRY_LISTENERS
-              value: "http://0.0.0.0:8081"
+            - name: KARAPACE_PORT
+              value: "8081"
+            - name: KARAPACE_HOST
+              value: "0.0.0.0"
+            - name: KARAPACE_CLIENT_ID
+              value: "karapace"
+            - name: KARAPACE_GROUP_ID
+              value: "karapace-registry"
+            - name: KARAPACE_MASTER_ELIGIBILITY
+              value: "true"
+            - name: KARAPACE_TOPIC_NAME
+              value: "_schemas"
+            - name: KARAPACE_LOG_LEVEL
+              value: "WARNING"
+            - name: KARAPACE_COMPATIBILITY
+              value: "FULL"  
           ports:
             - containerPort: 8081
           readinessProbe:
@@ -39,11 +52,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: registry
+  name: karapace-registry
 spec:
   selector:
-    app.kubernetes.io/instance: registry
+    app.kubernetes.io/instance: karapace-registry
   ports:
-    - name: registry
+    - name: karapace-registry
       port: 8081
   type: ClusterIP

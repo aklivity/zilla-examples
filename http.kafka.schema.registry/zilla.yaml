@@ -4,7 +4,7 @@ catalogs:
   catalog0:
     type: schema-registry
     options:
-      url: http://registry:8081
+      url: http://karapace-registry:8081
       context: default
 vaults:
   server:

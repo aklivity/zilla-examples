@@ -40,6 +40,12 @@ bindings:
   mqtt_kafka_proxy0:
     type: mqtt-kafka
     kind: proxy
+    options:
+      server: localhost:1883
+      topics:
+        sessions: mqtt-sessions
+        messages: mqtt-messages
+        retained: mqtt-retained
     exit: kafka_cache_client0
   kafka_cache_client0:
     type: kafka
@@ -50,8 +56,8 @@ bindings:
     kind: cache_server
     options:
       bootstrap:
-        - mqtt_retained
-        - mqtt_sessions
+        - mqtt-retained
+        - mqtt-sessions
     exit: kafka_client0
   kafka_client0:
     type: kafka

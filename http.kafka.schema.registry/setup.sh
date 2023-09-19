@@ -25,7 +25,7 @@ kubectl exec --namespace zilla-http-kafka-schema-registry "$KAFKA_POD" -- \
 # Start port forwarding
 kubectl port-forward --namespace zilla-http-kafka-schema-registry service/zilla-http-kafka-schema-registry 8080 9090 > /tmp/kubectl-zilla.log 2>&1 &
 kubectl port-forward --namespace zilla-http-kafka-schema-registry service/kafka 9092 29092 > /tmp/kubectl-kafka.log 2>&1 &
-kubectl port-forward --namespace zilla-http-kafka-schema-registry service/registry 8081 > /tmp/kubectl-registry.log 2>&1 &
+kubectl port-forward --namespace zilla-http-kafka-schema-registry service/karapace-reg 8081 > /tmp/kubectl-registry.log 2>&1 &
 
 until nc -z localhost 8080; do sleep 1; done
 until nc -z localhost 8081; do sleep 1; done

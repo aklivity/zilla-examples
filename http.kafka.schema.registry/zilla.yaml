@@ -4,7 +4,7 @@ catalogs:
   catalog0:
     type: schema-registry
     options:
-      url: http://karapace-registry:8081
+      url: http://karapace-reg:8081
       context: default
 vaults:
   server:
@@ -96,9 +96,9 @@ bindings:
           value:
             type: avro
             catalog:
-              - name: catalog0
-                strategy: topic
-                version: latest
+              catalog0:
+                - strategy: topic
+                  version: latest
     exit: kafka_cache_server0
   kafka_cache_server0:
     type: kafka
@@ -109,9 +109,9 @@ bindings:
           value:
             type: avro
             catalog:
-              - name: catalog0
-                strategy: topic
-                version: latest
+              catalog0:
+                - strategy: topic
+                  version: latest
     exit: kafka_client0
   kafka_client0:
     type: kafka

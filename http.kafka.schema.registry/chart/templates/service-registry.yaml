@@ -1,25 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: karapace-registry
+  name: karapace-reg
   labels:
-    app.kubernetes.io/instance: karapace-registry
+    app.kubernetes.io/instance: karapace-reg
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/instance: karapace-registry
+      app.kubernetes.io/instance: karapace-reg
   template:
     metadata:
       labels:
-        app.kubernetes.io/instance: karapace-registry
+        app.kubernetes.io/instance: karapace-reg
     spec:
       containers:
-        - name: karapace-registry
+        - name: karapace-reg
           image: "ghcr.io/aiven/karapace:latest"
           command:
             - /bin/bash
-          args: ["-c", "/opt/karapace/start.sh registry"]
+            - /opt/karapace/start.sh
+            - registry
           env:
             - name: KARAPACE_ADVERTISED_HOSTNAME
               value: "karapace-registry"
@@ -52,11 +53,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: karapace-registry
+  name: karapace-reg
 spec:
   selector:
-    app.kubernetes.io/instance: karapace-registry
+    app.kubernetes.io/instance: karapace-reg
   ports:
-    - name: karapace-registry
+    - name: karapace-reg
       port: 8081
   type: ClusterIP

@@ -8,15 +8,6 @@ Listens on http port `8080` or https port `9090` and will serve cached responses
 - Kubernetes (e.g. Docker Desktop with Kubernetes enabled)
 - kubectl
 - helm 3.0+
-- kcat
-
-### Install kcat client
-
-Requires Kafka client, such as `kcat`.
-
-```bash
-brew install kcat
-```
 
 ### Setup
 
@@ -54,11 +45,11 @@ Connection to localhost port 9092 [tcp/XmlIpcRegSvc] succeeded!
 ### Register Schema
 
 ```bash
-curl 'http://localhost:8081/subjects/items-snapshots/versions' \
+curl 'http://localhost:8081/subjects/items-snapshots-value/versions' \
 --header 'Content-Type: application/json' \
 --data '{
   "schema":
-    "{\"type\":\"record\",\"name\":\"Record\",\"fields\":[{\"name\":\"greeting\",\"type\":\"string\"}]}",
+    "{\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"status\",\"type\":\"string\"}],\"name\":\"Event\",\"namespace\":\"io.aklivity.example\",\"type\":\"record\"}",
   "schemaType": "AVRO"
 }'
 ```
@@ -66,7 +57,11 @@ curl 'http://localhost:8081/subjects/items-snapshots/versions' \
 ### Validate created Schema
 
 ```bash
-curl 'http://localhost:8081/schemas/ids/1/schema'
+curl 'http://localhost:8081/schemas/ids/1'
+```
+
+```bash
+curl 'http://localhost:8081/subjects/items-snapshots-value/versions/latest'
 ```
 
 ### Verify behavior
@@ -77,9 +72,8 @@ Send a `PUT` request for a specific item.
 curl -v \
     -X "PUT" "http://localhost:8080/items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07" \
     -H "Idempotency-Key: 1" \
-    -H "Content-Type: application/json" \
-    -H "Prefer: respond-async" \
-    -d "{\"greeting\":\"Hello, world\"}"
+    -H "Content-Type: avro/binary" \
+    --data-binary "@avro/data.avro"
 ```
 
 ### Verify behavior

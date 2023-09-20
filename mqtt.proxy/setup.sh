@@ -17,4 +17,5 @@ helm install mqtt-proxy-mosquitto chart --namespace mqtt-proxy --create-namespac
 kubectl port-forward --namespace mqtt-proxy service/mqtt-proxy-zilla 1883 8883 > /tmp/kubectl-zilla.log 2>&1 &
 kubectl port-forward --namespace mqtt-proxy service/mosquitto 1884 > /tmp/kubectl-mosquitto.log 2>&1 &
 until nc -z localhost 1883; do sleep 1; done
+until nc -z localhost 8883; do sleep 1; done
 until nc -z localhost 1884; do sleep 1; done

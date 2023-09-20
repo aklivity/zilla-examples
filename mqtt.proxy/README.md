@@ -1,4 +1,4 @@
-# mqtt.kafka.reflect (incubator)
+# mqtt.kafka.reflect
 
 Listens on mqtt port `1883` and will forward mqtt publish messages and proxies subscribes to mosquitto MQTT broker listening on `1884`.
 

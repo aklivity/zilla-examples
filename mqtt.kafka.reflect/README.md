@@ -1,4 +1,4 @@
-# mqtt.kafka.reflect (incubator)
+# mqtt.kafka.reflect
 
 Listens on mqtt port `1883` and will forward mqtt publish messages to Kafka, broadcasting to all subscribed mqtt clients.
 Listens on mqtts port `8883` and will forward mqtt publish messages to Kafka, broadcasting to all subscribed mqtt clients.

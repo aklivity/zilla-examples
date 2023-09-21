@@ -22,6 +22,7 @@ services:
 
   kafka-init:
     image: docker.io/bitnami/kafka:3.2
+    container_name: temp-kafka-init-zq
     command: 
       - "/bin/bash"
       - "-c"
@@ -29,8 +30,8 @@ services:
         /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic items-crud --config cleanup.policy=compact
         /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic events-sse
         /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic echo-service-messages
-        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic route-guide-requests
-        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic route-guide-responses
+        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic route-guide-requests --config cleanup.policy=delete
+        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic route-guide-responses --config cleanup.policy=delete
         /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic iot-messages
         /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic iot-sessions --config cleanup.policy=compact
         /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic iot-retained --config cleanup.policy=compact
@@ -51,15 +52,14 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
 
   zilla:
-    image: ghcr.io/aklivity/zilla:develop-SNAPSHOT
+    image: ghcr.io/aklivity/zilla:latest
     container_name: zilla-zq
     depends_on:
       - kafka
     ports:
       - 1883:1883
-      - 8080:8080
-      - 8083:8083
-      - 9090:9090
+      - 7114:7114
+      - 7190:7190
     environment:
       ROUTE_GUIDE_SERVER_HOST: route-guide-server
       ROUTE_GUIDE_SERVER_PORT: 50051
@@ -70,8 +70,10 @@ services:
     command: start -v -e
 
   mqtt-simulator:
-    build: https://github.com/DamascenoRafael/mqtt-simulator.git
+    build: https://github.com/vordimous/mqtt-simulator.git#zilla-quickstart
     container_name: mqtt-simulator-zq
+    volumes:
+      - ./mqtt/config/settings.json:/usr/src/app/config/settings.json
     restart: on-failure
     depends_on:
       kafka-init:
@@ -85,12 +87,12 @@ services:
 
   route-guide-client:
     build: ./grpc/route_guide/client
-    container_name: route-guide-client-zq
+    container_name: temp-route-guide-test-client-zq
     depends_on:
       - route-guide-server
     command: "-addr=route-guide-server:50051"
 
 networks:
   default:
-    name: zilla-network
+    name: zilla-quickstart-network
     driver: bridge

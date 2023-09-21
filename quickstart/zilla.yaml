@@ -8,19 +8,15 @@ bindings:
     options:
       host: 0.0.0.0
       port: 
-        - 8080
+        - 7114
         - 1883
-        - 8083
     routes:
         - when: 
-            - port: 8080
+            - port: 7114
           exit: http_server
         - when: 
             - port: 1883
           exit: mqtt_server
-        - when: 
-            - port: 8083
-          exit: mqtt_ws_server
     exit: http_server
     telemetry:
       metrics:
@@ -35,37 +31,37 @@ bindings:
       - when:
           - headers:
               :scheme: http
-              :authority: localhost:8080
+              :authority: localhost:7114
               :path: /sse/stream
         exit: sse_server
       - when:
           - headers:
               :scheme: http
-              :authority: localhost:8080
+              :authority: localhost:7114
               :path: /sse/*
         exit: sse_http_kafka_proxy
       - when:
           - headers:
               :scheme: http
-              :authority: localhost:8080
+              :authority: localhost:7114
               :path: /api/*
         exit: http_api_kafka_proxy
       - when:
           - headers:
               :scheme: http
-              :authority: localhost:8080
+              :authority: localhost:7114
               :path: /iot/sse
         exit: sse_server
       - when:
           - headers:
               :scheme: http
-              :authority: localhost:8080
+              :authority: localhost:7114
               :path: /iot/*
         exit: mqtt_http_kafka_proxy
       - when:
           - headers:
               :scheme: http
-              :authority: localhost:8080
+              :authority: localhost:7114
         exit: grpc_server
     telemetry:
       metrics:
@@ -171,7 +167,7 @@ bindings:
         with:
           topic: iot-messages
 
-# gRPC service definition
+# gRPC service definition With an exit to Kafka
   grpc_server:
     type: grpc
     kind: server
@@ -248,45 +244,14 @@ bindings:
       host: ${{env.ROUTE_GUIDE_SERVER_HOST}}
       port: ${{env.ROUTE_GUIDE_SERVER_PORT}}
 
-# MQTT proxy endpoints to Kafka a topics
-  mqtt_http_kafka_proxy:
-    type: http-kafka
-    kind: proxy
-    routes:
-      - when:
-          - method: GET
-            path: /iot/{topic}/{id}
-        exit: kafka_cache_client
-        with:
-          capability: fetch
-          topic: ${params.topic}
-          filters:
-            - key: ${params.id}
-      - when:
-          - method: GET
-            path: /iot/{topic}
-        exit: kafka_cache_client
-        with:
-          capability: fetch
-          topic: ${params.topic}
-          merge:
-            content-type: application/json
-
-  mqtt_ws_server:
-    type: ws
-    kind: server
-    routes:
-      - when:
-          - protocol: mqtt
-            authority: localhost:8083
-            path: /mqtt
-        exit: mqtt_server
-
 # MQTT Server With an exit to Kafka
   mqtt_server:
     type: mqtt
     kind: server
     exit: mqtt_kafka_proxy
+    telemetry:
+      metrics:
+        - stream.*
   mqtt_kafka_proxy:
     type: mqtt-kafka
     kind: proxy
@@ -308,6 +273,8 @@ bindings:
     options:
       bootstrap:
         - items-crud
+        - route-guide-requests
+        - route-guide-responses
         - iot-sessions
         - iot-retained
     exit: kafka_client
@@ -328,8 +295,6 @@ bindings:
           - cidr: 0.0.0.0/0
 
 telemetry:
-  attributes:
-    service.namespace: zilla-quickstart
 
   # Desired metrics to track
   metrics:
@@ -348,4 +313,4 @@ telemetry:
         endpoints:
           - scheme: http
             path: /metrics
-            port: 9090
+            port: 7190

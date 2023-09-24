@@ -294,7 +294,6 @@ bindings:
           - cidr: 0.0.0.0/0
 
 telemetry:
-
   # Desired metrics to track
   metrics:
     - http.request.size

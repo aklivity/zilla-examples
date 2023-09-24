@@ -17,7 +17,6 @@ bindings:
         - when: 
             - port: 1883
           exit: mqtt_server
-    exit: http_server
     telemetry:
       metrics:
         - stream.*

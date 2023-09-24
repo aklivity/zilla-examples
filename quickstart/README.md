@@ -15,6 +15,7 @@ The `setup.sh` script:
 - adds the necessary topics
 - hosts a `provectuslabs/kafka-ui` [instance](http://localhost:80)
 - starts the route_guide_server and route_guide_client from the [gRPC basics tutorial](https://grpc.io/docs/languages/go/basics/)
+- runs an [mqtt-simulator](https://github.com/DamascenoRafael/mqtt-simulator) to produce mock iot messages
 - hosts [prometheus metrics](http://localhost:7190/metrics)
 
 ```bash
@@ -28,4 +29,3 @@ The `teardown.sh` script stops running containers and removes orphans.
 ```bash
 ./teardown.sh
 ```
-

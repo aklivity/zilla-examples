@@ -3,6 +3,7 @@ services:
   kafka:
     image: docker.io/bitnami/kafka:3.2
     container_name: kafka-zq
+    restart: unless-stopped
     ports:
       - 9092:9092
       - 29092:9092
@@ -52,8 +53,9 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
 
   zilla:
-    image: ghcr.io/aklivity/zilla:latest
+    image: ghcr.io/aklivity/zilla:0.9.52
     container_name: zilla-zq
+    restart: unless-stopped
     depends_on:
       - kafka
     ports:
@@ -72,9 +74,10 @@ services:
   mqtt-simulator:
     build: https://github.com/vordimous/mqtt-simulator.git#zilla-quickstart
     container_name: mqtt-simulator-zq
+    image: aklivity/mqtt-simulator:local
+    restart: unless-stopped
     volumes:
       - ./mqtt/config/settings.json:/usr/src/app/config/settings.json
-    restart: on-failure
     depends_on:
       kafka-init:
         condition: service_completed_successfully
@@ -82,12 +85,15 @@ services:
   route-guide-server:
     build: ./grpc/route_guide/server
     container_name: route-guide-server-zq
+    image: aklivity/route-guide-server:local
+    restart: unless-stopped
     ports:
       - 50051:50051
 
   route-guide-client:
     build: ./grpc/route_guide/client
     container_name: temp-route-guide-test-client-zq
+    image: aklivity/route-guide-client:local
     depends_on:
       - route-guide-server
     command: "-addr=route-guide-server:50051"

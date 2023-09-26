@@ -1,6 +1,6 @@
 # http.kafka.schema.registry
 
-Listens on http port `8080` or https port `9090` and will serve cached responses from the `items-snapshots` topic in Kafka.
+This simple http.kafka.schema.registry example illustrates how to configure Karapace Schema Registry in zilla to validate messages while produce and fetch to a Kafka topic.
 
 ### Requirements
 
@@ -54,6 +54,12 @@ curl 'http://localhost:8081/subjects/items-snapshots-value/versions' \
 }'
 ```
 
+output:
+
+```text
+{"id":1}%
+```
+
 ### Validate created Schema
 
 ```bash
@@ -64,24 +70,97 @@ curl 'http://localhost:8081/schemas/ids/1'
 curl 'http://localhost:8081/subjects/items-snapshots-value/versions/latest'
 ```
 
-### Verify behavior
+### Verify behavior for a valid event
 
 Send a `PUT` request for a specific item.
 
 ```bash
 curl -v \
-    -X "PUT" "http://localhost:8080/items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07" \
+    -X "POST" "http://localhost:8080/items" \
     -H "Idempotency-Key: 1" \
     -H "Content-Type: avro/binary" \
     --data-binary "@avro/data.avro"
 ```
 
-### Verify behavior
+output:
 
-Retrieve all the items
+```text
+...
+> POST /items HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/7.88.1
+> Accept: */*
+> Idempotency-Key: 1
+> Content-Type: avro/binary
+> Content-Length: 13
+>
+< HTTP/1.1 204 No Content
+```
+
+`GET` request to fetch specific item.
 
 ```bash
-curl -v http://localhost:8080/items
+curl -k -v https://localhost:9090/items/1
+```
+
+output:
+
+```text
+...
+< HTTP/1.1 200 OK
+< Content-Length: 13
+< Content-Type: avro/binary
+< Etag: AQIABA==
+<
+* Connection #0 to host localhost left intact
+id0positive
+```
+
+### Verify behavior for Invalid event
+
+`POST` request.
+
+```bash
+curl -v \
+    -X "POST" "http://localhost:8080/items" \
+    -H "Idempotency-Key: 2" \
+    -H "Content-Type: avro/binary" \
+    --data-binary "@avro/invalid_data.avro"
+```
+
+output:
+
+```text
+...
+> POST /items HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/7.88.1
+> Accept: */*
+> Idempotency-Key: 2
+> Content-Type: avro/binary
+> Content-Length: 4
+>
+< HTTP/1.1 400 Bad Request
+< Transfer-Encoding: chunked
+```
+
+`GET` request to verify whether Invalid event is produced
+
+```bash
+curl -k -v https://localhost:9090/items/2
+```
+
+output:
+
+```text
+...
+> GET /items/2 HTTP/2
+> Host: localhost:9090
+> user-agent: curl/7.88.1
+> accept: */*
+>
+< HTTP/2 404
+< content-length: 0
 ```
 
 ### Teardown

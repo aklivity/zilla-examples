@@ -7,8 +7,8 @@ Listens on https port `9091` and serves files from the pod's `/var/www` subdirec
 
 ## Zilla HTTP echo server
 
-Listens on http port `8080` and will echo back whatever is sent to the server on path `\echo`.
-Listens on http port `9090` and will echo back whatever is sent to the server on path `\echo`.
+Listens on http port `7114` and will echo back whatever is sent to the server on path `\echo`.
+Listens on http port `7143` and will echo back whatever is sent to the server on path `\echo`.
 
 ### Requirements
 
@@ -57,16 +57,16 @@ REVISION: 1
 NOTES:
 Zilla has been installed.
 [...]
-+ kubectl run busybox-pod --image=busybox:1.28 --namespace zilla-config-server --rm --restart=Never -i -t -- /bin/sh -c 'until nc -w 2 zilla-config-server-http 8080; do echo . && sleep 5; done'
++ kubectl run busybox-pod --image=busybox:1.28 --namespace zilla-config-server --rm --restart=Never -i -t -- /bin/sh -c 'until nc -w 2 zilla-config-server-http 7114; do echo . && sleep 5; done'
 + kubectl wait --namespace zilla-config-server --for=delete pod/busybox-pod
 + kubectl port-forward --namespace zilla-config-server service/zilla-config-server-config 8081 9091
 + nc -z localhost 8081
-+ kubectl port-forward --namespace zilla-config-server service/zilla-config-server-http 8080 9090
++ kubectl port-forward --namespace zilla-config-server service/zilla-config-server-http 7114 7143
 + sleep 1
 + nc -z localhost 8081
 Connection to localhost port 8081 [tcp/sunproxyadmin] succeeded!
-+ nc -z localhost 8080
-Connection to localhost port 8080 [tcp/http-alt] succeeded!
++ nc -z localhost 7114
+Connection to localhost port 7114 [tcp/http-alt] succeeded!
 ```
 
 ### Verify behavior of the Zilla config server
@@ -94,14 +94,14 @@ bindings:
     kind: server
     options:
       host: 0.0.0.0
-      port: 8080
+      port: 7114
     exit: http_server0
   tcp_server1:
     type: tcp
     kind: server
     options:
       host: 0.0.0.0
-      port: 9090
+      port: 7143
     exit: tls_server0
   tls_server0:
     type: tls
@@ -123,11 +123,11 @@ bindings:
       - when:
           - headers:
               :scheme: http
-              :authority: localhost:8080
+              :authority: localhost:7114
               :path: /echo
           - headers:
               :scheme: https
-              :authority: localhost:9090
+              :authority: localhost:7143
               :path: /echo
         exit: echo_server0
   echo_server0:
@@ -140,7 +140,7 @@ The same URL will be used by the Zilla HTTP echo server to query its configurati
 ### Verify behavior of the Zilla HTTP echo server
 
 ```bash
-curl -d "Hello, world" -H "Content-Type: text/plain" -X "POST" http://localhost:8080/echo
+curl -d "Hello, world" -H "Content-Type: text/plain" -X "POST" http://localhost:7114/echo
 ```
 
 output:
@@ -164,9 +164,9 @@ output:
 ++ jq -r '.items[0].metadata.name'
 + ZILLA_CONFIG_POD=zilla-config-server-config-bc455d4d6-fshdl
 + kubectl cp --namespace zilla-config-server www-updated/zilla.yaml zilla-config-server-config-bc455d4d6-fshdl:/var/www/zilla.yaml
-+ curl -s -f -d 'Hello, World' -H 'Content-Type: text/plain' -X POST -v http://localhost:8080/echo_changed
++ curl -s -f -d 'Hello, World' -H 'Content-Type: text/plain' -X POST -v http://localhost:7114/echo_changed
 + sleep 1
-+ curl -s -f -d 'Hello, World' -H 'Content-Type: text/plain' -X POST -v http://localhost:8080/echo_changed
++ curl -s -f -d 'Hello, World' -H 'Content-Type: text/plain' -X POST -v http://localhost:7114/echo_changed
 ```
 
 ### Verify behavior of the reconfigured Zilla HTTP echo server
@@ -174,7 +174,7 @@ output:
 ### Verify the `/echo` path is no longer working
 
 ```bash
-curl -i -d "Hello, world" -H "Content-Type: text/plain" -X "POST" http://localhost:8080/echo
+curl -i -d "Hello, world" -H "Content-Type: text/plain" -X "POST" http://localhost:7114/echo
 ```
 
 output:
@@ -186,7 +186,7 @@ HTTP/1.1 404 Not Found
 ### Verify the `/echo_changed` path is working
 
 ```bash
-curl -d "Hello, world" -H "Content-Type: text/plain" -X "POST" http://localhost:8080/echo_changed
+curl -d "Hello, world" -H "Content-Type: text/plain" -X "POST" http://localhost:7114/echo_changed
 ```
 
 output:

@@ -27,14 +27,14 @@ bindings:
     options:
       host: 0.0.0.0
       port: 
-        - 9090
-        - 8080
+        - 7143
+        - 7114
     routes:
         - when:
-            - port: 9090
+            - port: 7143
           exit: tls_server0
         - when: 
-            - port: 8080
+            - port: 7114
           exit: http_server0
     telemetry:
       metrics:
@@ -62,10 +62,10 @@ bindings:
       - when:
           - headers:
               :scheme: http
-              :authority: localhost:8080
+              :authority: localhost:7114
           - headers:
               :scheme: https
-              :authority: localhost:9090
+              :authority: localhost:7143
         exit: http_kafka_proxy0
     telemetry:
       metrics:

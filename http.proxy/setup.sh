@@ -18,5 +18,5 @@ kubectl cp --namespace zilla-http-proxy www/demo.html "$NGINX_POD:/usr/share/ngi
 kubectl cp --namespace zilla-http-proxy www/style.css "$NGINX_POD:/usr/share/nginx/html"
 
 # Start port forwarding
-kubectl port-forward --namespace zilla-http-proxy service/zilla-http-proxy 9090 > /tmp/kubectl-zilla.log 2>&1 &
-until nc -z localhost 9090; do sleep 1; done
+kubectl port-forward --namespace zilla-http-proxy service/zilla-http-proxy 7143 > /tmp/kubectl-zilla.log 2>&1 &
+until nc -z localhost 7143; do sleep 1; done

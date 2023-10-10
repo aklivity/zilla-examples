@@ -9,14 +9,14 @@ env:
 
 args: ["start", "-v", "-e", "-p", "/etc/zilla/prop/zilla.properties"]
 
-livenessProbePort: 8080
-readinessProbePort: 8080
+livenessProbePort: 7114
+readinessProbePort: 7114
 
 service:
   ports:
-    - port: 8080
+    - port: 7114
       name: http
-    - port: 9090
+    - port: 7143
       name: https
 
 zilla.yaml: ""

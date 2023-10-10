@@ -1,6 +1,6 @@
 # grpc..kafka.proxy
 
-Listens on https port `9090` and uses kafka as proxy to talk to `grpc_echo` on tcp port `8080`.
+Listens on https port `7143` and uses kafka as proxy to talk to `grpc_echo` on tcp port `7114`.
 
 ### Requirements
 
@@ -61,17 +61,17 @@ TEST SUITE: None
 Created topic echo-requests.
 + kubectl exec --namespace zilla-grpc-kafka-proxy pod/kafka-74675fbb8-7knvx -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic echo-responses --if-not-exists
 Created topic echo-responses.
-+ kubectl port-forward --namespace zilla-grpc-kafka-proxy service/zilla-grpc-kafka-proxy 9090
++ kubectl port-forward --namespace zilla-grpc-kafka-proxy service/zilla-grpc-kafka-proxy 7143
 + kubectl port-forward --namespace zilla-grpc-kafka-proxy service/kafka 9092 29092
-+ nc -z localhost 9090
-+ kubectl port-forward --namespace zilla-grpc-kafka-proxy service/grpc-echo 8080
++ nc -z localhost 7143
++ kubectl port-forward --namespace zilla-grpc-kafka-proxy service/grpc-echo 7114
 + sleep 1
-+ nc -z localhost 9090
-Connection to localhost port 9090 [tcp/websm] succeeded!
++ nc -z localhost 7143
+Connection to localhost port 7143 [tcp/websm] succeeded!
 + nc -z localhost 9092
 Connection to localhost port 9092 [tcp/XmlIpcRegSvc] succeeded!
-+ nc -z localhost 8080
-Connection to localhost port 8080 [tcp/http-alt] succeeded!
++ nc -z localhost 7114
+Connection to localhost port 7114 [tcp/http-alt] succeeded!
 ```
 
 ### Verify behavior
@@ -81,7 +81,7 @@ Connection to localhost port 8080 [tcp/http-alt] succeeded!
 Echo `{"message":"Hello World"}` message via unary rpc.
 
 ```bash
-grpcurl -insecure -proto proto/echo.proto  -d '{"message":"Hello World"}' localhost:9090 example.EchoService.EchoUnary
+grpcurl -insecure -proto proto/echo.proto  -d '{"message":"Hello World"}' localhost:7143 example.EchoService.EchoUnary
 ```
 
 output:
@@ -149,7 +149,7 @@ output:
 Echo messages via bidirectional streaming rpc.
 
 ```bash
-grpcurl -insecure -proto proto/echo.proto -d @ localhost:9090 example.EchoService.EchoBidiStream
+grpcurl -insecure -proto proto/echo.proto -d @ localhost:7143 example.EchoService.EchoBidiStream
 ```
 
 Past below message.

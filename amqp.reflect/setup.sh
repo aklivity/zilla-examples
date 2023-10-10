@@ -9,5 +9,5 @@ helm install zilla-amqp-reflect $ZILLA_CHART --namespace zilla-amqp-reflect --cr
     --set-file secrets.tls.data.localhost\\.p12=tls/localhost.p12
 
 # Start port forwarding
-kubectl port-forward --namespace zilla-amqp-reflect service/zilla-amqp-reflect 5671 5672 > /tmp/kubectl-zilla.log 2>&1 &
-until nc -z localhost 5671; do sleep 1; done
+kubectl port-forward --namespace zilla-amqp-reflect service/zilla-amqp-reflect 7171 7172 > /tmp/kubectl-zilla.log 2>&1 &
+until nc -z localhost 7171; do sleep 1; done

@@ -21,7 +21,7 @@ bindings:
     kind: server
     options:
       host: 0.0.0.0
-      port: 9090
+      port: 7143
     exit: tls_server0
   tls_server0:
     type: tls
@@ -45,7 +45,7 @@ bindings:
       - when:
           - headers:
               :scheme: https
-              :authority: localhost:9090
+              :authority: localhost:7143
               :path: /*
         exit: http_client0
   http_client0:

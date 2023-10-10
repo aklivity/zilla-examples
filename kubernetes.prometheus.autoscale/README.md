@@ -1,6 +1,6 @@
 # kubernetes.prometheus.autoscale
 
-Listens on http port `8080` and will echo back whatever is sent to the server.
+Listens on http port `7114` and will echo back whatever is sent to the server.
 
 Kubernetes horizontal pod autoscaler is set up to enable the zilla deployment to scale from 1 to 5 pods with the goal
 of an average load of 10 active connections per pod.
@@ -45,20 +45,20 @@ NAMESPACE: zilla-kubernetes-prometheus-autoscale
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
-+ kubectl port-forward --namespace zilla-kubernetes-prometheus-autoscale service/zilla-kubernetes-prometheus-autoscale 8080
-+ nc -z localhost 8080
-+ kubectl port-forward --namespace zilla-kubernetes-prometheus-autoscale service/prometheus 9090
++ kubectl port-forward --namespace zilla-kubernetes-prometheus-autoscale service/zilla-kubernetes-prometheus-autoscale 7114
++ nc -z localhost 7114
++ kubectl port-forward --namespace zilla-kubernetes-prometheus-autoscale service/prometheus 7190
 + sleep 1
-+ nc -z localhost 8080
-Connection to localhost port 8080 [tcp/http-alt] succeeded!
-+ nc -z localhost 9090
-Connection to localhost port 9090 [tcp/websm] succeeded!
++ nc -z localhost 7114
+Connection to localhost port 7114 [tcp/http-alt] succeeded!
++ nc -z localhost 7190
+Connection to localhost port 7190 [tcp/websm] succeeded!
 ```
 
 ### Verify behavior
 
 ```bash
-curl -d "Hello, world" -X "POST" http://localhost:8080
+curl -d "Hello, world" -X "POST" http://localhost:7114
 ```
 
 output:
@@ -134,7 +134,7 @@ zilla-6db8d879f5-2wxgw   1/1     Running   0          4m25s
 Open 21 connections to zilla as instances of netcat in the background.
 
 ```bash
-for i in `seq 1 21`; do nc localhost 8080 &; done
+for i in `seq 1 21`; do nc localhost 7114 &; done
 ```
 
 output:
@@ -149,7 +149,7 @@ output:
 There should be 21 open connections in the background now.
 
 ```bash
-ps auxw | grep "nc localhost 8080" | grep -v grep | wc -l
+ps auxw | grep "nc localhost 7114" | grep -v grep | wc -l
 ```
 
 output:
@@ -221,7 +221,7 @@ zilla-6db8d879f5-fmgqx   1/1     Running   0          75s
 Open 21 connections to zilla as instances of netcat in the background.
 
 ```bash
-for i in `seq 1 21`; do nc localhost 8080 &; done
+for i in `seq 1 21`; do nc localhost 7114 &; done
 ```
 
 output:
@@ -235,7 +235,7 @@ output:
 There should be 42 open connections in the background now.
 
 ```bash
-ps auxw | grep "nc localhost 8080" | grep -v grep | wc -l
+ps auxw | grep "nc localhost 7114" | grep -v grep | wc -l
 ```
 
 output:
@@ -309,21 +309,21 @@ zilla-6db8d879f5-q5fmm   1/1     Running   0          63s
 Shut down all running netcat instances.
 
 ```bash
-ps auxw | grep "nc localhost 8080" | grep -v grep | awk '{print $2}' | xargs kill
+ps auxw | grep "nc localhost 7114" | grep -v grep | awk '{print $2}' | xargs kill
 ```
 
 output:
 
 ```text
-[23]  + 55555 terminated  nc localhost 8080
-[22]  + 55554 terminated  nc localhost 8080
-[21]  + 55553 terminated  nc localhost 8080
+[23]  + 55555 terminated  nc localhost 7114
+[22]  + 55554 terminated  nc localhost 7114
+[21]  + 55553 terminated  nc localhost 7114
 ...
 
 There should be no open connections in the background now.
 
 ```bash
-ps auxw | grep "nc localhost 8080" | grep -v grep | wc -l
+ps auxw | grep "nc localhost 7114" | grep -v grep | wc -l
 ```
 
 output:

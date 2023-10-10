@@ -20,7 +20,7 @@ ZILLA_POD=$(kubectl get pods --namespace zilla-sse-proxy-jwt --selector app.kube
 kubectl cp --namespace zilla-sse-proxy-jwt www "$ZILLA_POD:/var/"
 
 # Start port forwarding
-kubectl port-forward --namespace zilla-sse-proxy-jwt service/zilla-sse-proxy-jwt 9090 > /tmp/kubectl-zilla.log 2>&1 &
+kubectl port-forward --namespace zilla-sse-proxy-jwt service/zilla-sse-proxy-jwt 7143 > /tmp/kubectl-zilla.log 2>&1 &
 kubectl port-forward --namespace zilla-sse-proxy-jwt service/sse-server 8001 7001 > /tmp/kubectl-sse-server.log 2>&1 &
-until nc -z localhost 9090; do sleep 1; done
+until nc -z localhost 7143; do sleep 1; done
 until nc -z localhost 8001; do sleep 1; done

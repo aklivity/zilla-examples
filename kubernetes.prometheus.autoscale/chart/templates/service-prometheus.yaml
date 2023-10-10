@@ -19,7 +19,7 @@ spec:
           image: "prom/prometheus:v2.30.0"
           ports:
             - name: web
-              containerPort: 9090
+              containerPort: 7190
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -59,7 +59,7 @@ spec:
     app.kubernetes.io/instance: prometheus
   ports:
     - name: http
-      port: 9090
+      port: 7190
   type: ClusterIP
 ---
 apiVersion: v1

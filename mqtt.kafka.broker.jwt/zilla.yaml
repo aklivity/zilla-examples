@@ -26,7 +26,7 @@ bindings:
     kind: server
     options:
       host: 0.0.0.0
-      port: 1883
+      port: 7183
     exit: mqtt_server0
   tcp_server1:
     type: tcp
@@ -63,7 +63,7 @@ bindings:
     type: mqtt-kafka
     kind: proxy
     options:
-      server: localhost:1883
+      server: localhost:7183
       topics:
         sessions: mqtt-sessions
         messages: mqtt-messages

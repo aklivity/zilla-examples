@@ -15,14 +15,14 @@ bindings:
     options:
       host: 0.0.0.0
       port: 
-        - 5672
-        - 5671
+        - 7172
+        - 7171
     routes:
       - when:
-          - port: 5672
+          - port: 7172
         exit: amqp_server0
       - when:
-          - port: 5671
+          - port: 7171
         exit: tls_server0
   tls_server0:
     type: tls

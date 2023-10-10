@@ -39,8 +39,8 @@ kubectl exec --namespace zilla-mqtt-kafka-broker "$KAFKA_POD" -- \
 
 
 # Start port forwarding
-kubectl port-forward --namespace zilla-mqtt-kafka-broker service/zilla-mqtt-kafka-broker 1883 8883 > /tmp/kubectl-zilla.log 2>&1 &
+kubectl port-forward --namespace zilla-mqtt-kafka-broker service/zilla-mqtt-kafka-broker 7183 8883 > /tmp/kubectl-zilla.log 2>&1 &
 kubectl port-forward --namespace zilla-mqtt-kafka-broker service/kafka 9092 29092 > /tmp/kubectl-kafka.log 2>&1 &
-until nc -z localhost 1883; do sleep 1; done
+until nc -z localhost 7183; do sleep 1; done
 until nc -z localhost 8883; do sleep 1; done
 until nc -z localhost 9092; do sleep 1; done

@@ -28,7 +28,7 @@ kubectl exec --namespace zilla-http-kafka-async "$KAFKA_POD" -- \
         --if-not-exists
 
 # Start port forwarding
-kubectl port-forward --namespace zilla-http-kafka-async service/zilla-http-kafka-async 8080 9090 > /tmp/kubectl-zilla.log 2>&1 &
+kubectl port-forward --namespace zilla-http-kafka-async service/zilla-http-kafka-async 7114 7143 > /tmp/kubectl-zilla.log 2>&1 &
 kubectl port-forward --namespace zilla-http-kafka-async service/kafka 9092 29092 > /tmp/kubectl-kafka.log 2>&1 &
-until nc -z localhost 8080; do sleep 1; done
+until nc -z localhost 7114; do sleep 1; done
 until nc -z localhost 9092; do sleep 1; done

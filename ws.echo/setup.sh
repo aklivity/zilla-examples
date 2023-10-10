@@ -10,5 +10,5 @@ helm install zilla-ws-echo $ZILLA_CHART --version $VERSION --namespace zilla-ws-
     --set-file secrets.tls.data.localhost\\.p12=tls/localhost.p12
 
 # Start port forwarding
-kubectl port-forward --namespace zilla-ws-echo service/zilla-ws-echo 8080 9090 > /tmp/kubectl-zilla.log 2>&1 &
-until nc -z localhost 8080; do sleep 1; done
+kubectl port-forward --namespace zilla-ws-echo service/zilla-ws-echo 7114 7143 > /tmp/kubectl-zilla.log 2>&1 &
+until nc -z localhost 7114; do sleep 1; done

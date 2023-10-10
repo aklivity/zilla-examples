@@ -12,7 +12,7 @@ helm install zilla-kubernetes-prometheus-autoscale $ZILLA_CHART --version $VERSI
 helm install zilla-kubernetes-prometheus-autoscale-prometheus chart --namespace zilla-kubernetes-prometheus-autoscale --create-namespace --wait
 
 # Start port forwarding
-kubectl port-forward --namespace zilla-kubernetes-prometheus-autoscale service/zilla-kubernetes-prometheus-autoscale 8080 > /tmp/kubectl-zilla.log 2>&1 &
-kubectl port-forward --namespace zilla-kubernetes-prometheus-autoscale service/prometheus 9090 > /tmp/kubectl-prometheus.log 2>&1 &
-until nc -z localhost 8080; do sleep 1; done
-until nc -z localhost 9090; do sleep 1; done
+kubectl port-forward --namespace zilla-kubernetes-prometheus-autoscale service/zilla-kubernetes-prometheus-autoscale 7114 > /tmp/kubectl-zilla.log 2>&1 &
+kubectl port-forward --namespace zilla-kubernetes-prometheus-autoscale service/prometheus 7190 > /tmp/kubectl-prometheus.log 2>&1 &
+until nc -z localhost 7114; do sleep 1; done
+until nc -z localhost 7190; do sleep 1; done

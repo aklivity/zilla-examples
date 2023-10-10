@@ -14,7 +14,7 @@ bindings:
     kind: server
     options:
       host: 0.0.0.0
-      port: 9090
+      port: 7143
     exit: tls_server0
   tls_server0:
     type: tls
@@ -41,7 +41,7 @@ bindings:
         when:
           - headers:
               :scheme: https
-              :authority: localhost:9090
+              :authority: localhost:7143
   grpc_server0:
     type: grpc
     kind: server
@@ -68,4 +68,4 @@ bindings:
     kind: client
     options:
       host: grpc-echo
-      port: 8080
+      port: 7114

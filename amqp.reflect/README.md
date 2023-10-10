@@ -1,7 +1,7 @@
 # amqp.reflect (incubator)
 
-Listens on amqp port `5672` and will echo back whatever is sent to the server, broadcasting to all receiving clients.
-Listens on amqps port `5671` and will echo back whatever is sent to the server, broadcasting to all receiving clients.
+Listens on amqp port `7172` and will echo back whatever is sent to the server, broadcasting to all receiving clients.
+Listens on amqps port `7171` and will echo back whatever is sent to the server, broadcasting to all receiving clients.
 
 ### Requirements
 
@@ -37,11 +37,11 @@ REVISION: 1
 NOTES:
 Zilla has been installed.
 [...]
-+ nc -z localhost 5671
-+ kubectl port-forward --namespace zilla-amqp-reflect service/zilla-amqp-reflect 5671 5672
++ nc -z localhost 7171
++ kubectl port-forward --namespace zilla-amqp-reflect service/zilla-amqp-reflect 7171 7172
 + sleep 1
-+ nc -z localhost 5671
-Connection to localhost port 5671 [tcp/*] succeeded!
++ nc -z localhost 7171
+Connection to localhost port 7171 [tcp/*] succeeded!
 ```
 
 ### Install amqp client
@@ -57,7 +57,7 @@ npm install cli-rhea -g
 Connect two receiving clients first, then send `Hello, world` from sending client.
 
 ```bash
-cli-rhea-receiver --address 'zilla' --log-lib 'TRANSPORT_DRV' --log-msgs 'body' --broker localhost:5671 --conn-ssl-trust-store test-ca.crt
+cli-rhea-receiver --address 'zilla' --log-lib 'TRANSPORT_DRV' --log-msgs 'body' --broker localhost:7171 --conn-ssl-trust-store test-ca.crt
 ```
 
 output:

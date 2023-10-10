@@ -1,7 +1,7 @@
 # http.filesystem
 
-Listens on http port `8080` and serves files from the pod's `/var/www` subdirectory.
-Listens on https port `9090` and serves files from the pod's `/var/www` subdirectory.
+Listens on http port `7114` and serves files from the pod's `/var/www` subdirectory.
+Listens on https port `7143` and serves files from the pod's `/var/www` subdirectory.
 
 ### Requirements
 
@@ -41,17 +41,17 @@ Zilla has been installed.
 ++ jq -r '.items[0].metadata.name'
 + ZILLA_POD=zilla-1234567890-abcde
 + kubectl cp --namespace zilla-http-filesystem www zilla-1234567890-abcde:/var/
-+ nc -z localhost 8080
-+ kubectl port-forward --namespace zilla-http-filesystem service/zilla-http-filesystem 8080 9090
++ nc -z localhost 7114
++ kubectl port-forward --namespace zilla-http-filesystem service/zilla-http-filesystem 7114 7143
 + sleep 1
-+ nc -z localhost 8080
-Connection to localhost port 8080 [tcp/http-alt] succeeded!
++ nc -z localhost 7114
+Connection to localhost port 7114 [tcp/http-alt] succeeded!
 ```
 
 ### Verify behavior
 
 ```bash
-curl http://localhost:8080/index.html
+curl http://localhost:7114/index.html
 ```
 
 output:
@@ -68,7 +68,7 @@ output:
 ```
 
 ```bash
-curl --cacert test-ca.crt https://localhost:9090/index.html
+curl --cacert test-ca.crt https://localhost:7143/index.html
 ```
 
 output:

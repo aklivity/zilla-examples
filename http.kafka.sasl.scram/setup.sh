@@ -30,7 +30,7 @@ kubectl exec --namespace zilla-http-kafka-sasl-scram "$KAFKA_POD" --container ka
         --entity-type users --entity-name user
 
 # Start port forwarding
-kubectl port-forward --namespace zilla-http-kafka-sasl-scram service/zilla-http-kafka-sasl-scram 8080 9090 > /tmp/kubectl-zilla.log 2>&1 &
+kubectl port-forward --namespace zilla-http-kafka-sasl-scram service/zilla-http-kafka-sasl-scram 7114 7143 > /tmp/kubectl-zilla.log 2>&1 &
 kubectl port-forward --namespace zilla-http-kafka-sasl-scram service/kafka 9092 29092 > /tmp/kubectl-kafka.log 2>&1 &
-until nc -z localhost 8080; do sleep 1; done
+until nc -z localhost 7114; do sleep 1; done
 until nc -z localhost 9092; do sleep 1; done

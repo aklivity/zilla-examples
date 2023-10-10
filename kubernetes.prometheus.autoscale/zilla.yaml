@@ -21,14 +21,14 @@ telemetry:
         endpoints:
           - scheme: http
             path: /metrics
-            port: 9090
+            port: 7190
 bindings:
   tcp_server0:
     type: tcp
     kind: server
     options:
       host: 0.0.0.0
-      port: 8080
+      port: 7114
     telemetry:
       metrics:
         - stream.*
@@ -40,7 +40,7 @@ bindings:
       - when:
           - headers:
               :scheme: http
-              :authority: localhost:8080
+              :authority: localhost:7114
         exit: echo_server0
     telemetry:
       metrics:

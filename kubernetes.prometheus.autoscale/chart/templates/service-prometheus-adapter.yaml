@@ -22,7 +22,7 @@ spec:
             - --secure-port=443
             - --cert-dir=/tmp/cert
             - --logtostderr=true
-            - --prometheus-url=http://prometheus.zilla-kubernetes-prometheus-autoscale.svc.cluster.local:9090
+            - --prometheus-url=http://prometheus.zilla-kubernetes-prometheus-autoscale.svc.cluster.local:7190
             - --metrics-relist-interval=1m
             - --v=4
             - --config=/etc/prometheus-adapter/config.yaml

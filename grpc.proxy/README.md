@@ -1,6 +1,6 @@
 # grpc.proxy
 
-Listens on https port `7143` and will echo back whatever is published to `grpc-proxy` on tcp port `7114`.
+Listens on https port `7153` and will echo back whatever is published to `grpc-proxy` on tcp port `7151`.
 
 ### Requirements
 
@@ -57,14 +57,14 @@ NAMESPACE: zilla-grpc-proxy
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
-+ kubectl port-forward --namespace zilla-grpc-proxy service/zilla-grpc-proxy 7143
-+ kubectl port-forward --namespace zilla-grpc-proxy service/grpc-echo 7114
-+ nc -z localhost 7143
++ kubectl port-forward --namespace zilla-grpc-proxy service/zilla-grpc-proxy 7153
++ kubectl port-forward --namespace zilla-grpc-proxy service/grpc-echo 7151
++ nc -z localhost 7153
 + sleep 1
-+ nc -z localhost 7143
-Connection to localhost port 7143 [tcp/websm] succeeded!
-+ nc -z localhost 7114
-Connection to localhost port 7114 [tcp/http-alt] succeeded!
++ nc -z localhost 7153
+Connection to localhost port 7153 [tcp/websm] succeeded!
++ nc -z localhost 7151
+Connection to localhost port 7151 [tcp/http-alt] succeeded!
 ```
 
 ### Verify behavior
@@ -74,7 +74,7 @@ Connection to localhost port 7114 [tcp/http-alt] succeeded!
 Echo `{"message":"Hello World"}` message via unary rpc.
 
 ```bash
-grpcurl -insecure -proto proto/echo.proto  -d '{"message":"Hello World"}' localhost:7143 example.EchoService.EchoUnary
+grpcurl -insecure -proto proto/echo.proto  -d '{"message":"Hello World"}' localhost:7153 example.EchoService.EchoUnary
 ```
 
 output:
@@ -90,7 +90,7 @@ output:
 Echo messages via bidirectional streaming rpc.
 
 ```bash
-grpcurl -insecure -proto proto/echo.proto -d @ localhost:7143 example.EchoService.EchoBidiStream
+grpcurl -insecure -proto proto/echo.proto -d @ localhost:7153 example.EchoService.EchoBidiStream
 ```
 
 Paste below message.

@@ -13,7 +13,7 @@ bindings:
     kind: server
     options:
       host: 0.0.0.0
-      port: 7143
+      port: 7153
     exit: tls_server0
   tls_server0:
     type: tls
@@ -39,7 +39,7 @@ bindings:
       - when:
           - headers:
               ':scheme': https
-              ':authority': 'localhost:7143'
+              ':authority': 'localhost:7153'
         exit: grpc_server0
   grpc_server0:
     type: grpc

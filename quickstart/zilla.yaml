@@ -1,7 +1,7 @@
 name: zilla-quickstart
 bindings:
 
-# Service proxy entrypoint
+# Proxy service entrypoint
   north_tcp_server:
     type: tcp
     kind: server
@@ -16,7 +16,7 @@ bindings:
           exit: north_http_server
         - when: 
             - port: 1883
-          exit: mqtt_server
+          exit: north_mqtt_server
     telemetry:
       metrics:
         - stream.*
@@ -146,7 +146,7 @@ bindings:
           filters:
             - key: ${params.id}
 
-# SSE Server With an exit to Kafka
+# SSE Server to Kafka topics
   north_sse_server:
     type: sse
     kind: server
@@ -166,7 +166,7 @@ bindings:
         with:
           topic: iot-messages
 
-# gRPC service definition With an exit to Kafka
+# gRPC service definition to Kafka topics
   north_grpc_server:
     type: grpc
     kind: server
@@ -243,15 +243,15 @@ bindings:
       host: ${{env.ROUTE_GUIDE_SERVER_HOST}}
       port: ${{env.ROUTE_GUIDE_SERVER_PORT}}
 
-# MQTT Server With an exit to Kafka
-  mqtt_server:
+# MQTT Server to Kafka topics
+  north_mqtt_server:
     type: mqtt
     kind: server
-    exit: mqtt_kafka_proxy
+    exit: mapping_mqtt_kafka_proxy
     telemetry:
       metrics:
         - stream.*
-  mqtt_kafka_proxy:
+  mapping_mqtt_kafka_proxy:
     type: mqtt-kafka
     kind: proxy
     options:

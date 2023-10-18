@@ -44,7 +44,7 @@ services:
     container_name: kafka-ui-zq
     image: provectuslabs/kafka-ui:latest
     ports:
-      - 80:7114
+      - 80:8080
     depends_on:
       kafka-init:
         condition: service_completed_successfully

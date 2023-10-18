@@ -16,13 +16,13 @@ bindings:
       host: 0.0.0.0
       port: 
         - 7183
-        - 8883
+        - 7883
     routes:
         - when: 
             - port: 7183
           exit: mqtt_server0
         - when:
-            - port: 8883
+            - port: 7883
           exit: tls_server0
   tls_server0:
     type: tls

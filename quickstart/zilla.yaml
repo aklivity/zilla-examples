@@ -38,13 +38,13 @@ bindings:
               :scheme: http
               :authority: localhost:7114
               :path: /sse/*
-        exit: mapping_sse_api_http_kafka_proxy
+        exit: north_sse_api_http_kafka_mapping
       - when:
           - headers:
               :scheme: http
               :authority: localhost:7114
               :path: /api/*
-        exit: mapping_rest_api_http_kafka_proxy
+        exit: north_rest_api_http_kafka_mapping
       - when:
           - headers:
               :scheme: http
@@ -67,7 +67,7 @@ bindings:
         - http.*
 
 # REST proxy endpoints to Kafka a topic
-  mapping_rest_api_http_kafka_proxy:
+  north_rest_api_http_kafka_mapping:
     type: http-kafka
     kind: proxy
     routes:
@@ -115,7 +115,7 @@ bindings:
             - key: ${params.id}
 
 # SSE proxy endpoints to Kafka a topic
-  mapping_sse_api_http_kafka_proxy:
+  north_sse_api_http_kafka_mapping:
     type: http-kafka
     kind: proxy
     routes:
@@ -150,8 +150,8 @@ bindings:
   north_sse_server:
     type: sse
     kind: server
-    exit: mapping_sse_kafka_proxy
-  mapping_sse_kafka_proxy:
+    exit: north_sse_kafka_mapping
+  north_sse_kafka_mapping:
     type: sse-kafka
     kind: proxy
     routes:
@@ -166,6 +166,24 @@ bindings:
         with:
           topic: iot-messages
 
+# MQTT Server to Kafka topics
+  north_mqtt_server:
+    type: mqtt
+    kind: server
+    exit: north_mqtt_kafka_mapping
+    telemetry:
+      metrics:
+        - stream.*
+  north_mqtt_kafka_mapping:
+    type: mqtt-kafka
+    kind: proxy
+    options:
+      topics:
+        sessions: iot-sessions
+        messages: iot-messages
+        retained: iot-retained
+    exit: north_kafka_cache_client
+
 # gRPC service definition to Kafka topics
   north_grpc_server:
     type: grpc
@@ -177,16 +195,14 @@ bindings:
     routes:
       - when:
           - method: example.EchoService/*
-        exit: mapping_grpc_kafka_proxy
+        exit: north_grpc_kafka_mapping
       - when:
           - method: routeguide.RouteGuide/*
-        exit: mapping_grpc_kafka_proxy
+        exit: north_grpc_kafka_mapping
     telemetry:
       metrics:
         - grpc.*
-
-# gRPC proxy service to Kafka topics
-  mapping_grpc_kafka_proxy:
+  north_grpc_kafka_mapping:
     type: grpc-kafka
     kind: proxy
     routes:
@@ -206,60 +222,6 @@ bindings:
           topic: route-guide-requests
           acks: leader_only
           reply-to: route-guide-responses
-
-# Kafka to external gRPC server
-  mapping_kafka_grpc_remote_server:
-    type: kafka-grpc
-    kind: remote_server
-    entry: north_kafka_cache_client
-    options:
-      acks: leader_only
-    routes:
-      - when:
-          - topic: route-guide-requests
-            reply-to: route-guide-responses
-            method: routeguide.RouteGuide/*
-        with:
-          scheme: http
-          authority: ${{env.ROUTE_GUIDE_SERVER_HOST}}:${{env.ROUTE_GUIDE_SERVER_PORT}}
-        exit: south_route_guide_grpc_client
-
-# gRPC RoutGuide server config
-  south_route_guide_grpc_client:
-    type: grpc
-    kind: client
-    exit: south_route_guide_http_client
-  south_route_guide_http_client:
-    type: http
-    kind: client
-    options:
-      versions:
-        - h2
-    exit: south_route_guide_tcp_client
-  south_route_guide_tcp_client:
-    type: tcp
-    kind: client
-    options:
-      host: ${{env.ROUTE_GUIDE_SERVER_HOST}}
-      port: ${{env.ROUTE_GUIDE_SERVER_PORT}}
-
-# MQTT Server to Kafka topics
-  north_mqtt_server:
-    type: mqtt
-    kind: server
-    exit: mapping_mqtt_kafka_proxy
-    telemetry:
-      metrics:
-        - stream.*
-  mapping_mqtt_kafka_proxy:
-    type: mqtt-kafka
-    kind: proxy
-    options:
-      topics:
-        sessions: iot-sessions
-        messages: iot-messages
-        retained: iot-retained
-    exit: north_kafka_cache_client
 
 # Kafka sync layer
   north_kafka_cache_client:
@@ -292,6 +254,42 @@ bindings:
     routes:
       - when:
           - cidr: 0.0.0.0/0
+
+# Kafka to external gRPC server
+  west_kafka_grpc_remote_server:
+    type: kafka-grpc
+    kind: remote_server
+    entry: north_kafka_cache_client
+    options:
+      acks: leader_only
+    routes:
+      - when:
+          - topic: route-guide-requests
+            reply-to: route-guide-responses
+            method: routeguide.RouteGuide/*
+        with:
+          scheme: http
+          authority: ${{env.ROUTE_GUIDE_SERVER_HOST}}:${{env.ROUTE_GUIDE_SERVER_PORT}}
+        exit: west_route_guide_grpc_client
+
+# gRPC RoutGuide server config
+  west_route_guide_grpc_client:
+    type: grpc
+    kind: client
+    exit: south_route_guide_http_client
+  west_route_guide_http_client:
+    type: http
+    kind: client
+    options:
+      versions:
+        - h2
+    exit: south_route_guide_tcp_client
+  west_route_guide_tcp_client:
+    type: tcp
+    kind: client
+    options:
+      host: ${{env.ROUTE_GUIDE_SERVER_HOST}}
+      port: ${{env.ROUTE_GUIDE_SERVER_PORT}}
 
 telemetry:
   # Desired metrics to track

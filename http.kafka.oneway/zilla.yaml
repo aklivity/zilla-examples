@@ -48,8 +48,8 @@ bindings:
           - headers:
               :scheme: https
               :authority: localhost:9090
-        exit: mapping_http_kafka_proxy
-  mapping_http_kafka_proxy:
+        exit: north_http_kafka_mapping
+  north_http_kafka_mapping:
     type: http-kafka
     kind: proxy
     routes:

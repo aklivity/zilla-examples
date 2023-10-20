@@ -59,7 +59,7 @@ services:
     depends_on:
       - kafka
     ports:
-      - 1883:1883
+      - 7183:7183
       - 7114:7114
       - 7190:7190
     environment:

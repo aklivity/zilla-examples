@@ -9,13 +9,17 @@ bindings:
       host: 0.0.0.0
       port: 
         - 7114
-        - 1883
+        - 7151
+        - 7183
     routes:
         - when: 
             - port: 7114
           exit: http_server
         - when: 
-            - port: 1883
+            - port: 7151
+          exit: grpc_http_server
+        - when: 
+            - port: 7183
           exit: mqtt_server
     telemetry:
       metrics:
@@ -61,6 +65,21 @@ bindings:
           - headers:
               :scheme: http
               :authority: localhost:7114
+        exit: grpc_server
+    telemetry:
+      metrics:
+        - http.*
+  grpc_http_server:
+    type: http
+    kind: server
+    options:
+      access-control:
+        policy: cross-origin
+    routes:
+      - when:
+          - headers:
+              :scheme: http
+              :authority: localhost:7151
         exit: grpc_server
     telemetry:
       metrics:

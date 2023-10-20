@@ -10,6 +10,6 @@ helm install zilla-grpc-echo $ZILLA_CHART --namespace zilla-grpc-echo --create-n
     --set-file secrets.tls.data.localhost\\.p12=tls/localhost.p12
 
 # Start port forwarding
-kubectl port-forward --namespace zilla-grpc-echo service/zilla-grpc-echo 8080 9090 > /tmp/kubectl-zilla.log 2>&1 &
-until nc -z localhost 8080; do sleep 1; done
-until nc -z localhost 9090; do sleep 1; done
+kubectl port-forward --namespace zilla-grpc-echo service/zilla-grpc-echo 7151 7153 > /tmp/kubectl-zilla.log 2>&1 &
+until nc -z localhost 7151; do sleep 1; done
+until nc -z localhost 7153; do sleep 1; done

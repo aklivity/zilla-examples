@@ -16,7 +16,7 @@ helm install zilla-grpc-proxy $ZILLA_CHART --namespace zilla-grpc-proxy --create
 helm install zilla-grpc-proxy-grpc-echo chart --namespace zilla-grpc-proxy --create-namespace --wait --timeout 2m
 
 # Start port forwarding
-kubectl port-forward --namespace zilla-grpc-proxy service/zilla-grpc-proxy 9090 > /tmp/kubectl-zilla.log 2>&1 &
-kubectl port-forward --namespace zilla-grpc-proxy service/grpc-echo 8080 > /tmp/kubectl-grpc-echo.log 2>&1 &
-until nc -z localhost 9090; do sleep 1; done
-until nc -z localhost 8080; do sleep 1; done
+kubectl port-forward --namespace zilla-grpc-proxy service/zilla-grpc-proxy 7153 > /tmp/kubectl-zilla.log 2>&1 &
+kubectl port-forward --namespace zilla-grpc-proxy service/grpc-echo 7151 > /tmp/kubectl-grpc-echo.log 2>&1 &
+until nc -z localhost 7153; do sleep 1; done
+until nc -z localhost 7151; do sleep 1; done

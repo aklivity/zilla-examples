@@ -1,6 +1,6 @@
 # mqtt.proxy.asyncapi
 
-Listens on mqtt port `1883` and will forward mqtt publish messages and proxies subscribes to mosquitto MQTT broker listening on `1884` for topic `smartylighting/streetlights/1/0/event/+/lighting/measured`.
+Listens on mqtt port `7183` and will forward mqtt publish messages and proxies subscribes to mosquitto MQTT broker listening on `7184` for topic `smartylighting/streetlights/1/0/event/+/lighting/measured`.
 
 Note that the `zilla.yaml` config used by the proxy was generated based on `asyncapi.yaml`.
 
@@ -58,14 +58,14 @@ NAMESPACE: mqtt-proxy-asyncapi
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
-+ kubectl port-forward --namespace mqtt-proxy-asyncapi service/mqtt-proxy-asyncapi-zilla 1883
-+ nc -z localhost 1883
-+ kubectl port-forward --namespace mqtt-proxy-asyncapi service/mosquitto 1884
++ kubectl port-forward --namespace mqtt-proxy-asyncapi service/mqtt-proxy-asyncapi-zilla 7183
++ nc -z localhost 7183
++ kubectl port-forward --namespace mqtt-proxy-asyncapi service/mosquitto 7184
 + sleep 1
-+ nc -z localhost 1883
-Connection to localhost port 1883 [tcp/ibm-mqisdp] succeeded!
-+ nc -z localhost 1884
-Connection to localhost port 1884 [tcp/idmaps] succeeded!
++ nc -z localhost 7183
+Connection to localhost port 7183 [tcp/ibm-mqisdp] succeeded!
++ nc -z localhost 7184
+Connection to localhost port 7184 [tcp/idmaps] succeeded!
 
 ```
 
@@ -79,9 +79,9 @@ brew install mosquitto
 
 ### Verify behavior
 
-Connect a subscribing client to mosquitto broker to port `1884`. Using mosquitto_pub client publish `{"id":"1","status":"on"}` to Zilla on port `1883`. Verify that the message arrived to on the first client.
+Connect a subscribing client to mosquitto broker to port `7184`. Using mosquitto_pub client publish `{"id":"1","status":"on"}` to Zilla on port `7183`. Verify that the message arrived to on the first client.
 ```bash
-mosquitto_sub -V '5' -t 'smartylighting/streetlights/1/0/event/+/lighting/measured' -d -p 1884
+mosquitto_sub -V '5' -t 'smartylighting/streetlights/1/0/event/+/lighting/measured' -d -p 7184
 ```
 output:
 ```

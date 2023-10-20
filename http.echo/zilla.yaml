@@ -15,14 +15,14 @@ bindings:
     options:
       host: 0.0.0.0
       port:
-        - 8080
-        - 9090
+        - 7114
+        - 7143
     routes:
       - when:
-          - port: 8080
+          - port: 7114
         exit: http_server0
       - when:
-          - port: 9090
+          - port: 7143
         exit: tls_server0
   tls_server0:
     type: tls
@@ -44,10 +44,10 @@ bindings:
       - when:
           - headers:
               :scheme: http
-              :authority: localhost:8080
+              :authority: localhost:7114
           - headers:
               :scheme: https
-              :authority: localhost:9090
+              :authority: localhost:7143
         exit: echo_server0
   echo_server0:
     type: echo

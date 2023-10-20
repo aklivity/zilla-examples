@@ -26,7 +26,7 @@ kubectl exec --namespace zilla-http-redpanda-sasl-scram "$REDPANDA_POD" -- \
                 --sasl-mechanism SCRAM-SHA-256
 
 # Start port forwarding
-kubectl port-forward --namespace zilla-http-redpanda-sasl-scram service/zilla-http-redpanda-sasl-scram 8080 9090 > /tmp/kubectl-zilla.log 2>&1 &
+kubectl port-forward --namespace zilla-http-redpanda-sasl-scram service/zilla-http-redpanda-sasl-scram 7114 7143 > /tmp/kubectl-zilla.log 2>&1 &
 kubectl port-forward --namespace zilla-http-redpanda-sasl-scram service/redpanda 9092 > /tmp/kubectl-redpanda.log 2>&1 &
-until nc -z localhost 8080; do sleep 1; done
+until nc -z localhost 7114; do sleep 1; done
 until nc -z localhost 9092; do sleep 1; done

@@ -14,14 +14,14 @@ bindings:
     kind: server
     options:
       host: 0.0.0.0
-      port: 8080
+      port: 7114
     exit: http_server0
   tcp_server1:
     type: tcp
     kind: server
     options:
       host: 0.0.0.0
-      port: 9090
+      port: 7143
     exit: tls_server0
   tls_server0:
     type: tls
@@ -43,11 +43,11 @@ bindings:
       - when:
           - headers:
               :scheme: http
-              :authority: localhost:8080
+              :authority: localhost:7114
               :path: /echo_changed
           - headers:
               :scheme: https
-              :authority: localhost:9090
+              :authority: localhost:7143
               :path: /echo_changed
         exit: echo_server0
   echo_server0:

@@ -1,7 +1,7 @@
 # mqtt.kafka.broker
 
-Listens on mqtt port `1883` and will forward mqtt publish messages to Kafka, delivering to all mqtt clients subscribed to the same topic.
-Listens on mqtts port `8883` and will forward mqtt publish messages to Kafka, delivering to all mqtt clients subscribed to the same topic.
+Listens on mqtt port `7183` and will forward mqtt publish messages to Kafka, delivering to all mqtt clients subscribed to the same topic.
+Listens on mqtts port `7883` and will forward mqtt publish messages to Kafka, delivering to all mqtt clients subscribed to the same topic.
 
 ### Requirements
 
@@ -49,12 +49,12 @@ Created topic mqtt-messages.
 Created topic mqtt-retained.
 + kubectl exec --namespace zilla-mqtt-kafka-broker pod/kafka-74675fbb8-w42xt -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic mqtt-sessions --config cleanup.policy=compact --if-not-exists
 Created topic mqtt-sessions.
-+ kubectl port-forward --namespace zilla-mqtt-kafka-broker service/zilla-mqtt-kafka-broker 1883 8883
-+ nc -z localhost 1883
++ kubectl port-forward --namespace zilla-mqtt-kafka-broker service/zilla-mqtt-kafka-broker 7183 7883
++ nc -z localhost 7183
 + kubectl port-forward --namespace zilla-mqtt-kafka-broker service/kafka 9092 29092
 + sleep 1
-+ nc -z localhost 1883
-Connection to localhost port 1883 [tcp/ibm-mqisdp] succeeded!
++ nc -z localhost 7183
+Connection to localhost port 7183 [tcp/ibm-mqisdp] succeeded!
 + nc -z localhost 9092
 Connection to localhost port 9092 [tcp/XmlIpcRegSvc] succeeded!
 ```

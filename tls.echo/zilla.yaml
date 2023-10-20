@@ -30,7 +30,7 @@ bindings:
     routes:
       - when:
           - alpn: echo
-        exit: south_echo_server
-  south_echo_server:
+        exit: north_echo_server
+  north_echo_server:
     type: echo
     kind: server

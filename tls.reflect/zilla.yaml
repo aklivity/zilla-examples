@@ -30,11 +30,11 @@ bindings:
     routes:
       - when:
           - alpn: echo
-        exit: south_fan_server
-  south_fan_server:
+        exit: north_fan_server
+  north_fan_server:
     type: fan
     kind: server
-    exit: south_echo_server
-  south_echo_server:
+    exit: north_echo_server
+  north_echo_server:
     type: echo
     kind: server

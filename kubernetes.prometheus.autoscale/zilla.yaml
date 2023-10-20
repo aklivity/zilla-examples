@@ -41,10 +41,10 @@ bindings:
           - headers:
               :scheme: http
               :authority: localhost:8080
-        exit: south_echo_server
+        exit: north_echo_server
     telemetry:
       metrics:
         - http.*
-  south_echo_server:
+  north_echo_server:
     type: echo
     kind: server

@@ -69,7 +69,7 @@ bindings:
           - headers:
               :scheme: https
               :authority: localhost:9090
-        exit: south_echo_server
-  south_echo_server:
+        exit: north_echo_server
+  north_echo_server:
     type: echo
     kind: server

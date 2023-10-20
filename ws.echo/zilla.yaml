@@ -45,14 +45,14 @@ bindings:
           - headers:
               :scheme: https
               :authority: localhost:9090
-        exit: south_ws_server
-  south_ws_server:
+        exit: north_ws_server
+  north_ws_server:
     type: ws
     kind: server
     routes:
       - when:
           - protocol: echo
-        exit: south_echo_server
-  south_echo_server:
+        exit: north_echo_server
+  north_echo_server:
     type: echo
     kind: server

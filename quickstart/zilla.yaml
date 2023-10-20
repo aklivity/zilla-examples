@@ -17,7 +17,7 @@ bindings:
           exit: north_http_server
         - when: 
             - port: 7151
-          exit: north_mqtt_server
+          exit: north_grpc_server
         - when: 
             - port: 7183
           exit: north_mqtt_server
@@ -69,7 +69,7 @@ bindings:
     telemetry:
       metrics:
         - http.*
-  grpc_http_server:
+  north_grpc_http_server:
     type: http
     kind: server
     options:
@@ -80,7 +80,7 @@ bindings:
           - headers:
               :scheme: http
               :authority: localhost:7151
-        exit: grpc_server
+        exit: north_grpc_server
     telemetry:
       metrics:
         - http.*
@@ -268,8 +268,8 @@ bindings:
     type: tcp
     kind: client
     options:
-      host: kafka
-      port: 29092
+      host: ${{env.KAFKA_HOST}}
+      port: ${{env.KAFKA_PORT}}
     routes:
       - when:
           - cidr: 0.0.0.0/0

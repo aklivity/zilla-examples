@@ -19,7 +19,7 @@ KAFKA_PORT=""
 WORKDIR=$(pwd)
 
 # helper functions
-export USAGE="Usage:  ${CMD:=${0##*/}} [ EXAMPLE_FOLDER ] [ -h --khost KAFKA_HOST ] [ -p --kport KAFKA_PORT ] [ -d --workdir WORKDIR] [ -v --version VERSION] [ -k --k8s ] [ -m --use-main ] [ --no-kafka] [ --auto-teardown]"
+export USAGE="Usage:  ${CMD:=${0##*/}} [ EXAMPLE_FOLDER ] [ -h --kafka-host KAFKA_HOST ] [ -p --kafka-port KAFKA_PORT ] [ -d --workdir WORKDIR] [ -v --version VERSION] [ -k --k8s ] [ -m --use-main ] [ --no-kafka] [ --auto-teardown]"
 exit2 () { printf >&2 "%s:  %s: '%s'\n%s\n" "$CMD" "$1" "$2" "$USAGE"; exit 2; }
 check () { { [ "$1" != "$EOL" ] && [ "$1" != '--' ]; } || exit2 "missing argument" "$2"; }  # avoid infinite loop
 
@@ -30,8 +30,8 @@ while [ "$1" != "$EOL" ]; do
   case "$opt" in
 
     #EDIT HERE: defined options
-    -h | --khost         ) check "$1" "$opt"; KAFKA_HOST="$1"; REMOTE_KAFKA=true; shift;;
-    -p | --kport         ) check "$1" "$opt"; KAFKA_PORT="$1"; shift;;
+    -h | --kafka-host         ) check "$1" "$opt"; KAFKA_HOST="$1"; REMOTE_KAFKA=true; shift;;
+    -p | --kafka-port         ) check "$1" "$opt"; KAFKA_PORT="$1"; shift;;
     -d | --workdir       ) check "$1" "$opt"; WORKDIR="$1"; shift;;
     -v | --version       ) check "$1" "$opt"; VERSION="$1"; shift;;
     -k | --k8s           ) USE_K8S=true;;

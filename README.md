@@ -18,7 +18,7 @@ The `startup.sh` script is meant to help setup and teardown the necessary compon
 Usage:
 
 ```text
-startup.sh [ EXAMPLE_FOLDER ] [ -h --khost KAFKA_HOST ] [ -p --kport KAFKA_PORT ] [ -d --workdir WORKDIR] [ -v --version VERSION] [ -k --k8s ] [ -m --use-main ] [ --no-kafka] [ --auto-teardown]
+startup.sh [ EXAMPLE_FOLDER ] [ -h --kafka-host KAFKA_HOST ] [ -p --kafka-port KAFKA_PORT ] [ -d --workdir WORKDIR] [ -v --version VERSION] [ -k --k8s ] [ -m --use-main ] [ --no-kafka] [ --auto-teardown]
 ```
 
 Install and run any of the examples using this script:

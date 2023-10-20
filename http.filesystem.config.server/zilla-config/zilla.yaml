@@ -14,15 +14,16 @@ bindings:
     kind: server
     options:
       host: 0.0.0.0
-      port: 9091
-    exit: north_tls_server
-  tcp_server1:
-    type: tcp
-    kind: server
-    options:
-      host: 0.0.0.0
-      port: 8081
-    exit: north_http_server
+      port: 
+        - 9091
+        - 8081
+    routes:
+        - when:
+            - port: 9091
+          exit: north_tls_server
+        - when: 
+            - port: 8081
+          exit: north_http_server
   north_tls_server:
     type: tls
     kind: server
@@ -35,8 +36,8 @@ bindings:
       alpn:
         - http/1.1
         - h2
-    exit: north_http_server
-  north_http_server:
+    exit: east_http_server
+  east_http_server:
     type: http
     kind: server
     routes:
@@ -46,8 +47,8 @@ bindings:
           - headers:
               :scheme: https
               :authority: localhost:9091
-        exit: north_http_filesystem_mapping
-  north_http_filesystem_mapping:
+        exit: east_http_filesystem_mapping
+  east_http_filesystem_mapping:
     type: http-filesystem
     kind: proxy
     routes:

@@ -61,8 +61,8 @@ bindings:
           - headers:
               :scheme: https
               :authority: localhost:9090
-        exit: north_http_filesystem_mapping
-  north_http_filesystem_mapping:
+        exit: east_http_filesystem_mapping
+  east_http_filesystem_mapping:
     type: http-filesystem
     kind: proxy
     routes:

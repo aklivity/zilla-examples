@@ -5,5 +5,5 @@ set -x
 pgrep kubectl && killall kubectl
 
 # Uninstall Zilla and Kafka
-NAMESPACE=zilla-resource-kafka
+NAMESPACE=zilla-kafka-broker
 kubectl delete namespace $NAMESPACE --force --grace-period=0

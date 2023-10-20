@@ -6,6 +6,9 @@ RELEASE_URL="https://github.com/$REPO/releases/download"
 MAIN_URL="https://api.github.com/repos/$REPO/tarball"
 VERSION=""
 EXAMPLE_FOLDER=""
+KAFKA_FOLDER="kafka.broker"
+COMPOSE_FOLDER="compose"
+HELM_FOLDER="k8s"
 USE_K8S=false
 USE_MAIN=false
 START_KAFKA=true
@@ -64,12 +67,12 @@ if [[ -d "$WORKDIR" && ! -d "$WORKDIR/$EXAMPLE_FOLDER" ]]; then
 fi
 
 # don't start kafka if the example hasn't been reworked
-if [[ ! -d "$WORKDIR/$EXAMPLE_FOLDER/k8s" && ! -d "$WORKDIR/$EXAMPLE_FOLDER/compose" ]]; then
+if [[ ! -d "$WORKDIR/$EXAMPLE_FOLDER/$HELM_FOLDER" && ! -d "$WORKDIR/$EXAMPLE_FOLDER/$COMPOSE_FOLDER" ]]; then
     START_KAFKA=false
 fi
 
 # use helm if there isn't a compose implimentation, remove after adding to all examples
-if [[ $USE_K8S == false && ! -d "$WORKDIR/$EXAMPLE_FOLDER/compose" ]]; then
+if [[ $USE_K8S == false && ! -d "$WORKDIR/$EXAMPLE_FOLDER/$COMPOSE_FOLDER" ]]; then
     USE_K8S=true
 fi
 
@@ -77,22 +80,23 @@ KAKFA_TEARDOWN_SCRIPT=""
 if [[ $REMOTE_KAFKA == true ]]; then
     printf "Connecting to remote Kafka at $KAFKA_HOST:$KAFKA_PORT"
 elif [[ $START_KAFKA == true ]]; then
-    KAFKA_RESOURCE="resource.kafka.compose"
-    if [[ $USE_K8S == true ]]; then
-        KAFKA_RESOURCE="resource.kafka.helm"
-    fi
 
-    if ! [[ -d "$WORKDIR/$KAFKA_RESOURCE" ]]; then
+    if ! [[ -d "$WORKDIR/$KAFKA_FOLDER" ]]; then
         if [[ $USE_MAIN == true ]]; then
-            printf "\n==== Downloading $MAIN_URL '*/$KAFKA_RESOURCE/*' to $WORKDIR ====\n"
-            wget -qO - $MAIN_URL | tar -xf - --strip=1 -C $WORKDIR "*/$KAFKA_RESOURCE/*"
+            printf "\n==== Downloading $MAIN_URL '*/$KAFKA_FOLDER/*' to $WORKDIR ====\n"
+            wget -qO - $MAIN_URL | tar -xf - --strip=1 -C $WORKDIR "*/$KAFKA_FOLDER/*"
         else
-            printf "\n==== Downloading $RELEASE_URL/$VERSION/$KAFKA_RESOURCE.tar.gz to $WORKDIR ====\n"
-            wget -qO- $RELEASE_URL/$VERSION/$KAFKA_RESOURCE.tar.gz | tar -xf - -C $WORKDIR
+            printf "\n==== Downloading $RELEASE_URL/$VERSION/$KAFKA_FOLDER.tar.gz to $WORKDIR ====\n"
+            wget -qO- $RELEASE_URL/$VERSION/$KAFKA_FOLDER.tar.gz | tar -xf - -C $WORKDIR
         fi
     fi
 
-    cd $WORKDIR/$KAFKA_RESOURCE
+    if [[ $USE_K8S == true ]]; then
+        KAFKA_FOLDER="resource.kafka.helm"
+        cd $WORKDIR/$KAFKA_FOLDER/
+    else
+        cd $WORKDIR/$KAFKA_FOLDER/$COMPOSE_FOLDER
+    fi
     KAFKA_HOST="host.docker.internal"
     KAFKA_PORT=29092
     chmod u+x teardown.sh
@@ -107,7 +111,7 @@ if [[ $REMOTE_KAFKA == true || $START_KAFKA == true ]]; then
 fi
 
 TEARDOWN_SCRIPT=""
-if [[ $USE_K8S == false && -d "$WORKDIR/$EXAMPLE_FOLDER/compose" ]]; then
+if [[ $USE_K8S == false && -d "$WORKDIR/$EXAMPLE_FOLDER/$COMPOSE_FOLDER" ]]; then
     if ! [[ -x "$(command -v docker)" ]]; then
         printf "Docker is required to run this setup."
         exit
@@ -117,7 +121,7 @@ if [[ $USE_K8S == false && -d "$WORKDIR/$EXAMPLE_FOLDER/compose" ]]; then
         exit
     fi
 
-    cd $WORKDIR/$EXAMPLE_FOLDER/compose
+    cd $WORKDIR/$EXAMPLE_FOLDER/$COMPOSE_FOLDER
     chmod u+x teardown.sh
     TEARDOWN_SCRIPT="$(pwd)/teardown.sh"
     printf "\n==== Starting Zilla $EXAMPLE_FOLDER with Compose. Use this script to teardown: $(pwd)/teardown.sh ====\n"
@@ -134,8 +138,8 @@ if [[ $USE_K8S == true ]]; then
         exit
     fi
 
-    if [[ -d "$WORKDIR/$EXAMPLE_FOLDER/k8s" ]]; then
-        cd $WORKDIR/$EXAMPLE_FOLDER/k8s
+    if [[ -d "$WORKDIR/$EXAMPLE_FOLDER/$HELM_FOLDER" ]]; then
+        cd $WORKDIR/$EXAMPLE_FOLDER/$HELM_FOLDER
     else
         cd $WORKDIR/$EXAMPLE_FOLDER
     fi

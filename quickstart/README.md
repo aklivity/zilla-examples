@@ -2,12 +2,38 @@
 
 Follow the [Zilla Quickstart](https://docs.aklivity.io/zilla/latest/tutorials/quickstart/kafka-proxies.html) to discover some of what Zilla can do!
 
-## Start this example
+## Running locally
+
+This quickstart runs using Docker compose. You will find the setup scripts in the [compose](./compose) folder.
+
+You will need a running kafka broker. To start one locally you will find instructions in the [kafka.broker](../kafka.broker) folder. You will need to export the below environment variables before running the setup script.
 
 ```bash
-wget -qO- https://raw.githubusercontent.com/aklivity/zilla-examples/main/startup.sh | sh -s -- -m quickstart
+export KAFKA_HOST=host.docker.internal
+export KAFKA_PORT=29092
 ```
 
-## Teardown
+### Setup
 
-Find the path to the `teardown.sh` script(s) in the `use the teardown script(s) to clean up` section of the example output and run it.
+The `setup.sh` script will:
+
+- Configured Zilla instance with REST, SSE, gRPC, MQTT protocols configured
+- Create Kafka topics
+- Start a gRPC Route Guide server
+- Start a MQTT message simulator
+
+```bash
+./compose/setup.sh
+```
+
+### Using this quickstart
+
+You can interact with this quickstart using our [Postman collection](https://vordimous.github.io/zilla-docs/next/tutorials/quickstart/kafka-proxies.html#postman-collections)
+
+### Teardown
+
+The `teardown.sh` script will remove any resources created.
+
+```bash
+./compose/teardown.sh
+```

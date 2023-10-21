@@ -8,7 +8,7 @@ NAMESPACE=zilla-mqtt-kafka-broker
 docker-compose -p $NAMESPACE down --remove-orphans
 
 # Create the mqtt topics in Kafka
-docker run --rm bitnami/kafka:3.5 bash -c "
+docker run --rm bitnami/kafka:3.2 bash -c "
 echo 'Creating topics for $KAFKA_HOST:$KAFKA_PORT'
 /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server $KAFKA_HOST:$KAFKA_PORT --create --if-not-exists --topic mqtt-sessions
 /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server $KAFKA_HOST:$KAFKA_PORT --create --if-not-exists --topic mqtt-messages --config cleanup.policy=compact

@@ -6,7 +6,6 @@ Listens on mqtts port `7883` and will forward mqtt publish messages from an auth
 ### Requirements
 
 - bash, jq, nc
-- Zilla docker image local incubator build, `develop-SNAPSHOT` version
 - Kubernetes (e.g. Docker Desktop with Kubernetes enabled)
 - kubectl
 - helm 3.0+

@@ -81,7 +81,7 @@ output:
 ```
 
 ```bash
-cli-rhea-receiver --address 'zilla' --log-lib 'TRANSPORT_DRV' --log-msgs 'body'
+cli-rhea-receiver --address 'zilla' --log-lib 'TRANSPORT_DRV' --log-msgs 'body' --broker localhost:7172
 ```
 
 output:
@@ -106,7 +106,7 @@ output:
 ```
 
 ```bash
-cli-rhea-sender --address 'zilla' --msg-content 'Hello, world' --log-lib 'TRANSPORT_DRV'
+cli-rhea-sender --address 'zilla' --msg-content 'Hello, world' --log-lib 'TRANSPORT_DRV' --broker localhost:7172
 ```
 
 output:

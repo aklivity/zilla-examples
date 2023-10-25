@@ -1,7 +1,7 @@
 # mqtt.kafka.broker.jwt
 
-Listens on mqtt port `1883` and will forward mqtt publish messages from an authorized mqtt client to Kafka, delivering to all authorized mqtt clients subscribed to the same topic.
-Listens on mqtts port `8883` and will forward mqtt publish messages from an authorized mqtt client to Kafka, delivering to all authorized mqtt clients subscribed to the same topic.
+Listens on mqtt port `7183` and will forward mqtt publish messages from an authorized mqtt client to Kafka, delivering to all authorized mqtt clients subscribed to the same topic.
+Listens on mqtts port `7883` and will forward mqtt publish messages from an authorized mqtt client to Kafka, delivering to all authorized mqtt clients subscribed to the same topic.
 
 ### Requirements
 
@@ -41,7 +41,7 @@ The `setup.sh` script:
 
 ```text
 + ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
-+ helm install zilla-mqtt-kafka-broker-jwt oci://ghcr.io/aklivity/charts/zilla --namespace zilla-mqtt-kafka-broker-jwt --create-namespace --wait [...]
++ helm upgrade --install zilla-mqtt-kafka-broker-jwt oci://ghcr.io/aklivity/charts/zilla --namespace zilla-mqtt-kafka-broker-jwt --create-namespace --wait [...]
 NAME: zilla-mqtt-kafka-broker-jwt
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-mqtt-kafka-broker-jwt
@@ -49,7 +49,7 @@ STATUS: deployed
 REVISION: 1
 NOTES:
 Zilla has been installed.
-+ helm install zilla-mqtt-kafka-broker-jwt-kafka chart --namespace zilla-mqtt-kafka-broker-jwt --create-namespace --wait
++ helm upgrade --install zilla-mqtt-kafka-broker-jwt-kafka chart --namespace zilla-mqtt-kafka-broker-jwt --create-namespace --wait
 NAME: zilla-mqtt-kafka-broker-jwt-kafka
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-mqtt-kafka-broker-jwt
@@ -60,12 +60,12 @@ TEST SUITE: None
 + KAFKA_POD=pod/kafka-74675fbb8-g56l9
 + kubectl exec --namespace zilla-mqtt-kafka pod/kafka-74675fbb8-g56l9 -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic mqtt-messages --if-not-exists
 Created topic mqtt-messages.
-+ kubectl port-forward --namespace zilla-mqtt-kafka service/zilla-mqtt-kafka-broker-jwt 1883 8883
-+ nc -z localhost 1883
++ kubectl port-forward --namespace zilla-mqtt-kafka service/zilla-mqtt-kafka-broker-jwt 7183 7883
++ nc -z localhost 7183
 + kubectl port-forward --namespace zilla-mqtt-kafka service/kafka 9092 29092
 + sleep 1
-+ nc -z localhost 1883
-Connection to localhost port 1883 [tcp/ibm-mqisdp] succeeded!
++ nc -z localhost 7183
+Connection to localhost port 7183 [tcp/ibm-mqisdp] succeeded!
 + nc -z localhost 9092
 Connection to localhost port 9092 [tcp/XmlIpcRegSvc] succeeded!
 ```

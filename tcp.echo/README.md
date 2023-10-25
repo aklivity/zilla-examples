@@ -24,7 +24,7 @@ output:
 
 ```text
 + ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
-+ helm install zilla-tcp-echo oci://ghcr.io/aklivity/charts/zilla --namespace zilla-tcp-echo [...]
++ helm upgrade --install zilla-tcp-echo oci://ghcr.io/aklivity/charts/zilla --namespace zilla-tcp-echo [...]
 NAME: zilla-tcp-echo
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-tcp-echo

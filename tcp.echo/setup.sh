@@ -3,7 +3,7 @@ set -ex
 
 # Install Zilla to the Kubernetes cluster with helm and wait for the pod to start up
 ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
-helm install zilla-tcp-echo $ZILLA_CHART --namespace zilla-tcp-echo --create-namespace --wait \
+helm upgrade --install zilla-tcp-echo $ZILLA_CHART --namespace zilla-tcp-echo --create-namespace --wait \
     --values values.yaml \
     --set-file zilla\\.yaml=zilla.yaml
 

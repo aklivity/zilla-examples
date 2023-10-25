@@ -25,7 +25,7 @@ output:
 
 ```text
 + ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
-+ helm install zilla-tls-reflect oci://ghcr.io/aklivity/charts/zilla --namespace zilla-tls-reflect --create-namespace --wait [...]
++ helm upgrade --install zilla-tls-reflect oci://ghcr.io/aklivity/charts/zilla --namespace zilla-tls-reflect --create-namespace --wait [...]
 NAME: zilla-tls-reflect
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-tls-reflect

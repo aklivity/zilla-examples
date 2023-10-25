@@ -1,7 +1,7 @@
 # http.echo.jwt
 
-Listens on http port `8080` and will echo back whatever is sent to the server from an authorized client.
-Listens on https port `9090` and will echo back whatever is sent to the server from an authorized client.
+Listens on http port `7114` and will echo back whatever is sent to the server from an authorized client.
+Listens on https port `7143` and will echo back whatever is sent to the server from an authorized client.
 
 ### Requirements
 
@@ -35,7 +35,7 @@ output:
 
 ```text
 + ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
-+ helm install zilla-http-echo-jwt oci://ghcr.io/aklivity/charts/zilla --namespace zilla-http-echo-jwt --create-namespace --wait [...]
++ helm upgrade --install zilla-http-echo-jwt oci://ghcr.io/aklivity/charts/zilla --namespace zilla-http-echo-jwt --create-namespace --wait [...]
 NAME: zilla-http-echo-jwt
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-http-echo-jwt
@@ -44,11 +44,11 @@ REVISION: 1
 NOTES:
 Zilla has been installed.
 [...]
-+ nc -z localhost 8080
-+ kubectl port-forward --namespace zilla-http-echo-jwt service/zilla-http-echo-jwt 8080 9090
++ nc -z localhost 7114
++ kubectl port-forward --namespace zilla-http-echo-jwt service/zilla-http-echo-jwt 7114 7143
 + sleep 1
-+ nc -z localhost 8080
-Connection to localhost port 8080 [tcp/http-alt] succeeded!
++ nc -z localhost 7114
+Connection to localhost port 7114 [tcp/http-alt] succeeded!
 ```
 
 ### Verify behavior
@@ -75,7 +75,7 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImV4YW1wbGUifQ.eyJhdWQiOiJodHRwczovL
 Use the signed JWT token, without `echo:stream` scope, to attempt an authorized request.
 
 ```bash
-curl -v http://localhost:8080/ \
+curl -v http://localhost:7114/ \
     -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImV4YW1wbGUifQ.eyJhdWQiOiJodHRwczovL2FwaS5leGFtcGxlLmNvbSIsImV4cCI6MTk2ODg2Mjc0NywiaXNzIjoiaHR0cHM6Ly9hdXRoLmV4YW1wbGUuY29tIn0.k4Aq93RzFpOBBwuUEewJUq1Wj1F0csfW4c_eGaQY9xNk8WC1C_rhmWkiprApkoVoaUJI7PVemUFfwKmx3XVWTYB3AQUihGGDKA6TRN2kTfkd1Vm_tBbn6a1nsUKbfl70vFD51jebJ9w5yG2b_jEiqtt6eOW99KNNRdAi5U0z7NHHIniu8Yfi5qrK0IBJBBWOoe-D-539ZzWWlMZKA5n1BJZ6x5ZOJAbYWdoMxr73uo7p9rWdVNk-61KsqVSSkCy92dq_d0Uoa3Q8xT5cwpWoljDwl-jB1O6PBwR7MVGJfihFfQVimt0NDnWi8TPXyBUq7RWGwfmQdEHwcrGAnJiaNg" \
     -H "Content-Type: text/plain" \
     -d "Hello, world"
@@ -112,7 +112,7 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImV4YW1wbGUifQ.eyJhdWQiOiJodHRwczovL
 Use the signed JWT token, with `echo:stream` scope, to attempt an authorized request.
 
 ```bash
-curl "http://localhost:8080/" \
+curl "http://localhost:7114/" \
     -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImV4YW1wbGUifQ.eyJhdWQiOiJodHRwczovL2FwaS5leGFtcGxlLmNvbSIsImV4cCI6MTk2ODg2Mjc0NywiaXNzIjoiaHR0cHM6Ly9hdXRoLmV4YW1wbGUuY29tIiwic2NvcGUiOiJlY2hvOnN0cmVhbSJ9.glfCpnhVkQFf5zXlSFDWYsHyFhFEuxmRXVu8AbFXh67FzcjwzEcMgw1Zt7_SETyXHpNl1HhOgLohaVCkGxVG2iiOq0MJO00_l6X125itdY37noOFiGWTHb8uosGI4V3NhhCKyoVLtl3b9X4c6pCxHoQo7XkT1xmcjSeCKQenXpuX5WnKMIZsyBxUsOxg1cv3K7mg6WnKOlXWGjvCAoomUjIGiGDruFQMP1UzniMgY0b0IrofijiNB3HEKQQcU44MD7jH9lldrea1vaKnxYwmiaq7g7RsYMFXeNLzWz6hY61ColSeEUCiDtpVSNCyjKZHkuLA7yLQ-pvipwCpT0jU1Q" \
     -H "Content-Type: text/plain" \
     -d "Hello, world"
@@ -127,7 +127,7 @@ Hello, world
 Use the signed JWT token, with `echo:stream` scope, to attempt an authorized request via HTTP/2.
 
 ```bash
-curl --cacert test-ca.crt "https://localhost:9090/" \
+curl --cacert test-ca.crt "https://localhost:7143/" \
     -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImV4YW1wbGUifQ.eyJhdWQiOiJodHRwczovL2FwaS5leGFtcGxlLmNvbSIsImV4cCI6MTk2ODg2Mjc0NywiaXNzIjoiaHR0cHM6Ly9hdXRoLmV4YW1wbGUuY29tIiwic2NvcGUiOiJlY2hvOnN0cmVhbSJ9.glfCpnhVkQFf5zXlSFDWYsHyFhFEuxmRXVu8AbFXh67FzcjwzEcMgw1Zt7_SETyXHpNl1HhOgLohaVCkGxVG2iiOq0MJO00_l6X125itdY37noOFiGWTHb8uosGI4V3NhhCKyoVLtl3b9X4c6pCxHoQo7XkT1xmcjSeCKQenXpuX5WnKMIZsyBxUsOxg1cv3K7mg6WnKOlXWGjvCAoomUjIGiGDruFQMP1UzniMgY0b0IrofijiNB3HEKQQcU44MD7jH9lldrea1vaKnxYwmiaq7g7RsYMFXeNLzWz6hY61ColSeEUCiDtpVSNCyjKZHkuLA7yLQ-pvipwCpT0jU1Q" \
     -H "Content-Type: text/plain" \
     -d "Hello, world" \
@@ -141,7 +141,7 @@ Hello, world
 Use the signed JWT token, with `echo:stream` scope, to attempt an authorized request via HTTP/1.1 over TLS.
 
 ```bash
-curl --cacert test-ca.crt "https://localhost:9090/" \
+curl --cacert test-ca.crt "https://localhost:7143/" \
     -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImV4YW1wbGUifQ.eyJhdWQiOiJodHRwczovL2FwaS5leGFtcGxlLmNvbSIsImV4cCI6MTk2ODg2Mjc0NywiaXNzIjoiaHR0cHM6Ly9hdXRoLmV4YW1wbGUuY29tIiwic2NvcGUiOiJlY2hvOnN0cmVhbSJ9.glfCpnhVkQFf5zXlSFDWYsHyFhFEuxmRXVu8AbFXh67FzcjwzEcMgw1Zt7_SETyXHpNl1HhOgLohaVCkGxVG2iiOq0MJO00_l6X125itdY37noOFiGWTHb8uosGI4V3NhhCKyoVLtl3b9X4c6pCxHoQo7XkT1xmcjSeCKQenXpuX5WnKMIZsyBxUsOxg1cv3K7mg6WnKOlXWGjvCAoomUjIGiGDruFQMP1UzniMgY0b0IrofijiNB3HEKQQcU44MD7jH9lldrea1vaKnxYwmiaq7g7RsYMFXeNLzWz6hY61ColSeEUCiDtpVSNCyjKZHkuLA7yLQ-pvipwCpT0jU1Q" \
     -H "Content-Type: text/plain" \
     -d "Hello, world" \
@@ -155,7 +155,7 @@ Hello, world
 Use the signed JWT token, with `echo:stream` scope, to attempt an authorized request via HTTP/2 over TLS.
 
 ```bash
-curl --cacert test-ca.crt "https://localhost:9090/" \
+curl --cacert test-ca.crt "https://localhost:7143/" \
     -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImV4YW1wbGUifQ.eyJhdWQiOiJodHRwczovL2FwaS5leGFtcGxlLmNvbSIsImV4cCI6MTk2ODg2Mjc0NywiaXNzIjoiaHR0cHM6Ly9hdXRoLmV4YW1wbGUuY29tIiwic2NvcGUiOiJlY2hvOnN0cmVhbSJ9.glfCpnhVkQFf5zXlSFDWYsHyFhFEuxmRXVu8AbFXh67FzcjwzEcMgw1Zt7_SETyXHpNl1HhOgLohaVCkGxVG2iiOq0MJO00_l6X125itdY37noOFiGWTHb8uosGI4V3NhhCKyoVLtl3b9X4c6pCxHoQo7XkT1xmcjSeCKQenXpuX5WnKMIZsyBxUsOxg1cv3K7mg6WnKOlXWGjvCAoomUjIGiGDruFQMP1UzniMgY0b0IrofijiNB3HEKQQcU44MD7jH9lldrea1vaKnxYwmiaq7g7RsYMFXeNLzWz6hY61ColSeEUCiDtpVSNCyjKZHkuLA7yLQ-pvipwCpT0jU1Q" \
     -H "Content-Type: text/plain" \
     -d "Hello, world" \

@@ -1,6 +1,6 @@
 # grpc.kafka.echo
 
-Listens on https port `9090` and will exchange grpc message in probuf format through the `echo-messages` topic in Kafka.
+Listens on https port `7153` and will exchange grpc message in probuf format through the `echo-messages` topic in Kafka.
 
 ### Requirements
 
@@ -26,7 +26,7 @@ output:
 
 ```text
 + ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
-+ helm install zilla-grpc-kafka-echo oci://ghcr.io/aklivity/charts/zilla --namespace zilla-grpc-kafka-echo --wait [...]
++ helm upgrade --install zilla-grpc-kafka-echo oci://ghcr.io/aklivity/charts/zilla --namespace zilla-grpc-kafka-echo --wait [...]
 NAME: zilla-grpc-kafka-echo
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-grpc-kafka-echo
@@ -34,7 +34,7 @@ STATUS: deployed
 NOTES:
 Zilla has been installed.
 [...]
-+ helm install zilla-grpc-kafka-echo-kafka chart --namespace zilla-grpc-kafka-echo --create-namespace --wait
++ helm upgrade --install zilla-grpc-kafka-echo-kafka chart --namespace zilla-grpc-kafka-echo --create-namespace --wait
 NAME: zilla-grpc-kafka-echo-kafka
 LAST DEPLOYED: [...]
 NAMESPACE: zilla-grpc-kafka-echo
@@ -45,12 +45,12 @@ TEST SUITE: None
 + KAFKA_POD=pod/kafka-74675fbb8-kpkm8
 + kubectl exec --namespace zilla-grpc-kafka-echo pod/kafka-74675fbb8-kpkm8 -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic echo-messages --if-not-exists
 Created topic echo-messages.
-+ kubectl port-forward --namespace zilla-grpc-kafka-echo service/zilla-grpc-kafka-echo 9090
-+ nc -z localhost 9090
++ kubectl port-forward --namespace zilla-grpc-kafka-echo service/zilla-grpc-kafka-echo 7153
++ nc -z localhost 7153
 + kubectl port-forward --namespace zilla-grpc-kafka-echo service/kafka 9092 29092
 + sleep 1
-+ nc -z localhost 9090
-Connection to localhost port 9090 [tcp/websm] succeeded!
++ nc -z localhost 7153
+Connection to localhost port 7153 [tcp/websm] succeeded!
 + nc -z localhost 9092
 Connection to localhost port 9092 [tcp/XmlIpcRegSvc] succeeded!
 ```
@@ -62,7 +62,7 @@ Connection to localhost port 9092 [tcp/XmlIpcRegSvc] succeeded!
 Echo `{"message":"Hello World"}` message via unary rpc using `grpcurl` client.
 
 ```bash
-grpcurl -insecure -proto proto/echo.proto  -d '{"message":"Hello World"}' localhost:9090 example.EchoService.EchoUnary
+grpcurl -insecure -proto proto/echo.proto  -d '{"message":"Hello World"}' localhost:7153 example.EchoService.EchoUnary
 ```
 
 output:
@@ -130,7 +130,7 @@ output:
 Echo messages via bidirectional streaming rpc.
 
 ```bash
-grpcurl -insecure -proto proto/echo.proto -d @ localhost:9090 example.EchoService.EchoBidiStream
+grpcurl -insecure -proto proto/echo.proto -d @ localhost:7153 example.EchoService.EchoBidiStream
 ```
 
 Paste below message.
@@ -200,7 +200,7 @@ output:
 ghz --config bench.json \
     --proto proto/echo.proto \
     --call example.EchoService/EchoBidiStream \
-    localhost:9090
+    localhost:7153
 ```
 
 ### Teardown

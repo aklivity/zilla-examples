@@ -2,8 +2,8 @@
 
 ## Zilla config server
 
-Listens on http port `8081` and serves files from the pod's `/var/www` subdirectory.
-Listens on https port `9091` and serves files from the pod's `/var/www` subdirectory.
+Listens on http port `7115` and serves files from the pod's `/var/www` subdirectory.
+Listens on https port `7144` and serves files from the pod's `/var/www` subdirectory.
 
 ## Zilla HTTP echo server
 
@@ -59,12 +59,12 @@ Zilla has been installed.
 [...]
 + kubectl run busybox-pod --image=busybox:1.28 --namespace zilla-config-server --rm --restart=Never -i -t -- /bin/sh -c 'until nc -w 2 zilla-config-server-http 7114; do echo . && sleep 5; done'
 + kubectl wait --namespace zilla-config-server --for=delete pod/busybox-pod
-+ kubectl port-forward --namespace zilla-config-server service/zilla-config-server-config 8081 9091
-+ nc -z localhost 8081
++ kubectl port-forward --namespace zilla-config-server service/zilla-config-server-config 7115 7144
++ nc -z localhost 7115
 + kubectl port-forward --namespace zilla-config-server service/zilla-config-server-http 7114 7143
 + sleep 1
-+ nc -z localhost 8081
-Connection to localhost port 8081 [tcp/sunproxyadmin] succeeded!
++ nc -z localhost 7115
+Connection to localhost port 7115 [tcp/sunproxyadmin] succeeded!
 + nc -z localhost 7114
 Connection to localhost port 7114 [tcp/http-alt] succeeded!
 ```
@@ -72,7 +72,7 @@ Connection to localhost port 7114 [tcp/http-alt] succeeded!
 ### Verify behavior of the Zilla config server
 
 ```bash
-curl http://localhost:8081/zilla.yaml
+curl http://localhost:7115/zilla.yaml
 ```
 
 output:

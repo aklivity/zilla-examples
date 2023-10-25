@@ -116,7 +116,7 @@ bindings:
     options:
       versions:
         - h2
-    exit: south_grpc_tcp_client
+    exit: west_tcp_client
   west_tcp_client:
     type: tcp
     kind: client

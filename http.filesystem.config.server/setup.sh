@@ -23,9 +23,9 @@ kubectl run busybox-pod --image=busybox:1.28 --namespace $NAMESPACE --rm --resta
 kubectl wait --namespace $NAMESPACE --for=delete pod/busybox-pod
 
 # Start port forwarding
-kubectl port-forward --namespace $NAMESPACE service/zilla-config 8081 9091 > /tmp/kubectl-zilla-config.log 2>&1 &
+kubectl port-forward --namespace $NAMESPACE service/zilla-config 7115 7144 > /tmp/kubectl-zilla-config.log 2>&1 &
 kubectl port-forward --namespace $NAMESPACE service/zilla-http 7114 7143 > /tmp/kubectl-zilla-http.log 2>&1 &
-until nc -z localhost 8081; do sleep 1; done
-until nc -z localhost 9091; do sleep 1; done
+until nc -z localhost 7115; do sleep 1; done
+until nc -z localhost 7144; do sleep 1; done
 until nc -z localhost 7114; do sleep 1; done
 until nc -z localhost 7143; do sleep 1; done

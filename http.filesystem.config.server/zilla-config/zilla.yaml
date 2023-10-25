@@ -15,14 +15,14 @@ bindings:
     options:
       host: 0.0.0.0
       port: 
-        - 9091
-        - 8081
+        - 7144
+        - 7115
     routes:
         - when:
-            - port: 9091
+            - port: 7144
           exit: north_tls_server
         - when: 
-            - port: 8081
+            - port: 7115
           exit: north_http_server
   north_tls_server:
     type: tls
@@ -46,7 +46,7 @@ bindings:
               :scheme: http
           - headers:
               :scheme: https
-              :authority: localhost:9091
+              :authority: localhost:7144
         exit: east_http_filesystem_mapping
   east_http_filesystem_mapping:
     type: http-filesystem

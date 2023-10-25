@@ -6,4 +6,5 @@ pgrep kubectl && killall kubectl
 
 # Uninstall Zilla and mosquitto
 NAMESPACE=mqtt-proxy-asyncapi
+helm uninstall zilla mosquitto --namespace $NAMESPACE
 kubectl delete namespace $NAMESPACE --force --grace-period=0

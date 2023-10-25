@@ -81,7 +81,7 @@ output:
 ---
 name: example
 vaults:
-  server:
+  your_servers:
     type: filesystem
     options:
       keys:
@@ -106,7 +106,7 @@ bindings:
   north_tls_server:
     type: tls
     kind: server
-    vault: server
+    vault: your_servers
     options:
       keys:
         - localhost

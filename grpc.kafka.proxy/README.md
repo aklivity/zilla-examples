@@ -1,6 +1,6 @@
 # grpc..kafka.proxy
 
-Listens on https port `7153` and uses kafka as proxy to talk to `grpc_echo` on tcp port `7151`.
+Listens on https port `7153` and uses kafka as proxy to talk to `grpc_echo` on tcp port `8080`.
 
 ### Requirements
 
@@ -64,14 +64,14 @@ Created topic echo-responses.
 + kubectl port-forward --namespace zilla-grpc-kafka-proxy service/zilla-grpc-kafka-proxy 7153
 + kubectl port-forward --namespace zilla-grpc-kafka-proxy service/kafka 9092 29092
 + nc -z localhost 7153
-+ kubectl port-forward --namespace zilla-grpc-kafka-proxy service/grpc-echo 7151
++ kubectl port-forward --namespace zilla-grpc-kafka-proxy service/grpc-echo 8080
 + sleep 1
 + nc -z localhost 7153
 Connection to localhost port 7153 [tcp/websm] succeeded!
 + nc -z localhost 9092
 Connection to localhost port 9092 [tcp/XmlIpcRegSvc] succeeded!
-+ nc -z localhost 7151
-Connection to localhost port 7151 [tcp/http-alt] succeeded!
++ nc -z localhost 8080
+Connection to localhost port 8080 [tcp/http-alt] succeeded!
 ```
 
 ### Verify behavior

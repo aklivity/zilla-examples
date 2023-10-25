@@ -33,7 +33,7 @@ kubectl exec --namespace zilla-grpc-kafka-proxy "$KAFKA_POD" -- \
 # Start port forwarding
 kubectl port-forward --namespace zilla-grpc-kafka-proxy service/zilla-grpc-kafka-proxy 7153 > /tmp/kubectl-zilla.log 2>&1 &
 kubectl port-forward --namespace zilla-grpc-kafka-proxy service/kafka 9092 29092 > /tmp/kubectl-kafka.log 2>&1 &
-kubectl port-forward --namespace zilla-grpc-kafka-proxy service/grpc-echo 7151 > /tmp/kubectl-grpc-echo.log 2>&1 &
+kubectl port-forward --namespace zilla-grpc-kafka-proxy service/grpc-echo 8080 > /tmp/kubectl-grpc-echo.log 2>&1 &
 until nc -z localhost 7153; do sleep 1; done
 until nc -z localhost 9092; do sleep 1; done
-until nc -z localhost 7151; do sleep 1; done
+until nc -z localhost 8080; do sleep 1; done

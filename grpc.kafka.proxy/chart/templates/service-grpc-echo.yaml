@@ -18,10 +18,10 @@ spec:
         - name: grpc-echo
           image: "zilla-examples/grpc-echo:latest"
           ports:
-            - containerPort: 7151
+            - containerPort: 8080
           readinessProbe:
             tcpSocket:
-              port: 7151
+              port: 8080
             initialDelaySeconds: 3
             periodSeconds: 5
           tty: true
@@ -36,5 +36,5 @@ spec:
     app.kubernetes.io/instance: grpc-echo
   ports:
     - name: http
-      port: 7151
+      port: 8080
   type: ClusterIP

@@ -122,4 +122,4 @@ bindings:
     kind: client
     options:
       host: grpc-echo
-      port: 7151
+      port: 8080

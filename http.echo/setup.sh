@@ -12,3 +12,4 @@ helm upgrade --install zilla-http-echo $ZILLA_CHART --namespace $NAMESPACE --cre
 # Start port forwarding
 kubectl port-forward --namespace $NAMESPACE service/zilla-http-echo 7114 7143 > /tmp/kubectl-zilla.log 2>&1 &
 until nc -z localhost 7114; do sleep 1; done
+until nc -z localhost 7143; do sleep 1; done

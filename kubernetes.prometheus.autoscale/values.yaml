@@ -5,8 +5,8 @@ service:
   ports:
     - port: 7114
       name: http
-    - name: prometheus
-      port: 7190
+    - port: 7190
+      name: metrics
 
 autoscaling:
   enabled: true

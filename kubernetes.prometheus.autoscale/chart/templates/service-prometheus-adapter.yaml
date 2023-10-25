@@ -16,13 +16,13 @@ spec:
     spec:
       containers:
         - name: prometheus-adapter
-          image: "registry.k8s.io/prometheus-adapter/prometheus-adapter:v0.10.0"
+          image: "registry.k8s.io/prometheus-adapter/prometheus-adapter:v0.10.1"
           args:
             - /adapter
             - --secure-port=443
             - --cert-dir=/tmp/cert
             - --logtostderr=true
-            - --prometheus-url=http://prometheus.zilla-kubernetes-prometheus-autoscale.svc.cluster.local:7190
+            - --prometheus-url=http://prometheus.zilla-kubernetes-prometheus-autoscale.svc.cluster.local:9090
             - --metrics-relist-interval=1m
             - --v=4
             - --config=/etc/prometheus-adapter/config.yaml

@@ -44,14 +44,16 @@ NAMESPACE: zilla-kubernetes-prometheus-autoscale
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
-+ kubectl port-forward --namespace zilla-kubernetes-prometheus-autoscale service/zilla-kubernetes-prometheus-autoscale 7114
++ kubectl port-forward --namespace zilla-kubernetes-prometheus-autoscale service/zilla-kubernetes-prometheus-autoscale 7114 7190
 + nc -z localhost 7114
-+ kubectl port-forward --namespace zilla-kubernetes-prometheus-autoscale service/prometheus 7190
++ kubectl port-forward --namespace zilla-kubernetes-prometheus-autoscale service/prometheus 9090
 + sleep 1
 + nc -z localhost 7114
-Connection to localhost port 7114 [tcp/http-alt] succeeded!
+Connection to localhost port 7114 [tcp/*] succeeded!
 + nc -z localhost 7190
-Connection to localhost port 7190 [tcp/websm] succeeded!
+Connection to localhost port 7190 [tcp/*] succeeded!
++ nc -z localhost 9090
+Connection to localhost port 9090 [tcp/websm] succeeded!
 ```
 
 ### Verify behavior

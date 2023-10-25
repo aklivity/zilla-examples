@@ -6,7 +6,7 @@ echo -e "${BOLD}The value of stream_active_received metric${END}"
 echo -e "${BOLD}------------------------------------------${END}\n"
 
 echo -e "${BOLD}Prometheus API:${END}"
-curl -s http://localhost:7190/api/v1/query\?query\=stream_active_received | jq
+curl -s http://localhost:9090/api/v1/query\?query\=stream_active_received | jq
 echo
 
 echo -e "${BOLD}Kubernetes custom metrics API:${END}"

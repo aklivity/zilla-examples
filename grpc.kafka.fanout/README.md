@@ -114,13 +114,13 @@ INFO: Found message: message: "test"
 Simulate connection loss by stopping the `zilla` service in the `docker` stack.
 
 ```bash
-kubectl scale --replicas=0 --namespace=zilla-grpc-kafka-fanout deployment/zilla
+kubectl scale --replicas=0 --namespace zilla-grpc-kafka-fanout deployment/zilla
 ```
 
 Simulate connection recovery by starting the `zilla` service again.
 
 ```bash
-kubectl scale --replicas=1 --namespace=zilla-grpc-kafka-fanout deployment/zilla
+kubectl scale --replicas=1 --namespace zilla-grpc-kafka-fanout deployment/zilla
 ```
 
 Now you need to restart the port-forward.

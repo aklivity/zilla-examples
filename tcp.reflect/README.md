@@ -48,6 +48,8 @@ Connect each client first, then send `Hello, one` from first client, then send `
 nc localhost 12345
 ```
 
+Type a `Hello, one` message and press `enter`.
+
 output:
 
 ```text
@@ -59,6 +61,8 @@ Hello, two
 ```bash
 nc localhost 12345
 ```
+
+Type a `Hello, two` message and press `enter`.
 
 output:
 

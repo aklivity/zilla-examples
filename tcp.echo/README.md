@@ -46,6 +46,8 @@ Connection to localhost port 12345 [tcp/italk] succeeded!
 nc localhost 12345
 ```
 
+Type a `Hello, world` message and press `enter`.
+
 output:
 
 ```text

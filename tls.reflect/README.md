@@ -56,6 +56,13 @@ depth=1 C = US, ST = California, L = Palo Alto, O = Aklivity, OU = Development, 
 verify return:1
 depth=0 C = US, ST = California, L = Palo Alto, O = Aklivity, OU = Development, CN = localhost
 verify return:1
+```
+
+Type a `Hello, one` message and press `enter`.
+
+output:
+
+```text
 Hello, one
 Hello, one
 Hello, two
@@ -72,6 +79,13 @@ depth=1 C = US, ST = California, L = Palo Alto, O = Aklivity, OU = Development, 
 verify return:1
 depth=0 C = US, ST = California, L = Palo Alto, O = Aklivity, OU = Development, CN = localhost
 verify return:1
+```
+
+Type a `Hello, two` message and press `enter`.
+
+output:
+
+```text
 Hello, one
 Hello, two
 Hello, two

@@ -98,6 +98,11 @@ kcat -b localhost:9092 -X security.protocol=SASL_PLAINTEXT \
   -X sasl.username=user \
   -X sasl.password=redpanda \
   -t events -J -u | jq .
+```
+
+output:
+
+```json
 {
   "topic": "events",
   "partition": 0,
@@ -111,11 +116,6 @@ kcat -b localhost:9092 -X security.protocol=SASL_PLAINTEXT \
   ],
   "payload": "{\"greeting\":\"Hello, world\"}"
 }
-```
-
-output:
-
-```text
 % Reached end of topic events [0] at offset 1
 ```
 

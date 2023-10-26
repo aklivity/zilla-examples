@@ -54,6 +54,8 @@ npm install wscat -g
 wscat -c ws://localhost:7114/ -s echo
 ```
 
+Type a `Hello, world` message and press `enter`.
+
 output:
 
 ```text
@@ -65,6 +67,8 @@ Connected (press CTRL+C to quit)
 ```bash
 wscat -c wss://localhost:7143/ --ca test-ca.crt -s echo
 ```
+
+Type a `Hello, world` message and press `enter`.
 
 output:
 

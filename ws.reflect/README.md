@@ -50,6 +50,8 @@ Connect each client first, then send `Hello, one` from first client, then send `
 wscat -c ws://localhost:7114/ -s echo
 ```
 
+Type a `Hello, one` message and press `enter`.
+
 output:
 
 ```text
@@ -62,6 +64,8 @@ Connected (press CTRL+C to quit)
 ```bash
 wscat -c wss://localhost:7143/ --ca test-ca.crt -s echo
 ```
+
+Type a `Hello, two` message and press `enter`.
 
 output:
 

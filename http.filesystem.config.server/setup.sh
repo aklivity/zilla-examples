@@ -18,10 +18,6 @@ helm upgrade --install zilla-http $ZILLA_CHART --namespace $NAMESPACE --create-n
     --values zilla-http/values.yaml \
     --set-file configMaps.prop.data.zilla\\.properties=zilla-http/zilla.properties
 
-# Wait for Zilla (http) to pick up the config from Zilla (config)
-kubectl run busybox-pod --image=busybox:1.28 --namespace $NAMESPACE --rm --restart=Never -i -t -- /bin/sh -c 'until nc -w 2 zilla-http 7114; do echo . && sleep 5; done' > /dev/null 2>&1
-kubectl wait --namespace $NAMESPACE --for=delete pod/busybox-pod
-
 # Start port forwarding
 kubectl port-forward --namespace $NAMESPACE service/zilla-config 7115 7144 > /tmp/kubectl-zilla-config.log 2>&1 &
 kubectl port-forward --namespace $NAMESPACE service/zilla-http 7114 7143 > /tmp/kubectl-zilla-http.log 2>&1 &

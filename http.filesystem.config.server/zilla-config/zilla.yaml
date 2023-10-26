@@ -36,8 +36,8 @@ bindings:
       alpn:
         - http/1.1
         - h2
-    exit: east_http_server
-  east_http_server:
+    exit: north_http_server
+  north_http_server:
     type: http
     kind: server
     routes:

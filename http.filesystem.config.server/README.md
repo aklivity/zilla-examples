@@ -57,7 +57,7 @@ REVISION: 1
 NOTES:
 Zilla has been installed.
 [...]
-+ kubectl run busybox-pod --image=busybox:1.28 --namespace zilla-config-server --rm --restart=Never -i -t -- /bin/sh -c 'until nc -w 2 zilla-http 7114; do echo . && sleep 5; done'
++ kubectl run busybox-pod --image=busybox:1.36 --namespace zilla-config-server --rm --restart=Never -i -t -- /bin/sh -c 'until nc -w 2 zilla-http 7114; do echo . && sleep 5; done'
 + kubectl wait --namespace zilla-config-server --for=delete pod/busybox-pod
 + kubectl port-forward --namespace zilla-config-server service/zilla-config 7115 7144
 + nc -z localhost 7115

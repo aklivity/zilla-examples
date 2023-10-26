@@ -92,6 +92,11 @@ Verify that the event has been produced to the `events` Kafka topic.
 
 ```bash
 kcat -C -b localhost:9092 -t events -J -u | jq .
+```
+
+output:
+
+```json
 {
   "topic": "events",
   "partition": 0,
@@ -105,11 +110,6 @@ kcat -C -b localhost:9092 -t events -J -u | jq .
   ],
   "payload": "{\"greeting\":\"Hello, world\"}"
 }
-```
-
-output:
-
-```text
 % Reached end of topic events [0] at offset 1
 ```
 

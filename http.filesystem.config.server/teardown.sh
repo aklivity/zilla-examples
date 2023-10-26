@@ -7,4 +7,4 @@ pgrep kubectl && killall kubectl
 # Uninstall Zilla engine
 NAMESPACE=zilla-config-server
 helm uninstall zilla-config zilla-http --namespace $NAMESPACE
-kubectl delete namespace $NAMESPACE --force --grace-period=0
+kubectl delete namespace $NAMESPACE

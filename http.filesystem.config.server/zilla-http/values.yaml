@@ -1,7 +1,7 @@
 initContainers:
   - name: wait-for-zilla-config-server
     image: "busybox:latest"
-    command: ['/bin/sh', '-c', 'until nc -w 2 zilla-config-server-config 7115; do echo . && sleep 5; done']
+    command: ['/bin/sh', '-c', 'until nc -w 2 zilla-config 7115; do echo . && sleep 5; done']
 
 env:
   - name: KEYSTORE_PASSWORD

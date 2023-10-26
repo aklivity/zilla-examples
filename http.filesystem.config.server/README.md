@@ -35,8 +35,8 @@ output:
 
 ```text
 + ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
-+ helm upgrade --install zilla-config-server-config oci://ghcr.io/aklivity/charts/zilla --namespace zilla-config-server --create-namespace --wait --values zilla-config/values.yaml --set-file 'zilla\.yaml=zilla-config/zilla.yaml' --set-file 'secrets.tls.data.localhost\.p12=tls/localhost.p12'
-NAME: zilla-config-server-config
++ helm upgrade --install zilla-config oci://ghcr.io/aklivity/charts/zilla --namespace zilla-config-server --create-namespace --wait --values zilla-config/values.yaml --set-file 'zilla\.yaml=zilla-config/zilla.yaml' --set-file 'secrets.tls.data.localhost\.p12=tls/localhost.p12'
+NAME: zilla-config
 LAST DEPLOYED: Sat May 13 14:30:38 2023
 NAMESPACE: zilla-config-server
 STATUS: deployed
@@ -44,12 +44,12 @@ REVISION: 1
 NOTES:
 Zilla has been installed.
 [...]
-++ kubectl get pods --namespace zilla-config-server --selector app.kubernetes.io/instance=zilla-config-server-config -o json
+++ kubectl get pods --namespace zilla-config-server --selector app.kubernetes.io/instance=zilla-config -o json
 ++ jq -r '.items[0].metadata.name'
-+ ZILLA_CONFIG_POD=zilla-config-server-config-bc455d4d6-fshdl
-+ kubectl cp --namespace zilla-config-server www zilla-config-server-config-bc455d4d6-fshdl:/var/
-+ helm upgrade --install zilla-config-server-http oci://ghcr.io/aklivity/charts/zilla --namespace zilla-config-server --create-namespace --wait --values zilla-http/values.yaml --set-file 'configMaps.prop.data.zilla\.properties=zilla-http/zilla.properties'
-NAME: zilla-config-server-http
++ ZILLA_CONFIG_POD=zilla-config-bc455d4d6-fshdl
++ kubectl cp --namespace zilla-config-server www zilla-config-bc455d4d6-fshdl:/var/
++ helm upgrade --install zilla-http oci://ghcr.io/aklivity/charts/zilla --namespace zilla-config-server --create-namespace --wait --values zilla-http/values.yaml --set-file 'configMaps.prop.data.zilla\.properties=zilla-http/zilla.properties'
+NAME: zilla-http
 LAST DEPLOYED: Sat May 13 14:30:50 2023
 NAMESPACE: zilla-config-server
 STATUS: deployed
@@ -57,11 +57,11 @@ REVISION: 1
 NOTES:
 Zilla has been installed.
 [...]
-+ kubectl run busybox-pod --image=busybox:1.28 --namespace zilla-config-server --rm --restart=Never -i -t -- /bin/sh -c 'until nc -w 2 zilla-config-server-http 7114; do echo . && sleep 5; done'
++ kubectl run busybox-pod --image=busybox:1.28 --namespace zilla-config-server --rm --restart=Never -i -t -- /bin/sh -c 'until nc -w 2 zilla-http 7114; do echo . && sleep 5; done'
 + kubectl wait --namespace zilla-config-server --for=delete pod/busybox-pod
-+ kubectl port-forward --namespace zilla-config-server service/zilla-config-server-config 7115 7144
++ kubectl port-forward --namespace zilla-config-server service/zilla-config 7115 7144
 + nc -z localhost 7115
-+ kubectl port-forward --namespace zilla-config-server service/zilla-config-server-http 7114 7143
++ kubectl port-forward --namespace zilla-config-server service/zilla-http 7114 7143
 + sleep 1
 + nc -z localhost 7115
 Connection to localhost port 7115 [tcp/sunproxyadmin] succeeded!
@@ -160,10 +160,10 @@ The Zilla HTTP echo server currently echoes only for the /echo HTTP path. Let's 
 output:
 
 ```text
-++ kubectl get pods --namespace zilla-config-server --selector app.kubernetes.io/instance=zilla-config-server-config -o json
+++ kubectl get pods --namespace zilla-config-server --selector app.kubernetes.io/instance=zilla-config -o json
 ++ jq -r '.items[0].metadata.name'
-+ ZILLA_CONFIG_POD=zilla-config-server-config-bc455d4d6-fshdl
-+ kubectl cp --namespace zilla-config-server www-updated/zilla.yaml zilla-config-server-config-bc455d4d6-fshdl:/var/www/zilla.yaml
++ ZILLA_CONFIG_POD=zilla-config-bc455d4d6-fshdl
++ kubectl cp --namespace zilla-config-server www-updated/zilla.yaml zilla-config-bc455d4d6-fshdl:/var/www/zilla.yaml
 + curl -s -f -d 'Hello, World' -H 'Content-Type: text/plain' -X POST -v http://localhost:7114/echo_changed
 + sleep 1
 + curl -s -f -d 'Hello, World' -H 'Content-Type: text/plain' -X POST -v http://localhost:7114/echo_changed
@@ -210,9 +210,9 @@ output:
 99998
 99999
 + killall kubectl
-+ helm uninstall zilla-config-server-config zilla-config-server-http --namespace zilla-config-server
-release "zilla-config-server-config" uninstalled
-release "zilla-config-server-http" uninstalled
++ helm uninstall zilla-config zilla-http --namespace zilla-config-server
+release "zilla-config" uninstalled
+release "zilla-http" uninstalled
 + kubectl delete namespace zilla-config-server
 namespace "zilla-config-server" deleted
 ```

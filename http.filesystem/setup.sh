@@ -10,7 +10,7 @@ helm upgrade --install zilla $ZILLA_CHART --namespace $NAMESPACE --create-namesp
     --set-file secrets.tls.data.localhost\\.p12=tls/localhost.p12
 
 # Copy web files to the persistent volume mounted in the pod's filesystem
-ZILLA_POD=$(kubectl get pods --namespace $NAMESPACE --selector app.kubernetes.io/instance=zilla-http-filesystem -o json | jq -r '.items[0].metadata.name')
+ZILLA_POD=$(kubectl get pods --namespace $NAMESPACE --selector app.kubernetes.io/instance=zilla -o json | jq -r '.items[0].metadata.name')
 kubectl cp --namespace $NAMESPACE www "$ZILLA_POD:/var/"
 
 # Start port forwarding

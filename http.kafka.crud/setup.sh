@@ -26,4 +26,5 @@ kubectl exec --namespace $NAMESPACE "$KAFKA_POD" -- \
 kubectl port-forward --namespace $NAMESPACE service/zilla 7114 7143 > /tmp/kubectl-zilla.log 2>&1 &
 kubectl port-forward --namespace $NAMESPACE service/kafka 9092 29092 > /tmp/kubectl-kafka.log 2>&1 &
 until nc -z localhost 7114; do sleep 1; done
+until nc -z localhost 7143; do sleep 1; done
 until nc -z localhost 9092; do sleep 1; done

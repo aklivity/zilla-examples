@@ -8,7 +8,7 @@ Listens on tcp port `7153` and will echo grpc message sent by client.
 - Kubernetes (e.g. Docker Desktop with Kubernetes enabled)
 - kubectl
 - helm 3.0+
-- ghz
+- [ghz](https://ghz.sh/docs/install)
 
 ### Setup
 

@@ -8,7 +8,7 @@ Listens on https port `7153` and will exchange grpc message in probuf format thr
 - Kubernetes (e.g. Docker Desktop with Kubernetes enabled)
 - kubectl
 - helm 3.0+
-- ghz
+- [ghz](https://ghz.sh/docs/install)
 
 ### Setup
 
@@ -77,6 +77,11 @@ Verify the message payload, followed by a tombstone to mark the end of the reque
 
 ```bash
 kcat -C -b localhost:9092 -t echo-messages -J -u | jq .
+```
+
+output:
+
+```json
 {
   "topic": "echo-messages",
   "partition": 0,
@@ -117,11 +122,6 @@ kcat -C -b localhost:9092 -t echo-messages -J -u | jq .
   "key": "13360c3e-6c68-4c1f-bb7b-3cbd832a6007-74b89a7e944bd502db9d81165bda4983",
   "payload": null
 }
-```
-
-output:
-
-```text
 % Reached end of topic echo-messages [0] at offset 2
 ```
 
@@ -145,6 +145,11 @@ Verify the message payloads, followed by a tombstone to mark the end of each req
 
 ```bash
 kcat -C -b localhost:9092 -t echo-messages -J -u | jq .
+```
+
+output:
+
+```json
 ...
 {
   "topic": "echo-messages",
@@ -186,11 +191,6 @@ kcat -C -b localhost:9092 -t echo-messages -J -u | jq .
   "key": "3eb292f7-c503-42d2-a579-82da7bc853f8-45b1b1a7b121d744d1d1a68b30ebc5ef",
   "payload": null
 }
-```
-
-output:
-
-```text
 % Reached end of topic echo-messages [0] at offset 4
 ```
 

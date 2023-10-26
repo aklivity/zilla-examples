@@ -136,6 +136,11 @@ Verify the request, then send the correlated response via the kafka `items-respo
 
 ```bash
 kcat -C -b localhost:9092 -t items-requests -J -u | jq .
+```
+
+output:
+
+```json
 {
   "topic": "items-requests",
   "partition": 0,
@@ -168,11 +173,6 @@ kcat -C -b localhost:9092 -t items-requests -J -u | jq .
   "key": "5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07",
   "payload": "{\"greeting\":\"Hello, world\"}"
 }
-```
-
-output:
-
-```text
 % Reached end of topic items-requests [0] at offset 1
 ```
 
@@ -186,6 +186,44 @@ echo "{\"greeting\":\"Hello, world `date`\"}" | \
          -k "5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07" \
          -H ":status=200" \
          -H "zilla:correlation-id=1-e75a4e507cc0dc66a28f5a9617392fe8"
+```
+
+The previous asynchronous request will complete if you did this inside of the `60 seconds` window.
+
+```text
+< HTTP/1.1 202 Accepted
+< Content-Length: 0
+< Location: /items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07;1-e75a4e507cc0dc66a28f5a9617392fe8
+< 
+* Connection #0 to host localhost left intact
+```
+
+Verify the response via the kafka `items-responses` topic.
+
+```bash
+kcat -C -b localhost:9092 -t items-responses -J -u | jq .
+```
+
+output:
+
+```json
+{
+  "topic": "items-responses",
+  "partition": 0,
+  "offset": 0,
+  "tstype": "create",
+  "ts": 1698334635176,
+  "broker": 1,
+  "headers": [
+    ":status",
+    "200",
+    "zilla:correlation-id",
+    "1-e75a4e507cc0dc66a28f5a9617392fe8"
+  ],
+  "key": "5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07",
+  "payload": "{\"greeting\":\"Hello, world Thu Oct 26 11:37:15 EDT 2023\"}"
+}
+% Reached end of topic items-responses [0] at offset 1
 ```
 
 ### Teardown

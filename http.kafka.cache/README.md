@@ -174,7 +174,7 @@ output:
 ...
 ```
 
-Retrieve a specific item again, if not matching the previous `etag`, prefering to wait. After 5 seconds, returns not modified.
+Retrieve a specific item again, if not matching the previous `etag`, preferring to wait. After 5 seconds, returns not modified.
 
 ```bash
 curl -v http://localhost:7114/items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07 \
@@ -196,7 +196,7 @@ output:
 ...
 ```
 
-Retrieve a specific item again, if not matching the previous `etag`, prefering to wait for 60 seconds.
+Retrieve a specific item again, if not matching the previous `etag`, preferring to wait for 60 seconds.
 
 ```bash
 curl -v http://localhost:7114/items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07 \

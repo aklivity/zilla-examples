@@ -96,6 +96,11 @@ Verify the message payload, followed by a tombstone to mark the end of the reque
 
 ```bash
 kcat -C -b localhost:9092 -t echo-requests -J -u | jq .
+```
+
+output:
+
+```json
 {
   "topic": "echo-requests",
   "partition": 0,
@@ -136,11 +141,6 @@ kcat -C -b localhost:9092 -t echo-requests -J -u | jq .
   "key": "c3c3eb97-313f-4cf0-aa6c-f83c1080e649-cdd8170a6db4597eb33ba423f67e19e2",
   "payload": null
 }
-```
-
-output:
-
-```text
 % Reached end of topic echo-requests [0] at offset 2
 ```
 
@@ -164,6 +164,11 @@ Verify the message payload, followed by a tombstone to mark the end of the respo
 
 ```bash
 kcat -C -b localhost:9092 -t echo-responses -J -u | jq .
+```
+
+output:
+
+```json
 {
   "topic": "echo-responses",
   "partition": 0,
@@ -194,12 +199,7 @@ kcat -C -b localhost:9092 -t echo-responses -J -u | jq .
   "key": "c3c3eb97-313f-4cf0-aa6c-f83c1080e649-cdd8170a6db4597eb33ba423f67e19e2",
   "payload": null
 }
-```
-
-output:
-
-```text
-% Reached end of topic echo-responses [0] at offset 2
+% Reached end of topic echo-responses [0] at offset 4
 ```
 
 ### Teardown

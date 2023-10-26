@@ -192,7 +192,7 @@ Kubernetes custom metrics API:
 }
 ```
 
-Wait for a few seconds so the autoscaler can catch up. The zilla deployment should be soon scaled up to 3 pods.
+Wait for a a minute so the autoscaler can catch up. The zilla deployment should be soon scaled up to 3 pods.
 
 ```bash
 ./check_hpa.sh
@@ -278,7 +278,7 @@ Kubernetes custom metrics API:
 }
 ```
 
-Wait for a few seconds so the autoscaler can catch up. The zilla deployment should be soon scaled up to 5 pods.
+Wait for a a minute so the autoscaler can catch up. The zilla deployment should be soon scaled up to 5 pods.
 
 ```bash
 ./check_hpa.sh
@@ -365,7 +365,7 @@ Kubernetes custom metrics API:
 ...
 }
 
-Wait for a few seconds so the autoscaler can catch up. The zilla deployment should be soon scaled down to 1 pod.
+Wait for a a minute so the autoscaler can catch up. The zilla deployment should be soon scaled down to 1 pod.
 
 ```bash
 ./check_hpa.sh

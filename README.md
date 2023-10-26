@@ -105,11 +105,3 @@ for d in */ ; do
     echo $d
 done
 
-- [x] grpc.kafka.fanout
-- [x] grpc.kafka.proxy
-- [X] grpc.proxy
-- [X] kubernetes.prometheus.autoscale
-- [X] http.filesystem.config.server
-- [ ] http.filesystem
-- [ ] sse.kafka.fanout
-- [ ] sse.proxy.jwt

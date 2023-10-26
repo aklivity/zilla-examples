@@ -116,7 +116,7 @@ Additional messages produced to the `events` Kafka topic then arrive at the brow
 Simulate connection loss by stopping the `zilla` service in the `docker` stack.
 
 ```bash
-kubectl scale --replicas=0 --namespace=zilla-sse-kafka-fanout deployment/zilla
+kubectl scale --replicas=0 --namespace zilla-sse-kafka-fanout deployment/zilla
 ```
 
 This causes errors to be logged in the browser console during repeated attempts to automatically reconnect.
@@ -124,7 +124,7 @@ This causes errors to be logged in the browser console during repeated attempts 
 Simulate connection recovery by starting the `zilla` service again.
 
 ```bash
-kubectl scale --replicas=1 --namespace=zilla-sse-kafka-fanout deployment/zilla
+kubectl scale --replicas=1 --namespace zilla-sse-kafka-fanout deployment/zilla
 ```
 
 Now you need to restart the port-forward.

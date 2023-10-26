@@ -7,7 +7,7 @@ env:
   - name: TCP_CLIENT_HOST
     value: mosquitto
   - name: TCP_CLIENT_PORT
-    value: '"7184"'
+    value: '"1883"'
 
 livenessProbePort: 7183
 readinessProbePort: 7183

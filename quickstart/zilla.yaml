@@ -63,6 +63,7 @@ bindings:
         exit: mqtt_http_kafka_proxy
     telemetry:
       metrics:
+        - stream.*
         - http.*
   north_grpc_http_server:
     type: http
@@ -75,6 +76,7 @@ bindings:
     exit: north_grpc_server
     telemetry:
       metrics:
+        - stream.*
         - http.*
 
 # REST proxy endpoints to Kafka a topic
@@ -212,6 +214,7 @@ bindings:
         exit: north_grpc_kafka_mapping
     telemetry:
       metrics:
+        - stream.*
         - grpc.*
   north_grpc_kafka_mapping:
     type: grpc-kafka
@@ -287,14 +290,14 @@ bindings:
   west_route_guide_grpc_client:
     type: grpc
     kind: client
-    exit: south_route_guide_http_client
+    exit: west_route_guide_http_client
   west_route_guide_http_client:
     type: http
     kind: client
     options:
       versions:
         - h2
-    exit: south_route_guide_tcp_client
+    exit: west_route_guide_tcp_client
   west_route_guide_tcp_client:
     type: tcp
     kind: client
@@ -305,6 +308,7 @@ bindings:
 telemetry:
   # Desired metrics to track
   metrics:
+    - http.active.requests
     - http.request.size
     - http.response.size
     - stream.opens.sent
@@ -315,6 +319,7 @@ telemetry:
     - stream.errors.received
     - stream.active.sent
     - stream.active.received
+    - grpc.active.requests
     - grpc.requests.per.rpc
     - grpc.responses.per.rpc
 

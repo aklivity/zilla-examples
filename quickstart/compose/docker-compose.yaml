@@ -2,7 +2,7 @@ version: '3'
 services:
   zilla:
     image: ghcr.io/aklivity/zilla:latest
-    container_name: zilla-zq
+    container_name: zilla
     restart: unless-stopped
     ports:
       - 7114:7114
@@ -22,7 +22,7 @@ services:
 
   mqtt-simulator:
     build: https://github.com/vordimous/mqtt-simulator.git#zilla-quickstart
-    container_name: mqtt-simulator-zq
+    container_name: mqtt-simulator
     image: aklivity/mqtt-simulator:local
     restart: unless-stopped
     volumes:
@@ -30,7 +30,7 @@ services:
 
   route-guide-server:
     build: ./grpc/route_guide/server
-    container_name: route-guide-server-zq
+    container_name: route-guide-server
     image: aklivity/route-guide-server:local
     restart: unless-stopped
     ports:
@@ -38,5 +38,4 @@ services:
 
 networks:
   default:
-    name: zilla-quickstart-network
     driver: bridge

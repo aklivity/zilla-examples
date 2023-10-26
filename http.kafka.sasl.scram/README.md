@@ -58,7 +58,7 @@ Created topic events.
 + kubectl exec --namespace zilla-http-kafka-sasl-scram pod/kafka-1234567890-abcde --container kafka -- /opt/bitnami/kafka/bin/kafka-configs.sh --bootstrap-server localhost:9092 --alter --add-config 'SCRAM-SHA-256=[iterations=8192,password=bitnami],SCRAM-SHA-512=[password=bitnami]' --entity-type users --entity-name user
 Completed updating config for user user.
 + nc -z localhost 7114
-+ kubectl port-forward --namespace zilla-http-kafka-sasl-scram service/zilla-http-kafka-sasl-scram 7114 7143
++ kubectl port-forward --namespace zilla-http-kafka-sasl-scram service/zilla 7114 7143
 + kubectl port-forward --namespace zilla-http-kafka-sasl-scram service/kafka 9092 29092
 + sleep 1
 + nc -z localhost 7114

@@ -56,7 +56,7 @@ TEST SUITE: None
 + kubectl cp --namespace zilla-http-proxy www/demo.html nginx-1234567890-abcde:/usr/share/nginx/html
 + kubectl cp --namespace zilla-http-proxy www/style.css nginx-1234567890-abcde:/usr/share/nginx/html
 + nc -z localhost 7143
-+ kubectl port-forward --namespace zilla-http-proxy service/zilla-http-proxy 7143
++ kubectl port-forward --namespace zilla-http-proxy service/zilla 7143
 + sleep 1
 + nc -z localhost 7143
 Connection to localhost port 7143 [tcp/websm] succeeded!

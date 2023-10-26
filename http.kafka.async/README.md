@@ -57,7 +57,7 @@ TEST SUITE: None
 Created topic items-requests.
 + kubectl exec --namespace zilla-http-kafka-async pod/kafka-1234567890-abcde -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic items-responses --if-not-exists
 Created topic items-responses.
-+ kubectl port-forward --namespace zilla-http-kafka-async service/zilla-http-kafka-async 7114 7143
++ kubectl port-forward --namespace zilla-http-kafka-async service/zilla 7114 7143
 + nc -z localhost 7114
 + kubectl port-forward --namespace zilla-http-kafka-async service/kafka 9092 29092
 + sleep 1

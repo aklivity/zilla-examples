@@ -57,7 +57,7 @@ NAMESPACE: zilla-grpc-proxy
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
-+ kubectl port-forward --namespace zilla-grpc-proxy service/zilla-grpc-proxy 7153
++ kubectl port-forward --namespace zilla-grpc-proxy service/zilla 7153
 + kubectl port-forward --namespace zilla-grpc-proxy service/grpc-echo 8080
 + nc -z localhost 7153
 + sleep 1

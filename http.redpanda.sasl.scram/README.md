@@ -59,7 +59,7 @@ Created user "user".
 + kubectl exec --namespace zilla-http-redpanda-sasl-scram pod/redpanda-1234567890-abcde -- rpk topic create events --user user --password redpanda --sasl-mechanism SCRAM-SHA-256
 TOPIC   STATUS
 events  OK
-+ kubectl port-forward --namespace zilla-http-redpanda-sasl-scram service/zilla-http-redpanda-sasl-scram 7114 7143
++ kubectl port-forward --namespace zilla-http-redpanda-sasl-scram service/zilla 7114 7143
 + nc -z localhost 7114
 + kubectl port-forward --namespace zilla-http-redpanda-sasl-scram service/redpanda 9092
 + sleep 1

@@ -37,7 +37,7 @@ NOTES:
 Zilla has been installed.
 [...]
 + nc -z localhost 7171
-+ kubectl port-forward --namespace zilla-amqp-reflect service/zilla-amqp-reflect 7171 7172
++ kubectl port-forward --namespace zilla-amqp-reflect service/zilla 7171 7172
 + sleep 1
 + nc -z localhost 7171
 Connection to localhost port 7171 [tcp/*] succeeded!

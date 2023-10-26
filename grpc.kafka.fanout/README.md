@@ -45,7 +45,7 @@ TEST SUITE: None
 + KAFKA_POD=pod/kafka-969789cc9-mxd98
 + kubectl exec --namespace zilla-grpc-kafka-fanout pod/kafka-969789cc9-mxd98 -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic messages --if-not-exists
 Created topic messages.
-+ kubectl port-forward --namespace zilla-grpc-kafka-fanout service/zilla-grpc-kafka-fanout 7153
++ kubectl port-forward --namespace zilla-grpc-kafka-fanout service/zilla 7153
 + nc -z localhost 7153
 + kubectl port-forward --namespace zilla-grpc-kafka-fanout service/kafka 9092 29092
 + sleep 1
@@ -114,19 +114,19 @@ INFO: Found message: message: "test"
 Simulate connection loss by stopping the `zilla` service in the `docker` stack.
 
 ```bash
-kubectl scale --replicas=0 --namespace=zilla-grpc-kafka-fanout deployment/zilla-grpc-kafka-fanout
+kubectl scale --replicas=0 --namespace=zilla-grpc-kafka-fanout deployment/zilla
 ```
 
 Simulate connection recovery by starting the `zilla` service again.
 
 ```bash
-kubectl scale --replicas=1 --namespace=zilla-grpc-kafka-fanout deployment/zilla-grpc-kafka-fanout
+kubectl scale --replicas=1 --namespace=zilla-grpc-kafka-fanout deployment/zilla
 ```
 
 Now you need to restart the port-forward.
 
 ```bash
-kubectl port-forward --namespace zilla-grpc-kafka-fanout service/zilla-grpc-kafka-fanout 7153 > /tmp/kubectl-zilla.log 2>&1 &
+kubectl port-forward --namespace zilla-grpc-kafka-fanout service/zilla 7153 > /tmp/kubectl-zilla.log 2>&1 &
 ```
 
 Then produce another protobuf message to Kafka, repeat to produce multiple messages.

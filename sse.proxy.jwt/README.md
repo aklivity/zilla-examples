@@ -72,7 +72,7 @@ TEST SUITE: None
 ++ jq -r '.items[0].metadata.name'
 + ZILLA_POD=zilla-1234567890-abcde
 + kubectl cp --namespace zilla-sse-proxy-jwt www zilla-1234567890-abcde:/var/
-+ kubectl port-forward --namespace zilla-sse-proxy-jwt service/zilla-sse-proxy-jwt 7143
++ kubectl port-forward --namespace zilla-sse-proxy-jwt service/zilla 7143
 + nc -z localhost 7143
 + kubectl port-forward --namespace zilla-sse-proxy-jwt service/sse-server 8001 7001
 Connection to localhost port 7143 [tcp/websm] succeeded!

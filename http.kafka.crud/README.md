@@ -46,7 +46,7 @@ TEST SUITE: None
 + KAFKA_POD=pod/kafka-1234567890-abcde
 + kubectl exec --namespace zilla-http-kafka-crud pod/kafka-1234567890-abcde -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic items-snapshots --config cleanup.policy=compact --if-not-exists
 Created topic items-snapshots.
-+ kubectl port-forward --namespace zilla-http-kafka-crud service/zilla-http-kafka-crud 7114 7143
++ kubectl port-forward --namespace zilla-http-kafka-crud service/zilla 7114 7143
 + nc -z localhost 7114
 + kubectl port-forward --namespace zilla-http-kafka-crud service/kafka 9092 29092
 + sleep 1

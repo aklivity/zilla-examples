@@ -35,7 +35,7 @@ NOTES:
 Zilla has been installed.
 [...]
 + nc -z localhost 7153
-+ kubectl port-forward --namespace zilla-grpc-echo service/zilla-grpc-echo 7153
++ kubectl port-forward --namespace zilla-grpc-echo service/zilla 7153
 + sleep 1
 + nc -z localhost 7153
 Connection to localhost port 7153 [tcp/italk] succeeded!

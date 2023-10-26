@@ -34,7 +34,7 @@ NOTES:
 Zilla has been installed.
 [...]
 + nc -z localhost 12345
-+ kubectl port-forward --namespace zilla-tcp-reflect service/zilla-tcp-reflect 12345
++ kubectl port-forward --namespace zilla-tcp-reflect service/zilla 12345
 + sleep 1
 + nc -z localhost 12345
 Connection to localhost port 12345 [tcp/italk] succeeded!

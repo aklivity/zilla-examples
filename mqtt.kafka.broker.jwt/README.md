@@ -59,7 +59,7 @@ TEST SUITE: None
 + KAFKA_POD=pod/kafka-74675fbb8-g56l9
 + kubectl exec --namespace zilla-mqtt-kafka pod/kafka-74675fbb8-g56l9 -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic mqtt-messages --if-not-exists
 Created topic mqtt-messages.
-+ kubectl port-forward --namespace zilla-mqtt-kafka service/zilla-mqtt-kafka-broker-jwt 7183 7883
++ kubectl port-forward --namespace zilla-mqtt-kafka service/zilla 7183 7883
 + nc -z localhost 7183
 + kubectl port-forward --namespace zilla-mqtt-kafka service/kafka 9092 29092
 + sleep 1

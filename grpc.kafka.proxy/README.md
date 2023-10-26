@@ -61,7 +61,7 @@ TEST SUITE: None
 Created topic echo-requests.
 + kubectl exec --namespace zilla-grpc-kafka-proxy pod/kafka-74675fbb8-7knvx -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic echo-responses --if-not-exists
 Created topic echo-responses.
-+ kubectl port-forward --namespace zilla-grpc-kafka-proxy service/zilla-grpc-kafka-proxy 7153
++ kubectl port-forward --namespace zilla-grpc-kafka-proxy service/zilla 7153
 + kubectl port-forward --namespace zilla-grpc-kafka-proxy service/kafka 9092 29092
 + nc -z localhost 7153
 + kubectl port-forward --namespace zilla-grpc-kafka-proxy service/grpc-echo 8080

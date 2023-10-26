@@ -98,7 +98,7 @@ Join the [Slack community][community-join].
 ### testing
 
 for d in */ ; do
-    ./startup.sh $d --auto-teardown >> /tmp/test-zilla.log
+    ./startup.sh $d --auto-teardown >> test-zilla.log
 done
 
 for d in */ ; do
@@ -107,9 +107,9 @@ done
 
 - [x] grpc.kafka.fanout
 - [x] grpc.kafka.proxy
-- [ ] grpc.proxy
-http.filesystem.config.server
-http.proxy
-kubernetes.prometheus.autoscale
-mqtt.proxy.asyncapi
-sse.proxy.jwt
+- [X] grpc.proxy
+- [X] kubernetes.prometheus.autoscale
+- [X] http.filesystem.config.server
+- [ ] http.filesystem
+- [ ] sse.kafka.fanout
+- [ ] sse.proxy.jwt

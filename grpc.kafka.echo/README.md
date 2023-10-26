@@ -45,7 +45,7 @@ TEST SUITE: None
 + KAFKA_POD=pod/kafka-74675fbb8-kpkm8
 + kubectl exec --namespace zilla-grpc-kafka-echo pod/kafka-74675fbb8-kpkm8 -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic echo-messages --if-not-exists
 Created topic echo-messages.
-+ kubectl port-forward --namespace zilla-grpc-kafka-echo service/zilla-grpc-kafka-echo 7153
++ kubectl port-forward --namespace zilla-grpc-kafka-echo service/zilla 7153
 + nc -z localhost 7153
 + kubectl port-forward --namespace zilla-grpc-kafka-echo service/kafka 9092 29092
 + sleep 1

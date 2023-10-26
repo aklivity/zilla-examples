@@ -36,7 +36,7 @@ NOTES:
 Zilla has been installed.
 [...]
 + nc -z localhost 7114
-+ kubectl port-forward --namespace zilla-ws-reflect service/zilla-ws-reflect 7114 7143
++ kubectl port-forward --namespace zilla-ws-reflect service/zilla 7114 7143
 + sleep 1
 + nc -z localhost 7114
 Connection to localhost port 7114 [tcp/http-alt] succeeded!

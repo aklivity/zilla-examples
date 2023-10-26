@@ -13,7 +13,7 @@ helm upgrade --install zilla $ZILLA_CHART --namespace $NAMESPACE --create-namesp
 helm upgrade --install kafka chart --namespace $NAMESPACE --create-namespace --wait
 
 # Copy web files to the persistent volume mounted in the pod's filesystem
-ZILLA_POD=$(kubectl get pods --namespace $NAMESPACE --selector app.kubernetes.io/instance=zilla-sse-kafka-fanout -o json | jq -r '.items[0].metadata.name')
+ZILLA_POD=$(kubectl get pods --namespace $NAMESPACE --selector app.kubernetes.io/instance=zilla -o json | jq -r '.items[0].metadata.name')
 kubectl cp --namespace $NAMESPACE www "$ZILLA_POD:/var/"
 
 # Creates the events topic in Kafka with the cleanup.policy=compact topic configuration

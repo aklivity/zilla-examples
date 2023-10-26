@@ -41,7 +41,7 @@ Zilla has been installed.
 + ZILLA_POD=zilla-1234567890-abcde
 + kubectl cp --namespace zilla-http-filesystem www zilla-1234567890-abcde:/var/
 + nc -z localhost 7114
-+ kubectl port-forward --namespace zilla-http-filesystem service/zilla-http-filesystem 7114 7143
++ kubectl port-forward --namespace zilla-http-filesystem service/zilla 7114 7143
 + sleep 1
 + nc -z localhost 7114
 Connection to localhost port 7114 [tcp/http-alt] succeeded!

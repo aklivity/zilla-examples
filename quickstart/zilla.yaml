@@ -17,7 +17,7 @@ bindings:
           exit: north_http_server
         - when: 
             - port: 7151
-          exit: north_grpc_server
+          exit: north_grpc_http_server
         - when: 
             - port: 7183
           exit: north_mqtt_server
@@ -61,11 +61,6 @@ bindings:
               :authority: localhost:7114
               :path: /iot/*
         exit: mqtt_http_kafka_proxy
-      - when:
-          - headers:
-              :scheme: http
-              :authority: localhost:7114
-        exit: north_grpc_server
     telemetry:
       metrics:
         - http.*
@@ -73,14 +68,11 @@ bindings:
     type: http
     kind: server
     options:
+      versions:
+        - h2
       access-control:
         policy: cross-origin
-    routes:
-      - when:
-          - headers:
-              :scheme: http
-              :authority: localhost:7151
-        exit: north_grpc_server
+    exit: north_grpc_server
     telemetry:
       metrics:
         - http.*

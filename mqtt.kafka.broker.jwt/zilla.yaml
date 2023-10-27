@@ -26,15 +26,16 @@ bindings:
     kind: server
     options:
       host: 0.0.0.0
-      port: 7183
-    exit: north_mqtt_server
-  tcp_server1:
-    type: tcp
-    kind: server
-    options:
-      host: 0.0.0.0
-      port: 7883
-    exit: north_tls_server
+      port: 
+        - 7183
+        - 7883
+    routes:
+        - when: 
+            - port: 7183
+          exit: north_mqtt_server
+        - when:
+            - port: 7883
+          exit: north_tls_server
   north_tls_server:
     type: tls
     kind: server
@@ -78,6 +79,7 @@ bindings:
     kind: cache_server
     options:
       bootstrap:
+        - mqtt-messages
         - mqtt-retained
     exit: south_kafka_client
   south_kafka_client:

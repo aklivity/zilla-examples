@@ -158,7 +158,10 @@ if ! [[ -z "$KAFKA_HOST" && -z "$KAFKA_PORT" ]]; then
     printf "\n"
 fi
 
-printf "\n==== Check out the README to see how to use this example ==== \n$WORKDIR/$EXAMPLE_FOLDER/README.md\n$(head -n 4 $WORKDIR/$EXAMPLE_FOLDER/README.md | tail -n 3)\n"
+printf "\n==== Check out the README to see how to use this example ==== \n"
+printf "cd $WORKDIR/$EXAMPLE_FOLDER\n"
+printf "cat README.md\n"
+printf "$(head -n 4 $WORKDIR/$EXAMPLE_FOLDER/README.md | tail -n 3)\n"
 printf "\n==== Finished, use the teardown script(s) to clean up ==== \n$TEARDOWN_SCRIPT\n$KAKFA_TEARDOWN_SCRIPT\n"
 
 if [[ $AUTO_TEARDOWN == true ]]; then

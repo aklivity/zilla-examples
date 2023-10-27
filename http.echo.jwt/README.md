@@ -56,27 +56,27 @@ Connection to localhost port 7114 [tcp/http-alt] succeeded!
 Create a token that is valid until 2032, but without `echo:stream` scope.
 
 ```bash
-jwt encode \
+export JWT_TOKEN=$(jwt encode \
     --alg "RS256" \
     --kid "example" \
     --iss "https://auth.example.com" \
     --aud "https://api.example.com" \
     --exp=+1d \
     --no-iat \
-    --secret @private.pem
+    --secret @private.pem)
 ```
 
-The signed JWT token is shown below.
+See the signed JWT token, without `echo:stream` scope, print the `JWT_TOKEN` var.
 
-```
-eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImV4YW1wbGUifQ.eyJhdWQiOiJodHRwczovL2FwaS5leGFtcGxlLmNvbSIsImV4cCI6MTk2ODg2Mjc0NywiaXNzIjoiaHR0cHM6Ly9hdXRoLmV4YW1wbGUuY29tIn0.k4Aq93RzFpOBBwuUEewJUq1Wj1F0csfW4c_eGaQY9xNk8WC1C_rhmWkiprApkoVoaUJI7PVemUFfwKmx3XVWTYB3AQUihGGDKA6TRN2kTfkd1Vm_tBbn6a1nsUKbfl70vFD51jebJ9w5yG2b_jEiqtt6eOW99KNNRdAi5U0z7NHHIniu8Yfi5qrK0IBJBBWOoe-D-539ZzWWlMZKA5n1BJZ6x5ZOJAbYWdoMxr73uo7p9rWdVNk-61KsqVSSkCy92dq_d0Uoa3Q8xT5cwpWoljDwl-jB1O6PBwR7MVGJfihFfQVimt0NDnWi8TPXyBUq7RWGwfmQdEHwcrGAnJiaNg
+```bash
+echo $JWT_TOKEN
 ```
 
 Use the signed JWT token, without `echo:stream` scope, to attempt an authorized request.
 
 ```bash
 curl -v http://localhost:7114/ \
-    -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImV4YW1wbGUifQ.eyJhdWQiOiJodHRwczovL2FwaS5leGFtcGxlLmNvbSIsImV4cCI6MTk2ODg2Mjc0NywiaXNzIjoiaHR0cHM6Ly9hdXRoLmV4YW1wbGUuY29tIn0.k4Aq93RzFpOBBwuUEewJUq1Wj1F0csfW4c_eGaQY9xNk8WC1C_rhmWkiprApkoVoaUJI7PVemUFfwKmx3XVWTYB3AQUihGGDKA6TRN2kTfkd1Vm_tBbn6a1nsUKbfl70vFD51jebJ9w5yG2b_jEiqtt6eOW99KNNRdAi5U0z7NHHIniu8Yfi5qrK0IBJBBWOoe-D-539ZzWWlMZKA5n1BJZ6x5ZOJAbYWdoMxr73uo7p9rWdVNk-61KsqVSSkCy92dq_d0Uoa3Q8xT5cwpWoljDwl-jB1O6PBwR7MVGJfihFfQVimt0NDnWi8TPXyBUq7RWGwfmQdEHwcrGAnJiaNg" \
+    -H "Authorization: Bearer $JWT_TOKEN" \
     -H "Content-Type: text/plain" \
     -d "Hello, world"
 ```
@@ -89,10 +89,10 @@ The request is rejected as expected, and without leaking any information about f
 < 
 ```
 
-Create a token that is valid until 2032, with `echo:stream` scope.
+Create a token with the `echo:stream` scope.
 
 ```bash
-jwt encode \
+export JWT_TOKEN=$(jwt encode \
     --alg "RS256" \
     --kid "example" \
     --iss "https://auth.example.com" \
@@ -100,20 +100,20 @@ jwt encode \
     --exp=+1d \
     --no-iat \
     --payload "scope=echo:stream" \
-    --secret @private.pem
+    --secret @private.pem)
 ```
 
-The signed JWT token with `echo:stream` scope is shown below.
+See the signed JWT token with `echo:stream` scope print the `JWT_TOKEN` var.
 
-```
-eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImV4YW1wbGUifQ.eyJhdWQiOiJodHRwczovL2FwaS5leGFtcGxlLmNvbSIsImV4cCI6MTk2ODg2Mjc0NywiaXNzIjoiaHR0cHM6Ly9hdXRoLmV4YW1wbGUuY29tIiwic2NvcGUiOiJlY2hvOnN0cmVhbSJ9.glfCpnhVkQFf5zXlSFDWYsHyFhFEuxmRXVu8AbFXh67FzcjwzEcMgw1Zt7_SETyXHpNl1HhOgLohaVCkGxVG2iiOq0MJO00_l6X125itdY37noOFiGWTHb8uosGI4V3NhhCKyoVLtl3b9X4c6pCxHoQo7XkT1xmcjSeCKQenXpuX5WnKMIZsyBxUsOxg1cv3K7mg6WnKOlXWGjvCAoomUjIGiGDruFQMP1UzniMgY0b0IrofijiNB3HEKQQcU44MD7jH9lldrea1vaKnxYwmiaq7g7RsYMFXeNLzWz6hY61ColSeEUCiDtpVSNCyjKZHkuLA7yLQ-pvipwCpT0jU1Q
+```bash
+echo $JWT_TOKEN
 ```
 
 Use the signed JWT token, with `echo:stream` scope, to attempt an authorized request.
 
 ```bash
 curl "http://localhost:7114/" \
-    -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImV4YW1wbGUifQ.eyJhdWQiOiJodHRwczovL2FwaS5leGFtcGxlLmNvbSIsImV4cCI6MTk2ODg2Mjc0NywiaXNzIjoiaHR0cHM6Ly9hdXRoLmV4YW1wbGUuY29tIiwic2NvcGUiOiJlY2hvOnN0cmVhbSJ9.glfCpnhVkQFf5zXlSFDWYsHyFhFEuxmRXVu8AbFXh67FzcjwzEcMgw1Zt7_SETyXHpNl1HhOgLohaVCkGxVG2iiOq0MJO00_l6X125itdY37noOFiGWTHb8uosGI4V3NhhCKyoVLtl3b9X4c6pCxHoQo7XkT1xmcjSeCKQenXpuX5WnKMIZsyBxUsOxg1cv3K7mg6WnKOlXWGjvCAoomUjIGiGDruFQMP1UzniMgY0b0IrofijiNB3HEKQQcU44MD7jH9lldrea1vaKnxYwmiaq7g7RsYMFXeNLzWz6hY61ColSeEUCiDtpVSNCyjKZHkuLA7yLQ-pvipwCpT0jU1Q" \
+    -H "Authorization: Bearer $JWT_TOKEN" \
     -H "Content-Type: text/plain" \
     -d "Hello, world"
 ```
@@ -128,7 +128,7 @@ Use the signed JWT token, with `echo:stream` scope, to attempt an authorized req
 
 ```bash
 curl --cacert test-ca.crt "https://localhost:7143/" \
-    -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImV4YW1wbGUifQ.eyJhdWQiOiJodHRwczovL2FwaS5leGFtcGxlLmNvbSIsImV4cCI6MTk2ODg2Mjc0NywiaXNzIjoiaHR0cHM6Ly9hdXRoLmV4YW1wbGUuY29tIiwic2NvcGUiOiJlY2hvOnN0cmVhbSJ9.glfCpnhVkQFf5zXlSFDWYsHyFhFEuxmRXVu8AbFXh67FzcjwzEcMgw1Zt7_SETyXHpNl1HhOgLohaVCkGxVG2iiOq0MJO00_l6X125itdY37noOFiGWTHb8uosGI4V3NhhCKyoVLtl3b9X4c6pCxHoQo7XkT1xmcjSeCKQenXpuX5WnKMIZsyBxUsOxg1cv3K7mg6WnKOlXWGjvCAoomUjIGiGDruFQMP1UzniMgY0b0IrofijiNB3HEKQQcU44MD7jH9lldrea1vaKnxYwmiaq7g7RsYMFXeNLzWz6hY61ColSeEUCiDtpVSNCyjKZHkuLA7yLQ-pvipwCpT0jU1Q" \
+    -H "Authorization: Bearer $JWT_TOKEN" \
     -H "Content-Type: text/plain" \
     -d "Hello, world" \
     --http2-prior-knowledge
@@ -142,7 +142,7 @@ Use the signed JWT token, with `echo:stream` scope, to attempt an authorized req
 
 ```bash
 curl --cacert test-ca.crt "https://localhost:7143/" \
-    -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImV4YW1wbGUifQ.eyJhdWQiOiJodHRwczovL2FwaS5leGFtcGxlLmNvbSIsImV4cCI6MTk2ODg2Mjc0NywiaXNzIjoiaHR0cHM6Ly9hdXRoLmV4YW1wbGUuY29tIiwic2NvcGUiOiJlY2hvOnN0cmVhbSJ9.glfCpnhVkQFf5zXlSFDWYsHyFhFEuxmRXVu8AbFXh67FzcjwzEcMgw1Zt7_SETyXHpNl1HhOgLohaVCkGxVG2iiOq0MJO00_l6X125itdY37noOFiGWTHb8uosGI4V3NhhCKyoVLtl3b9X4c6pCxHoQo7XkT1xmcjSeCKQenXpuX5WnKMIZsyBxUsOxg1cv3K7mg6WnKOlXWGjvCAoomUjIGiGDruFQMP1UzniMgY0b0IrofijiNB3HEKQQcU44MD7jH9lldrea1vaKnxYwmiaq7g7RsYMFXeNLzWz6hY61ColSeEUCiDtpVSNCyjKZHkuLA7yLQ-pvipwCpT0jU1Q" \
+    -H "Authorization: Bearer $JWT_TOKEN" \
     -H "Content-Type: text/plain" \
     -d "Hello, world" \
     --http1.1
@@ -156,7 +156,7 @@ Use the signed JWT token, with `echo:stream` scope, to attempt an authorized req
 
 ```bash
 curl --cacert test-ca.crt "https://localhost:7143/" \
-    -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImV4YW1wbGUifQ.eyJhdWQiOiJodHRwczovL2FwaS5leGFtcGxlLmNvbSIsImV4cCI6MTk2ODg2Mjc0NywiaXNzIjoiaHR0cHM6Ly9hdXRoLmV4YW1wbGUuY29tIiwic2NvcGUiOiJlY2hvOnN0cmVhbSJ9.glfCpnhVkQFf5zXlSFDWYsHyFhFEuxmRXVu8AbFXh67FzcjwzEcMgw1Zt7_SETyXHpNl1HhOgLohaVCkGxVG2iiOq0MJO00_l6X125itdY37noOFiGWTHb8uosGI4V3NhhCKyoVLtl3b9X4c6pCxHoQo7XkT1xmcjSeCKQenXpuX5WnKMIZsyBxUsOxg1cv3K7mg6WnKOlXWGjvCAoomUjIGiGDruFQMP1UzniMgY0b0IrofijiNB3HEKQQcU44MD7jH9lldrea1vaKnxYwmiaq7g7RsYMFXeNLzWz6hY61ColSeEUCiDtpVSNCyjKZHkuLA7yLQ-pvipwCpT0jU1Q" \
+    -H "Authorization: Bearer $JWT_TOKEN" \
     -H "Content-Type: text/plain" \
     -d "Hello, world" \
     --http2

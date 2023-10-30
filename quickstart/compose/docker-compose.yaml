@@ -3,6 +3,7 @@ services:
   zilla:
     image: ghcr.io/aklivity/zilla:latest
     container_name: zilla
+    pull_policy: always
     restart: unless-stopped
     ports:
       - 7114:7114

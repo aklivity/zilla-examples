@@ -65,31 +65,24 @@ bindings:
     routes:
       - when:
           - headers:
-              :scheme: http
-              :authority: localhost:7114
-              :path: /events
-          - headers:
               :scheme: https
               :authority: localhost:7143
               :path: /events
         exit: north_sse_server
       - when:
           - headers:
-              :scheme: http
-              :authority: localhost:7114
-          - headers:
               :scheme: https
               :authority: localhost:7143
-        exit: north_http_filesystem_mapping
-  north_http_filesystem_mapping:
+        exit: east_http_filesystem_mapping
+  east_http_filesystem_mapping:
     type: http-filesystem
     kind: proxy
     routes:
-      - exit: east_filesystem_server
-        when:
+      - when:
           - path: /{path}
         with:
           path: ${params.path}
+        exit: east_filesystem_server
   east_filesystem_server:
     type: filesystem
     kind: server

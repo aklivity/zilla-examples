@@ -21,7 +21,7 @@ bindings:
   north_tls_server:
     type: tls
     kind: server
-    vault: your_servers
+    vault: my_servers
     options:
       keys:
         - localhost
@@ -75,7 +75,7 @@ bindings:
           - cidr: 0.0.0.0/0
 
 vaults:
-  your_servers:
+  my_servers:
     type: filesystem
     options:
       keys:

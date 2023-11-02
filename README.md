@@ -12,27 +12,29 @@ You will need an environment with [Docker][docker-install] or [Helm][helm-instal
 
 ## Getting Started
 
-The `startup.sh` script is meant to help setup and teardown the necessary components for each of the examples. Using it is the easiest way to interact with each example.
+The `startup.sh` script is meant to help setup and teardown the necessary components for each of the examples. Using it is the easiest way to interact with each [example](#examples).
 
-Install and run any of the examples using this script:
+![demo](.assets/demo.gif)
+
+Install and run any of the [examples](#examples) using the `startup.sh` script:
 
 ```bash
 ./startup.sh -m example.name
 ```
 
-You can specify your own `KAFKA_HOST` and `KAFKA_PORT` or the `WORKDIR` where you want the examples to be downloaded.
+You can specify your own Kafka host and port or the working directory where you want the examples to be downloaded.
 
 ```bash
-./startup.sh -m -h $KAFKA_HOST -p $KAFKA_PORT -d /tmp example.name
+./startup.sh -m -h kafka -p 9092 -d /tmp example.name
 ```
 
-Alternatively, you can run this script the same way without downloading the repo.
+Alternatively, you can run this script the same way without cloning the repo.
 
 ```bash
 wget -qO- https://raw.githubusercontent.com/aklivity/zilla-examples/main/startup.sh | sh -s -- -m example.name
 ```
 
-![demo](.assets/demo.gif)
+### Usage
 
 ```bash
 ./startup.sh --help

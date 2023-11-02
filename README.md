@@ -6,40 +6,55 @@ This repo contains a collection of [example folders](#examples) that can be used
 
 ## Prerequisites
 
-[![Docker]][compose-install][![Kubernetes]][kubernetes-install][![Kafka]][kafka-install][![Postman]][postman-url]
+[![Docker]][docker-install][![Kubernetes]][kubernetes-install][![Kafka]][kafka-install][![Postman]][postman-url]
 
-You will need an environment with [Compose][compose-install] or [Helm][helm-install] and [Kubernetes][kubernetes-install] installed. Check out our [Postman collections][postman-url] for more ways to interact with an example.
-
+You will need an environment with [Docker][docker-install] or [Helm][helm-install] and [Kubernetes][kubernetes-install] installed. Check out our [Postman collections][postman-url] for more ways to interact with an example.
 
 ## Getting Started
 
 The `startup.sh` script is meant to help setup and teardown the necessary components for each of the examples. Using it is the easiest way to interact with each example.
 
-Usage:
-
-```text
-startup.sh [ EXAMPLE_FOLDER ] [ -h --kafka-host KAFKA_HOST ] [ -p --kafka-port KAFKA_PORT ] [ -d --workdir WORKDIR] [ -v --version VERSION] [ -k --k8s ] [ -m --use-main ] [ --no-kafka] [ --auto-teardown]
-```
-
 Install and run any of the examples using this script:
 
 ```bash
-./startup.sh -m <example.name>
+./startup.sh -m example.name
 ```
 
 You can specify your own `KAFKA_HOST` and `KAFKA_PORT` or the `WORKDIR` where you want the examples to be downloaded.
 
 ```bash
-./startup.sh -m <example.name> -h $KAFKA_HOST -p $KAFKA_PORT -d /tmp
+./startup.sh -m -h $KAFKA_HOST -p $KAFKA_PORT -d /tmp example.name
 ```
 
-Alternatively, you can run this script the same way without downloading the repository.
+Alternatively, you can run this script the same way without downloading the repo.
 
 ```bash
-wget -qO- https://raw.githubusercontent.com/aklivity/zilla-examples/main/startup.sh | sh -s -- -m <example.name>
+wget -qO- https://raw.githubusercontent.com/aklivity/zilla-examples/main/startup.sh | sh -s -- -m example.name
 ```
 
 ![demo](.assets/demo.gif)
+
+```bash
+./startup.sh --help
+```
+
+```text
+Usage: startup.sh [-km][-h KAFKA_HOST -p KAFKA_PORT][-d WORKDIR][-v VERSION][--no-kafka][--auto-teardown] example.name
+
+Operand:
+    example.name          The name of the example to use                                 [default: quickstart][string]
+
+Options:
+    -d | --workdir        Sets the directory used to download and run the example                             [string]
+    -h | --kafka-host     Sets the hostname used when connecting to Kafka                                     [string]
+    -k | --k8s            Use the kubernetes install, if available, instead of the docker compose            [boolean]
+    -m | --use-main       Download the head of the main branch                                               [boolean]
+    -p | --kafka-port     Sets the port used when connecting to Kafka                                         [string]
+    -v | --version        Sets the version to download                                       [default: latest][string]
+         --auto-teardown  Executes the teardown script immediately after setup                               [boolean]
+         --no-kafka       The script wont try to start a kafka broker                                        [boolean]
+         --help           Print help                                                                         [boolean]
+```
 
 ## Examples
 
@@ -50,7 +65,7 @@ wget -qO- https://raw.githubusercontent.com/aklivity/zilla-examples/main/startup
 | [tls.echo](tls.echo)                                               | Echoes encrypted bytes sent to the TLS server                                                       |
 | [tls.reflect](tls.reflect)                                         | Echoes encrypted bytes sent to the TLS server, broadcasting to all TLS clients                      |
 | [http.filesystem](http.filesystem)                                 | Serves files from a directory on the local filesystem                                               |
-| [http.filesystem.config.server](.http.filesystem.config.server)    | Serves files from a directory on the local filesystem, getting the config from a http server        |
+| [http.filesystem.config.server](http.filesystem.config.server)     | Serves files from a directory on the local filesystem, getting the config from a http server        |
 | [http.echo](http.echo)                                             | Echoes request sent to the HTTP server from an HTTP client                                          |
 | [http.echo.jwt](http.echo.jwt)                                     | Echoes request sent to the HTTP server from a JWT-authorized HTTP client                            |
 | [http.proxy](http.proxy)                                           | Proxy request sent to the HTTP server from an HTTP client                                           |
@@ -89,7 +104,7 @@ Join the [Slack community][community-join].
 [Postman]: https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white
 [zilla-docs]: https://docs.aklivity.io/zilla
 [zilla-examples]: https://github.com/aklivity/zilla-examples
-[compose-install]: https://docs.docker.com/compose/gettingstarted/
+[docker-install]: https://docs.docker.com/compose/gettingstarted/
 [helm-install]: https://helm.sh/docs/intro/install/
 [kubernetes-install]: https://kubernetes.io/docs/tasks/tools/
 [kafka-install]: https://kafka.apache.org/

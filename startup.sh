@@ -19,9 +19,28 @@ KAFKA_PORT=""
 WORKDIR=$(pwd)
 
 # helper functions
-export USAGE="Usage:  ${CMD:=${0##*/}} [ EXAMPLE_FOLDER ] [ -h --kafka-host KAFKA_HOST ] [ -p --kafka-port KAFKA_PORT ] [ -d --workdir WORKDIR] [ -v --version VERSION] [ -k --k8s ] [ -m --use-main ] [ --no-kafka] [ --auto-teardown]"
+read -r -d '' HELP_TEXT <<-EOF || :
+Usage: ${CMD:=${0##*/}} [-km][-h KAFKA_HOST -p KAFKA_PORT][-d WORKDIR][-v VERSION][--no-kafka][--auto-teardown] example.name
+
+Operand:
+    example.name          The name of the example to use                                 [default: quickstart][string]
+
+Options:
+    -d | --workdir        Sets the directory used to download and run the example                             [string]
+    -h | --kafka-host     Sets the hostname used when connecting to Kafka                                     [string]
+    -k | --k8s            Use the kubernetes install, if available, instead of the docker compose            [boolean]
+    -m | --use-main       Download the head of the main branch                                               [boolean]
+    -p | --kafka-port     Sets the port used when connecting to Kafka                                         [string]
+    -v | --version        Sets the version to download                                       [default: latest][string]
+         --auto-teardown  Executes the teardown script immediately after setup                               [boolean]
+         --no-kafka       The script wont try to start a kafka broker                                        [boolean]
+         --help           Print help                                                                         [boolean]
+
+Report a bug: github.com/$REPO/issues/new
+EOF
+export USAGE="$HELP_TEXT"
 exit2 () { printf >&2 "%s:  %s: '%s'\n%s\n" "$CMD" "$1" "$2" "$USAGE"; exit 2; }
-check () { { [ "$1" != "$EOL" ] && [ "$1" != '--' ]; } || exit2 "missing argument" "$2"; }  # avoid infinite loop
+check () { { [ "$1" != "$EOL" ] && [ "$1" != '--' ]; } || exit2 "missing argument" "$2"; } # avoid infinite loop
 
 # parse command-line options
 set -- "$@" "${EOL:=$(printf '\1\3\3\7')}"  # end-of-list marker
@@ -29,9 +48,9 @@ while [ "$1" != "$EOL" ]; do
   opt="$1"; shift
   case "$opt" in
 
-    #EDIT HERE: defined options
-    -h | --kafka-host         ) check "$1" "$opt"; KAFKA_HOST="$1"; REMOTE_KAFKA=true; shift;;
-    -p | --kafka-port         ) check "$1" "$opt"; KAFKA_PORT="$1"; shift;;
+    #defined options
+    -h | --kafka-host    ) check "$1" "$opt"; KAFKA_HOST="$1"; REMOTE_KAFKA=true; shift;;
+    -p | --kafka-port    ) check "$1" "$opt"; KAFKA_PORT="$1"; shift;;
     -d | --workdir       ) check "$1" "$opt"; WORKDIR="$1"; shift;;
     -v | --version       ) check "$1" "$opt"; VERSION="$1"; shift;;
     -k | --k8s           ) USE_K8S=true;;

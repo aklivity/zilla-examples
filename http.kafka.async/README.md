@@ -188,7 +188,7 @@ echo "{\"greeting\":\"Hello, world `date`\"}" | \
          -H "zilla:correlation-id=1-e75a4e507cc0dc66a28f5a9617392fe8"
 ```
 
-The previous asynchronous request will complete if you did this inside of the `60 seconds` window.
+The previous asynchronous request will complete with `200 OK` if done within `60 seconds` window, otherwise `202 Accepted` is returned again.
 
 ```text
 < HTTP/1.1 202 Accepted

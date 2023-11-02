@@ -6,10 +6,10 @@ services:
     pull_policy: always
     restart: unless-stopped
     ports:
-      - "7114:7114"
-      - "7151:7151"
-      - "7183:7183"
-      - "7190:7190"
+      - 7114:7114
+      - 7151:7151
+      - 7183:7183
+      - 7190:7190
     environment:
       KAFKA_HOST: ${KAFKA_HOST}
       KAFKA_PORT: ${KAFKA_PORT}
@@ -35,7 +35,7 @@ services:
     image: aklivity/route-guide-server:local
     restart: unless-stopped
     ports:
-      - "50051:50051"
+      - 50051:50051
 
 networks:
   default:

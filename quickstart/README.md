@@ -4,7 +4,7 @@ Follow the [Zilla Quickstart](https://docs.aklivity.io/zilla/latest/tutorials/qu
 
 ## Running locally
 
-This quickstart runs using Docker compose. You will find the setup scripts in the [compose](./compose) folder.
+This quickstart runs using Docker compose. You will find the setup scripts in the [compose](./docker/compose) folder.
 
 You will need a running kafka broker. To start one locally you will find instructions in the [kafka.broker](../kafka.broker) folder. You will need to export the below environment variables before running the setup script.
 

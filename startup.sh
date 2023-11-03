@@ -7,9 +7,9 @@ MAIN_URL="https://api.github.com/repos/$REPO/tarball"
 VERSION=""
 EXAMPLE_FOLDER=""
 KAFKA_FOLDER="kafka.broker"
-COMPOSE_FOLDER="compose"
-HELM_FOLDER="k8s"
-USE_K8S=false
+COMPOSE_FOLDER="docker/compose"
+HELM_FOLDER="k8s/helm"
+USE_HELM=false
 USE_MAIN=false
 START_KAFKA=true
 AUTO_TEARDOWN=false
@@ -28,7 +28,7 @@ Operand:
 Options:
     -d | --workdir        Sets the directory used to download and run the example                             [string]
     -h | --kafka-host     Sets the hostname used when connecting to Kafka                                     [string]
-    -k | --k8s            Use the kubernetes install, if available, instead of the docker compose            [boolean]
+    -k | --use-helm       Use the helm install, if available, instead of compose                             [boolean]
     -m | --use-main       Download the head of the main branch                                               [boolean]
     -p | --kafka-port     Sets the port used when connecting to Kafka                                         [string]
     -v | --version        Sets the version to download                                       [default: latest][string]
@@ -53,7 +53,7 @@ while [ "$1" != "$EOL" ]; do
     -p | --kafka-port    ) check "$1" "$opt"; KAFKA_PORT="$1"; shift;;
     -d | --workdir       ) check "$1" "$opt"; WORKDIR="$1"; shift;;
     -v | --version       ) check "$1" "$opt"; VERSION="$1"; shift;;
-    -k | --k8s           ) USE_K8S=true;;
+    -k | --use-helm      ) USE_HELM=true;;
     -m | --use-main      ) USE_MAIN=true;;
          --no-kafka      ) START_KAFKA=false;;
          --auto-teardown ) AUTO_TEARDOWN=true;;
@@ -91,8 +91,8 @@ if [[ ! -d "$WORKDIR/$EXAMPLE_FOLDER/$HELM_FOLDER" && ! -d "$WORKDIR/$EXAMPLE_FO
 fi
 
 # use helm if there isn't a compose implimentation, remove after adding to all examples
-if [[ $USE_K8S == false && ! -d "$WORKDIR/$EXAMPLE_FOLDER/$COMPOSE_FOLDER" ]]; then
-    USE_K8S=true
+if [[ $USE_HELM == false && ! -d "$WORKDIR/$EXAMPLE_FOLDER/$COMPOSE_FOLDER" ]]; then
+    USE_HELM=true
 fi
 
 KAKFA_TEARDOWN_SCRIPT=""
@@ -110,7 +110,7 @@ elif [[ $START_KAFKA == true ]]; then
         fi
     fi
 
-    if [[ $USE_K8S == true ]]; then
+    if [[ $USE_HELM == true ]]; then
         cd "$WORKDIR"/"$KAFKA_FOLDER"/"$HELM_FOLDER"
     else
         cd "$WORKDIR"/"$KAFKA_FOLDER"/"$COMPOSE_FOLDER"
@@ -130,7 +130,7 @@ if [[ $REMOTE_KAFKA == true || $START_KAFKA == true ]]; then
 fi
 
 TEARDOWN_SCRIPT=""
-if [[ $USE_K8S == false && -d "$WORKDIR/$EXAMPLE_FOLDER/$COMPOSE_FOLDER" ]]; then
+if [[ $USE_HELM == false && -d "$WORKDIR/$EXAMPLE_FOLDER/$COMPOSE_FOLDER" ]]; then
     if ! [[ -x "$(command -v docker)" ]]; then
         echo "Docker is required to run this setup."
         exit
@@ -148,7 +148,7 @@ if [[ $USE_K8S == false && -d "$WORKDIR/$EXAMPLE_FOLDER/$COMPOSE_FOLDER" ]]; the
     sh setup.sh
 fi
 
-if [[ $USE_K8S == true ]]; then
+if [[ $USE_HELM == true ]]; then
     if ! [[ -x "$(command -v helm)" ]]; then
         echo "Helm is required to run this setup."
         exit

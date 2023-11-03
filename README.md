@@ -49,7 +49,7 @@ Operand:
 Options:
     -d | --workdir        Sets the directory used to download and run the example                             [string]
     -h | --kafka-host     Sets the hostname used when connecting to Kafka                                     [string]
-    -k | --k8s            Use the kubernetes install, if available, instead of the docker compose            [boolean]
+    -k | --use-helm       Use the helm install, if available, instead of compose                             [boolean]
     -m | --use-main       Download the head of the main branch                                               [boolean]
     -p | --kafka-port     Sets the port used when connecting to Kafka                                         [string]
     -v | --version        Sets the version to download                                       [default: latest][string]

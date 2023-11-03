@@ -18,7 +18,7 @@ KAFKA_HOST=""
 KAFKA_PORT=""
 WORKDIR=$(pwd)
 
-# helper functions
+# help text
 read -r -d '' HELP_TEXT <<-EOF || :
 Usage: ${CMD:=${0##*/}} [-km][-h KAFKA_HOST -p KAFKA_PORT][-d WORKDIR][-v VERSION][--no-kafka][--auto-teardown] example.name
 
@@ -74,14 +74,14 @@ EXAMPLE_FOLDER="$*"
 [[ -z "$VERSION" ]] && VERSION=$(curl -s https://api.github.com/repos/$REPO/releases/latest | grep -i "tag_name" | awk -F '"' '{print $4}')
 [[ -z "$VERSION" ]] && USE_MAIN=true
 
-! [[ -d "$WORKDIR" ]] && printf "Error: WORKDIR must be a valid directory." && exit2
+! [[ -d "$WORKDIR" ]] && echo "Error: WORKDIR must be a valid directory." && exit2
 if [[ -d "$WORKDIR" && ! -d "$WORKDIR/$EXAMPLE_FOLDER" ]]; then
     if [[ $USE_MAIN == true ]]; then
-        printf "\n==== Downloading $MAIN_URL '*/$EXAMPLE_FOLDER/*' to $WORKDIR ====\n"
-        wget -qO- $MAIN_URL | tar -xf - --strip=1 -C $WORKDIR "*/$EXAMPLE_FOLDER/*"
+        echo "==== Downloading $MAIN_URL '*/$EXAMPLE_FOLDER/*' to $WORKDIR ===="
+        wget -qO- $MAIN_URL | tar -xf - --strip=1 -C "$WORKDIR" "*/$EXAMPLE_FOLDER/*"
     else
-        printf "\n==== Downloading $RELEASE_URL/$VERSION/$EXAMPLE_FOLDER.tar.gz to $WORKDIR ====\n"
-        wget -qO- $RELEASE_URL/$VERSION/$EXAMPLE_FOLDER.tar.gz | tar -xf - -C $WORKDIR
+        echo "==== Downloading $RELEASE_URL/$VERSION/$EXAMPLE_FOLDER.tar.gz to $WORKDIR ===="
+        wget -qO- "$RELEASE_URL"/"$VERSION"/"$EXAMPLE_FOLDER.tar.gz" | tar -xf - -C "$WORKDIR"
     fi
 fi
 
@@ -97,31 +97,32 @@ fi
 
 KAKFA_TEARDOWN_SCRIPT=""
 if [[ $REMOTE_KAFKA == true ]]; then
-    printf "Connecting to remote Kafka at $KAFKA_HOST:$KAFKA_PORT"
+    echo "Connecting to remote Kafka at $KAFKA_HOST:$KAFKA_PORT"
 elif [[ $START_KAFKA == true ]]; then
 
     if ! [[ -d "$WORKDIR/$KAFKA_FOLDER" ]]; then
         if [[ $USE_MAIN == true ]]; then
-            printf "\n==== Downloading $MAIN_URL '*/$KAFKA_FOLDER/*' to $WORKDIR ====\n"
-            wget -qO - $MAIN_URL | tar -xf - --strip=1 -C $WORKDIR "*/$KAFKA_FOLDER/*"
+            echo "==== Downloading $MAIN_URL '*/$KAFKA_FOLDER/*' to $WORKDIR ===="
+            wget -qO - $MAIN_URL | tar -xf - --strip=1 -C "$WORKDIR" "*/$KAFKA_FOLDER/*"
         else
-            printf "\n==== Downloading $RELEASE_URL/$VERSION/$KAFKA_FOLDER.tar.gz to $WORKDIR ====\n"
-            wget -qO- $RELEASE_URL/$VERSION/$KAFKA_FOLDER.tar.gz | tar -xf - -C $WORKDIR
+            echo "==== Downloading $RELEASE_URL/$VERSION/$KAFKA_FOLDER.tar.gz to $WORKDIR ===="
+            wget -qO- "$RELEASE_URL"/"$VERSION"/"$KAFKA_FOLDER.tar.gz" | tar -xf - -C "$WORKDIR"
         fi
     fi
 
     if [[ $USE_K8S == true ]]; then
-        cd $WORKDIR/$KAFKA_FOLDER/$HELM_FOLDER
+        cd "$WORKDIR"/"$KAFKA_FOLDER"/"$HELM_FOLDER"
     else
-        cd $WORKDIR/$KAFKA_FOLDER/$COMPOSE_FOLDER
+        cd "$WORKDIR"/"$KAFKA_FOLDER"/"$COMPOSE_FOLDER"
     fi
     KAFKA_HOST="host.docker.internal"
     KAFKA_PORT=29092
     chmod u+x teardown.sh
     KAKFA_TEARDOWN_SCRIPT="$(pwd)/teardown.sh"
-    printf "\n==== Starting Kafka Use this script to teardown: $KAKFA_TEARDOWN_SCRIPT ====\n"
+    echo -e "\n"
+    echo "==== Starting Kafka Use this script to teardown: $KAKFA_TEARDOWN_SCRIPT ===="
     sh setup.sh
-    printf "\n==== Kafka started at $KAFKA_HOST:$KAFKA_PORT ====\n"
+    echo "Kafka started at $KAFKA_HOST:$KAFKA_PORT"
 fi
 if [[ $REMOTE_KAFKA == true || $START_KAFKA == true ]]; then
     export KAFKA_HOST=$KAFKA_HOST
@@ -131,60 +132,69 @@ fi
 TEARDOWN_SCRIPT=""
 if [[ $USE_K8S == false && -d "$WORKDIR/$EXAMPLE_FOLDER/$COMPOSE_FOLDER" ]]; then
     if ! [[ -x "$(command -v docker)" ]]; then
-        printf "Docker is required to run this setup."
+        echo "Docker is required to run this setup."
         exit
     fi
     if ! [[ -x "$(command -v docker-compose)" ]]; then
-        printf "Docker Compose is required to run this setup."
+        echo "Docker Compose is required to run this setup."
         exit
     fi
 
-    cd $WORKDIR/$EXAMPLE_FOLDER/$COMPOSE_FOLDER
+    cd "$WORKDIR"/"$EXAMPLE_FOLDER"/"$COMPOSE_FOLDER"
     chmod u+x teardown.sh
     TEARDOWN_SCRIPT="$(pwd)/teardown.sh"
-    printf "\n==== Starting Zilla $EXAMPLE_FOLDER with Compose. Use this script to teardown: $(pwd)/teardown.sh ====\n"
+    echo -e "\n"
+    echo "==== Starting Zilla $EXAMPLE_FOLDER with Compose. Use this script to teardown: $(pwd)/teardown.sh ===="
     sh setup.sh
 fi
 
 if [[ $USE_K8S == true ]]; then
     if ! [[ -x "$(command -v helm)" ]]; then
-        printf "Helm is required to run this setup."
+        echo "Helm is required to run this setup."
         exit
     fi
     if ! [[ -x "$(command -v kubectl)" ]]; then
-        printf "Kubectl is required to run this setup."
+        echo "Kubectl is required to run this setup."
         exit
     fi
 
     if [[ -d "$WORKDIR/$EXAMPLE_FOLDER/$HELM_FOLDER" ]]; then
-        cd $WORKDIR/$EXAMPLE_FOLDER/$HELM_FOLDER
+        cd "$WORKDIR"/"$EXAMPLE_FOLDER"/"$HELM_FOLDER"
     else
-        cd $WORKDIR/$EXAMPLE_FOLDER
+        cd "$WORKDIR"/"$EXAMPLE_FOLDER"
     fi
 
     chmod u+x teardown.sh
     TEARDOWN_SCRIPT="$(pwd)/teardown.sh"
-    printf "\n==== Starting Zilla $EXAMPLE_FOLDER with Helm. Use this script to teardown: $(pwd)/teardown.sh ====\n"
+    echo -e "\n"
+    echo "==== Starting Zilla $EXAMPLE_FOLDER with Helm. Use this script to teardown: $(pwd)/teardown.sh ===="
     sh setup.sh
 fi
 
-if ! [[ -z "$KAFKA_HOST" && -z "$KAFKA_PORT" ]]; then
-    printf "\n\n==== Verify the Kafka topics created ====\n"
+if [[ -n "$KAFKA_HOST" && -n "$KAFKA_PORT" ]]; then
+    echo -e "\n"
+    echo "==== Verify the Kafka topics created ===="
     echo "docker run --tty --rm confluentinc/cp-kafkacat:7.1.9 kafkacat -b $KAFKA_HOST:$KAFKA_PORT -L"
-
-    printf "\n==== Start a topic consumer to listen for messages ====\n"
-    echo "docker run --tty --rm confluentinc/cp-kafkacat:7.1.9 kafkacat -b $KAFKA_HOST:$KAFKA_PORT -C -f '%t [%p:%o] | %h | %k:%s\n' -t <topic_name>"
-    printf "\n"
+    echo -e "\n"
+    echo "==== Start a topic consumer to listen for messages ===="
+    KCAT_FORMAT="'%t [%p:%o] | %h | %k:%s\n'"
+    echo "docker run --tty --rm confluentinc/cp-kafkacat:7.1.9 kafkacat -b $KAFKA_HOST:$KAFKA_PORT -C -f $KCAT_FORMAT -t <topic_name>"
 fi
 
-printf "\n==== Check out the README to see how to use this example ==== \n"
-printf "cd $WORKDIR/$EXAMPLE_FOLDER\n"
-printf "cat README.md\n"
-printf "$(head -n 4 $WORKDIR/$EXAMPLE_FOLDER/README.md | tail -n 3)\n"
-printf "\n==== Finished, use the teardown script(s) to clean up ==== \n$TEARDOWN_SCRIPT\n$KAKFA_TEARDOWN_SCRIPT\n"
+echo -e "\n"
+echo "==== Check out the README to see how to use this example ==== "
+echo "cd $WORKDIR/$EXAMPLE_FOLDER"
+echo "cat README.md"
+echo -e "$(head -n 4 "$WORKDIR"/"$EXAMPLE_FOLDER"/README.md | tail -n 3)"
+
+echo -e "\n"
+echo "==== Finished, use the teardown script(s) to clean up ===="
+echo -e "$TEARDOWN_SCRIPT\n$KAKFA_TEARDOWN_SCRIPT\n"
 
 if [[ $AUTO_TEARDOWN == true ]]; then
-    printf "\n==== Auto teardown ==== \n$TEARDOWN_SCRIPT\n$KAKFA_TEARDOWN_SCRIPT\n"
-    ! [[ -z "$TEARDOWN_SCRIPT" ]] && $TEARDOWN_SCRIPT
-    ! [[ -z "$KAKFA_TEARDOWN_SCRIPT" ]] && $KAKFA_TEARDOWN_SCRIPT
+    echo -e "\n"
+    echo "==== Auto teardown ===="
+    echo -e "$TEARDOWN_SCRIPT\n$KAKFA_TEARDOWN_SCRIPT\n"
+    [[ -n "$TEARDOWN_SCRIPT" ]] && $TEARDOWN_SCRIPT
+    [[ -n "$KAKFA_TEARDOWN_SCRIPT" ]] && $KAKFA_TEARDOWN_SCRIPT
 fi

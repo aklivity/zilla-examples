@@ -85,6 +85,19 @@ bindings:
         sessions: mqtt-sessions
         messages: mqtt-messages
         retained: mqtt-retained
+    clients:
+      - place/{identity}/#
+    routes:
+      - when:
+          - publish:
+              - topic: place/+/device/#
+              - topic: device/#
+          - subscribe:
+              - topic: place/+/device/#
+              - topic: device/#
+        with:
+          messages: mqtt-devices
+        exit: north_kafka_cache_client
     exit: north_kafka_cache_client
 
   # Kafka sync layer

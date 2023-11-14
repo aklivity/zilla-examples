@@ -1,31 +1,30 @@
 ---
 name: zilla-mqtt-kafka-broker
 bindings:
-
-# Proxy service entrypoint
+  # Proxy service entrypoint
   north_tcp_server:
     type: tcp
     kind: server
     options:
       host: 0.0.0.0
-      port: 
+      port:
         - 7114
         - 7143
         - 7183
         - 7883
     routes:
-        - when: 
-            - port: 7114
-          exit: north_ws_http_server
-        - when: 
-            - port: 7143
-          exit: north_wss_tls_server
-        - when: 
-            - port: 7183
-          exit: north_mqtt_server
-        - when:
-            - port: 7883
-          exit: north_mqtts_tls_server
+      - when:
+          - port: 7114
+        exit: north_ws_http_server
+      - when:
+          - port: 7143
+        exit: north_wss_tls_server
+      - when:
+          - port: 7183
+        exit: north_mqtt_server
+      - when:
+          - port: 7883
+        exit: north_mqtts_tls_server
 
   # TLS decrypting
   north_mqtts_tls_server:
@@ -76,7 +75,7 @@ bindings:
     kind: server
     exit: north_mqtt_kafka_mapping
 
-# MQTT messages to Kafka topics
+  # MQTT messages to Kafka topics
   north_mqtt_kafka_mapping:
     type: mqtt-kafka
     kind: proxy
@@ -88,7 +87,7 @@ bindings:
         retained: mqtt-retained
     exit: north_kafka_cache_client
 
-# Kafka sync layer
+  # Kafka sync layer
   north_kafka_cache_client:
     type: kafka
     kind: cache_client
@@ -100,9 +99,10 @@ bindings:
       bootstrap:
         - mqtt-messages
         - mqtt-retained
+        - mqtt-places
     exit: south_kafka_client
 
-# Connect to Kafka
+  # Connect to Kafka
   south_kafka_client:
     type: kafka
     kind: client

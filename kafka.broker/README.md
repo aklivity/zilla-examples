@@ -18,8 +18,17 @@ This resource can be run using Docker compose or Kubernetes. The setup scripts a
 
 If you are running this alongside another example you will want to expose these environment variables
 
+Docker:
+
 ```bash
 export KAFKA_HOST=host.docker.internal
+export KAFKA_PORT=29092
+```
+
+Kubernetes:
+
+```bash
+export KAFKA_HOST=localhost
 export KAFKA_PORT=29092
 ```
 

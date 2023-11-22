@@ -4,7 +4,7 @@ yamlApplicationConfig:
   kafka:
     clusters:
       - name: local
-        bootstrapServers: host.docker.internal:29092
+        bootstrapServers: kafka:29092
   auth:
     type: disabled
   management:

@@ -39,7 +39,7 @@ spec:
             - name: KAFKA_CFG_INTER_BROKER_LISTENER_NAME
               value: "INTERNAL"
             - name: KAFKA_CFG_ADVERTISED_LISTENERS
-              value: "CLIENT://host.docker.internal:9092,INTERNAL://host.docker.internal:29092"
+              value: "CLIENT://kafka:9092,INTERNAL://kafka:29092"
           ports:
             - containerPort: 9092
             - containerPort: 29092

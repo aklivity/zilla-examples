@@ -35,11 +35,11 @@ spec:
             - name: KAFKA_CFG_PROCESS_ROLES
               value: "broker,controller"
             - name: KAFKA_CFG_LISTENERS
-              value: "CLIENT://:9092,INTERNAL://:29092,CONTROLLER://:9093"
+              value: "CLIENT://:29092,INTERNAL://:9092,CONTROLLER://:9093"
             - name: KAFKA_CFG_INTER_BROKER_LISTENER_NAME
               value: "INTERNAL"
             - name: KAFKA_CFG_ADVERTISED_LISTENERS
-              value: "CLIENT://kafka.zilla-kafka-broker.svc.cluster.local:9092,INTERNAL://localhost:29092"
+              value: "CLIENT://localhost:29092,INTERNAL://kafka.zilla-kafka-broker.svc.cluster.local:9092"
           ports:
             - containerPort: 9092
             - containerPort: 29092

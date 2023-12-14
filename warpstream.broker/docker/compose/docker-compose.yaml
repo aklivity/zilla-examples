@@ -1,0 +1,38 @@
+version: '3'
+services:
+
+  warpstream:
+    image: public.ecr.aws/warpstream-labs/warpstream_agent:latest
+    pull_policy: always
+    container_name: warp
+    ports:
+      - 9092:9092
+    environment:
+      WARPSTREAM_ADVERTISED_HOSTNAME_STRATEGY: custom
+      WARPSTREAM_DISCOVERY_KAFKA_HOSTNAME_OVERRIDE: host.docker.internal
+    command: 
+        playground
+    healthcheck:
+      # Wait for the Agent to finish setting up the demo before marking it as healthy
+      # to delay the diagnose-connection command from running for a few seconds.
+      test: ["CMD", "sh", "-c", "sleep 10"]
+      interval: 5s
+      timeout: 15s
+      retries: 5
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    depends_on:
+      warpstream:
+        condition: service_healthy
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: host.docker.internal:9092
+
+networks:
+  default:
+    driver: bridge

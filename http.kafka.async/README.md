@@ -89,7 +89,7 @@ output:
 > Content-Type: application/json
 ...
 < HTTP/1.1 202 Accepted
-< Location: /items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07;1-e75a4e507cc0dc66a28f5a9617392fe8
+< Location: /items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07;cid=1-e75a4e507cc0dc66a28f5a9617392fe8
 ```
 
 Use the returned location to attempt to verify completion of the asynchronous request within `10 seconds`.
@@ -97,18 +97,18 @@ Note that no correlated response has been produced to the kafka `items-responses
 
 ```bash
 curl -v \
-       "http://localhost:7114/items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07;cid=1-b664e68dd5c49716688e3ec1c8c68bb6" \
+       "http://localhost:7114/items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07;cid=1-e75a4e507cc0dc66a28f5a9617392fe8" \
        -H "Prefer: wait=10"
 ```
 
 output:
 
 ```text
-> GET /items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07;1-e75a4e507cc0dc66a28f5a9617392fe8 HTTP/1.1
+> GET /items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07;cid=1-e75a4e507cc0dc66a28f5a9617392fe8 HTTP/1.1
 > Prefer: wait=10
 ...
 < HTTP/1.1 202 Accepted
-< Location: /items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07;1-e75a4e507cc0dc66a28f5a9617392fe8
+< Location: /items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07;cid=1-e75a4e507cc0dc66a28f5a9617392fe8
 ...
 ```
 
@@ -117,14 +117,14 @@ Note that the response will not return until you complete the following step to 
 
 ```bash
 curl -v \
-       "http://localhost:7114/items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07;1-e75a4e507cc0dc66a28f5a9617392fe8" \
+       "http://localhost:7114/items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07;cid=1-e75a4e507cc0dc66a28f5a9617392fe8" \
        -H "Prefer: wait=60"
 ```
 
 output:
 
 ```text
-> GET /items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07;1-e75a4e507cc0dc66a28f5a9617392fe8 HTTP/1.1
+> GET /items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07;cid=1-e75a4e507cc0dc66a28f5a9617392fe8 HTTP/1.1
 > Prefer: wait=60
 ...
 < HTTP/1.1 OK
@@ -185,7 +185,7 @@ echo "{\"greeting\":\"Hello, world `date`\"}" | \
          -t items-responses \
          -k "5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07" \
          -H ":status=200" \
-         -H "zilla:correlation-id=1-e75a4e507cc0dc66a28f5a9617392fe8"
+         -H "zilla:correlation-id=1-b664e68dd5c49716688e3ec1c8c68bb6"
 ```
 
 The previous asynchronous request will complete with `200 OK` if done within `60 seconds` window, otherwise `202 Accepted` is returned again.
@@ -193,7 +193,7 @@ The previous asynchronous request will complete with `200 OK` if done within `60
 ```text
 < HTTP/1.1 202 Accepted
 < Content-Length: 0
-< Location: /items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07;1-e75a4e507cc0dc66a28f5a9617392fe8
+< Location: /items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07;cid=1-e75a4e507cc0dc66a28f5a9617392fe8
 <
 * Connection #0 to host localhost left intact
 ```

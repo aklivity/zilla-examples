@@ -97,7 +97,7 @@ Note that no correlated response has been produced to the kafka `items-responses
 
 ```bash
 curl -v \
-       "http://localhost:7114/items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07;1-e75a4e507cc0dc66a28f5a9617392fe8" \
+       "http://localhost:7114/items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07;cid=1-b664e68dd5c49716688e3ec1c8c68bb6" \
        -H "Prefer: wait=10"
 ```
 

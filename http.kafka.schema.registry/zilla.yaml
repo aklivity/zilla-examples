@@ -1,7 +1,7 @@
 ---
 name: example
 catalogs:
-  catalog0:
+  my_catalog:
     type: schema-registry
     options:
       url: http://karapace-reg:8081
@@ -113,7 +113,7 @@ bindings:
             model: avro
             view: json
             catalog:
-              catalog0:
+              my_catalog:
                 - strategy: topic
                   version: latest
     exit: south_kafka_cache_server
@@ -127,7 +127,7 @@ bindings:
             model: avro
             view: json
             catalog:
-              catalog0:
+              my_catalog:
                 - strategy: topic
                   version: latest
     exit: south_kafka_client

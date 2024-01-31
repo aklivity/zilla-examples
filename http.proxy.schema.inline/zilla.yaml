@@ -1,11 +1,11 @@
 ---
 name: example
 catalogs:
-  inline_catalog0:
+  my_catalog:
     type: inline
     options:
       subjects:
-        tiger:
+        my_subject:
           schema: |
             {
               "type": "object",
@@ -71,8 +71,8 @@ bindings:
           content:
             model: json
             catalog:
-               inline_catalog0:
-                 - subject: tiger
+               my_catalog:
+                 - subject: my_subject
         - path: /invalid.json
           method: GET
           content-type:
@@ -80,8 +80,8 @@ bindings:
           content:
             model: json
             catalog:
-               inline_catalog0:
-                 - subject: tiger
+               my_catalog:
+                 - subject: my_subject
     exit: south_http_client
   south_http_client:
     type: http
@@ -103,8 +103,8 @@ bindings:
               content:
                 model: json
                 catalog:
-                  inline_catalog0:
-                    - subject: tiger
+                  my_catalog:
+                    - subject: my_subject
             - status:
                 - 401
                 - 404
@@ -124,8 +124,8 @@ bindings:
               content:
                 model: json
                 catalog:
-                  inline_catalog0:
-                    - subject: tiger
+                  my_catalog:
+                    - subject: my_subject
             - status:
                 - 401
                 - 404

@@ -7,10 +7,21 @@ Note that the `zilla.yaml` config used by the proxy was generated based on `asyn
 For example:
 
 ```bash
-cat asyncapi.yaml | \
+cat asyncapi.yml | \
   docker run --rm -e JAVA_OPTIONS='-Dzilla.incubator.enabled=true' -i ghcr.io/aklivity/zilla \
     generate --template asyncapi.mqtt.proxy --input /dev/stdin --output /dev/stdout | \
   tee zilla.yaml
+```
+
+- error deletes yaml or creates empty file
+- add a `--force` to overwrite
+- better binding names, specifically for catalog
+- we don't capture the port definition?
+- parse namespace from title?
+
+```bash
+docker run --rm -it -v ./streetlights-mqtt-asyncapi.yml:/streetlights-mqtt-asyncapi.yml -v ./example:/app/example -v ./output:/app/output \
+asyncapi/cli generate fromTemplate /streetlights-mqtt-asyncapi.yml @asyncapi/nodejs-template -p server=production -o example
 ```
 
 ### Requirements

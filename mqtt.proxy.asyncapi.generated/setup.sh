@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -e
 
 # Install Zilla to the Kubernetes cluster with helm and wait for the pod to start up
 ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla

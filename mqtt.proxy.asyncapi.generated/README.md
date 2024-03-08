@@ -7,22 +7,23 @@ Note that the `zilla.yaml` config used by the proxy was generated based on `asyn
 For example:
 
 ```bash
-cat asyncapi.yaml | \
-  docker run --rm -e JAVA_OPTIONS='-Dzilla.incubator.enabled=true' -i ghcr.io/aklivity/zilla \
+cat streetlights-mqtt-asyncapi.yaml | \
+  docker run --rm -e ZILLA_INCUBATOR_ENABLED='true' -i ghcr.io/aklivity/zilla \
     generate --template asyncapi.mqtt.proxy --input /dev/stdin --output /dev/stdout | \
   tee zilla.yaml
 ```
 
-### Requirements
+## Requirements
 
 - bash, jq, nc
+- Docker
 - Kubernetes (e.g. Docker Desktop with Kubernetes enabled)
 - kubectl
 - helm 3.0+
 - mosquitto
 - kcat
 
-### Setup
+## Setup
 
 The `setup.sh` script:
 
@@ -35,38 +36,8 @@ The `setup.sh` script:
 ```
 
 ```text
-+ ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
-+ helm upgrade --install mqtt-proxy-asyncapi-generated oci://ghcr.io/aklivity/charts/zilla --namespace mqtt-proxy-asyncapi-generated --create-namespace --wait --values values.yaml --set-file 'zilla\.yaml=zilla.yaml'
-NAME: mqtt-proxy-asyncapi-generated
-LAST DEPLOYED: [...]
-NAMESPACE: mqtt-proxy-asyncapi-generated
-STATUS: deployed
-REVISION: 1
-NOTES:
-Zilla has been installed.
-+ helm upgrade --install zilla-mqtt-kafka-reflect-kafka chart --namespace zilla-mqtt-kafka-reflect --create-namespace --wait
-NAME: zilla-mqtt-kafka-reflect-kafka
-LAST DEPLOYED: [...]
-NAMESPACE: zilla-mqtt-kafka-reflect
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-+ helm upgrade --install mqtt-proxy-asyncapi-generated-mosquitto chart --namespace mqtt-proxy-asyncapi-generated --create-namespace --wait
-NAME: mqtt-proxy-asyncapi-generated-mosquitto
-LAST DEPLOYED: Tue Sep 19 18:15:07 2023
-NAMESPACE: mqtt-proxy-asyncapi-generated
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-+ kubectl port-forward --namespace mqtt-proxy-asyncapi-generated service/mqtt-proxy-asyncapi-generated-zilla 7183
-+ nc -z localhost 7183
-+ kubectl port-forward --namespace mqtt-proxy-asyncapi-generated service/mosquitto 1883
-+ sleep 1
-+ nc -z localhost 7183
 Connection to localhost port 7183 [tcp/ibm-mqisdp] succeeded!
-+ nc -z localhost 1883
 Connection to localhost port 1883 [tcp/idmaps] succeeded!
-
 ```
 
 ### Install mqtt client
@@ -81,7 +52,8 @@ brew install mosquitto
 
 Connect a subscribing client to mosquitto broker to port `1883`. Using mosquitto_pub client publish `{"id":"1","status":"on"}` to Zilla on port `7183`. Verify that the message arrived to on the first client.
 ```bash
-mosquitto_sub -V '5' -t 'smartylighting/streetlights/1/0/event/+/lighting/measured' -d
+docker run -it --rm eclipse-mosquitto \
+mosquitto_sub --url mqtt://host.docker.internal:7183/'smartylighting/streetlights/1/0/event/+/lighting/measured'
 ```
 
 output:
@@ -96,7 +68,9 @@ Subscribed (mid: 1): 0
 ```
 
 ```bash
-mosquitto_pub -V '5' -t 'smartylighting/streetlights/1/0/event/1/lighting/measured' -m '{"id":"1","status":"on"}' -d -p 7183
+docker run -it --rm eclipse-mosquitto \
+mosquitto_pub --url mqtt://host.docker.internal:7183/'smartylighting/streetlights/1/0/event/1/lighting/measured' -d \
+  -m '{"id":"1","status":"on"}'
 ```
 
 output:
@@ -111,7 +85,9 @@ Client 244684c7-fbaf-4e08-b382-a1a2329cf9ec sending DISCONNECT
 Now attempt to publish an invalid message, with property `stat` instead of `status`.
 
 ```bash
-mosquitto_pub -V '5' -t 'smartylighting/streetlights/1/0/event/1/lighting/measured' -m '{"id":"1","stat":"off"}' -d -p 7183 --repeat 2 --repeat-delay 3
+docker run -it --rm eclipse-mosquitto \
+mosquitto_pub --url mqtt://host.docker.internal:7183/'smartylighting/streetlights/1/0/event/1/lighting/measured' -d \
+  -m '{"id":"1","stat":"off"}' --repeat 2 --repeat-delay 3
 ```
 
 output:
@@ -138,13 +114,5 @@ The `teardown.sh` script stops port forwarding, uninstalls Zilla and mosquitto b
 output:
 
 ```text
-+ + pgrep kubectl
-99998
-99999
-+ killall kubectl
-+ helm uninstall mqtt-proxy-asyncapi-generated mqtt-proxy-asyncapi-generated-mosquitto --namespace mqtt-proxy-asyncapi-generated
-release "mqtt-proxy-asyncapi-generated" uninstalled
-release "mqtt-proxy-asyncapi-generated-mosquitto" uninstalled
-+ kubectl delete namespace mqtt-proxy-asyncapi-generated
 namespace "mqtt-proxy-asyncapi-generated" deleted
 ```

@@ -1,56 +1,55 @@
 name: example
 bindings:
-  north_tcp_server:
+  tcp_server0:
     type: tcp
     kind: server
     options:
       host: 0.0.0.0
-      port: 7183
-    routes:
-    - exit: north_mqtt_server
-      when:
-      - port: 7183
-  north_mqtt_server:
+      port: -1
+  mqtt_server0:
     type: mqtt
     kind: server
     options:
       topics:
-      - name: smartylighting/streetlights/1/0/event/1/lighting/measured
+      - name: smartylighting/streetlights/1/0/event/*/lighting/measured
         content:
-          type: json
+          model: json
           catalog:
-            inline_schema:
-            - subject: item
+            catalog0:
+            - subject: lightMeasured
     routes:
-    - exit: south_mqtt_client
+    - exit: mqtt_client0
       when:
       - publish:
-        - topic: smartylighting/streetlights/1/0/event/1/lighting/measured
+        - topic: smartylighting/streetlights/1/0/event/*/lighting/measured
       - subscribe:
-        - topic: smartylighting/streetlights/1/0/event/1/lighting/measured
-  south_mqtt_client:
+        - topic: smartylighting/streetlights/1/0/event/*/lighting/measured
+  mqtt_client0:
     type: mqtt
     kind: client
-    exit: south_tcp_client
-  south_tcp_client:
+    exit: tcp_client0
+  tcp_client0:
     type: tcp
     kind: client
     options:
-      host: ${{env.MOSQUITTO_BROKER_HOST}}
-      port: ${{env.MOSQUITTO_BROKER_PORT}}
+      host: "${{env.TCP_CLIENT_HOST}}"
+      port: ${{env.TCP_CLIENT_PORT}}
 catalogs:
-  inline_schema:
+  catalog0:
     type: inline
     options:
       subjects:
-        item:
+        lightMeasuredPayload:
           schema: |
+            type: object
             properties:
-              id:
-                type: string
+              lumens:
+                description: Light intensity measured in lumens.
+                type: integer
               status:
+                description: State of the Light being on or off
                 type: string
             required:
-            - id
+            - lumens
             - status
           version: latest

@@ -1,6 +1,6 @@
 apiVersion: v2
-name: zilla
-description: zilla mqtt.proxy example
+name: mosquitto
+description: mosquitto mqtt broker
 type: application
 version: 0.1.0
 appVersion: "latest"

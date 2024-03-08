@@ -30,7 +30,7 @@ services:
     ports:
       - 7114:7114
     environment:
-      ZILLA_INCUBATOR_ENABLED: true
+      ZILLA_INCUBATOR_ENABLED: "true"
     volumes:
       - ../../asyncapi.yaml:/etc/zilla/asyncapi.yaml
       - ../../openapi.yaml:/etc/zilla/openapi.yaml

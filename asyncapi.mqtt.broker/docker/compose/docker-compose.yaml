@@ -31,7 +31,7 @@ services:
       - 7183:7183
       - 7190:7190
     environment:
-      ZILLA_INCUBATOR_ENABLED: true
+      ZILLA_INCUBATOR_ENABLED: "true"
     volumes:
       - ../../mqtt-asyncapi.yaml:/etc/zilla/mqtt-asyncapi.yaml
       - ../../kafka-asyncapi.yaml:/etc/zilla/kafka-asyncapi.yaml

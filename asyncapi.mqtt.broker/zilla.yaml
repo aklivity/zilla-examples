@@ -1,0 +1,43 @@
+---
+name: zilla-mqtt-kafka-broker
+bindings:
+  asyncapi_mqtt:
+    type: asyncapi
+    kind: server
+    options:
+      specs:
+        my-mqtt-api-spec: mqtt-asyncapi.yaml
+    exit: asyncapi_proxy
+  asyncapi_proxy:
+    type: asyncapi
+    kind: proxy
+    options:
+      specs:
+        my-mqtt-api-spec: mqtt-asyncapi.yaml
+        my-kafka-spec: kafka-asyncapi.yaml
+      mqtt-kafka:
+        channels:
+          sessions: mqttSessions
+          retained: mqttRetained
+          messages: mqttMessages
+    routes:
+      - when:
+          - api-id: my-mqtt-api-spec
+            operation-id: sendEvents
+        exit: asyncapi_kafka
+        with:
+          api-id: my-kafka-spec
+          operation-id: toSensorData
+      - when:
+          - api-id: my-mqtt-api-spec
+            operation-id: receiveEvents
+        exit: asyncapi_kafka
+        with:
+          api-id: my-kafka-spec
+          operation-id: onSensorData
+  asyncapi_kafka:
+    type: asyncapi
+    kind: client
+    options:
+      specs:
+        my-kafka-spec: kafka-asyncapi.yaml

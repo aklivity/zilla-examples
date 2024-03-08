@@ -1,0 +1,83 @@
+openapi: 3.0.0
+info:
+  title: Zilla Petstore - OpenAPI 3.0
+  description: Zilla implements the Petstore API spec
+  version: 1.0.0
+  license:
+    name: Aklivity Community License
+  contact:
+    name: Aklivity Community
+    url: https://www.aklivity.io/slack
+externalDocs:
+  description: Find out more about Zilla
+  url: https://docs.aklivity.io/
+servers:
+  - url: http://localhost:7114
+tags:
+  - name: pets
+    description: Everything about your Pets
+paths:
+  /pets:
+    get:
+      tags:
+        - pets
+      summary: List all Pets
+      description: Returns an array of pets
+      operationId: listPets
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Pets"
+    post:
+      tags:
+        - pets
+      summary: Create a Pet
+      description: "Create a pet in the store with a specific ID"
+      operationId: createPets
+      requestBody:
+        description: Create a new pet in the store
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Pet"
+        required: true
+      responses:
+        "204":
+          description: Successful operation
+        "400":
+          description: Invalid input
+components:
+  schemas:
+    Tag:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "gentle"
+    Pet:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+          example: doggie
+        tags:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Tag"
+        status:
+          type: string
+          description: pet status in the store
+          enum:
+            - available
+            - pending
+            - sold
+    Pets:
+      type: array
+      maxItems: 100
+      items:
+        $ref: "#/components/schemas/Pet"

@@ -1,0 +1,65 @@
+asyncapi: 3.0.0
+info:
+  title: Zilla MQTT Proxy
+  version: 1.0.0
+  license:
+    name: Aklivity Community License
+  contact:
+    name: Aklivity Community
+    url: https://www.aklivity.io/slack
+  externalDocs:
+    description: Find out more about Zilla
+    url: https://docs.aklivity.io/
+servers:
+  local-connection:
+    host: localhost:7183
+    protocol: mqtt
+defaultContentType: application/json
+
+channels:
+  sensors:
+    address: "sensors/{sensorId}"
+    title: MQTT Topic to produce & consume topic.
+    parameters:
+      sensorId:
+        $ref: '#/components/parameters/sensorId'
+    messages:
+      sensorUpdate:
+        $ref: '#/components/messages/sensorUpdate'
+
+operations:
+  sendEvents:
+    action: send
+    channel:
+      $ref: '#/channels/sensors'
+
+  receiveEvents:
+    action: receive
+    channel:
+      $ref: '#/channels/sensors'
+
+components:
+  parameters:
+    sensorId:
+      description: Sensor ID
+      location: $message.header#/id
+  messages:
+    sensorUpdate:
+      name: sensorUpdate
+      title: Sensor Update
+      summary: A sensor status and temperature update
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/sensorUpdate"
+  schemas:
+    sensorUpdate:
+      type: object
+      properties:
+        on:
+          type: boolean
+        temperature:
+          type: integer
+          format: int32
+      required:
+        - "on"
+        - temperature

@@ -16,10 +16,12 @@ spec:
     spec:
       containers:
         - name: kafka
-          image: "bitnami/kafka:3.2"
+          image: "bitnami/kafka:3.5"
           env:
             - name: ALLOW_PLAINTEXT_LISTENER
               value: "yes"
+            - name: KAFKA_CFG_GROUP_INITIAL_REBALANCE_DELAY_MS
+              value: "0"
             - name: KAFKA_CFG_NODE_ID
               value: "1"
             - name: KAFKA_CFG_BROKER_ID

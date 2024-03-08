@@ -1,0 +1,31 @@
+---
+name: zilla-openapi-asyncapi
+bindings:
+  openapi_server:
+    type: openapi
+    kind: server
+    options:
+      specs:
+        my-openapi-spec: openapi.yaml
+    exit: openapi_asyncapi_proxy
+  openapi_asyncapi_proxy:
+    type: openapi-asyncapi
+    kind: proxy
+    options:
+      specs:
+        openapi:
+          my-openapi-spec: openapi.yaml
+        asyncapi:
+          my-asyncapi-spec: asyncapi.yaml
+    routes:
+      - when:
+          - api-id: my-openapi-spec
+        exit: asyncapi_client
+        with:
+          api-id: my-asyncapi-spec
+  asyncapi_client:
+    type: asyncapi
+    kind: client
+    options:
+      specs:
+        my-asyncapi-spec: asyncapi.yaml

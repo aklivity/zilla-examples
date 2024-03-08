@@ -22,17 +22,21 @@ services:
       KAFKA_CFG_ADVERTISED_LISTENERS: "INTERNAL://host.docker.internal:9092,CLIENT://localhost:29092"
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
 
-  kafka-ui:
-    image: provectuslabs/kafka-ui:latest
-    container_name: kafka-ui
+  zilla:
+    image: ghcr.io/aklivity/zilla:latest
+    container_name: zilla
+    pull_policy: always
     restart: unless-stopped
     ports:
-      - 8080:8080
-    depends_on:
-      - kafka
+      - 7114:7114
     environment:
-      KAFKA_CLUSTERS_0_NAME: local
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: host.docker.internal:9092
+      ZILLA_INCUBATOR_ENABLED: true
+    volumes:
+      - ../../asyncapi.yaml:/etc/zilla/asyncapi.yaml
+      - ../../openapi.yaml:/etc/zilla/openapi.yaml
+      - ../../zilla.yaml:/etc/zilla/zilla.yaml
+    command: start -v -e
+
 
 networks:
   default:

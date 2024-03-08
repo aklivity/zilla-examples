@@ -1,0 +1,36 @@
+{
+    "BROKER_URL": "zilla",
+    "BROKER_PORT": 7183,
+    "PROTOCOL_VERSION": 5,
+    "CLEAN_SESSION": false,
+    "QOS": 0,
+    "RETAINED": false,
+    "TOPICS": [
+        {
+            "TYPE": "multiple",
+            "PREFIX": "sensors",
+            "RANGE_START": 1,
+            "RANGE_END": 2,
+            "TIME_INTERVAL": 4,
+            "DATA": [
+                {
+                    "NAME": "on",
+                    "TYPE": "bool",
+                    "RETAIN_PROBABILITY": 0.85
+                },
+                {
+                    "NAME": "temperature",
+                    "TYPE": "int",
+                    "INITIAL_VALUE": 60,
+                    "MIN_VALUE": 30,
+                    "MAX_VALUE": 200,
+                    "MAX_STEP": 10,
+                    "RETAIN_PROBABILITY": 0.3,
+                    "RESET_PROBABILITY": 0.1,
+                    "INCREASE_PROBABILITY": 0.8,
+                    "RESTART_ON_BOUNDARIES": true
+                }
+            ]
+        }
+    ]
+}

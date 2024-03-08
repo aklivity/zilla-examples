@@ -1,6 +1,7 @@
 # mqtt.kafka.asyncapi.proxy
 
-This is the resource folder for the running the [MQTT Kafka AsyncAPI broker guide](https://docs.aklivity.io/zilla/latest/how-tos/mqtt/mqtt.kafka.broker.html) found on our docs. *TODO: add docs
+In this guide, you create Kafka topics and use Zilla to mediate MQTT broker messages onto those topics.
+Zilla implements MQTT API defined in AsyncAPI specifications and uses Kafka API defined AsyncAPI proxy MQTT messages to Kafka.
 
 ## Running locally
 
@@ -13,7 +14,7 @@ You will need a running kafka broker. To start one locally you will find instruc
 Wether you chose [compose](./docker/compose) or [helm](./k8s/helm), the `setup.sh` script will:
 
 - create the necessary kafka topics
-- create an MQTT broker at `http://localhost:7183`
+- create an MQTT broker at `mqtt://localhost:7183`
 
 ```bash
 ./setup.sh
@@ -21,11 +22,7 @@ Wether you chose [compose](./docker/compose) or [helm](./k8s/helm), the `setup.s
 
 ### Using this example
 
-Follow the steps on our [MQTT Kafka AsyncAPI broker guide](https://docs.aklivity.io/zilla/latest/how-tos/mqtt/mqtt.kafka.broker.html#send-a-greeting)
-
-#### TODO: add these steps in the docs, remove from here
-Send a greeting
-Using eclipse-mosquitto subscribe to the sensors topic.
+Using eclipse-mosquitto subscribe to the sensors/# topic.
 
 ```bash
 mosquitto_sub -V '5' -t 'sensors/#' -d -p 7183

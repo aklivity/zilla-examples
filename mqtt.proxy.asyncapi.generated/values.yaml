@@ -1,0 +1,15 @@
+extraEnv:
+  - name: MOSQUITTO_BROKER_HOST
+    value: mosquitto
+  - name: MOSQUITTO_BROKER_PORT
+    value: "1883"
+  - name: ZILLA_INCUBATOR_ENABLED
+    value: "true"
+
+livenessProbePort: 7183
+readinessProbePort: 7183
+
+service:
+  ports:
+    - port: 7183
+      name: mqtt

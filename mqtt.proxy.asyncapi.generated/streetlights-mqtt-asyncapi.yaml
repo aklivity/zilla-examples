@@ -1,0 +1,81 @@
+asyncapi: 3.0.0
+info:
+  title: Zilla MQTT Proxy
+  version: 1.0.0
+  license:
+    name: Aklivity Community License
+  contact:
+    name: Aklivity Community
+    url: https://www.aklivity.io/slack
+  externalDocs:
+    description: Find out more about Zilla
+    url: https://docs.aklivity.io/
+servers:
+  local-connection:
+    host: localhost:7183
+    protocol: mqtt
+defaultContentType: application/json
+
+channels:
+  lightingMeasured:
+    address: "smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured"
+    title: MQTT Topic to produce & consume topic.
+    parameters:
+      streetlightId:
+        $ref: '#/components/parameters/streetlightId'
+    messages:
+      lightMeasured:
+        $ref: "#/components/messages/lightMeasured"
+
+operations:
+  sendEvents:
+    action: send
+    channel:
+      $ref: "#/channels/lightingMeasured"
+  receiveEvents:
+    action: receive
+    channel:
+      $ref: "#/channels/lightingMeasured"
+
+components:
+  messages:
+    lightMeasured:
+      name: lightMeasured
+      title: Light measured
+      summary: >-
+        Inform about environmental lighting conditions of a particular
+        streetlight.
+      contentType: application/json
+      traits:
+        - $ref: "#/components/messageTraits/commonHeaders"
+      payload:
+        $ref: "#/components/schemas/lightMeasuredPayload"
+  schemas:
+    lightMeasuredPayload:
+      type: object
+      properties:
+        lumens:
+          type: integer
+          minimum: 0
+          description: Light intensity measured in lumens.
+        status:
+          type: string
+          default: "on"
+          description: State of the Light being on or off
+          enum:
+            - "on"
+            - "off"
+      required:
+        - lumens
+        - status
+  parameters:
+    streetlightId:
+      description: The ID of the streetlight.
+  messageTraits:
+    commonHeaders:
+      headers:
+        type: object
+        properties:
+          idempotency-key:
+            description: Unique identifier for a given event
+            type: string

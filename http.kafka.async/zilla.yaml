@@ -54,18 +54,28 @@ bindings:
     kind: proxy
     routes:
       - when:
-          - method: PUT
-            path: /items/{id}
+          - method: POST
+            path: /items
           - method: GET
-            path: /items/{id};cid={correlationId}
+            path: /items;cid={correlationId}
         exit: north_kafka_cache_client
         with:
           capability: produce
           topic: items-requests
-          key: ${params.id}
+          key: ${idempotencyKey}
           reply-to: items-responses
           async:
-            location: /items/${params.id};cid=${correlationId}
+            location: /items;cid=${correlationId}
+      - when:
+          - method: PUT
+            path: /items;cid={cid}
+        exit: north_kafka_cache_client
+        with:
+          capability: produce
+          topic: items-responses
+          key: ${idempotencyKey}
+          overrides:
+            "zilla:correlation-id": ${params.cid}
   north_kafka_cache_client:
     type: kafka
     kind: cache_client

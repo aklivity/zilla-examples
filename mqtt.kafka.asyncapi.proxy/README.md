@@ -58,10 +58,10 @@ Client a1f4ad8c-c9e8-4671-ad46-69030d4f1c9a sending DISCONNECT
 Now attempt to publish an invalid message by setting `lumens` property to a negative value.
 
 ```bash
-mosquitto_pub -V '5' -t 'smartylighting/streetlights/1/0/event/1/lighting/measured' -m '{"lumens":-1,"sentAt":"2024-06-07T12:34:32.000Z"}' -d -p 7183 --repeat 2 --repeat-delay 3```
+mosquitto_pub -V '5' -t 'smartylighting/streetlights/1/0/event/1/lighting/measured' -m '{"lumens":-1,"sentAt":"2024-06-07T12:34:32.000Z"}' -d -p 7183 --repeat 2 --repeat-delay 3
+```
 
 output:
-
 ```
 Client null sending CONNECT
 Client 30157eed-0ea7-42c6-91e8-466d1dd0ab66 received CONNACK (0)

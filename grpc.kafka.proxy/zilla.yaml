@@ -1,5 +1,12 @@
 ---
 name: example
+catalogs:
+  catalog0:
+    type: filesystem
+    options:
+      subjects:
+        echo:
+          url: proto/echo.proto
 vaults:
   my_servers:
     type: filesystem
@@ -45,9 +52,9 @@ bindings:
   north_grpc_server:
     type: grpc
     kind: server
-    options:
-      services:
-        - proto/echo.proto
+    catalog:
+      catalog0:
+        - subject: echo
     routes:
       - when:
           - method: example.EchoService/*
@@ -103,9 +110,9 @@ bindings:
   west_grpc_client:
     type: grpc
     kind: client
-    options:
-      services:
-        - proto/echo.proto
+    catalog:
+      catalog0:
+        - subject: echo
     routes:
       - exit: west_http_client
         when:

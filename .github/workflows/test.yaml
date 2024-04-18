@@ -1,0 +1,43 @@
+name: Test Examples
+
+on: pull_request
+  #workflow_dispatch
+
+jobs:
+  test-tcp-echo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Create k8s Kind Cluster
+        uses: helm/kind-action@v1
+      - name: Execute Test
+        working-directory: tcp.echo
+        run: |
+          set -o pipefail
+          ./setup.sh
+          ./test.sh | tee -a $GITHUB_STEP_SUMMARY
+      - name: Teardown
+        if: always()
+        working-directory: tcp.echo
+        run: |
+          ./teardown.sh
+
+  test-tls-echo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Create k8s Kind Cluster
+        uses: helm/kind-action@v1
+      - name: Execute Test
+        working-directory: tls.echo
+        run: |
+          set -o pipefail
+          ./setup.sh
+          ./test.sh | tee -a $GITHUB_STEP_SUMMARY
+      - name: Teardown
+        if: always()
+        working-directory: tls.echo
+        run: |
+          ./teardown.sh

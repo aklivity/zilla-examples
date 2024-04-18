@@ -1,0 +1,56 @@
+name: Test Example using k8s Kind Cluster
+
+on:
+  workflow_call:
+    inputs:
+      example-path:
+        required: true
+        type: string
+      test-input:
+        required: true
+        type: string
+      test-expected:
+        required: true
+        type: string
+
+jobs:
+  test-example:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout-cone-mode: false
+          sparse-checkout: ${{ inputs.example-path }}
+
+      - name: Create k8s Kind Cluster
+        uses: helm/kind-action@v1
+
+      - name: Installing ${{ inputs.example-path }}
+        env:
+          INPUT: ${{ inputs.test-input }}
+        run: |
+          cd ${{ inputs.example-path }}
+          ./setup.sh
+          kubectl get pods -A
+
+      - name: Run Test for ${{ inputs.example-path }}
+        id: run-test
+        env:
+          INPUT: ${{ inputs.test-input }}
+          EXPECTED: ${{ inputs.test-expected }}
+        run: |
+          echo "test-output=$(./test.sh)" >> "$GITHUB_OUTPUT"
+          echo "test-result=$?" >> "$GITHUB_OUTPUT"
+
+      - name: Check Results for ${{ inputs.example-path }}
+        env:
+          RESULT: ${{ steps.run-test.outputs.test-output }}
+          OUTPUT: ${{ steps.run-test.outputs.test-result }}
+          EXPECTED: ${{ inputs.test-expected }}
+        run: |
+          if [ $RESULT -ne 0 ] || [ "$OUTPUT" != "$EXPECTED" ]; then
+            exit 1
+          fi
+
+      - name: Clean up ${{ inputs.example-path }}
+        run: ./teardown.sh

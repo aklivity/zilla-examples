@@ -1,0 +1,24 @@
+name: Test tcp.echo
+
+on:
+  push:
+    paths:
+      - "tcp.echo/**/*"
+
+env:
+  EXAMPLE_PATH: tcp.echo
+
+jobs:
+  test-tcp-echo-success:
+    uses: ./.github/workflows/example_test.yml
+    with:
+      example-path: ${{ env.EXAMPLE_PATH }}
+      test-input: "hello zilla1"
+      test-expected: ""
+
+  test-tcp-echo-fail:
+    uses: ./.github/workflows/example_test.yml
+    with:
+      example-path: ${{ env.EXAMPLE_PATH }}
+      test-input: "hello zilla1"
+      test-expected: ""

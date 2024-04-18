@@ -33,3 +33,7 @@ bindings:
         host: openapi-mock
         port:
           - 5000
+telemetry:
+  exporters:
+    stdout_exporter:
+      type: stdout

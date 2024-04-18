@@ -87,3 +87,7 @@ bindings:
             catalog0:
               subject: kafka
               version: latest
+telemetry:
+  exporters:
+    stdout_exporter:
+      type: stdout

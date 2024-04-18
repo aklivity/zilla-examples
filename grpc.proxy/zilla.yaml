@@ -76,3 +76,7 @@ bindings:
     options:
       host: grpc-echo
       port: 8080
+telemetry:
+  exporters:
+    stdout_exporter:
+      type: stdout

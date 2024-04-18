@@ -89,3 +89,7 @@ bindings:
     routes:
       - when:
           - cidr: 0.0.0.0/0
+telemetry:
+  exporters:
+    stdout_exporter:
+      type: stdout

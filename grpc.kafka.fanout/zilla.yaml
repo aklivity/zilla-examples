@@ -5,7 +5,7 @@ catalogs:
     options:
       subjects:
         fanout:
-          url: proto/fanout.proto
+          path: proto/fanout.proto
 vaults:
   my_servers:
     type: filesystem

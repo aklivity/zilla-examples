@@ -6,9 +6,9 @@ catalogs:
     options:
       subjects:
         mqtt:
-          url: mqtt/mqtt-asyncapi.yaml
+          path: mqtt/mqtt-asyncapi.yaml
         kafka:
-          url: kafka/kafka-asyncapi.yaml
+          path: kafka/kafka-asyncapi.yaml
 bindings:
   asyncapi_mqtt0:
     type: asyncapi

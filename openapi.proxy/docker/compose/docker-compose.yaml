@@ -10,7 +10,7 @@ services:
     environment:
       ZILLA_INCUBATOR_ENABLED: true
     volumes:
-      - ../../specs/schema.yaml:/etc/zilla/schema.yaml
+      - ../../specs/petstore.yaml:/etc/zilla/petstore.yaml
       - ../../zilla.yaml:/etc/zilla/zilla.yaml
     command: start -v -e
 

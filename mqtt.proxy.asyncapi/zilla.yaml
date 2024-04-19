@@ -6,7 +6,7 @@ catalogs:
     options:
       subjects:
         smartylighting:
-          url: asyncapi/asyncapi.yaml
+          path: asyncapi/asyncapi.yaml
 bindings:
   asyncapi_server:
     type: asyncapi

@@ -1,7 +1,8 @@
 name: Test Examples
 
-on: pull_request
-  #workflow_dispatch
+on:
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   test-tcp-echo:
@@ -11,17 +12,18 @@ jobs:
         uses: actions/checkout@v3
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1
+      - name: Setup
+        working-directory: tcp.echo
+        run: ./setup.sh
       - name: Execute Test
         working-directory: tcp.echo
         run: |
           set -o pipefail
-          ./setup.sh
-          ./test.sh | tee -a $GITHUB_STEP_SUMMARY
+          ./test.sh | tee $GITHUB_STEP_SUMMARY
       - name: Teardown
         if: always()
         working-directory: tcp.echo
-        run: |
-          ./teardown.sh
+        run: ./teardown.sh
 
   test-tls-echo:
     runs-on: ubuntu-latest
@@ -30,14 +32,45 @@ jobs:
         uses: actions/checkout@v3
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1
+      - name: Setup
+        working-directory: tls.echo
+        run: ./setup.sh
       - name: Execute Test
         working-directory: tls.echo
         run: |
           set -o pipefail
-          ./setup.sh
-          ./test.sh | tee -a $GITHUB_STEP_SUMMARY
+          ./test.sh | tee $GITHUB_STEP_SUMMARY
       - name: Teardown
         if: always()
         working-directory: tls.echo
+        run: ./teardown.sh
+
+  test-http-kafka-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install kcat
+        working-directory: /tmp
         run: |
-          ./teardown.sh
+          set -x
+          sudo apt-get update
+          sudo apt-get install librdkafka-dev libyajl-dev
+          curl -L -o kcat https://github.com/attilakreiner/kcat/releases/download/1.7.1/kcat-linux-$(arch)
+          chmod +x kcat
+          sudo mv kcat /usr/local/bin
+          kcat 2>&1 | grep "Version 1.7.1"
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Create k8s Kind Cluster
+        uses: helm/kind-action@v1
+      - name: Setup
+        working-directory: http.kafka.sync
+        run: ./setup.sh
+      - name: Execute Test
+        working-directory: http.kafka.sync
+        run: |
+          set -o pipefail
+          ./test.sh | tee $GITHUB_STEP_SUMMARY
+      - name: Teardown
+        if: always()
+        working-directory: http.kafka.sync
+        run: ./teardown.sh

@@ -1,7 +1,7 @@
 ---
 name: zilla-openapi-proxy
 catalogs:
-  catalog0:
+  host_filesystem:
     type: filesystem
     options:
       subjects:
@@ -15,7 +15,7 @@ bindings:
       specs:
         my-openapi-spec:
           catalog:
-            catalog0:
+            host_filesystem:
               subject: petstore
               version: latest
     exit: south_openapi_lcient
@@ -26,7 +26,7 @@ bindings:
       specs:
         my-openapi-spec:
           catalog:
-            catalog0:
+            host_filesystem:
               subject: petstore
               version: latest
       tcp:

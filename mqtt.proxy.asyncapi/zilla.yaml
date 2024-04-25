@@ -1,32 +1,32 @@
 ---
 name: zilla-mqtt-kafka-broker
 catalogs:
-  catalog0:
+  host_filesystem:
     type: filesystem
     options:
       subjects:
         smartylighting:
-          path: asyncapi/asyncapi.yaml
+          path: asyncapi/mqtt-asyncapi.yaml
 bindings:
-  asyncapi_server:
+  mqtt_proxy_server:
     type: asyncapi
     kind: server
     options:
       specs:
         my-asyncapi-spec:
           catalog:
-            catalog0:
+            host_filesystem:
               subject: smartylighting
               version: latest
-    exit: asyncapi_client
-  asyncapi_client:
+    exit: mqtt_proxy_client
+  mqtt_proxy_client:
     type: asyncapi
     kind: client
     options:
       specs:
         my-asyncapi-spec:
           catalog:
-            catalog0:
+            host_filesystem:
               subject: smartylighting
               version: latest
       tcp:

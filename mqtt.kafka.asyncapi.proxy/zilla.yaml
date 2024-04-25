@@ -1,39 +1,39 @@
 ---
 name: zilla-mqtt-kafka-broker
 catalogs:
-  catalog0:
+  host_filesystem:
     type: filesystem
     options:
       subjects:
         mqtt:
-          path: mqtt/mqtt-asyncapi.yaml
+          path: specs/mqtt-asyncapi.yaml
         kafka:
-          path: kafka/kafka-asyncapi.yaml
+          path: specs/kafka-asyncapi.yaml
 bindings:
-  asyncapi_mqtt0:
+  north_mqtt_server:
     type: asyncapi
     kind: server
     options:
       specs:
         mqtt_api:
           catalog:
-            catalog0:
+            host_filesystem:
               subject: mqtt
               version: latest
-    exit: asyncapi_proxy0
-  asyncapi_proxy0:
+    exit: south_kafka_proxy
+  south_kafka_proxy:
     type: asyncapi
     kind: proxy
     options:
       specs:
         mqtt_api:
           catalog:
-            catalog0:
+            host_filesystem:
               subject: mqtt
               version: latest
         kafka_api:
           catalog:
-            catalog0:
+            host_filesystem:
               subject: kafka
               version: latest
       mqtt-kafka:
@@ -45,46 +45,46 @@ bindings:
       - when:
           - api-id: mqtt_api
             operation-id: turnOn
-        exit: asyncapi_kafka0
+        exit: south_kafka_client
         with:
           api-id: kafka_api
           operation-id: toStreetlightData
       - when:
           - api-id: mqtt_api
             operation-id: receiveLightMeasurement
-        exit: asyncapi_kafka0
+        exit: south_kafka_client
         with:
           api-id: kafka_api
           operation-id: onStreetlightData
       - when:
           - api-id: mqtt_api
             operation-id: sendLightMeasurement
-        exit: asyncapi_kafka0
+        exit: south_kafka_client
         with:
           api-id: kafka_api
           operation-id: toStreetlightData
       - when:
           - api-id: mqtt_api
             operation-id: turnOff
-        exit: asyncapi_kafka0
+        exit: south_kafka_client
         with:
           api-id: kafka_api
           operation-id: toStreetlightData
       - when:
           - api-id: mqtt_api
             operation-id: dimLight
-        exit: asyncapi_kafka0
+        exit: south_kafka_client
         with:
           api-id: kafka_api
           operation-id: toStreetlightData
-  asyncapi_kafka0:
+  south_kafka_client:
     type: asyncapi
     kind: client
     options:
       specs:
         kafka_api:
           catalog:
-            catalog0:
+            host_filesystem:
               subject: kafka
               version: latest
 telemetry:

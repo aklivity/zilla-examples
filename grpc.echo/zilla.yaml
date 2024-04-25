@@ -1,6 +1,6 @@
 name: example
 catalogs:
-  catalog0:
+  host_filesystem:
     type: filesystem
     options:
       subjects:
@@ -55,7 +55,7 @@ bindings:
     type: grpc
     kind: server
     catalog:
-      catalog0:
+      host_filesystem:
         - subject: echo
     routes:
       - when:

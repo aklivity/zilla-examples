@@ -2,6 +2,7 @@
 set -e
 
 NAMESPACE="${NAMESPACE:-zilla-mqtt-kafka-broker}"
+export ZILLA_VERSION="${ZILLA_VERSION:-latest}"
 export KAFKA_BROKER="${KAFKA_BROKER:-kafka}"
 export KAFKA_HOST="${KAFKA_HOST:-host.docker.internal}"
 export KAFKA_PORT="${KAFKA_PORT:-9092}"

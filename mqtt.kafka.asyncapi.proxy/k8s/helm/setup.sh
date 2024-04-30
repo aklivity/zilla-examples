@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+ZILLA_VERSION="${ZILLA_VERSION:-^0.9.0}"
 NAMESPACE="${NAMESPACE:-zilla-mqtt-kafka-asyncapi-proxy}"
 export KAFKA_BROKER="${KAFKA_BROKER:-kafka}"
 export KAFKA_HOST="${KAFKA_HOST:-host.docker.internal}"
@@ -10,7 +11,7 @@ ZILLA_CHART="${ZILLA_CHART:-oci://ghcr.io/aklivity/charts/zilla}"
 
 # Install Zilla to the Kubernetes cluster with helm and wait for the pod to start up
 echo "==== Installing $ZILLA_CHART to $NAMESPACE with $KAFKA_BROKER($KAFKA_HOST:$KAFKA_PORT) ===="
-helm upgrade --install zilla $ZILLA_CHART --namespace $NAMESPACE --create-namespace --wait \
+helm upgrade --install zilla $ZILLA_CHART --version $ZILLA_VERSION --namespace $NAMESPACE --create-namespace --wait \
     --values values.yaml \
     --set extraEnv[1].value="\"$KAFKA_HOST\"",extraEnv[2].value="\"$KAFKA_PORT\"" \
     --set-file zilla\\.yaml=../../zilla.yaml \

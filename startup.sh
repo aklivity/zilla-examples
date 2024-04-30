@@ -5,6 +5,7 @@ REPO=aklivity/zilla-examples
 RELEASE_URL="https://github.com/$REPO/releases/download"
 MAIN_URL="https://api.github.com/repos/$REPO/tarball"
 VERSION=""
+ZILLA_VERSION=""
 EXAMPLE_FOLDER=""
 KAFKA_FOLDER=""
 COMPOSE_FOLDER="docker/compose"
@@ -21,18 +22,19 @@ WORKDIR=$(pwd)
 
 # help text
 read -r -d '' HELP_TEXT <<-EOF || :
-Usage: ${CMD:=${0##*/}} [-km][-h KAFKA_HOST -p KAFKA_PORT][-d WORKDIR][-v VERSION][--no-bootstrap][--auto-teardown][--redpanda] example.name
+Usage: ${CMD:=${0##*/}} [-km][-h KAFKA_HOST -p KAFKA_PORT][-d WORKDIR][-v ZILLA_VERSION][-e EX_VERSION][--no-bootstrap][--redpanda] example.name
 
 Operand:
     example.name          The name of the example to use                                 [default: quickstart][string]
 
 Options:
+    -e | --ex-version     Sets the examples version to download                              [default: latest][string]
     -d | --workdir        Sets the directory used to download and run the example                             [string]
     -h | --kafka-host     Sets the hostname used when connecting to Kafka                                     [string]
     -k | --use-helm       Use the helm install, if available, instead of compose                             [boolean]
     -m | --use-main       Download the head of the main branch                                               [boolean]
     -p | --kafka-port     Sets the port used when connecting to Kafka                                         [string]
-    -v | --version        Sets the version to download                                       [default: latest][string]
+    -v | --zilla-version  Sets the zilla version to use                                      [default: latest][string]
          --auto-teardown  Executes the teardown script immediately after setup                               [boolean]
          --no-bootstrap   The script wont try to bootstrap the kafka broker                                  [boolean]
          --redpanda       Makes the included kafka broker and scripts use Redpanda                           [boolean]
@@ -51,10 +53,11 @@ while [ "$1" != "$EOL" ]; do
   case "$opt" in
 
     #defined options
+    -e | --ex-version    ) check "$1" "$opt"; VERSION="$1"; shift;;
     -h | --kafka-host    ) check "$1" "$opt"; KAFKA_HOST="$1"; REMOTE_KAFKA=true; shift;;
     -p | --kafka-port    ) check "$1" "$opt"; KAFKA_PORT="$1"; shift;;
     -d | --workdir       ) check "$1" "$opt"; WORKDIR="$1"; shift;;
-    -v | --version       ) check "$1" "$opt"; VERSION="$1"; shift;;
+    -v | --zilla-version ) check "$1" "$opt"; ZILLA_VERSION="$1"; shift;;
     -k | --use-helm      ) USE_HELM=true;;
     -m | --use-main      ) USE_MAIN=true;;
          --no-bootstrap  ) BOOTSTRAP_KAFKA=false;;
@@ -149,6 +152,7 @@ elif [[ $BOOTSTRAP_KAFKA == true ]]; then
     echo "Kafka started at $KAFKA_HOST:$KAFKA_PORT"
 fi
 
+export ZILLA_VERSION=$ZILLA_VERSION
 export NAMESPACE="zilla-${EXAMPLE_FOLDER//./-}"
 export REMOTE_KAFKA=$REMOTE_KAFKA
 export BOOTSTRAP_KAFKA=$BOOTSTRAP_KAFKA

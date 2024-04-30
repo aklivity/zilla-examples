@@ -12,7 +12,7 @@ COMPOSE_FOLDER="docker/compose"
 HELM_FOLDER="k8s/helm"
 USE_HELM=false
 USE_MAIN=false
-BOOTSTRAP_KAFKA=true
+INIT_KAFKA=true
 AUTO_TEARDOWN=false
 REMOTE_KAFKA=false
 KAFKA_BROKER="kafka"
@@ -22,7 +22,7 @@ WORKDIR=$(pwd)
 
 # help text
 read -r -d '' HELP_TEXT <<-EOF || :
-Usage: ${CMD:=${0##*/}} [-km][-h KAFKA_HOST -p KAFKA_PORT][-d WORKDIR][-v ZILLA_VERSION][-e EX_VERSION][--no-bootstrap][--redpanda] example.name
+Usage: ${CMD:=${0##*/}} [-km][-h KAFKA_HOST -p KAFKA_PORT][-d WORKDIR][-v ZILLA_VERSION][-e EX_VERSION][--no-kafka-init][--redpanda] example.name
 
 Operand:
     example.name          The name of the example to use                                 [default: quickstart][string]
@@ -36,7 +36,7 @@ Options:
     -p | --kafka-port     Sets the port used when connecting to Kafka                                         [string]
     -v | --zilla-version  Sets the zilla version to use                                      [default: latest][string]
          --auto-teardown  Executes the teardown script immediately after setup                               [boolean]
-         --no-bootstrap   The script wont try to bootstrap the kafka broker                                  [boolean]
+         --no-kafka-init  The script wont try to bootstrap the kafka broker                                  [boolean]
          --redpanda       Makes the included kafka broker and scripts use Redpanda                           [boolean]
          --help           Print help                                                                         [boolean]
 
@@ -60,7 +60,7 @@ while [ "$1" != "$EOL" ]; do
     -v | --zilla-version ) check "$1" "$opt"; ZILLA_VERSION="$1"; shift;;
     -k | --use-helm      ) USE_HELM=true;;
     -m | --use-main      ) USE_MAIN=true;;
-         --no-bootstrap  ) BOOTSTRAP_KAFKA=false;;
+         --no-kafka-init ) INIT_KAFKA=false;;
          --auto-teardown ) AUTO_TEARDOWN=true;;
          --redpanda      ) KAFKA_BROKER="redpanda";;
          --help          ) printf "%s\n" "$USAGE"; exit 0;;
@@ -96,7 +96,7 @@ fi
 
 # don't start kafka if the example hasn't been reworked
 if [[ ! -d "$WORKDIR/$EXAMPLE_FOLDER/$HELM_FOLDER" && ! -d "$WORKDIR/$EXAMPLE_FOLDER/$COMPOSE_FOLDER" ]]; then
-    BOOTSTRAP_KAFKA=false
+    INIT_KAFKA=false
 fi
 
 
@@ -122,7 +122,7 @@ KAKFA_TEARDOWN_SCRIPT=""
 KAFKA_FOLDER="$KAFKA_BROKER.broker"
 if [[ $REMOTE_KAFKA == true ]]; then
     echo "Connecting to remote Kafka at $KAFKA_HOST:$KAFKA_PORT"
-elif [[ $BOOTSTRAP_KAFKA == true ]]; then
+elif [[ $INIT_KAFKA == true ]]; then
 
     if ! [[ -d "$WORKDIR/$KAFKA_FOLDER" ]]; then
         if [[ $USE_MAIN == true ]]; then
@@ -155,7 +155,7 @@ fi
 export ZILLA_VERSION=$ZILLA_VERSION
 export NAMESPACE="zilla-${EXAMPLE_FOLDER//./-}"
 export REMOTE_KAFKA=$REMOTE_KAFKA
-export BOOTSTRAP_KAFKA=$BOOTSTRAP_KAFKA
+export INIT_KAFKA=$INIT_KAFKA
 export KAFKA_BROKER=$KAFKA_BROKER
 export KAFKA_HOST=$KAFKA_HOST
 export KAFKA_PORT=$KAFKA_PORT

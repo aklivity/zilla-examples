@@ -41,7 +41,7 @@ wget -qO- https://raw.githubusercontent.com/aklivity/zilla-examples/main/startup
 ```
 
 ```text
-Usage: startup.sh [-km][-h KAFKA_HOST -p KAFKA_PORT][-d WORKDIR][-v ZILLA_VERSION][-e EX_VERSION][--no-bootstrap][--redpanda] example.name
+Usage: startup.sh [-km][-h KAFKA_HOST -p KAFKA_PORT][-d WORKDIR][-v ZILLA_VERSION][-e EX_VERSION][--no-kafka-init][--redpanda] example.name
 
 Operand:
     example.name          The name of the example to use                                 [default: quickstart][string]
@@ -55,7 +55,7 @@ Options:
     -p | --kafka-port     Sets the port used when connecting to Kafka                                         [string]
     -v | --zilla-version  Sets the zilla version to use                                      [default: latest][string]
          --auto-teardown  Executes the teardown script immediately after setup                               [boolean]
-         --no-bootstrap   The script wont try to bootstrap the kafka broker                                  [boolean]
+         --no-kafka-init  The script wont try to bootstrap the kafka broker                                  [boolean]
          --redpanda       Makes the included kafka broker and scripts use Redpanda                           [boolean]
          --help           Print help                                                                         [boolean]
 ```

@@ -6,7 +6,7 @@ NAMESPACE="${NAMESPACE:-zilla-mqtt-kafka-broker}"
 export KAFKA_BROKER="${KAFKA_BROKER:-kafka}"
 export KAFKA_HOST="${KAFKA_HOST:-host.docker.internal}"
 export KAFKA_PORT="${KAFKA_PORT:-9092}"
-BOOTSTRAP_KAFKA="${BOOTSTRAP_KAFKA:-true}"
+INIT_KAFKA="${INIT_KAFKA:-true}"
 ZILLA_CHART="${ZILLA_CHART:-oci://ghcr.io/aklivity/charts/zilla}"
 
 # Install Zilla to the Kubernetes cluster with helm and wait for the pod to start up
@@ -18,7 +18,7 @@ helm upgrade --install zilla $ZILLA_CHART --version $ZILLA_VERSION --namespace $
     --set-file secrets.tls.data.localhost\\.p12=../../tls/localhost.p12
 
 # Create the mqtt topics in Kafka
-if [[ $BOOTSTRAP_KAFKA == true ]]; then
+if [[ $INIT_KAFKA == true ]]; then
   kubectl run kafka-init-pod --image=bitnami/kafka:3.2 --namespace $NAMESPACE --rm --restart=Never -i -t -- /bin/sh -c "
   echo 'Creating topics for $KAFKA_HOST:$KAFKA_PORT'
   /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server $KAFKA_HOST:$KAFKA_PORT --create --if-not-exists --topic mqtt-messages

@@ -48,12 +48,15 @@ jobs:
   test-http-kafka-sync:
     runs-on: ubuntu-latest
     steps:
+      - name: Install apt packages
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: librdkafka-dev libyajl-dev
+          version: 1.0
       - name: Install kcat
         working-directory: /tmp
         run: |
           set -x
-          sudo apt-get update
-          sudo apt-get install librdkafka-dev libyajl-dev
           curl -L -o kcat https://github.com/attilakreiner/kcat/releases/download/1.7.1/kcat-linux-$(arch)
           chmod +x kcat
           sudo mv kcat /usr/local/bin

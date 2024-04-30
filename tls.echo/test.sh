@@ -17,7 +17,7 @@ echo OUTPUT=$OUTPUT
 echo RESULT=$RESULT
 
 # THEN
-if [ $RESULT -eq 124 ] && [ "$OUTPUT" == "$EXPECTED" ]; then
+if [[ $RESULT -eq 124 && "$OUTPUT" == "$EXPECTED" ]]; then
   echo ✅
 else
   echo ❌

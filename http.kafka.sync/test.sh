@@ -33,7 +33,7 @@ for i in $(seq 1 20); do
   fi
 done
 echo CORRELATION_ID=$CORRELATION_ID
-if [ -z "$CORRELATION_ID" ]; then
+if [[ -z "$CORRELATION_ID" ]]; then
   echo ❌
   exit 1
 fi
@@ -61,7 +61,7 @@ echo OUTPUT=$OUTPUT
 
 # THEN
 rm .testoutput
-if [ "$OUTPUT" == "$EXPECTED" ]; then
+if [[ "$OUTPUT" == "$EXPECTED" ]]; then
   echo ✅
 else
   echo ❌

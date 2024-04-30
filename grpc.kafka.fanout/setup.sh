@@ -1,8 +1,8 @@
 #!/bin/bash
 set -ex
 # Install Zilla to the Kubernetes cluster with helm and wait for the pod to start up
-ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
-NAMESPACE=zilla-grpc-kafka-fanout
+ZILLA_CHART="${ZILLA_CHART:-oci://ghcr.io/aklivity/charts/zilla}"
+NAMESPACE="${NAMESPACE:-zilla-grpc-kafka-fanout}"
 helm upgrade --install zilla $ZILLA_CHART --namespace $NAMESPACE --create-namespace --wait \
     --values values.yaml \
     --set-file zilla\\.yaml=zilla.yaml \

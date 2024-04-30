@@ -1,5 +1,5 @@
 #!/bin/bash
 set -e
 
-NAMESPACE=zilla-kafka-broker
+NAMESPACE="${NAMESPACE:-zilla-redpanda-broker}"
 docker-compose -p $NAMESPACE down --remove-orphans

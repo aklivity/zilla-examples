@@ -1,19 +1,18 @@
 #!/bin/bash
 set -e
 
-if [[ -z "$KAFKA_HOST" && -z "$KAFKA_PORT" ]]; then
-  export KAFKA_HOST=host.docker.internal
-  export KAFKA_PORT=9092
-  echo "==== This example requires env vars KAFKA_HOST and KAFKA_PORT for a running kafka instance. Setting to the default ($KAFKA_HOST:$KAFKA_PORT) ===="
-fi
-
-NAMESPACE=zilla-mqtt-kafka-broker
+NAMESPACE="${NAMESPACE:-zilla-mqtt-kafka-broker}"
+export KAFKA_BROKER="${KAFKA_BROKER:-kafka}"
+export KAFKA_HOST="${KAFKA_HOST:-host.docker.internal}"
+export KAFKA_PORT="${KAFKA_PORT:-9092}"
+BOOTSTRAP_KAFKA="${BOOTSTRAP_KAFKA:-true}"
 
 # Start or restart Zilla
 if [[ -z $(docker-compose -p $NAMESPACE ps -q zilla) ]]; then
+  echo "==== Running the $NAMESPACE example with $KAFKA_BROKER($KAFKA_HOST:$KAFKA_PORT) ===="
   docker-compose -p $NAMESPACE up -d
 
-  if [[ "$KAFKA_SKIP_CREATE_TOPICS" != "yes" ]]; then
+  if [[ $BOOTSTRAP_KAFKA == true ]]; then
     # Create the mqtt topics in Kafka
     docker run --rm bitnami/kafka:3.2 bash -c "
     echo 'Creating topics for $KAFKA_HOST:$KAFKA_PORT'

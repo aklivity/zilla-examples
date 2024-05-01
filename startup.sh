@@ -16,24 +16,22 @@ INIT_KAFKA=true
 AUTO_TEARDOWN=false
 REMOTE_KAFKA=false
 KAFKA_BROKER="kafka"
-KAFKA_HOST=""
-KAFKA_PORT=""
+KAFKA_BOOTSTRAP_SERVER=""
 WORKDIR=$(pwd)
 
 # help text
 read -r -d '' HELP_TEXT <<-EOF || :
-Usage: ${CMD:=${0##*/}} [-km][-h KAFKA_HOST -p KAFKA_PORT][-d WORKDIR][-v ZILLA_VERSION][-e EX_VERSION][--no-kafka-init][--redpanda] example.name
+Usage: ${CMD:=${0##*/}} [-hm][-k KAFKA_BOOTSTRAP_SERVER][-d WORKDIR][-v ZILLA_VERSION][-e EX_VERSION][--no-kafka-init][--redpanda] example.name
 
 Operand:
     example.name          The name of the example to use                                 [default: quickstart][string]
 
 Options:
-    -e | --ex-version     Sets the examples version to download                              [default: latest][string]
     -d | --workdir        Sets the directory used to download and run the example                             [string]
-    -h | --kafka-host     Sets the hostname used when connecting to Kafka                                     [string]
-    -k | --use-helm       Use the helm install, if available, instead of compose                             [boolean]
+    -e | --ex-version     Sets the examples version to download                              [default: latest][string]
+    -h | --use-helm       Use the helm install, if available, instead of compose                             [boolean]
+    -k | --kafka-server   Sets the Kafka Boostrap Server to use                                               [string]
     -m | --use-main       Download the head of the main branch                                               [boolean]
-    -p | --kafka-port     Sets the port used when connecting to Kafka                                         [string]
     -v | --zilla-version  Sets the zilla version to use                                      [default: latest][string]
          --auto-teardown  Executes the teardown script immediately after setup                               [boolean]
          --no-kafka-init  The script wont try to bootstrap the kafka broker                                  [boolean]
@@ -53,12 +51,11 @@ while [ "$1" != "$EOL" ]; do
   case "$opt" in
 
     #defined options
-    -e | --ex-version    ) check "$1" "$opt"; VERSION="$1"; shift;;
-    -h | --kafka-host    ) check "$1" "$opt"; KAFKA_HOST="$1"; REMOTE_KAFKA=true; shift;;
-    -p | --kafka-port    ) check "$1" "$opt"; KAFKA_PORT="$1"; shift;;
     -d | --workdir       ) check "$1" "$opt"; WORKDIR="$1"; shift;;
+    -k | --kafka-server  ) check "$1" "$opt"; KAFKA_BOOTSTRAP_SERVER="$1"; REMOTE_KAFKA=true; shift;;
+    -e | --ex-version    ) check "$1" "$opt"; VERSION="$1"; shift;;
     -v | --zilla-version ) check "$1" "$opt"; ZILLA_VERSION="$1"; shift;;
-    -k | --use-helm      ) USE_HELM=true;;
+    -h | --use-helm      ) USE_HELM=true;;
     -m | --use-main      ) USE_MAIN=true;;
          --no-kafka-init ) INIT_KAFKA=false;;
          --auto-teardown ) AUTO_TEARDOWN=true;;
@@ -99,29 +96,28 @@ if [[ ! -d "$WORKDIR/$EXAMPLE_FOLDER/$HELM_FOLDER" && ! -d "$WORKDIR/$EXAMPLE_FO
     INIT_KAFKA=false
 fi
 
-
 # use compose if there isn't a helm implimentation
 if [[ $USE_HELM == true && ! -d "$WORKDIR/$EXAMPLE_FOLDER/$HELM_FOLDER" ]]; then
-    echo "==== This example only supports Compose currently ===";
+    echo "==== This example only supports Compose currently ==="
     USE_HELM=false
 fi
 
 # use helm if there isn't a compose implimentation
 if [[ $USE_HELM == false && ! -d "$WORKDIR/$EXAMPLE_FOLDER/$COMPOSE_FOLDER" ]]; then
-    echo "==== This example only supports Helm currently ===";
+    echo "==== This example only supports Helm currently ==="
     USE_HELM=true
 fi
 
 # force use of kafka if helm is being used
-if [[  $USE_HELM == true && $KAFKA_BROKER != "kafka" ]]; then
-    echo "**** Helm examples only support the Kafka broker currently, switching broker to Kafka ****";
+if [[ $USE_HELM == true && $KAFKA_BROKER != "kafka" ]]; then
+    echo "**** Helm examples only support the Kafka broker currently, switching broker to Kafka ****"
     KAFKA_BROKER="kafka"
 fi
 
 KAKFA_TEARDOWN_SCRIPT=""
 KAFKA_FOLDER="$KAFKA_BROKER.broker"
 if [[ $REMOTE_KAFKA == true ]]; then
-    echo "Connecting to remote Kafka at $KAFKA_HOST:$KAFKA_PORT"
+    echo "Connecting to remote Kafka at $KAFKA_BOOTSTRAP_SERVER"
 elif [[ $INIT_KAFKA == true ]]; then
 
     if ! [[ -d "$WORKDIR/$KAFKA_FOLDER" ]]; then
@@ -135,13 +131,12 @@ elif [[ $INIT_KAFKA == true ]]; then
     fi
 
     export NAMESPACE="zilla-${KAFKA_FOLDER//./-}"
-    export KAFKA_PORT=9092
     if [[ $USE_HELM == true ]]; then
         cd "$WORKDIR"/"$KAFKA_FOLDER"/"$HELM_FOLDER"
-        KAFKA_HOST="kafka.$NAMESPACE.svc.cluster.local"
+        KAFKA_BOOTSTRAP_SERVER="$KAFKA_BROKER.$NAMESPACE.svc.cluster.local:9092"
     else
         cd "$WORKDIR"/"$KAFKA_FOLDER"/"$COMPOSE_FOLDER"
-        KAFKA_HOST="host.docker.internal"
+        KAFKA_BOOTSTRAP_SERVER="host.docker.internal:9092"
     fi
     chmod u+x teardown.sh
     KAKFA_TEARDOWN_SCRIPT="NAMESPACE=$NAMESPACE $(pwd)/teardown.sh"
@@ -149,7 +144,7 @@ elif [[ $INIT_KAFKA == true ]]; then
     echo "==== Starting Kafka. Use this script to teardown ===="
     printf '%s\n' "$KAKFA_TEARDOWN_SCRIPT"
     sh setup.sh
-    echo "Kafka started at $KAFKA_HOST:$KAFKA_PORT"
+    echo "Kafka started at $KAFKA_BOOTSTRAP_SERVER"
 fi
 
 export ZILLA_VERSION=$ZILLA_VERSION
@@ -157,8 +152,7 @@ export NAMESPACE="zilla-${EXAMPLE_FOLDER//./-}"
 export REMOTE_KAFKA=$REMOTE_KAFKA
 export INIT_KAFKA=$INIT_KAFKA
 export KAFKA_BROKER=$KAFKA_BROKER
-export KAFKA_HOST=$KAFKA_HOST
-export KAFKA_PORT=$KAFKA_PORT
+export KAFKA_BOOTSTRAP_SERVER=$KAFKA_BOOTSTRAP_SERVER
 
 TEARDOWN_SCRIPT=""
 if [[ $USE_HELM == false && -d "$WORKDIR/$EXAMPLE_FOLDER/$COMPOSE_FOLDER" ]]; then

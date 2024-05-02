@@ -51,16 +51,12 @@ jobs:
       - name: Install apt packages
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: librdkafka-dev libyajl-dev
+          packages: kafkacat
           version: 1.0
-      - name: Install kcat
-        working-directory: /tmp
+      - name: Setup kcat
         run: |
-          set -x
-          curl -L -o kcat https://github.com/attilakreiner/kcat/releases/download/1.7.1/kcat-linux-$(arch)
-          chmod +x kcat
-          sudo mv kcat /usr/local/bin
-          kcat 2>&1 | grep "Version 1.7.1"
+          sudo ln -s /usr/bin/kafkacat /usr/local/bin/kcat
+          kcat 2>&1 | grep "Version 1.6.0"
       - name: Checkout
         uses: actions/checkout@v3
       - name: Create k8s Kind Cluster

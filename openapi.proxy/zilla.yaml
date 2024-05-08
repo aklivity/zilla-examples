@@ -6,7 +6,7 @@ catalogs:
     options:
       subjects:
         petstore:
-          path: schema.json
+          path: petstore.yaml
 bindings:
   north_openapi_server:
     type: openapi

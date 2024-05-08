@@ -10,7 +10,7 @@ services:
     environment:
       ZILLA_INCUBATOR_ENABLED: true
     volumes:
-      - ../../specs/schema.json:/etc/zilla/schema.json
+      - ../../specs/petstore.yaml:/etc/zilla/petstore.yaml
       - ../../zilla.yaml:/etc/zilla/zilla.yaml
     command: start -v -e
 
@@ -21,6 +21,7 @@ services:
       - ../../specs:/app
     ports:
       - "8000:5000"
+    command: open-api-mocker -s /app/petstore.yaml
 
 networks:
   default:

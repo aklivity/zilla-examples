@@ -46,18 +46,9 @@ bindings:
           operation-id: addPet
       - when:
           - api-id: http_api
-            operation-id: listPets
         exit: south_kafka_client
         with:
           api-id: kafka_api
-          operation-id: listPets
-      - when:
-          - api-id: http_api
-            operation-id: createCustomer
-        exit: south_kafka_client
-        with:
-          api-id: kafka_api
-          operation-id: createCustomer
   south_kafka_client:
     type: asyncapi
     kind: client

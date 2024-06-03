@@ -1,0 +1,19 @@
+image:
+  tag: develop-SNAPSHOT
+extraEnv:
+  - name: KEYSTORE_PASSWORD
+    value: generated
+  - name: KAFKA_HOST
+    value: ""
+  - name: KAFKA_PORT
+    value: ""
+  - name: ZILLA_INCUBATOR_ENABLED
+    value: "true"
+
+livenessProbePort: 7114
+readinessProbePort: 7114
+
+service:
+  ports:
+    - port: 7114
+      name: http

@@ -1,10 +1,4 @@
 extraEnv:
-  - name: KEYSTORE_PASSWORD
-    value: generated
-  - name: KAFKA_HOST
-    value: ""
-  - name: KAFKA_PORT
-    value: ""
   - name: ZILLA_INCUBATOR_ENABLED
     value: "true"
 

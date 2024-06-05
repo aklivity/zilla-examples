@@ -1,4 +1,4 @@
-# http.kafka.asyncapi.proxy
+# asyncapi.http.kafka.proxy
 
 In this guide, you create Kafka topics and use Zilla to implement the common Petstore example where requests are proxied to Kafka. Zilla is implementing the REST endpoints 
 defined in an AsyncAPI 3.x spec and proxying them onto Kafka topics defined in an AsyncAPI 3.x spec based on the operations defined in each spec.
@@ -11,7 +11,7 @@ You will need a running kafka broker. To start one locally you will find instruc
 
 ### Setup
 
-Wether you chose [compose](./docker/compose) or [helm](./k8s/helm), the `setup.sh` script will:
+Whether you chose [compose](./docker/compose) or [helm](./k8s/helm), the `setup.sh` script will:
 
 - create the necessary kafka topics
 - create the Petstore API at `http://localhost:7114`

@@ -1,16 +1,12 @@
 version: '3'
 services:
   zilla:
-    image: ghcr.io/aklivity/zilla:${ZILLA_VERSION}
+    image: ghcr.io/aklivity/zilla:develop-SNAPSHOT
     container_name: zilla
-    pull_policy: always
     restart: unless-stopped
     ports:
       - 7114:7114
     environment:
-      KEYSTORE_PASSWORD: generated
-      KAFKA_HOST: ${KAFKA_HOST}
-      KAFKA_PORT: ${KAFKA_PORT}
       ZILLA_INCUBATOR_ENABLED: "true"
     volumes:
       - ../../zilla.yaml:/etc/zilla/zilla.yaml

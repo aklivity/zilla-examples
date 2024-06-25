@@ -1,0 +1,61 @@
+replicaCount: 1
+
+image:
+  registry: ghcr.io
+  repository: vordimous/mqtt-simulator
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+env:
+  BROKER_HOST: "zilla.zilla-quickstart.svc.cluster.local"
+  BROKER_PORT: "7183"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+## Annotations to be added to the Deployment
+##
+annotations: {}
+
+resources: {}
+  # limits:
+  #   cpu: 200m
+  #   memory: 512Mi
+  # requests:
+  #   cpu: 200m
+  #   memory: 256Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+env: {}
+
+initContainers: {}
+
+volumeMounts: {}
+
+volumes: {}

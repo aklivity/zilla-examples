@@ -1,10 +1,28 @@
 version: '3'
+volumes:
+  configs:
 services:
+
+  yaml-init:
+    image: docker.io/mikefarah/yq:4
+    volumes:
+      - ../../:/workdir:Z
+      - configs:/configs
+    userns_mode: host
+    user: root
+    entrypoint: sh
+    command:
+      - -c
+      - "yq '.' *-zilla.yaml > /configs/zilla.yaml"
+
   zilla:
     image: ghcr.io/aklivity/zilla:${ZILLA_VERSION}
     container_name: zilla
     pull_policy: always
     restart: unless-stopped
+    depends_on:
+      yaml-init:
+        condition: service_completed_successfully
     ports:
       - 7114:7114
       - 7151:7151
@@ -15,7 +33,7 @@ services:
       ROUTE_GUIDE_SERVER_HOST: route-guide-server
       ROUTE_GUIDE_SERVER_PORT: 50051
     volumes:
-      - ../../zilla.yaml:/etc/zilla/zilla.yaml
+      - configs:/etc/zilla/
       - ./grpc/echo.proto:/etc/zilla/proto/echo.proto
       - ./grpc/route_guide.proto:/etc/zilla/proto/route_guide.proto
     command: start -v -e -Pzilla.binding.kafka.client.connection.pool=false

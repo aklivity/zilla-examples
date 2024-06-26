@@ -7,9 +7,6 @@ services:
     container_name: zilla
     pull_policy: always
     restart: unless-stopped
-    depends_on:
-      yaml-init:
-        condition: service_completed_successfully
     ports:
       - 7114:7114
       - 7151:7151

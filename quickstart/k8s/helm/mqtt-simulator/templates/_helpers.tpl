@@ -52,17 +52,6 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-Create the name of the service account to use
-*/}}
-{{- define "mqtt-simulator.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "mqtt-simulator.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}
-
-{{/*
 This allows us to check if the registry of the image is specified or not.
 */}}
 {{- define "mqtt-simulator.imageName" -}}

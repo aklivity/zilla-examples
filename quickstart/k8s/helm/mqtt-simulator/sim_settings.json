@@ -11,7 +11,7 @@
             "PREFIX": "lamp",
             "RANGE_START": 1,
             "RANGE_END": 2,
-            "TIME_INTERVAL": 4,
+            "TIME_INTERVAL": 400,
             "DATA": [
                 {
                     "NAME": "on",

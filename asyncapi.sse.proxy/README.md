@@ -9,22 +9,6 @@ Listens on http port `7114` and will stream back whatever is published to `sse_s
 - kubectl
 - helm 3.0+
 
-### Build the sse-server docker image
-
-```bash
-docker build -t zilla-examples/sse-server:latest .
-```
-
-output:
-
-```text
-...
- => exporting to image                                                                                                                                                                       1.4s 
- => => exporting layers                                                                                                                                                                      1.4s 
- => => writing image sha256:104abb7e5a4389c50d02aaf5d9bb2fef883c82e066ac2b400c9039b35086efcc                                                                                                 0.0s 
- => => naming to docker.io/zilla-examples/sse-server:latest
-```
-
 ### Setup
 
 The `setup.sh` script:
@@ -67,13 +51,6 @@ Connection to localhost port 8001 [tcp/vcom-tunnel] succeeded!
 Connection to localhost port 7001 [tcp/afs3-callback] succeeded!
 ```
 
-Note: if you see the following output from `./setup.sh` then you need to first build the `zilla-examples/sse-server:latest` image, see above.
-
-```bash
-+ docker image inspect zilla-examples/sse-server --format 'Image Found {{.RepoTags}}'
-
-Error: No such image: zilla-examples/sse-server
-```
 
 ### Verify behavior
 
@@ -108,13 +85,13 @@ data:{ "id": 1, "name": "Hello World!" }
 From another terminal send an invalid data from `nc` client. Note that the invalid event will not arrive to the client.
 
 ```bash
-echo '{ "name": "event name", "data": "{ \"id\": -1, \"name\": \"Hello World!\" }" }' | nc -c localhost 7001
+echo '{ "name": "event name", "data": { "id": -1, "name": "Hello World!" } }' | nc -c localhost 7001
 ```
 
 Now send a valid event, where the id is non-negative and the message will arrive to `curl` client.
 
 ```bash
-echo '{ "name": "event name", "data": "{ \"id\": 1, \"name\": \"Hello World!\" }" }' | nc -c localhost 7001
+echo '{ "name": "event name", "data": { "id": 1, "name": "Hello World!" } }' | nc -c localhost 7001
 ```
 
 ### Teardown

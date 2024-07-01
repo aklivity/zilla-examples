@@ -1,12 +1,8 @@
-extraEnv:
-  - name: SSE_SERVER_HOST
-    value: sse-server
-  - name: SSE_SERVER_PORT
-    value: "8001"
-  - name: KEYSTORE_PASSWORD
-    value: generated
-  - name: ZILLA_INCUBATOR_ENABLED
-    value: "true"
+env:
+  SSE_SERVER_HOST: sse-server
+  SSE_SERVER_PORT: "8001"
+  KEYSTORE_PASSWORD: generated
+  ZILLA_INCUBATOR_ENABLED: "true"
 
 livenessProbePort: 7114
 readinessProbePort: 7114

@@ -27,7 +27,6 @@ spec:
             initialDelaySeconds: 3
             periodSeconds: 5
           tty: true
-          imagePullPolicy: Never
 ---
 apiVersion: v1
 kind: Service

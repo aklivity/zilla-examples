@@ -66,6 +66,7 @@ Options:
 | [asyncapi.mqtt.proxy](asyncapi.mqtt.proxy)                         | Forwards validated MQTT publish messages and proxies subscribes to an MQTT broker                   |
 | [asyncapi.mqtt.kafka.proxy](asyncapi.mqtt.kafka.proxy)             | Forwards MQTT publish messages to Kafka, broadcasting to all subscribed MQTT clients                |
 | [asyncapi.http.kafka.proxy](asyncapi.http.kafka.proxy)             | Correlates HTTP requests and responses over separate Kafka topics                                   |
+| [asyncapi.sse.proxy](asyncapi.sse.proxy)                           | Proxies validated messages delivered by the SSE server                                              |
 | [asyncapi.sse.kafka.proxy](asyncapi.sse.kafka.proxy)               | Streams messages published to a Kafka topic over SSE                                                |
 | [tcp.echo](tcp.echo)                                               | Echoes bytes sent to the TCP server                                                                 |
 | [tcp.reflect](tcp.reflect)                                         | Echoes bytes sent to the TCP server, broadcasting to all TCP clients                                |

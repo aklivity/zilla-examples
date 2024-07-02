@@ -1,0 +1,39 @@
+replicaCount: 1
+
+args: ["start", "-v", "-e", "-Pzilla.engine.worker.capacity=512"]
+
+env:
+  ROUTE_GUIDE_SERVER_HOST: "route-guide.grpc-proxy.svc.cluster.local"
+  ROUTE_GUIDE_SERVER_PORT: "50051"
+  ZILLA_INCUBATOR_ENABLED: "true"
+  # JAVA_OPTIONS: "-Dzilla.binding.kafka.debug=true" # -Djavax.net.debug=ssl,handshake"
+
+livenessProbePort: 7190
+readinessProbePort: 7190
+
+service:
+  ports:
+    - port: 7114
+      name: http
+    - port: 7183
+      name: mqtt
+    - port: 7151
+      name: grpc
+    - port: 7190
+      name: prometheus
+
+envFromSecret: "deploy-secrets"
+
+volumeMounts:
+#  - name: ssl-files
+#    mountPath: /ssl
+ - name: proto-files
+   mountPath: /proto
+
+volumes:
+#  - name: ssl-files
+#    configMap:
+#      name: kafka-ssl-files
+ - name: proto-files
+   configMap:
+     name: protobuf-files

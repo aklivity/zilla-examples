@@ -1,0 +1,30 @@
+replicaCount: 2
+
+yamlApplicationConfig:
+  kafka:
+    clusters:
+      - name: kafka
+        bootstrapServers: kafka.grpc-proxy.svc.cluster.local:9092
+        readOnly: true
+        properties:
+          security.protocol: SASL_SSL
+          sasl.mechanism: PLAIN
+          sasl.jaas.config: org.apache.kafka.common.security.scram.ScramLoginModule required username="admin" password="admin";
+  auth:
+    type: disabled
+  management:
+    health:
+      ldap:
+        enabled: false
+# ingress:
+#   enabled: true
+#   ingressClassName: nginx
+#   host: taxi.aklivity.io
+#   path: /kafka
+#   tls:
+#     enabled: true
+#     secretName: taxi-demo-tls
+# envs:
+#   config:
+    # SERVER_SERVLET_CONTEXT_PATH: /kafka
+existingSecret: "kafka-secrets"

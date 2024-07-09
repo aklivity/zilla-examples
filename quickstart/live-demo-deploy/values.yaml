@@ -1,15 +1,31 @@
 replicaCount: 1
 
+image:
+  repository: ghcr.io/aklivity/zilla
+  tag: "0.9.84"
+
 args: ["start", "-v", "-e", "-Pzilla.engine.worker.capacity=512"]
 
 env:
-  ROUTE_GUIDE_SERVER_HOST: "route-guide.zilla-quickstart.svc.cluster.local"
+  ROUTE_GUIDE_SERVER_HOST: "route-guide.zilla.svc.cluster.local"
   ROUTE_GUIDE_SERVER_PORT: "50051"
   ZILLA_INCUBATOR_ENABLED: "true"
   # JAVA_OPTIONS: "-Dzilla.binding.kafka.debug=true" # -Djavax.net.debug=ssl,handshake"
 
-livenessProbePort: 7190
-readinessProbePort: 7190
+livenessProbePort: prometheus
+readinessProbePort: prometheus
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  # host: ""
+  paths:
+    - path: /api
+      pathType: Prefix
+      port: 7114
+  tls:
+    enabled: false
+  #   secretName: quickstart-tls
 
 service:
   ports:

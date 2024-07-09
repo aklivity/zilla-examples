@@ -7,9 +7,8 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
-env:
-  BROKER_HOST: "zilla.zilla-quickstart.svc.cluster.local"
-  BROKER_PORT: "7183"
+brokerUrl: "broker.svc.cluster.local"
+brokerPort: 1883
 
 imagePullSecrets: []
 nameOverride: ""
@@ -33,7 +32,7 @@ resources: {}
 autoscaling:
   enabled: false
   minReplicas: 1
-  maxReplicas: 100
+  maxReplicas: 2
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 

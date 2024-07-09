@@ -20,7 +20,8 @@ helm upgrade --install zilla $ZILLA_CHART --version $ZILLA_VERSION --namespace $
 
 # MQTT Simulator
 helm upgrade --install mqtt-simulator ./mqtt-simulator -n $NAMESPACE \
-    --set env.BROKER_HOST="zilla.$NAMESPACE.svc.cluster.local"
+    --set brokerUrl="$ZILLA_NAME.$NAMESPACE.svc.cluster.local" \
+    --set brokerPort="7183"
 
 # gRPC Route Guide Server
 helm upgrade --install route-guide-server ./route-guide-server -n $NAMESPACE

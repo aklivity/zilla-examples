@@ -1,7 +1,7 @@
 name: grpc-quickstart
-bindings:
 
-# Proxy service entrypoint
+bindings:
+  # Proxy service entrypoint
   north_tcp_server:
     type: tcp
     kind: server
@@ -10,9 +10,9 @@ bindings:
       port:
         - 7151
     routes:
-        - when:
-            - port: 7151
-          exit: north_grpc_http_server
+      - when:
+          - port: 7151
+        exit: north_grpc_http_server
     telemetry:
       metrics:
         - stream.*
@@ -30,47 +30,36 @@ bindings:
         - stream.*
         - http.*
 
-# gRPC service definition to Kafka topics
+  # gRPC service definition to Kafka topics
+  #region route_guide_service_definition
   north_grpc_server:
     type: grpc
     kind: server
     options:
       services:
-        - proto/echo.proto
-        - proto/route_guide.proto
-    routes:
-      - when:
-          - method: example.EchoService/*
-        exit: north_grpc_kafka_mapping
-      - when:
-          - method: routeguide.RouteGuide/*
-        exit: north_grpc_kafka_mapping
+        - /proto/route_guide.proto
+    #endregion route_guide_service_definition
+    exit: north_grpc_kafka_mapping
     telemetry:
       metrics:
         - stream.*
         - grpc.*
+  #region route_guide_service_mapping
   north_grpc_kafka_mapping:
     type: grpc-kafka
     kind: proxy
     routes:
       - when:
-          - method: example.EchoService/*
-        exit: north_kafka_cache_client
-        with:
-          capability: produce
-          topic: echo-service-messages
-          acks: leader_only
-          reply-to: echo-service-messages
-      - when:
           - method: routeguide.RouteGuide/*
         exit: north_kafka_cache_client
         with:
           capability: produce
-          topic: route-guide-requests
+          topic: grpc-request-response
           acks: leader_only
-          reply-to: route-guide-responses
+          reply-to: grpc-request-response
+  #endregion route_guide_service_mapping
 
-# Kafka sync layer
+  # Kafka sync layer
   north_kafka_cache_client:
     type: kafka
     kind: cache_client
@@ -80,23 +69,23 @@ bindings:
     kind: cache_server
     options:
       bootstrap:
-        - route-guide-requests
-        - route-guide-responses
+        - grpc-request-response
     exit: south_kafka_client
 
-# Connect to local Kafka
+  # Connect to local Kafka
   south_kafka_client:
     type: kafka
     kind: client
     options:
       servers:
-        -  ${{env.KAFKA_BOOTSTRAP_SERVER}}
-    exit: south_kafka_tcp_client
-  south_kafka_tcp_client:
+        - ${{env.KAFKA_BOOTSTRAP_SERVER}}
+    exit: south_tcp_client
+  south_tcp_client:
     type: tcp
     kind: client
 
-# Kafka to external gRPC server
+  # Kafka to external gRPC server
+  #region route_guide_interface
   west_kafka_grpc_remote_server:
     type: kafka-grpc
     kind: remote_server
@@ -105,15 +94,16 @@ bindings:
       acks: leader_only
     routes:
       - when:
-          - topic: route-guide-requests
-            reply-to: route-guide-responses
+          - topic: grpc-request-response
+            reply-to: grpc-request-response
             method: routeguide.RouteGuide/*
         with:
           scheme: http
           authority: ${{env.ROUTE_GUIDE_SERVER_HOST}}:${{env.ROUTE_GUIDE_SERVER_PORT}}
+        #endregion route_guide_interface
         exit: west_route_guide_grpc_client
 
-# gRPC RoutGuide server config
+  # gRPC RoutGuide server config
   west_route_guide_grpc_client:
     type: grpc
     kind: client
@@ -125,12 +115,14 @@ bindings:
       versions:
         - h2
     exit: west_route_guide_tcp_client
+  #region route_guide_server
   west_route_guide_tcp_client:
     type: tcp
     kind: client
     options:
       host: ${{env.ROUTE_GUIDE_SERVER_HOST}}
       port: ${{env.ROUTE_GUIDE_SERVER_PORT}}
+  #endregion route_guide_server
 
 telemetry:
   # Desired metrics to track

@@ -6,7 +6,125 @@ metadata:
     {{- include "mqtt-simulator.labels" . | nindent 4 }}
 data:
   sim_settings.json: |-
-{{ .Files.Get "sim_settings.json" | indent 4 }}
+    {
+        "BROKER_URL": "{{- .Values.brokerUrl -}}",
+        "BROKER_PORT": {{- .Values.brokerPort -}},
+        "PROTOCOL_VERSION": 5,
+        "CLEAN_SESSION": false,
+        "QOS": 0,
+        "TOPICS": [
+            {
+                "TYPE": "multiple",
+                "PREFIX": "lamp",
+                "RANGE_START": 1,
+                "RANGE_END": 2,
+                "TIME_INTERVAL": 40,
+                "DATA": [
+                    {
+                        "NAME": "on",
+                        "TYPE": "bool",
+                        "RETAIN_PROBABILITY": 0.85
+                    },
+                    {
+                        "NAME": "temperature",
+                        "TYPE": "int",
+                        "INITIAL_VALUE": 2750,
+                        "MIN_VALUE": 2700,
+                        "MAX_VALUE": 6500,
+                        "MAX_STEP": 250,
+                        "RETAIN_PROBABILITY": 0.3,
+                        "RESET_PROBABILITY": 0.1,
+                        "INCREASE_PROBABILITY": 0.8,
+                        "RESTART_ON_BOUNDARIES": true
+                    }
+                ]
+            },
+            {
+                "TYPE": "single",
+                "PREFIX": "air_quality",
+                "TIME_INTERVAL": 60,
+                "DATA": [
+                    {
+                        "NAME": "pollution_particles",
+                        "TYPE": "float",
+                        "MIN_VALUE": 0,
+                        "MAX_VALUE": 1,
+                        "MAX_STEP": 0.15,
+                        "RETAIN_PROBABILITY": 0.9
+                    },
+                    {
+                        "NAME": "alert",
+                        "TYPE": "bool",
+                        "RETAIN_PROBABILITY": 0.9
+                    }
+                ]
+            },
+            {
+                "TYPE": "list",
+                "PREFIX": "temperature",
+                "LIST": ["roof", "basement"],
+                "TIME_INTERVAL": 80,
+                "DATA": [
+                    {
+                        "NAME": "temperature",
+                        "TYPE": "float",
+                        "MIN_VALUE": 20,
+                        "MAX_VALUE": 55,
+                        "MAX_STEP": 3,
+                        "RETAIN_PROBABILITY": 0.5,
+                        "INCREASE_PROBABILITY": 0.6
+                    }
+                ]
+            },
+            {
+                "TYPE": "single",
+                "PREFIX": "freezer",
+                "TIME_INTERVAL": 60,
+                "DATA": [
+                    {
+                        "NAME": "temperature",
+                        "TYPE": "math_expression",
+                        "RETAIN_PROBABILITY": 0.1,
+                        "MATH_EXPRESSION": "2*math.pow(x,2)+1",
+                        "INTERVAL_START": 0,
+                        "INTERVAL_END": 5,
+                        "MIN_DELTA": 0.3,
+                        "MAX_DELTA": 0.5
+                    }
+                ]
+            },
+            {
+                "TYPE": "single",
+                "PREFIX": "location",
+                "TIME_INTERVAL": 50,
+                "DATA": [
+                    {
+                        "NAME": "coordinate",
+                        "TYPE": "raw_values",
+                        "RESTART_ON_END": true,
+                        "VALUES": [
+                            {
+                                "lat": -121.883682,
+                                "long": 37.354635
+                            },
+                            {
+                                "lat": -121.883352,
+                                "long": 37.354192
+                            },
+                            {
+                                "lat": -121.884284,
+                                "long": 37.353757
+                            },
+                            {
+                                "lat": -121.885227,
+                                "long": 37.353324
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
 
 ---
 apiVersion: apps/v1
@@ -68,22 +186,13 @@ spec:
             - name: "{{ tpl $key $ }}"
               value: "{{ tpl (print $value) $ }}"
             {{- end }}
-          livenessProbe:
-            tcpSocket:
-              port: http
-            initialDelaySeconds: 60
-            periodSeconds: 30
-            timeoutSeconds: 10
-          readinessProbe:
-            tcpSocket:
-              port: http
           tty: true
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: sim-settings
               mountPath: /usr/src/app/settings.json
-              subPath: sim_settings.json
+              subPath: templates/sim_settings.json
           {{- if .Values.volumeMounts}}
             {{- with .Values.volumeMounts }} 
               {{- toYaml . | nindent 12 }}

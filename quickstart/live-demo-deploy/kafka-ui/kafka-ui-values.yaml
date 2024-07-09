@@ -16,15 +16,16 @@ yamlApplicationConfig:
     health:
       ldap:
         enabled: false
-# ingress:
-#   enabled: true
-#   ingressClassName: nginx
-#   host: taxi.aklivity.io
-#   path: /kafka
-#   tls:
-#     enabled: true
-#     secretName: taxi-demo-tls
-# envs:
-#   config:
-    # SERVER_SERVLET_CONTEXT_PATH: /kafka
-existingSecret: "kafka-secrets"
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  # host: quickstart.aklivity.io
+  path: /kafka
+  # tls:
+  #   enabled: true
+  #   secretName: quickstart-tls
+envs:
+  config:
+    SERVER_SERVLET_CONTEXT_PATH: /kafka
+
+existingSecret: "deploy-secrets"

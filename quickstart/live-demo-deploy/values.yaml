@@ -4,7 +4,7 @@ image:
   repository: ghcr.io/aklivity/zilla
   tag: "0.9.84"
 
-args: ["start", "-v", "-e", "-Pzilla.engine.worker.capacity=512"]
+args: ["start", "-v", "-e", "-Pzilla.engine.worker.capacity=512", "-Pzilla.binding.kafka.client.connection.pool=false"]
 
 env:
   ROUTE_GUIDE_SERVER_HOST: "route-guide.zilla.svc.cluster.local"

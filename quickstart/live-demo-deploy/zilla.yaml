@@ -1,5 +1,12 @@
 ---
 name: grpc-quickstart
+catalogs:
+  host_filesystem:
+    type: filesystem
+    options:
+      subjects:
+        route_guide:
+          path: /proto/route_guide.proto
 bindings:
   # Proxy service entrypoint
   north_tcp_server:
@@ -33,9 +40,9 @@ bindings:
   north_grpc_server:
     type: grpc
     kind: server
-    options:
-      services:
-        - /proto/route_guide.proto
+    catalog:
+      host_filesystem:
+        - subject: route_guide
     exit: north_grpc_kafka_mapping
     telemetry:
       metrics:
@@ -50,9 +57,9 @@ bindings:
         exit: north_kafka_cache_client
         with:
           capability: produce
-          topic: grpc-request-response
+          topic: grpc-request
           acks: leader_only
-          reply-to: grpc-request-response
+          reply-to: grpc-response
 
   # Kafka sync layer
   north_kafka_cache_client:
@@ -64,7 +71,8 @@ bindings:
     kind: cache_server
     options:
       bootstrap:
-        - grpc-request-response
+        - grpc-request
+        - grpc-response
     exit: south_kafka_client
   # Connect to local Kafka
   south_kafka_client:
@@ -94,8 +102,8 @@ bindings:
       acks: leader_only
     routes:
       - when:
-          - topic: grpc-request-response
-            reply-to: grpc-request-response
+          - topic: grpc-request
+            reply-to: grpc-response
             method: routeguide.RouteGuide/*
         with:
           scheme: http

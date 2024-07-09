@@ -5,7 +5,7 @@ image:
   repository: vordimous/mqtt-simulator
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "zilla-quickstart"
 
 brokerUrl: "broker.svc.cluster.local"
 brokerPort: 1883

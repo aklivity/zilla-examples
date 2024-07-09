@@ -47,7 +47,7 @@ helm upgrade --install route-guide-server ../k8s/helm/route-guide-server -n $NAM
 
 # create Kafka UI
 helm upgrade --install kafka-ui kafka-ui/kafka-ui --version 1.4.2 -n $NAMESPACE \
-    --set yamlApplicationConfig.kafka.clusters[0].name="$NAMESPACE-cc-kafka" \
+    --set yamlApplicationConfig.kafka.clusters[0].name="$NAMESPACE-kafka" \
     --set yamlApplicationConfig.kafka.clusters[0].bootstrapServers="$KAFKA_BOOTSTRAP_SERVER" \
     --set yamlApplicationConfig.kafka.clusters[0].properties.sasl\\.jaas\\.config="$SASL_JAAS" \
     --values kafka-ui/kafka-ui-values.yaml

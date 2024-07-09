@@ -34,7 +34,7 @@ bindings:
         sessions: mqtt-sessions
         messages: mqtt-messages
         retained: mqtt-retained
-  #endregion mqtt_broker_mapping
+    #endregion mqtt_broker_mapping
     exit: north_kafka_cache_client
     telemetry:
       metrics:

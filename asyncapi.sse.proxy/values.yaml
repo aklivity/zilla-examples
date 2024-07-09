@@ -1,8 +1,8 @@
 env:
+  SSE_SERVER_HOST: sse-server
+  SSE_SERVER_PORT: "8001"
   KEYSTORE_PASSWORD: generated
-  KAFKA_BOOTSTRAP_SERVER: kafka:29092
-  SASL_USERNAME: user
-  SASL_PASSWORD: bitnami
+  ZILLA_INCUBATOR_ENABLED: "true"
 
 livenessProbePort: 7114
 readinessProbePort: 7114
@@ -11,5 +11,3 @@ service:
   ports:
     - port: 7114
       name: http
-    - port: 7143
-      name: https

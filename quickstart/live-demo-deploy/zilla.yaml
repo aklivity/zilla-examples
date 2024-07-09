@@ -43,7 +43,10 @@ bindings:
     catalog:
       host_filesystem:
         - subject: route_guide
-    exit: north_grpc_kafka_mapping
+    routes:
+      - when:
+          - method: routeguide.RouteGuide/*
+        exit: north_grpc_kafka_mapping
     telemetry:
       metrics:
         - stream.*

@@ -12,6 +12,7 @@ data:
         "PROTOCOL_VERSION": 5,
         "CLEAN_SESSION": false,
         "QOS": 0,
+        "RETAIN": true,
         "TOPICS": [
             {
                 "TYPE": "multiple",
@@ -191,8 +192,8 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: sim-settings
-              mountPath: /usr/src/app/settings.json
-              subPath: templates/sim_settings.json
+              mountPath: /usr/src/app/config/settings.json
+              subPath: sim_settings.json
           {{- if .Values.volumeMounts}}
             {{- with .Values.volumeMounts }} 
               {{- toYaml . | nindent 12 }}

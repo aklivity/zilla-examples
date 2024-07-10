@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/aklivity/zilla
-  tag: "0.9.84"
+  tag: "0.9.86"
 
 args: ["start", "-v", "-e", "-Pzilla.engine.worker.capacity=512"]
 
@@ -10,7 +10,7 @@ env:
   ROUTE_GUIDE_SERVER_HOST: "route-guide.zilla.svc.cluster.local"
   ROUTE_GUIDE_SERVER_PORT: "50051"
   ZILLA_INCUBATOR_ENABLED: "true"
-  # JAVA_OPTIONS: "-Dzilla.binding.kafka.debug=true -Djavax.net.debug=ssl,handshake"
+  JAVA_OPTIONS: "-Dzilla.binding.kafka.debug=true" # -Djavax.net.debug=ssl,handshake"
 
 livenessProbePort: prometheus
 readinessProbePort: prometheus
@@ -27,6 +27,14 @@ ingress:
     enabled: false
   #   secretName: quickstart-tls
 
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 500m
+  limits:
+    memory: 1024Mi
+    cpu: 2000m
+
 service:
   ports:
     - port: 7114
@@ -41,10 +49,10 @@ service:
 envFromSecret: "deploy-secrets"
 
 volumeMounts:
- - name: proto-files
-   mountPath: /proto
+  - name: proto-files
+    mountPath: /proto
 
 volumes:
- - name: proto-files
-   configMap:
-     name: protobuf-files
+  - name: proto-files
+    configMap:
+      name: protobuf-files

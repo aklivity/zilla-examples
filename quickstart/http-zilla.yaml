@@ -109,11 +109,14 @@ bindings:
     type: sse-kafka
     kind: proxy
     routes:
+      #region sse_stream_all
       - when:
           - path: /api/stream
         exit: north_kafka_cache_client
         with:
           topic: http-messages
+          #endregion sse_stream_all
+          #region sse_stream_id
       - when:
           - path: /api/stream/{id}
         exit: north_kafka_cache_client
@@ -121,6 +124,7 @@ bindings:
           topic: http-messages
           filters:
             - key: ${params.id}
+            #endregion sse_stream_id
 
   # Kafka sync layer
   north_kafka_cache_client:

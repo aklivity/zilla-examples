@@ -23,9 +23,6 @@ bindings:
     type: mqtt
     kind: server
     exit: north_mqtt_kafka_mapping
-    telemetry:
-      metrics:
-        - stream.*
   north_mqtt_kafka_mapping:
     type: mqtt-kafka
     kind: proxy

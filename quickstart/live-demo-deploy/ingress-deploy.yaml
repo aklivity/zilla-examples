@@ -321,6 +321,15 @@ subjects:
 apiVersion: v1
 data:
   allow-snippet-annotations: "false"
+  use-http2: "true"
+  proxy-cache: "off"
+  proxy-buffering: "off"
+  proxy-request-buffering: "off"
+  proxy-connect-timeout: "1800"
+  proxy-read-timeout: "1800"
+  proxy-send-timeout: "1800"
+  keep-alive: "300"
+  keep-alive-requests: "1000"
 kind: ConfigMap
 metadata:
   labels:

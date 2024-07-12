@@ -2,15 +2,14 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/aklivity/zilla
-  tag: "0.9.86"
+  tag: "0.9.87"
 
-args: ["start", "-v", "-e", "-Pzilla.engine.worker.capacity=512"]
+args: ["start", "-v", "-e", "-Pzilla.engine.worker.capacity=512", "-Pzilla.binding.kafka.client.group.min.session.timeout.default=30000"]
 
 env:
   ROUTE_GUIDE_SERVER_HOST: "route-guide.zilla.svc.cluster.local"
   ROUTE_GUIDE_SERVER_PORT: "50051"
   ZILLA_INCUBATOR_ENABLED: "true"
-  JAVA_OPTIONS: "-Dzilla.binding.kafka.debug=true" # -Djavax.net.debug=ssl,handshake"
 
 livenessProbePort: prometheus
 readinessProbePort: prometheus
@@ -18,6 +17,11 @@ readinessProbePort: prometheus
 ingress:
   enabled: true
   ingressClassName: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/cors-allow-headers: '*'
+    nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS
+    nginx.ingress.kubernetes.io/cors-allow-origin: '*'
+    nginx.ingress.kubernetes.io/enable-cors: "true"
   # host: ""
   paths:
     - path: /api
@@ -29,11 +33,8 @@ ingress:
 
 resources:
   requests:
-    memory: 256Mi
-    cpu: 500m
-  limits:
-    memory: 1024Mi
-    cpu: 2000m
+    memory: 512Mi
+    cpu: 1000m
 
 service:
   ports:

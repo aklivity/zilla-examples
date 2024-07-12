@@ -29,7 +29,23 @@ kubectl create configmap protobuf-files --from-file=./route_guide.proto -n $NAME
 kubectl create secret generic deploy-secrets --from-env-file=.env -n $NAMESPACE -o yaml --dry-run=client | kubectl apply -f -
 
 # Install Ingress Controller
-while ! kubectl apply -f ingress-deploy.yaml; do echo "Retrying to apply resources"; sleep 3; done
+kubectl apply -f ingress-deploy.yaml
+### Wait ingress nginx pod creation
+echo -n "Wait for pod app.kubernetes.io/component=controller to be created."
+while : ; do
+  [ ! -z "$(kubectl -n ingress-nginx get pod --selector=app.kubernetes.io/component=controller 2> /dev/null)" ] && echo && break
+  sleep 2
+  echo -n "."
+done
+### Wait pod is ready
+timeout="600s"
+echo -n "Wait for pod app.kubernetes.io/component=controller to be ready (timeout=$timeout)..."
+kubectl wait  --namespace ingress-nginx \
+              --for=condition=ready pod \
+              --selector=app.kubernetes.io/component=controller \
+              --timeout=$timeout
+echo
+
 # Create ingress controller tcp-services configmap
 kubectl create configmap tcp-services \
     --from-literal=7183="$NAMESPACE/$ZILLA_NAME:7183" \
@@ -53,7 +69,7 @@ helm upgrade --install kafka-ui kafka-ui/kafka-ui --version 1.4.2 -n $NAMESPACE 
     --values kafka-ui/kafka-ui-values.yaml
 
 # install Zilla
-helm upgrade --install $ZILLA_NAME /Users/adanelz/Code/zilla/cloud/helm-chart/src/main/helm/zilla --version 0.9.84 -n $NAMESPACE \
+helm upgrade --install $ZILLA_NAME /Users/adanelz/Code/zilla/cloud/helm-chart/src/main/helm/zilla --version 0.9.87 -n $NAMESPACE \
     --set env.ROUTE_GUIDE_SERVER_HOST="route-guide-server.$NAMESPACE.svc.cluster.local" \
     --set-file zilla\\.yaml=zilla.yaml \
     --values values.yaml

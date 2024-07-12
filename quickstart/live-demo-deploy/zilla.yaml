@@ -169,6 +169,9 @@ bindings:
     type: http
     kind: server
     options:
+      versions:
+        - h2
+        - http/1.1
       access-control:
         policy: cross-origin
     routes:
@@ -182,12 +185,24 @@ bindings:
         exit: north_sse_server
       - when:
           - headers:
+              :path: /api/index.html
+        exit: east_http_filesystem_mapping
+      - when:
+          - headers:
               :path: /api/*
         exit: north_rest_api_http_kafka_mapping
-    telemetry:
-      metrics:
-        - stream.*
-        - http.*
+  east_http_filesystem_mapping:
+    type: http-filesystem
+    kind: proxy
+    routes:
+      - exit: east_filesystem_server
+        with:
+          path: index.html
+  east_filesystem_server:
+    type: filesystem
+    kind: server
+    options:
+      location: /var/www/
   # REST proxy endpoints to Kafka a topic
   north_rest_api_http_kafka_mapping:
     type: http-kafka

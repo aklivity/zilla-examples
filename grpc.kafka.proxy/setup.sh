@@ -1,9 +1,5 @@
 #!/bin/bash
 set -ex
-
-# Verify Grpc Echo image already available locally
-docker image inspect zilla-examples/grpc-echo:latest --format 'Image Found {{.RepoTags}}'
-
 # Install Zilla to the Kubernetes cluster with helm and wait for the pod to start up
 ZILLA_CHART="${ZILLA_CHART:-oci://ghcr.io/aklivity/charts/zilla}"
 ZILLA_VERSION="${ZILLA_VERSION:-^0.9.0}"

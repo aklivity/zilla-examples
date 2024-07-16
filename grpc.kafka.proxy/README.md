@@ -81,7 +81,7 @@ Connection to localhost port 8080 [tcp/http-alt] succeeded!
 Echo `{"message":"Hello World"}` message via unary rpc.
 
 ```bash
-grpcurl -insecure -proto proto/echo.proto  -d '{"message":"Hello World"}' localhost:7153 example.EchoService.EchoUnary
+grpcurl -insecure -proto proto/echo.proto  -d '{"message":"Hello World"}' localhost:7153 grpc.examples.echo.Echo.UnaryEcho
 ```
 
 output:
@@ -110,7 +110,7 @@ output:
   "broker": 1,
   "headers": [
     "zilla:service",
-    "example.EchoService",
+    "grpc.examples.echo.Echo",
     "zilla:method",
     "EchoUnary",
     "zilla:reply-to",
@@ -130,7 +130,7 @@ output:
   "broker": 1,
   "headers": [
     "zilla:service",
-    "example.EchoService",
+    "grpc.examples.echo.Echo",
     "zilla:method",
     "EchoUnary",
     "zilla:reply-to",
@@ -149,7 +149,7 @@ output:
 Echo messages via bidirectional streaming rpc.
 
 ```bash
-grpcurl -insecure -proto proto/echo.proto -d @ localhost:7153 example.EchoService.EchoBidiStream
+grpcurl -insecure -proto proto/echo.proto -d @ localhost:7153 grpc.examples.echo.Echo.BidirectionalStreamingEcho
 ```
 
 Past below message.

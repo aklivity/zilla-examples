@@ -29,7 +29,7 @@ services:
       - ./sim_settings.json:/usr/src/app/config/settings.json
 
   route-guide-server:
-    image: ghcr.io/aklivity/extras-route-guide-server:sha-e49c994
+    image: ghcr.io/aklivity/extras-route-guide-server:sha-478b2ce
     container_name: route-guide-server
     restart: unless-stopped
     ports:

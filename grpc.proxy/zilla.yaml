@@ -6,7 +6,7 @@ catalogs:
     options:
       subjects:
         echo:
-          path: proto/echo.proto
+          path: /proto/echo.proto
 vaults:
   my_servers:
     type: filesystem
@@ -77,8 +77,8 @@ bindings:
     type: tcp
     kind: client
     options:
-      host: grpc-echo
-      port: 50051
+      host: ${{env.ECHO_SERVER_HOST}}
+      port: ${{env.ECHO_SERVER_PORT}}
 telemetry:
   exporters:
     stdout_logs_exporter:

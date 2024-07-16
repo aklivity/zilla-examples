@@ -1,5 +1,7 @@
 env:
   KEYSTORE_PASSWORD: generated
+  ECHO_SERVER_HOST: "grpc-echo.svc.cluster.local"
+  ECHO_SERVER_PORT: 50051
   ZILLA_INCUBATOR_ENABLED: "true"
 
 livenessProbePort: 7151
@@ -11,3 +13,12 @@ service:
       name: https
     - port: 7151
       name: http
+
+volumeMounts:
+  - name: proto-files
+    mountPath: /proto
+
+volumes:
+  - name: proto-files
+    configMap:
+      name: protobuf-files

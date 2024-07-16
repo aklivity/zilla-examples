@@ -11,3 +11,12 @@ service:
       name: https
     - port: 7151
       name: http
+
+volumeMounts:
+  - name: proto-files
+    mountPath: /proto
+
+volumes:
+  - name: proto-files
+    configMap:
+      name: protobuf-files

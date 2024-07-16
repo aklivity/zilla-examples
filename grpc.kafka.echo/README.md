@@ -62,7 +62,7 @@ Connection to localhost port 9092 [tcp/XmlIpcRegSvc] succeeded!
 Echo `{"message":"Hello World"}` message via unary rpc using `grpcurl` client.
 
 ```bash
-grpcurl -insecure -proto proto/echo.proto  -d '{"message":"Hello World"}' localhost:7153 grpc.examples.echo.Echo.EchoUnary
+grpcurl -insecure -proto proto/echo.proto  -d '{"message":"Hello World"}' localhost:7153 grpc.examples.echo.Echo.UnaryEcho
 ```
 
 output:
@@ -93,7 +93,7 @@ output:
     "zilla:service",
     "grpc.examples.echo.Echo",
     "zilla:method",
-    "EchoUnary",
+    "UnaryEcho",
     "zilla:reply-to",
     "echo-messages",
     "zilla:correlation-id",
@@ -113,7 +113,7 @@ output:
     "zilla:service",
     "grpc.examples.echo.Echo",
     "zilla:method",
-    "EchoUnary",
+    "UnaryEcho",
     "zilla:reply-to",
     "echo-messages",
     "zilla:correlation-id",

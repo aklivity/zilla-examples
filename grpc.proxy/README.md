@@ -57,7 +57,7 @@ Connection to localhost port 8080 [tcp/http-alt] succeeded!
 Echo `{"message":"Hello World"}` message via unary rpc.
 
 ```bash
-grpcurl -insecure -proto proto/echo.proto  -d '{"message":"Hello World"}' localhost:7153 grpc.examples.echo.Echo.EchoUnary
+grpcurl -insecure -proto proto/echo.proto  -d '{"message":"Hello World"}' localhost:7153 grpc.examples.echo.Echo.UnaryEcho
 ```
 
 output:

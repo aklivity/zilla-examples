@@ -1,6 +1,6 @@
 env:
   KEYSTORE_PASSWORD: generated
-  ECHO_SERVER_HOST: "grpc-echo.svc.cluster.local"
+  ECHO_SERVER_HOST: "grpc-echo"
   ECHO_SERVER_PORT: 50051
   ZILLA_INCUBATOR_ENABLED: "true"
 

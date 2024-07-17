@@ -7,7 +7,7 @@ ZILLA_VERSION="${ZILLA_VERSION:-^0.9.0}"
 NAMESPACE="${NAMESPACE:-zilla-grpc-proxy}"
 
 kubectl get ns $NAMESPACE || kubectl create ns $NAMESPACE
-kubectl create configmap protobuf-files --from-file=./proto/echo.proto -n $NAMESPACE -o yaml --dry-run=client | kubectl apply -f -
+kubectl create configmap protobuf-files --from-file=./proto/ -n $NAMESPACE -o yaml --dry-run=client | kubectl apply -f -
 
 # Install Zilla to the Kubernetes cluster with helm and wait for the pod to start up
 echo "==== Installing $ZILLA_CHART to $NAMESPACE ===="

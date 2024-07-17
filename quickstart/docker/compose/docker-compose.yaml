@@ -18,7 +18,7 @@ services:
       ROUTE_GUIDE_SERVER_PORT: 50051
     volumes:
       - ../../zilla.yaml:/etc/zilla/zilla.yaml
-      - ./proto/route_guide.proto:/etc/zilla/proto/route_guide.proto
+      - ./proto/:/etc/zilla/proto/
     command: start -v -e -Pzilla.engine.worker.capacity=512
 
   mqtt-simulator:

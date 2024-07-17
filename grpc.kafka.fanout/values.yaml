@@ -14,7 +14,7 @@ service:
 
 volumeMounts:
   - name: proto-files
-    mountPath: /proto
+    mountPath: /etc/zilla/proto
 
 volumes:
   - name: proto-files

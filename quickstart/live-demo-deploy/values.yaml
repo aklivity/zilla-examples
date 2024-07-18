@@ -1,0 +1,61 @@
+replicaCount: 3
+
+image:
+  repository: ghcr.io/aklivity/zilla
+  tag: "0.9.87"
+
+args: ["start", "-v", "-e", "-Pzilla.engine.worker.capacity=512", "-Pzilla.binding.kafka.client.group.min.session.timeout.default=30000"]
+
+env:
+  ROUTE_GUIDE_SERVER_HOST: "route-guide.zilla.svc.cluster.local"
+  ROUTE_GUIDE_SERVER_PORT: "50051"
+  ZILLA_INCUBATOR_ENABLED: "true"
+
+livenessProbePort: prometheus
+readinessProbePort: prometheus
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  annotations:
+    cert-manager.io/issuer: letsencrypt-prod
+    # cert-manager.io/issuer: letsencrypt-staging
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "postman-token,DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
+    # nginx.ingress.kubernetes.io/cors-allow-credentials: 'true'
+  host: quickstart.aklivity.io
+  paths:
+    - path: /api
+      pathType: Prefix
+      port: 7114
+  tls:
+    enabled: true
+    secretName: quickstart-tls
+    # secretName: quickstart-stage-tls
+
+resources:
+  requests:
+    memory: 512Mi
+    cpu: 1000m
+
+service:
+  ports:
+    - port: 7114
+      name: http
+    - port: 7183
+      name: mqtt
+    - port: 7151
+      name: grpc
+    - port: 7190
+      name: prometheus
+
+envFromSecret: "deploy-secrets"
+
+volumeMounts:
+  - name: proto-files
+    mountPath: /proto
+
+volumes:
+  - name: proto-files
+    configMap:
+      name: protobuf-files

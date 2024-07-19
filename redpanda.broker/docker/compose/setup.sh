@@ -8,5 +8,5 @@ if [[ -z $(docker compose -p $NAMESPACE ps -q redpanda) || -z $(docker compose -
 fi
 
 if [[ -n $(docker compose -p $NAMESPACE ps -q console) ]]; then
-  docker compose -p $NAMESPACE restart console
+  docker compose -p $NAMESPACE up -d --force-recreate --no-deps console
 fi

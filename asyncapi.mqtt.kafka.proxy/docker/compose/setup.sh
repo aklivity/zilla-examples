@@ -24,5 +24,5 @@ if [[ -z $(docker compose -p $NAMESPACE ps -q zilla) ]]; then
   fi
 
 else
-  docker compose -p $NAMESPACE up --force-recreate --no-deps zilla
+  docker compose -p $NAMESPACE up -d --force-recreate --no-deps zilla
 fi

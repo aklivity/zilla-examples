@@ -1,10 +1,6 @@
 #!/bin/bash
-set -x
+set -e
 
-# Stop port forwarding
-pgrep kubectl && killall kubectl
+echo "==== Tearing down the zilla-http-kafka-sync example ===="
+docker compose -p zilla-http-kafka-sync --profile "*" down --remove-orphans
 
-# Uninstall Zilla and Kafka
-NAMESPACE="${NAMESPACE:-zilla-http-kafka-sync}"
-helm uninstall zilla kafka --namespace $NAMESPACE
-kubectl delete namespace $NAMESPACE

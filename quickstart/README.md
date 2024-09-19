@@ -4,9 +4,7 @@ Follow the [Zilla Quickstart](https://docs.aklivity.io/zilla/latest/how-tos/quic
 
 ## Running locally
 
-This quickstart runs using Docker compose. You will find the setup scripts in the [compose](./docker/compose) folder.
-
-You will need a running kafka broker. To start one locally you will find instructions in the [kafka.broker](../kafka.broker) folder. Alternatively you can use the [redpanda.broker](../redpanda.broker) folder.
+This quickstart runs using Docker compose.
 
 ### Setup
 
@@ -17,9 +15,27 @@ The `setup.sh` script will:
 - Start a gRPC Route Guide server
 - Start a MQTT message simulator
 
-```bash
-./compose/setup.sh
-```
+- Setup with a bitnami Kafka cluster
+
+    ```bash
+    ./setup.sh
+    ```
+
+- Setup with a Redpanda cluster
+
+    ```bash
+    KAFKA_VENDOR_PROFILE=redpanda ./setup.sh
+    ```
+
+- alternatively with the plain docker compose command respectively
+
+    ```bash
+    docker compose --profile bitnami --profile init-bitnami up -d
+    ```
+
+    ```bash
+    docker compose --profile redpanda --profile init-redpanda up -d
+    ```
 
 ### Using this quickstart
 
@@ -30,5 +46,5 @@ You can interact with this quickstart using our [Postman collection](https://www
 The `teardown.sh` script will remove any resources created.
 
 ```bash
-./compose/teardown.sh
+./teardown.sh
 ```

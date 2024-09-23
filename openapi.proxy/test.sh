@@ -10,7 +10,7 @@ echo
 
 # WHEN
 for i in $(seq 1 30); do
-  OUTPUT=$(curl --silent --location "http://localhost:$PORT/pets" --header 'Accept: application/json')
+  OUTPUT=$(curl -v --location "http://localhost:$PORT/pets" --header 'Accept: application/json')
   RESULT=$?
   if [[ ! -z "$OUTPUT" ]]; then
     break

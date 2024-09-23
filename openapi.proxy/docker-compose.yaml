@@ -15,6 +15,7 @@ services:
 
   openapi-mock:
     image: jormaechea/open-api-mocker:2.0.0
+    container_name: openapi-mock
     volumes:
       - ./specs:/app
     ports:

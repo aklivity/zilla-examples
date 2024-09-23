@@ -1,7 +1,7 @@
+name: zilla-openapi-proxy
 services:
   zilla:
-    image: ghcr.io/aklivity/zilla:${ZILLA_VERSION}
-    container_name: zilla
+    image: ghcr.io/aklivity/zilla:${ZILLA_VERSION:-latest}
     pull_policy: always
     restart: unless-stopped
     ports:
@@ -9,15 +9,15 @@ services:
     environment:
       ZILLA_INCUBATOR_ENABLED: "true"
     volumes:
-      - ../../specs/petstore.yaml:/etc/zilla/petstore.yaml
-      - ../../zilla.yaml:/etc/zilla/zilla.yaml
+      - ./specs/petstore.yaml:/etc/zilla/petstore.yaml
+      - ./zilla.yaml:/etc/zilla/zilla.yaml
     command: start -v -e
 
   openapi-mock:
     image: jormaechea/open-api-mocker
     platform: linux/amd64
     volumes:
-      - ../../specs:/app
+      - ./specs:/app
     ports:
       - "8000:5000"
     command: open-api-mocker -s /app/petstore.yaml

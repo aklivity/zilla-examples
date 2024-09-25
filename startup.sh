@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
 REPO=aklivity/zilla-examples
@@ -17,7 +17,7 @@ KAFKA_BOOTSTRAP_SERVER=""
 WORKDIR=$(pwd)
 
 # help text
-read -r -d '' HELP_TEXT <<-EOF || :
+HELP_TEXT=$(cat <<EOF
 Usage: ${CMD:=${0##*/}} [-m][-k KAFKA_BOOTSTRAP_SERVER][-d WORKDIR][-v ZILLA_VERSION][-e EX_VERSION][--no-kafka-init][--redpanda] example.name
 
 Operand:
@@ -36,6 +36,7 @@ Options:
 
 Report a bug: github.com/$REPO/issues/new
 EOF
+)
 export USAGE="$HELP_TEXT"
 exit2 () { printf >&2 "%s:  %s: '%s'\n%s\n" "$CMD" "$1" "$2" "$USAGE"; exit 2; }
 check () { { [ "$1" != "$EOL" ] && [ "$1" != '--' ]; } || exit2 "missing argument" "$2"; } # avoid infinite loop
@@ -62,45 +63,45 @@ while [ "$1" != "$EOL" ]; do
     --) while [ "$1" != "$EOL" ]; do set -- "$@" "$1"; shift; done;;   # parse remaining as positional
     --[!=]*=*) set -- "${opt%%=*}" "${opt#*=}" "$@";;                  # "--opt=arg"  ->  "--opt" "arg"
     -[A-Za-z0-9] | -*[!A-Za-z0-9]*) exit2 "invalid option" "$opt";;    # anything invalid like '-*'
-    -?*) other="${opt#-?}"; set -- "${opt%$other}" "-${other}" "$@";;  # "-abc"  ->  "-a" "-bc"
+    -?*) other="${opt#-?}"; set -- "${opt%"$other"}" "-${other}" "$@";;  # "-abc"  ->  "-a" "-bc"
     *) set -- "$@" "$opt";;                                            # positional, rotate to the end
   esac
 done; shift
 
 # check ability to run Zilla with docker
-! [[ -x "$(command -v docker)" ]] && echo "WARN: Docker is required to run this setup."
-! [[ -x "$(command -v docker compose)" ]] && echo "WARN: Docker Compose is required to run this setup."
+! [ -x "$(command -v docker)" ] && echo "WARN: Docker is required to run this setup."
+! [ -x "$(command -v docker compose)" ] && echo "WARN: Docker Compose is required to run this setup."
 
 # pull the example folder from the end of the params and set defaults
 operand=$*
-EXAMPLE_FOLDER=${operand//\//}
-[[ -z "$EXAMPLE_FOLDER" ]] && EXAMPLE_FOLDER="quickstart"
+EXAMPLE_FOLDER=$(echo "$operand" | sed 's/\///g')
+[ -z "$EXAMPLE_FOLDER" ] && EXAMPLE_FOLDER="quickstart"
 
 # check all of the repos for the correct example to run
 RELEASES_JSON=$(curl -s https://api.github.com/repos/$REPO/releases/latest)
-if [[ $(echo "$RELEASES_JSON" | grep "name" | grep -Li "$EXAMPLE_FOLDER") ]]; then
+if [ $(echo "$RELEASES_JSON" | grep "name" | grep -Li "$EXAMPLE_FOLDER") ]; then
     REPO="aklivity/zilla-docs"
     echo "no example"
     RELEASES_JSON=$(curl -s https://api.github.com/repos/$REPO/releases/latest)
-    if [[ $(echo "$RELEASES_JSON" | grep "name" | grep -Li "$EXAMPLE_FOLDER") ]]; then
+    if [ $(echo "$RELEASES_JSON" | grep "name" | grep -Li "$EXAMPLE_FOLDER") ]; then
         REPO="aklivity/zilla-demos"
         echo "no docs"
         RELEASES_JSON=$(curl -s https://api.github.com/repos/$REPO/releases/latest)
-        if [[ $(echo "$RELEASES_JSON" | grep "name" | grep -Li "$EXAMPLE_FOLDER") ]]; then
+        if [ $(echo "$RELEASES_JSON" | grep "name" | grep -Li "$EXAMPLE_FOLDER") ]; then
             echo "Unable to find the $EXAMPLE_FOLDER example to run."
             echo "no demo"
         fi
     fi
 fi
 
-[[ -z "$VERSION" ]] && VERSION=$(echo "$RELEASES_JSON" | grep -i "tag_name" | awk -F '"' '{print $4}')
-[[ -z "$VERSION" ]] && USE_MAIN=true
+[ -z "$VERSION" ] && VERSION=$(echo "$RELEASES_JSON" | grep -i "tag_name" | awk -F '"' '{print $4}')
+[ -z "$VERSION" ] && USE_MAIN=true
 
 echo "==== Starting Zilla Example $EXAMPLE_FOLDER at $WORKDIR ===="
 
-! [[ -d "$WORKDIR" ]] && echo "Error: WORKDIR must be a valid directory." && exit2
-if [[ -d "$WORKDIR" && ! -d "$WORKDIR/$EXAMPLE_FOLDER" ]]; then
-    if [[ $USE_MAIN == true ]]; then
+! [ -d "$WORKDIR" ] && echo "Error: WORKDIR must be a valid directory." && exit2
+if [ -d "$WORKDIR" ] && ! [ -d "$WORKDIR/$EXAMPLE_FOLDER" ]; then
+    if [ $USE_MAIN = true ]; then
         echo "==== Downloading $MAIN_URL '*/$EXAMPLE_FOLDER/*' to $WORKDIR ===="
         wget -qO- $MAIN_URL | tar -xf - --strip=1 -C "$WORKDIR" "*/$EXAMPLE_FOLDER/*"
     else
@@ -109,12 +110,12 @@ if [[ -d "$WORKDIR" && ! -d "$WORKDIR/$EXAMPLE_FOLDER" ]]; then
     fi
 fi
 
-export ZILLA_VERSION=$ZILLA_VERSION
-export ZILLA_PULL_POLICY=$ZILLA_PULL_POLICY
-export REMOTE_KAFKA=$REMOTE_KAFKA
-export INIT_KAFKA=$INIT_KAFKA
-export KAFKA_VENDOR_PROFILE=$KAFKA_VENDOR_PROFILE
-export KAFKA_BOOTSTRAP_SERVER=$KAFKA_BOOTSTRAP_SERVER
+export ZILLA_VERSION="$ZILLA_VERSION"
+export ZILLA_PULL_POLICY="$ZILLA_PULL_POLICY"
+export REMOTE_KAFKA="$REMOTE_KAFKA"
+export INIT_KAFKA="$INIT_KAFKA"
+export KAFKA_VENDOR_PROFILE="$KAFKA_VENDOR_PROFILE"
+export KAFKA_BOOTSTRAP_SERVER="$KAFKA_BOOTSTRAP_SERVER"
 export EXAMPLE_DIR="$WORKDIR/$EXAMPLE_FOLDER"
 
 TEARDOWN_SCRIPT=""
@@ -137,10 +138,10 @@ printf "\n\n"
 echo "==== Finished, use the teardown script(s) to clean up ===="
 printf '%s\n' "$TEARDOWN_SCRIPT"
 
-if [[ $AUTO_TEARDOWN == true ]]; then
+if [ $AUTO_TEARDOWN = true ]; then
     printf "\n\n"
     echo "==== Auto teardown ===="
     printf '%s\n' "$TEARDOWN_SCRIPT"
-    [[ -n "$TEARDOWN_SCRIPT" ]] && bash -c "$TEARDOWN_SCRIPT"
+    [ -n "$TEARDOWN_SCRIPT" ] && bash -c "$TEARDOWN_SCRIPT"
 fi
 printf "\n"

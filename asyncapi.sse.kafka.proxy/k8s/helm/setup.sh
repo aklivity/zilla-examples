@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
 ZILLA_VERSION="${ZILLA_VERSION:-^0.9.0}"
@@ -18,7 +18,7 @@ helm upgrade --install zilla $ZILLA_CHART --version $ZILLA_VERSION --namespace $
     --set-file configMaps.specs.data.kafka-asyncapi\\.yaml=../../specs/kafka-asyncapi.yaml
 
 # Create topics in Kafka
-if [[ $INIT_KAFKA == true ]]; then
+if [ $INIT_KAFKA = true ]; then
   kubectl run kafka-init-pod --image=bitnami/kafka:3.2 --namespace $NAMESPACE --rm --restart=Never -i -t -- /bin/sh -c "
   echo 'Creating topics for $KAFKA_BOOTSTRAP_SERVER'
   /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server $KAFKA_BOOTSTRAP_SERVER --create --if-not-exists --topic events --config cleanup.policy=compact
@@ -30,6 +30,6 @@ fi
 SERVICE_PORTS=$(kubectl get svc --namespace $NAMESPACE zilla --template "{{ range .spec.ports }}{{.port}} {{ end }}")
 eval "kubectl port-forward --namespace $NAMESPACE service/zilla $SERVICE_PORTS" > /tmp/kubectl-zilla.log 2>&1 &
 
-if [[ -x "$(command -v nc)" ]]; then
+if [ -x "$(command -v nc)" ]; then
     until nc -z localhost 7114; do sleep 1; done
 fi

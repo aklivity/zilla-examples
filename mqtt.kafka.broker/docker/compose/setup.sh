@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
 NAMESPACE="${NAMESPACE:-zilla-mqtt-kafka-broker}"
@@ -8,11 +8,11 @@ export KAFKA_BOOTSTRAP_SERVER="${KAFKA_BOOTSTRAP_SERVER:-host.docker.internal:90
 INIT_KAFKA="${INIT_KAFKA:-true}"
 
 # Start or restart Zilla
-if [[ -z $(docker compose -p $NAMESPACE ps -q zilla) ]]; then
+if [ -z $(docker compose -p $NAMESPACE ps -q zilla) ]; then
   echo "==== Running the $NAMESPACE example with $KAFKA_BROKER($KAFKA_BOOTSTRAP_SERVER) ===="
   docker compose -p $NAMESPACE up -d
 
-  if [[ $INIT_KAFKA == true ]]; then
+  if [ $INIT_KAFKA = true ]; then
     # Create the mqtt topics in Kafka
     docker run --rm bitnami/kafka:3.2 bash -c "
     echo 'Creating topics for $KAFKA_BOOTSTRAP_SERVER'

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
 NAMESPACE="${NAMESPACE:-zilla-kafka-broker}"
@@ -15,7 +15,7 @@ eval "kubectl port-forward --namespace $NAMESPACE service/kafka $SERVICE_PORTS" 
 SERVICE_PORTS=$(kubectl get svc --namespace $NAMESPACE kafka-ui --template "{{ range .spec.ports }}{{.port}} {{ end }}")
 eval "kubectl port-forward --namespace $NAMESPACE service/kafka-ui $SERVICE_PORTS" > /tmp/kubectl-kafka-ui.log 2>&1 &
 
-if [[ -x "$(command -v nc)" ]]; then
+if [ -x "$(command -v nc)" ]; then
     until nc -z localhost 8080; do sleep 1; done
     until nc -z localhost 29092; do sleep 1; done
 fi

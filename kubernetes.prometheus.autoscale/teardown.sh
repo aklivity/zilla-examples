@@ -1,5 +1,5 @@
-#!/bin/bash
-set -x
+#!/bin/sh
+set -e
 
 # Stop port forwarding
 pgrep kubectl && killall kubectl

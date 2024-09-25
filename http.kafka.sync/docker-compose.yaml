@@ -2,7 +2,7 @@ name: zilla-http-kafka-sync
 services:
   zilla:
     image: ghcr.io/aklivity/zilla:${ZILLA_VERSION:-latest}
-    pull_policy: always
+    pull_policy: ${ZILLA_PULL_POLICY:-always}
     restart: unless-stopped
     ports:
       - 7114:7114

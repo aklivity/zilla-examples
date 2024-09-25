@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1
       - name: Setup
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1
       - name: Setup
@@ -62,7 +62,7 @@ jobs:
           sudo mv kcat /usr/local/bin
           kcat 2>&1 | grep "Version 1.7.1"
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1
       - name: Setup
@@ -82,7 +82,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup
         working-directory: openapi.proxy
         run: ./setup.sh

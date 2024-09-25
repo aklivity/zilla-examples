@@ -1,4 +1,4 @@
 #!/bin/bash
 set -e
 
-docker compose down --remove-orphans
+docker compose -p zilla-openapi-proxy down --remove-orphans

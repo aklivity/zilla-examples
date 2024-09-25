@@ -9,7 +9,7 @@ echo EXPECTED=$EXPECTED
 echo
 
 # WHEN
-for i in $(seq 1 30); do
+for i in $(seq 1 300); do
   OUTPUT=$(curl -v --location "http://localhost:$PORT/pets" --header 'Accept: application/json')
   RESULT=$?
   if [[ ! -z "$OUTPUT" ]]; then

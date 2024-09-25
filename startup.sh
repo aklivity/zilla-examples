@@ -5,7 +5,8 @@ REPO=aklivity/zilla-examples
 RELEASE_URL="https://github.com/$REPO/releases/download"
 MAIN_URL="https://api.github.com/repos/$REPO/tarball"
 VERSION=""
-ZILLA_VERSION=""
+ZILLA_VERSION="${ZILLA_VERSION:-latest}"
+ZILLA_PULL_POLICY="${ZILLA_PULL_POLICY:-always}"
 EXAMPLE_FOLDER=""
 USE_MAIN=false
 INIT_KAFKA=true
@@ -109,6 +110,7 @@ if [[ -d "$WORKDIR" && ! -d "$WORKDIR/$EXAMPLE_FOLDER" ]]; then
 fi
 
 export ZILLA_VERSION=$ZILLA_VERSION
+export ZILLA_PULL_POLICY=$ZILLA_PULL_POLICY
 export REMOTE_KAFKA=$REMOTE_KAFKA
 export INIT_KAFKA=$INIT_KAFKA
 export KAFKA_VENDOR_PROFILE=$KAFKA_VENDOR_PROFILE

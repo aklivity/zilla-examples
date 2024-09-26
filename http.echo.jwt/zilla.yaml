@@ -65,10 +65,8 @@ bindings:
         when:
           - headers:
               :scheme: http
-              :authority: localhost:7114
           - headers:
               :scheme: https
-              :authority: localhost:7143
         exit: north_echo_server
   north_echo_server:
     type: echo

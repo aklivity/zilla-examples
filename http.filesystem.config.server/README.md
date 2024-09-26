@@ -122,11 +122,9 @@ bindings:
       - when:
           - headers:
               :scheme: http
-              :authority: localhost:7114
               :path: /echo
           - headers:
               :scheme: https
-              :authority: localhost:7143
               :path: /echo
         exit: north_echo_server
   north_echo_server:

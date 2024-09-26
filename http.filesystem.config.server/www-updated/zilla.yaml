@@ -44,11 +44,9 @@ bindings:
       - when:
           - headers:
               :scheme: http
-              :authority: localhost:7114
               :path: /echo_changed
           - headers:
               :scheme: https
-              :authority: localhost:7143
               :path: /echo_changed
         exit: north_echo_server
   north_echo_server:

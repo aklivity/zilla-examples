@@ -47,20 +47,16 @@ bindings:
       - when:
           - headers:
               :scheme: http
-              :authority: localhost:7114
               :path: /events
           - headers:
               :scheme: https
-              :authority: localhost:7143
               :path: /events
         exit: north_sse_server
       - when:
           - headers:
               :scheme: http
-              :authority: localhost:7114
           - headers:
               :scheme: https
-              :authority: localhost:7143
         exit: east_http_filesystem_mapping
   east_http_filesystem_mapping:
     type: http-filesystem

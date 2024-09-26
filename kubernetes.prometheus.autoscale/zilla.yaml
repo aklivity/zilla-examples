@@ -22,7 +22,6 @@ bindings:
       - when:
           - headers:
               :scheme: http
-              :authority: localhost:7114
         exit: north_echo_server
     telemetry:
       metrics:

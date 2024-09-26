@@ -46,7 +46,6 @@ bindings:
               :scheme: http
           - headers:
               :scheme: https
-              :authority: localhost:7144
         exit: east_http_filesystem_mapping
   east_http_filesystem_mapping:
     type: http-filesystem

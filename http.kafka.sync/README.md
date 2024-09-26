@@ -3,26 +3,23 @@
 Listens on http port `7114` to correlate requests and responses over the `items-requests`
 and `items-responses` topics in Kafka, synchronously.
 
-## Requirements
-
-- Docker or Compose spec compatible container runtime
-
 ## Setup
 
-The `setup.sh` script:
-
-- installs Zilla and Kafka
-- creates the `items-requests` and `items-responses` topics in Kafka
+Start this example by running this command from the example directory.
 
 ```bash
-./setup.sh
+docker compose up -d
 ```
 
-- alternatively with the docker compose command:
+This will:
 
-```bash
-docker compose --profile bitnami up -d
-```
+- Install Zilla and Kafka
+- Create the `items-requests` and `items-responses` topics in Kafka
+- To restart Zilla to update the deployment run
+
+  ```bash
+  docker compose up -d --force-recreate --no-deps zilla
+  ```
 
 ## Verify behavior
 
@@ -57,7 +54,7 @@ Fetch the request message, then send the correlated response via the Kafka UI [i
 
   ```bash
   docker compose -p zilla-http-kafka-sync exec kcat \
-  kafkacat -b bitnami:29092 -C -f 'Key:Message | %k:%s\n Headers | %h \n\n' -t items-requests
+  kafkacat -b kafka:29092 -C -f 'Key:Message | %k:%s\n Headers | %h \n\n' -t items-requests
   ```
 
   ```text
@@ -72,7 +69,7 @@ Make sure to propagate the request message `zilla:correlation-id` header, found 
 ```bash
 echo "{\"greeting\":\"Hello, world `date`\"}" | docker compose -p zilla-http-kafka-sync exec -T kcat \
 kafkacat -P \
-         -b bitnami:29092 \
+         -b kafka:29092 \
          -t items-responses \
          -k "6cf7a1d5-3772-49ef-86e7-ba6f2c7d7d0" \
          -H ":status=200" \
@@ -96,7 +93,7 @@ Verify the response response via the Kafka UI [items-responses](http://localhost
 
   ```bash
   docker compose -p zilla-http-kafka-sync exec kcat \
-  kafkacat -b bitnami:29092 -C -f 'Key:Message | %k:%s\n Headers | %h \n\n' -t items-responses
+  kafkacat -b kafka:29092 -C -f 'Key:Message | %k:%s\n Headers | %h \n\n' -t items-responses
   ```
 
   ```text

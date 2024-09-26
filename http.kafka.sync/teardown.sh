@@ -1,6 +1,4 @@
 #!/bin/sh
 set -e
 
-echo "==== Tearing down the zilla-http-kafka-sync example ===="
-docker compose -p zilla-http-kafka-sync --profile "*" down --remove-orphans
-
+docker compose -p "${NAMESPACE:-zilla-http-kafka-sync}" down --remove-orphans

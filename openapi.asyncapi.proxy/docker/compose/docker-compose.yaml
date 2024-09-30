@@ -9,12 +9,11 @@ services:
       - 4444:4444
     environment:
       ZILLA_INCUBATOR_ENABLED: "true"
-      #JAVA_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:4444
     volumes:
       - ../../specs/http-openapi.yaml:/etc/zilla/http-openapi.yaml
       - ../../specs/kafka-asyncapi.yaml:/etc/zilla/kafka-asyncapi.yaml
       - ../../zilla.yaml:/etc/zilla/zilla.yaml
-    command: start -v -e -Pzilla.engine.verbose.composites=true
+    command: start -v -e
 
 networks:
   default:

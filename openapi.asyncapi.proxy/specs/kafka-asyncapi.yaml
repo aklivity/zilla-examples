@@ -19,8 +19,8 @@ info:
   title: Zilla Petstore Kafka API
   version: 2.0.0
   description: >
-    This Petstore specification illustrates how Zilla can proxy synchronous and asynchronous
-    REST APIs using an AsyncAPI 3.0 spec to document and generate them.
+    This Petstore specification illustrates how Zilla can proxy OpenAPI-defined
+    REST APIs to AsyncAPI-defined Kafka APIs.
   license:
     name: Aklivity Community License
     url: https://github.com/aklivity/zilla/blob/main/LICENSE
@@ -28,8 +28,8 @@ info:
     name: Aklivity Community
     url: https://www.aklivity.io/slack
   externalDocs:
-    description: Demo Repo
-    url: https://github.com/aklivity/zilla-demos/tree/main/petstore#readme
+    description: Examples Repo
+    url: https://github.com/aklivity/zilla-examples/tree/main/openapi.asyncapi.proxy#readme
   tags:
     - name: pet
       description: Everything about your Pets

@@ -6,7 +6,7 @@ catalogs:
     options:
       subjects:
         echo:
-          path: proto/echo.proto
+          path: protos/echo.proto
 vaults:
   my_servers:
     type: filesystem

@@ -75,7 +75,7 @@ Options:
 | [http.filesystem](http.filesystem)                                 | Serves files from a directory on the local filesystem                                               |
 | [http.filesystem.config.server](http.filesystem.config.server)     | Serves files from a directory on the local filesystem, getting the config from a http server        |
 | [http.echo](http.echo)                                             | Echoes request sent to the HTTP server from an HTTP client                                          |
-| [http.echo.jwt](http.echo.jwt)                                     | Echoes request sent to the HTTP server from a JWT-authorized HTTP client                            |
+| [http.echo.jwt](http.jwt)                                     | Echoes request sent to the HTTP server from a JWT-authorized HTTP client                            |
 | [http.proxy](http.proxy)                                           | Proxy request sent to the HTTP server from an HTTP client                                           |
 | [http.proxy.schema.inline](http.proxy.schema.inline)               | Proxy request sent to the HTTP server from an HTTP client with schema enforcement                   |
 | [http.kafka.sync](http.kafka.sync)                                 | Correlates HTTP requests and responses over separate Kafka topics                                   |

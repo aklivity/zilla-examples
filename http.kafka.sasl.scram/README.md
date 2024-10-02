@@ -91,7 +91,8 @@ output:
 Verify that the event has been produced to the `events` Kafka topic.
 
 ```bash
-kcat -C -b localhost:9092 -t events -J -u | jq .
+docker compose -p zilla-http-kafka-sync exec kcat \
+kafkacat -C -b localhost:9092 -t events -J -u | jq .
 ```
 
 output:

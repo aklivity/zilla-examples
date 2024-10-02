@@ -35,17 +35,17 @@ output:
 
 ```text
 + ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
-+ helm upgrade --install zilla-http-echo-jwt oci://ghcr.io/aklivity/charts/zilla --namespace zilla-http-echo-jwt --create-namespace --wait [...]
-NAME: zilla-http-echo-jwt
++ helm upgrade --install zilla-http-jwt oci://ghcr.io/aklivity/charts/zilla --namespace zilla-http-jwt --create-namespace --wait [...]
+NAME: zilla-http-jwt
 LAST DEPLOYED: [...]
-NAMESPACE: zilla-http-echo-jwt
+NAMESPACE: zilla-http-jwt
 STATUS: deployed
 REVISION: 1
 NOTES:
 Zilla has been installed.
 [...]
 + nc -z localhost 7114
-+ kubectl port-forward --namespace zilla-http-echo-jwt service/zilla 7114 7143
++ kubectl port-forward --namespace zilla-http-jwt service/zilla 7114 7143
 + sleep 1
 + nc -z localhost 7114
 Connection to localhost port 7114 [tcp/http-alt] succeeded!
@@ -196,8 +196,8 @@ output:
 + pgrep kubectl
 99999
 + killall kubectl
-+ helm uninstall zilla-http-echo-jwt --namespace zilla-http-echo-jwt
-release "zilla-http-echo-jwt" uninstalled
-+ kubectl delete namespace zilla-http-echo-jwt
-namespace "zilla-http-echo-jwt" deleted
++ helm uninstall zilla-http-jwt --namespace zilla-http-jwt
+release "zilla-http-jwt" uninstalled
++ kubectl delete namespace zilla-http-jwt
+namespace "zilla-http-jwt" deleted
 ```

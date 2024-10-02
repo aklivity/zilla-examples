@@ -7,7 +7,7 @@ readinessProbePort: 7151
 
 service:
   ports:
-    - port: 7153
+    - port: 7151
       name: https
     - port: 7151
       name: http

@@ -6,10 +6,17 @@ services:
     restart: unless-stopped
     ports:
       - 7114:7114
+    healthcheck:
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      test: ["CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/7114"]
     environment:
-      ENV: env
+      KAFKA_BOOTSTRAP_SERVER: kafka:29092
     volumes:
       - ./zilla.yaml:/etc/zilla/zilla.yaml
+      - ./mqtt-asyncapi.yaml:/etc/zilla/specs/mqtt-asyncapi.yaml
+      - ./kafka-asyncapi.yaml:/etc/zilla/specs/kafka-asyncapi.yaml
     command: start -v -e
 
   kafka:
@@ -53,8 +60,10 @@ services:
     command:
       - |
         echo -e "Creating kafka topic";
-        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic items-requests
-        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic items-responses --config cleanup.policy=compact
+        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic mqtt-messages
+        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic streetlights
+        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic mqtt-retained --config cleanup.policy=compact
+        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic mqtt-sessions --config cleanup.policy=compact
         echo -e "Successfully created the following topics:";
         /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --list;
 

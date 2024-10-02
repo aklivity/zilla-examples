@@ -5,11 +5,15 @@ services:
     pull_policy: always
     restart: unless-stopped
     ports:
-      - 7114:7114
-    environment:
-      ENV: env
+      - 7151:7151
+    healthcheck:
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      test: ["CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/7151"]
     volumes:
       - ./zilla.yaml:/etc/zilla/zilla.yaml
+      - ./echo.proto:/etc/zilla/protos/echo.proto
     command: start -v -e
 
 networks:

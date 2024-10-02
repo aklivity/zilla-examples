@@ -5,11 +5,21 @@ services:
     pull_policy: always
     restart: unless-stopped
     ports:
-      - 7114:7114
+      - 7151:7151
+      - 7153:7153
+    healthcheck:
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      test: ["CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/7153"]
     environment:
-      ENV: env
+      KEYSTORE_PASSWORD: generated
+      ECHO_SERVER_HOST: grpc-echo
+      ECHO_SERVER_PORT: 50051
     volumes:
       - ./zilla.yaml:/etc/zilla/zilla.yaml
+      - ./echo.proto:/etc/zilla/protos/echo.proto
+      - ./tls:/etc/zilla/tls
     command: start -v -e
 
 networks:

@@ -1,13 +1,5 @@
 ---
 name: example
-vaults:
-  my_servers:
-    type: filesystem
-    options:
-      keys:
-        store: tls/localhost.p12
-        type: pkcs12
-        password: ${{env.KEYSTORE_PASSWORD}}
 bindings:
   north_tcp_server:
     type: tcp
@@ -16,24 +8,10 @@ bindings:
       host: 0.0.0.0
       port:
         - 7172
-        - 7171
     routes:
       - when:
           - port: 7172
         exit: north_amqp_server
-      - when:
-          - port: 7171
-        exit: north_tls_server
-  north_tls_server:
-    type: tls
-    kind: server
-    vault: my_servers
-    options:
-      keys:
-        - localhost
-      sni:
-        - localhost
-    exit: north_amqp_server
   north_amqp_server:
     type: amqp
     kind: server

@@ -1,4 +1,4 @@
-name: ${NAMESPACE:-zilla-http-echo}
+name: ${NAMESPACE:-zilla-http-jwt}
 services:
   zilla:
     image: ghcr.io/aklivity/zilla:${ZILLA_VERSION:-latest}
@@ -6,8 +6,13 @@ services:
     restart: unless-stopped
     ports:
       - 7114:7114
+    healthcheck:
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      test: ["CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/7114"]
     environment:
-      ENV: env
+      KAFKA_BOOTSTRAP_SERVER: kafka:29092
     volumes:
       - ./zilla.yaml:/etc/zilla/zilla.yaml
     command: start -v -e

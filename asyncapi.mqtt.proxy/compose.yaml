@@ -5,12 +5,36 @@ services:
     pull_policy: always
     restart: unless-stopped
     ports:
-      - 7114:7114
+      - 7183:7183
+    healthcheck:
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      test: ["CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/7183"]
     environment:
-      ENV: env
+      MOSQUITTO_BROKER_HOST: mosquitto
+      MOSQUITTO_BROKER_PORT: 1883
     volumes:
       - ./zilla.yaml:/etc/zilla/zilla.yaml
+      - ./mqtt-asyncapi.yaml:/etc/zilla/specs/mqtt-asyncapi.yaml
     command: start -v -e
+
+  mosquitto:
+    image: eclipse-mosquitto
+    restart: unless-stopped
+    ports:
+      - 1883:1883
+    configs:
+      - source: mosquitto.conf
+        target: /mosquitto/config/mosquitto.conf
+
+configs:
+  mosquitto.conf:
+    content: |
+      # DO NOT USE IN PRODUCTION
+      allow_anonymous true
+      listener 1883
+      protocol mqtt
 
 networks:
   default:

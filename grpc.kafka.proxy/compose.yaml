@@ -5,12 +5,33 @@ services:
     pull_policy: always
     restart: unless-stopped
     ports:
-      - 7114:7114
+      - 7151:7151
+    healthcheck:
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      test: ["CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/7151"]
     environment:
-      ENV: env
+      KAFKA_BOOTSTRAP_SERVER: kafka:29092
+      ECHO_SERVER_HOST: grpc-echo
+      ECHO_SERVER_PORT: 50051
     volumes:
       - ./zilla.yaml:/etc/zilla/zilla.yaml
+      - ./echo.proto:/etc/zilla/protos/echo.proto
     command: start -v -e
+
+  grpc-echo:
+    image: ghcr.io/aklivity/extras-grpc-echo-server:sha-478b2ce
+    restart: unless-stopped
+    ports:
+      - 50051:50051
+    tty: true
+    healthcheck:
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      test: netstat -an | grep 50051 > /dev/null; if [ 0 != $? ]; then exit 1; fi;
+    command: --port 50051
 
   kafka:
     image: bitnami/kafka:3.5

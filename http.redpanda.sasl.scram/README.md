@@ -93,7 +93,8 @@ output:
 Verify that the event has been produced to the `events` topic in Redpanda cluster.
 
 ```bash
-kcat -b localhost:9092 -X security.protocol=SASL_PLAINTEXT \
+docker compose -p zilla-http-kafka-sync exec kcat \
+kafkacat -b localhost:9092 -X security.protocol=SASL_PLAINTEXT \
   -X sasl.mechanisms=SCRAM-SHA-256 \
   -X sasl.username=user \
   -X sasl.password=redpanda \

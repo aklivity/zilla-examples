@@ -1,13 +1,5 @@
 ---
 name: example
-vaults:
-  my_servers:
-    type: filesystem
-    options:
-      keys:
-        store: tls/localhost.p12
-        type: pkcs12
-        password: ${{env.KEYSTORE_PASSWORD}}
 guards:
   authn_jwt:
     type: jwt
@@ -28,24 +20,10 @@ bindings:
       host: 0.0.0.0
       port:
         - 7183
-        - 7883
     routes:
         - when:
             - port: 7183
           exit: north_mqtt_server
-        - when:
-            - port: 7883
-          exit: north_tls_server
-  north_tls_server:
-    type: tls
-    kind: server
-    vault: my_servers
-    options:
-      keys:
-        - localhost
-      sni:
-        - localhost
-    exit: north_mqtt_server
   north_mqtt_server:
     type: mqtt
     kind: server
@@ -86,7 +64,7 @@ bindings:
     kind: client
     options:
       servers:
-        - kafka:29092
+        - ${{env.KAFKA_BOOTSTRAP_SERVER}}
     exit: south_tcp_client
   south_tcp_client:
     type: tcp

@@ -20,10 +20,10 @@ helm upgrade --install zilla $ZILLA_CHART --version $ZILLA_VERSION --namespace $
 if [ $INIT_KAFKA = true ]; then
   kubectl run kafka-init-pod --image=bitnami/kafka:3.5 --namespace $NAMESPACE --rm --restart=Never -i -t -- /bin/sh -c "
   echo 'Creating topics for $KAFKA_BOOTSTRAP_SERVER'
-  /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server $KAFKA_BOOTSTRAP_SERVER --create --if-not-exists --topic mqtt-messages
-  /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server $KAFKA_BOOTSTRAP_SERVER --create --if-not-exists --topic mqtt-devices --config cleanup.policy=compact
-  /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server $KAFKA_BOOTSTRAP_SERVER --create --if-not-exists --topic mqtt-retained --config cleanup.policy=compact
-  /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server $KAFKA_BOOTSTRAP_SERVER --create --if-not-exists --topic mqtt-sessions --config cleanup.policy=compact
+  /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic mqtt-messages
+  /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic mqtt-devices --config cleanup.policy=compact
+  /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic mqtt-retained --config cleanup.policy=compact
+  /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic mqtt-sessions --config cleanup.policy=compact
   "
   kubectl wait --namespace $NAMESPACE --for=delete pod/kafka-init-pod
 fi

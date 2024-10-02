@@ -1,0 +1,17 @@
+name: ${NAMESPACE:-zilla-tcp-echo}
+services:
+  zilla:
+    image: ghcr.io/aklivity/zilla:${ZILLA_VERSION:-latest}
+    pull_policy: always
+    restart: unless-stopped
+    ports:
+      - 7114:7114
+    environment:
+      ENV: env
+    volumes:
+      - ./zilla.yaml:/etc/zilla/zilla.yaml
+    command: start -v -e
+
+networks:
+  default:
+    driver: bridge

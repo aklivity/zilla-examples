@@ -1,10 +1,5 @@
 #!/bin/sh
 set -e
 
-# Stop port forwarding
-pgrep kubectl && killall kubectl
+docker compose -p "${NAMESPACE:-zilla-asyncapi-sse-proxy}" down --remove-orphans
 
-# Uninstall Zilla and SSE Server
-NAMESPACE="${NAMESPACE:-zilla-asyncapi-sse-proxy}"
-helm uninstall zilla sse-server --namespace $NAMESPACE
-kubectl delete namespace $NAMESPACE

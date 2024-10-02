@@ -118,3 +118,25 @@ Join the [Slack community][community-join].
 [kubernetes-install]: https://kubernetes.io/docs/tasks/tools/
 [kafka-install]: https://kafka.apache.org/
 [postman-url]: https://www.postman.com/aklivity-zilla/
+
+
+### testing
+
+for d in */ ; do
+    ./startup.sh $d --auto-teardown >> test-zilla.log
+done
+
+for d in */ ; do
+    echo $d
+    cat <<EOT >> setup.sh
+    #!/bin/sh
+    set -e
+
+    # Start or restart Zilla
+    if [ -z "$(docker compose ps -q zilla)" ]; then
+    docker compose up -d
+    else
+    docker compose up -d --force-recreate --no-deps zilla
+    fi
+    EOT
+done

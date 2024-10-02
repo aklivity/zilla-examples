@@ -1,10 +1,5 @@
 #!/bin/sh
 set -e
 
-# Stop port forwarding
-pgrep kubectl && killall kubectl
+docker compose -p "${NAMESPACE:-zilla-grpc-proxy}" down --remove-orphans
 
-# Uninstall Zilla and Grpc Echo
-NAMESPACE="${NAMESPACE:-zilla-grpc-proxy}"
-helm uninstall zilla grpc-echo --namespace $NAMESPACE
-kubectl delete namespace $NAMESPACE

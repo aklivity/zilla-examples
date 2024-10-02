@@ -1,10 +1,5 @@
 #!/bin/sh
 set -e
 
-# Stop port forwarding
-pgrep kubectl && killall kubectl
+docker compose -p "${NAMESPACE:-zilla-http-proxy-schema-inline}" down --remove-orphans
 
-# Uninstall Zilla and Nginx
-NAMESPACE="${NAMESPACE:-zilla-http-proxy-schema-inline}"
-helm uninstall zilla nginx --namespace $NAMESPACE
-kubectl delete namespace $NAMESPACE

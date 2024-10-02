@@ -1,13 +1,13 @@
-name: ${NAMESPACE:-zilla-http-kafka-sync}
+name: ${NAMESPACE:-zilla-grpc-kafka-proxy}
 services:
   zilla:
     image: ghcr.io/aklivity/zilla:${ZILLA_VERSION:-latest}
-    pull_policy: ${ZILLA_PULL_POLICY:-always}
+    pull_policy: always
     restart: unless-stopped
     ports:
       - 7114:7114
     environment:
-      KAFKA_BOOTSTRAP_SERVER: kafka:29092
+      ENV: env
     volumes:
       - ./zilla.yaml:/etc/zilla/zilla.yaml
     command: start -v -e
@@ -54,7 +54,7 @@ services:
       - |
         echo -e "Creating kafka topic";
         /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic items-requests
-        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic items-responses
+        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic items-responses --config cleanup.policy=compact
         echo -e "Successfully created the following topics:";
         /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --list;
 

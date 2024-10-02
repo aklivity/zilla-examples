@@ -1,10 +1,5 @@
 #!/bin/sh
 set -e
 
-# Stop port forwarding
-pgrep kubectl && killall kubectl
+docker compose -p "${NAMESPACE:-zilla-ws-reflect}" down --remove-orphans
 
-# Uninstall Zilla engine
-NAMESPACE="${NAMESPACE:-zilla-ws-reflect}"
-helm uninstall zilla --namespace $NAMESPACE
-kubectl delete namespace $NAMESPACE

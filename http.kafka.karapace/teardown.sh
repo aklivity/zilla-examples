@@ -1,5 +1,5 @@
 #!/bin/sh
 set -e
 
-echo "==== Tearing down the zilla-kafka-karapace example ===="
-docker compose -p zilla-kafka-karapace --profile "*" down --remove-orphans
+docker compose -p "${NAMESPACE:-zilla-http-kafka-karapace}" down --remove-orphans
+

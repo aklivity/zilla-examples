@@ -1,10 +1,5 @@
 #!/bin/sh
 set -e
 
-# Stop port forwarding
-pgrep kubectl && killall kubectl
+docker compose -p "${NAMESPACE:-zilla-asyncapi-mqtt-proxy}" down --remove-orphans
 
-# Uninstall Zilla and mosquitto
-NAMESPACE="${NAMESPACE:-asyncapi-mqtt-proxy}"
-helm uninstall zilla mosquitto --namespace $NAMESPACE
-kubectl delete namespace $NAMESPACE

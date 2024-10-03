@@ -97,7 +97,7 @@ Options:
 | [mqtt.kafka.broker.jwt](mqtt.kafka.broker.jwt)                     | Forwards MQTT publish messages to Kafka, broadcasting to all subscribed JWT-authorized MQTT clients |
 | [quickstart](quickstart)                                           | Starts endpoints for all protocols (HTTP, SSE, gRPC, MQTT)                                          |
 | [sse.kafka.fanout](sse.kafka.fanout)                               | Streams messages published to a Kafka topic, applying conflation based on log compaction            |
-| [sse.proxy.jwt](sse.proxy.jwt)                                     | Proxies messages delivered by the SSE server, enforcing streaming security constraints              |
+| [sse.proxy.jwt](sse.jwt)                                     | Proxies messages delivered by the SSE server, enforcing streaming security constraints              |
 | [ws.echo](ws.echo)                                                 | Echoes messages sent to the WebSocket server                                                        |
 | [ws.reflect](ws.reflect)                                           | Echoes messages sent to the WebSocket server, broadcasting to all WebSocket clients                 |
 

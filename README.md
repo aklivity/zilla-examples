@@ -77,7 +77,7 @@ Options:
 | [http.echo](http.echo)                                             | Echoes request sent to the HTTP server from an HTTP client                                          |
 | [http.echo.jwt](http.jwt)                                     | Echoes request sent to the HTTP server from a JWT-authorized HTTP client                            |
 | [http.proxy](http.proxy)                                           | Proxy request sent to the HTTP server from an HTTP client                                           |
-| [http.proxy.schema.inline](http.proxy.schema.inline)               | Proxy request sent to the HTTP server from an HTTP client with schema enforcement                   |
+| [http.schema.validate](http.schema.validate)               | Proxy request sent to the HTTP server from an HTTP client with schema enforcement                   |
 | [http.kafka.sync](http.kafka.sync)                                 | Correlates HTTP requests and responses over separate Kafka topics                                   |
 | [http.kafka.async](http.kafka.async)                               | Correlates HTTP requests and responses over separate Kafka topics, asynchronously                   |
 | [http.kafka.cache](http.kafka.cache)                               | Serves cached responses from a Kafka topic, detect when updated                                     |

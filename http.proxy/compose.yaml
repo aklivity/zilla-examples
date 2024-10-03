@@ -5,17 +5,28 @@ services:
     pull_policy: always
     restart: unless-stopped
     ports:
-      - 7114:7114
+      - 7143:7143
     healthcheck:
       interval: 5s
       timeout: 3s
       retries: 5
-      test: ["CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/7114"]
+      test: ["CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/7143"]
     environment:
-      KAFKA_BOOTSTRAP_SERVER: kafka:29092
+      KEYSTORE_PASSWORD: generated
     volumes:
       - ./zilla.yaml:/etc/zilla/zilla.yaml
+      - ./tls:/etc/zilla/tls
     command: start -v -e
+
+  nginx:
+    image: nginx:stable
+    restart: unless-stopped
+    ports:
+      - 443:443
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+      - ./www:/usr/share/nginx/html
 
 networks:
   default:

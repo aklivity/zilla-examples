@@ -2,9 +2,9 @@
 name: example
 catalogs:
   my_catalog:
-    type: karapace
+    type: schema-registry
     options:
-      url: http://karapace-reg:8081
+      url: ${{env.SCHEMA_REGISTRY_SERVER}}
       context: default
 bindings:
   north_tcp_server:
@@ -26,8 +26,6 @@ bindings:
           - headers:
               :scheme: http
               :authority: localhost:7114
-
-              :authority: localhost:7143
         exit: north_http_kafka_mapping
   north_http_kafka_mapping:
     type: http-kafka

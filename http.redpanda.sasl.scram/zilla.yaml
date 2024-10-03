@@ -1,13 +1,5 @@
 ---
 name: example
-vaults:
-  my_servers:
-    type: filesystem
-    options:
-      keys:
-        store: tls/localhost.p12
-        type: pkcs12
-        password: ${{env.KEYSTORE_PASSWORD}}
 bindings:
   north_tcp_server:
     type: tcp

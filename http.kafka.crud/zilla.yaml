@@ -1,13 +1,5 @@
 ---
 name: example
-vaults:
-  my_servers:
-    type: filesystem
-    options:
-      keys:
-        store: tls/localhost.p12
-        type: pkcs12
-        password: ${{env.KEYSTORE_PASSWORD}}
 bindings:
   north_tcp_server:
     type: tcp
@@ -27,7 +19,6 @@ bindings:
       - when:
           - headers:
               :scheme: http
-
         exit: north_http_kafka_mapping
   north_http_kafka_mapping:
     type: http-kafka

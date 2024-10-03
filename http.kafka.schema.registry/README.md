@@ -1,6 +1,6 @@
-# http.kafka.karapace
+# http.kafka.schema.registry
 
-This simple http.kafka.karapace example illustrates how to configure Karapace Schema Registry in zilla to validate messages while produce and fetch to a Kafka topic.
+This example illustrates how to configure the Karapace Schema Registry in Zilla to validate messages during produce and fetch to a Kafka topic.
 
 ### Requirements
 
@@ -25,11 +25,11 @@ output:
 
 ```text
 + ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
-+ NAMESPACE=zilla-http-kafka-karapace
-+ helm upgrade --install zilla oci://ghcr.io/aklivity/charts/zilla --namespace zilla-http-kafka-karapace --create-namespace --wait [...]
++ NAMESPACE=zilla-http-kafka-schema-registry
++ helm upgrade --install zilla oci://ghcr.io/aklivity/charts/zilla --namespace zilla-http-kafka-schema-registry --create-namespace --wait [...]
 NAME: zilla-http-kafka-crud
 LAST DEPLOYED: [...]
-NAMESPACE: zilla-http-kafka-karapace
+NAMESPACE: zilla-http-kafka-schema-registry
 STATUS: deployed
 REVISION: 1
 NOTES:
@@ -181,10 +181,10 @@ output:
 99998
 99999
 + killall kubectl
-+ NAMESPACE=zilla-http-kafka-karapace
-+ helm uninstall zilla kafka --namespace zilla-http-kafka-karapace
++ NAMESPACE=zilla-http-kafka-schema-registry
++ helm uninstall zilla kafka --namespace zilla-http-kafka-schema-registry
 release "zilla" uninstalled
 release "kafka" uninstalled
-+ kubectl delete namespace zilla-http-kafka-karapace
-namespace "zilla-http-kafka-karapace" deleted
++ kubectl delete namespace zilla-http-kafka-schema-registry
+namespace "zilla-http-kafka-schema-registry" deleted
 ```

@@ -1,0 +1,201 @@
+Release "kafka-ui" has been upgraded. Happy Helming!
+NAME: kafka-ui
+LAST DEPLOYED: Sun Jul 14 11:13:05 2024
+NAMESPACE: zilla-quickstart
+STATUS: pending-upgrade
+REVISION: 4
+TEST SUITE: None
+HOOKS:
+MANIFEST:
+---
+# Source: kafka-ui/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kafka-ui
+  namespace: zilla-quickstart
+  labels:
+    helm.sh/chart: kafka-ui-1.4.2
+    app.kubernetes.io/name: kafka-ui
+    app.kubernetes.io/instance: kafka-ui
+    app.kubernetes.io/version: "v1.0.0"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: kafka-ui/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-ui
+  namespace: zilla-quickstart
+  labels:
+    helm.sh/chart: kafka-ui-1.4.2
+    app.kubernetes.io/name: kafka-ui
+    app.kubernetes.io/instance: kafka-ui
+    app.kubernetes.io/version: "v1.0.0"
+    app.kubernetes.io/managed-by: Helm
+data:
+  SERVER_SERVLET_CONTEXT_PATH: /kafka
+---
+# Source: kafka-ui/templates/configmap_fromValues.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-ui-fromvalues
+  namespace: zilla-quickstart
+  labels:
+    helm.sh/chart: kafka-ui-1.4.2
+    app.kubernetes.io/name: kafka-ui
+    app.kubernetes.io/instance: kafka-ui
+    app.kubernetes.io/version: "v1.0.0"
+    app.kubernetes.io/managed-by: Helm
+data:
+  config.yml: |-
+    auth:
+      type: disabled
+    kafka:
+      clusters:
+      - bootstrapServers: pkc-419q3.us-east4.gcp.confluent.cloud:9092
+        name: zilla-quickstart-kafka
+        properties:
+          sasl.jaas.config: org.apache.kafka.common.security.scram.ScramLoginModule required
+            username="Z7ZF5RTY3QQI5HH4" password="x1hon8jNtqPy3aM818ZOKTwsNygoNteNBJYjX+RIQDON24XnkPu9hsjLI2oMi9jC";
+          sasl.mechanism: PLAIN
+          security.protocol: SASL_SSL
+        readOnly: true
+    management:
+      health:
+        ldap:
+          enabled: false
+---
+# Source: kafka-ui/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-ui
+  namespace: zilla-quickstart
+  labels:
+    helm.sh/chart: kafka-ui-1.4.2
+    app.kubernetes.io/name: kafka-ui
+    app.kubernetes.io/instance: kafka-ui
+    app.kubernetes.io/version: "v1.0.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: kafka-ui
+    app.kubernetes.io/instance: kafka-ui
+---
+# Source: kafka-ui/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-ui
+  namespace: zilla-quickstart
+  labels:
+    helm.sh/chart: kafka-ui-1.4.2
+    app.kubernetes.io/name: kafka-ui
+    app.kubernetes.io/instance: kafka-ui
+    app.kubernetes.io/version: "v1.0.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kafka-ui
+      app.kubernetes.io/instance: kafka-ui
+  template:
+    metadata:
+      annotations:
+        checksum/config: 1fb66feb2c0682f849e1ba39978fbf7b2dce4d2496357da75427e4c286e66c98
+        checksum/configFromValues: a263b61203f6cc3d11b650082a63a697743c9888819dd3489282d4e5c54bb106
+        checksum/secret: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+      labels:
+        app.kubernetes.io/name: kafka-ui
+        app.kubernetes.io/instance: kafka-ui
+    spec:
+      serviceAccountName: kafka-ui
+      securityContext:
+        {}
+      containers:
+        - name: kafka-ui
+          securityContext:
+            {}
+          image: ghcr.io/kafbat/kafka-ui:v1.0.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SPRING_CONFIG_ADDITIONAL-LOCATION
+              value: /kafka-ui/config.yml
+          envFrom:
+            - configMapRef:
+                name: kafka-ui
+            - secretRef:
+                name: deploy-secrets    
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /kafka/actuator/health
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /kafka/actuator/health
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+          volumeMounts:
+            - name: kafka-ui-yaml-conf
+              mountPath: /kafka-ui/
+      volumes:
+        - name: kafka-ui-yaml-conf
+          configMap: 
+            name: kafka-ui-fromvalues
+---
+# Source: kafka-ui/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kafka-ui
+  namespace: zilla-quickstart
+  labels:
+    helm.sh/chart: kafka-ui-1.4.2
+    app.kubernetes.io/name: kafka-ui
+    app.kubernetes.io/instance: kafka-ui
+    app.kubernetes.io/version: "v1.0.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    cert-manager.io/issuer: letsencrypt-staging
+spec:
+  tls:
+    - hosts:
+        - quickstart.aklivity.io
+      secretName: quickstart-stage-tls
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - backend:
+              service:
+                name: kafka-ui
+                port:
+                  number: 80
+            pathType: Prefix
+            path: /kafka
+      host: quickstart.aklivity.io
+
+NOTES:
+1. Get the application URL by running these commands:

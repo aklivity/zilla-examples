@@ -4,6 +4,8 @@
 PORT="7114"
 EXPECTED='[{"id":1,"name":"string","tag":"string"}]'
 echo \# Testing openapi.proxy
+EXIT=0
+echo \# Testing openapi.proxy/
 echo PORT=$PORT
 echo EXPECTED="$EXPECTED"
 echo
@@ -22,8 +24,10 @@ echo RESULT=$RESULT
 
 # THEN
 if [ $RESULT -eq 0 ] && [ "$OUTPUT" = "$EXPECTED" ]; then
-  echo ✅
+      echo ✅
 else
-  echo ❌
-  exit 1
+    echo ❌
+    EXIT=1
 fi
+
+exit $EXIT

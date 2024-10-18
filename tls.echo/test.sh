@@ -1,10 +1,11 @@
-#!/bin/bash
+#!/bin/sh
 
 # GIVEN
 PORT="23456"
 INPUT="Hello, Zilla!"
 EXPECTED="Hello, Zilla!"
-echo \# Testing tls.echo
+EXIT=0
+echo \# Testing tls.echo/
 echo PORT=$PORT
 echo INPUT=$INPUT
 echo EXPECTED=$EXPECTED
@@ -17,9 +18,11 @@ echo OUTPUT=$OUTPUT
 echo RESULT=$RESULT
 
 # THEN
-if [[ $RESULT -eq 124 && "$OUTPUT" == "$EXPECTED" ]]; then
-  echo ✅
+if [ $RESULT -eq 124 ] && [ "$OUTPUT" = "$EXPECTED" ]; then
+    echo ✅
 else
-  echo ❌
-  exit 1
+    echo ❌
+    EXIT=1
 fi
+
+exit $EXIT

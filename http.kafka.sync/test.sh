@@ -15,6 +15,8 @@ echo ITEM_ID="$ITEM_ID"
 echo GREETING="$GREETING"
 echo GREETING_DATE="$GREETING_DATE"
 echo EXPECTED="$EXPECTED"
+EXIT=0
+echo \# Testing http.kafka.sync/
 echo
 
 # WHEN
@@ -62,8 +64,10 @@ echo OUTPUT="$OUTPUT"
 # THEN
 rm .testoutput
 if [ "$OUTPUT" = "$EXPECTED" ]; then
-  echo ✅
+      echo ✅
 else
-  echo ❌
-  exit 1
+    echo ❌
+    EXIT=1
 fi
+
+exit $EXIT

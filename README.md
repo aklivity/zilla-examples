@@ -77,14 +77,14 @@ Options:
 | [http.echo](http.echo)                                             | Echoes request sent to the HTTP server from an HTTP client                                          |
 | [http.echo.jwt](http.jwt)                                     | Echoes request sent to the HTTP server from a JWT-authorized HTTP client                            |
 | [http.proxy](http.proxy)                                           | Proxy request sent to the HTTP server from an HTTP client                                           |
-| [http.schema.validate](http.schema.validate)               | Proxy request sent to the HTTP server from an HTTP client with schema enforcement                   |
+| [http.schema.validate](http.json.validate)               | Proxy request sent to the HTTP server from an HTTP client with schema enforcement                   |
 | [http.kafka.sync](http.kafka.sync)                                 | Correlates HTTP requests and responses over separate Kafka topics                                   |
 | [http.kafka.async](http.kafka.async)                               | Correlates HTTP requests and responses over separate Kafka topics, asynchronously                   |
 | [http.kafka.cache](http.kafka.cache)                               | Serves cached responses from a Kafka topic, detect when updated                                     |
 | [http.kafka.oneway](http.kafka.oneway)                             | Sends messages to a Kafka topic, fire-and-forget                                                    |
 | [http.kafka.crud](http.kafka.crud)                                 | Exposes a REST API with CRUD operations where a log-compacted Kafka topic acts as a table           |
 | [http.kafka.sasl.scram](http.kafka.sasl.scram)                     | Sends messages to a SASL/SCRAM enabled Kafka                                                        |
-| [http.kafka.schema.registry](http.kafka.schema.registry)                         | Validate messages while produce and fetch to a Kafka topic                                          |
+| [http.kafka.schema.registry](http.kafka.avro.json)                         | Validate messages while produce and fetch to a Kafka topic                                          |
 | [http.redpanda.sasl.scram](http.redpanda.sasl.scram)               | Sends messages to a SASL/SCRAM enabled Redpanda Cluster                                             |
 | [kubernetes.prometheus.autoscale](kubernetes.prometheus.autoscale) | Demo Kubernetes Horizontal Pod Autoscaling feature based a on a custom metric with Prometheus       |
 | [grpc.echo](grpc.echo)                                             | Echoes messages sent to the gRPC server from a gRPC client                                          |
@@ -138,5 +138,39 @@ for d in */ ; do
     else
     docker compose up -d --force-recreate --no-deps zilla
     fi
+    EOT
+done
+
+for d in */ ; do
+    echo $d
+    cat <<EOT >> test.sh
+    #!/bin/bash
+
+    # GIVEN
+    PORT="12345"
+    INPUT="Hello, Zilla!"
+    EXPECTED="Hello, Zilla!"
+    EXIT=0
+    echo \# Testing tcp.echo
+    echo PORT=$PORT
+    echo INPUT=$INPUT
+    echo EXPECTED=$EXPECTED
+    echo
+
+    # WHEN
+    OUTPUT=$(echo $INPUT | nc -w 1 localhost $PORT)
+    RESULT=$?
+    echo OUTPUT=$OUTPUT
+    echo RESULT=$RESULT
+
+    # THEN
+    if [[ $RESULT -eq 0 && "$OUTPUT" == "$EXPECTED" ]]; then
+    echo ✅
+    else
+    echo ❌
+    EXIT=1
+    fi
+
+    exit $EXIT
     EOT
 done

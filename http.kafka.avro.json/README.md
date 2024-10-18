@@ -2,20 +2,16 @@
 
 This example illustrates how to configure the Karapace Schema Registry in Zilla to validate messages during produce and fetch to a Kafka topic.
 
-### Requirements
+## Requirements
 
-- bash, jq, nc
-- Kubernetes (e.g. Docker Desktop with Kubernetes enabled)
-- kubectl
-- helm 3.0+
+- Compose compatible host
 
-### Setup
+## Setup
 
 The `setup.sh` script:
 
-- installs Zilla and Kafka to the Kubernetes cluster with helm and waits for the pods to start up
+- installs Zilla, Kafka, and Karapace using a Compose stack
 - creates the `items-snapshots` topic in Kafka with the `cleanup.policy=compact` topic configuration
-- starts port forwarding
 
 ```bash
 ./setup.sh
@@ -55,7 +51,7 @@ Connection to localhost port 9092 [tcp/XmlIpcRegSvc] succeeded!
 ### Register Schema
 
 ```bash
-curl 'http://localhost:8081/subjects/items-snapshots-value/versions' \
+curl 'http://localhost:8081/subjects/core-paymenthub-simple-pay-ipn-request-value/versions' \
 --header 'Content-Type: application/json' \
 --data '{
   "schema":
@@ -70,7 +66,7 @@ output:
 {"id":1}%
 ```
 
-### Validate created Schema
+## Validate created Schema
 
 ```bash
 curl 'http://localhost:8081/schemas/ids/1'
@@ -80,7 +76,7 @@ curl 'http://localhost:8081/schemas/ids/1'
 curl 'http://localhost:8081/subjects/items-snapshots-value/versions/latest'
 ```
 
-### Verify behavior for a valid event
+## Verify behavior for a valid event
 
 `POST` request
 
@@ -123,7 +119,7 @@ output:
 {"id":"123","status":"OK"}
 ```
 
-### Verify behavior for Invalid event
+## Verify behavior for Invalid event
 
 `POST` request.
 
@@ -166,7 +162,7 @@ output:
 < content-length: 0
 ```
 
-### Teardown
+## Teardown
 
 The `teardown.sh` script stops port forwarding, uninstalls Zilla and Kafka and deletes the namespace.
 

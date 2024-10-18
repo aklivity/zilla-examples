@@ -1,5 +1,13 @@
 ---
 name: example
+catalogs:
+  host_filesystem:
+    type: filesystem
+    options:
+      subjects:
+        my_proto_subject:
+          path: protos/request.proto
+
 bindings:
   north_tcp_server:
     type: tcp
@@ -15,24 +23,31 @@ bindings:
   north_http_server:
     type: http
     kind: server
-    routes:
-      - when:
-          - headers:
-              :scheme: http
-        exit: north_http_kafka_mapping
+    exit: north_http_kafka_mapping
   north_http_kafka_mapping:
     type: http-kafka
     kind: proxy
     routes:
       - when:
-          - path: /events
+          - method: POST
+            path: /requests
         exit: north_kafka_cache_client
         with:
           capability: produce
-          topic: events
+          topic: my-requests
+          key: ${idempotencyKey}
   north_kafka_cache_client:
     type: kafka
     kind: cache_client
+    options:
+      topics:
+        - name: my-requests
+          value:
+            model: protobuf
+            catalog:
+              host_filesystem:
+                - subject: my_proto_subject
+                  record: Request
     exit: south_kafka_cache_server
   south_kafka_cache_server:
     type: kafka

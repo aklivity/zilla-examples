@@ -25,7 +25,6 @@ bindings:
       - when:
           - headers:
               :scheme: http
-              :authority: localhost:7114
         exit: north_http_kafka_mapping
   north_http_kafka_mapping:
     type: http-kafka

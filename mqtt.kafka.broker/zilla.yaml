@@ -27,11 +27,9 @@ bindings:
       - when:
           - headers:
               :scheme: http
-              :authority: localhost:7114
               upgrade: websocket
           - headers:
               :scheme: https
-              :authority: localhost:7143
               upgrade: websocket
         exit: north_ws_server
   north_ws_server:

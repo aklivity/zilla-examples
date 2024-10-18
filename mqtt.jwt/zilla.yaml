@@ -1,5 +1,5 @@
 ---
-name: zilla-mqtt-proxy-jwt
+name: zilla-mqtt-jwt
 ---
 name: example
 guards:

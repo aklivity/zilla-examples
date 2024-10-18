@@ -38,7 +38,7 @@ bindings:
         policy: cross-origin
       requests:
         - path: /valid.json
-          method: GET
+          method: POST
           content-type:
             - application/json
           content:
@@ -47,7 +47,7 @@ bindings:
                my_catalog:
                  - subject: my_subject
         - path: /invalid.json
-          method: GET
+          method: PUT
           content-type:
             - application/json
           content:

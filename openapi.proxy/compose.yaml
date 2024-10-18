@@ -11,11 +11,19 @@ services:
       timeout: 3s
       retries: 5
       test: ["CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/7114"]
-    environment:
-      KAFKA_BOOTSTRAP_SERVER: kafka:29092
     volumes:
+      - ./specs/petstore.yaml:/etc/zilla/petstore.yaml
       - ./zilla.yaml:/etc/zilla/zilla.yaml
     command: start -v -e
+
+  openapi-mock:
+    image: jormaechea/open-api-mocker:2.0.0
+    container_name: openapi-mock
+    volumes:
+      - ./specs:/app
+    ports:
+      - "8000:5000"
+    command: open-api-mocker -s /app/petstore.yaml
 
 networks:
   default:

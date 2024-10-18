@@ -29,7 +29,7 @@ timeout 300 curl -vs \
 
 # fetch correlation id from kafka with kcat; retry until ready
 for i in $(seq 1 20); do
-  CORRELATION_ID=$(timeout 10 kcat -C -b localhost:$KAFKA_PORT -t items-requests -J -u | jq -r '.headers | index("zilla:correlation-id") as $index | .[$index + 1]')
+  CORRELATION_ID=$(timeout 10 docker compose -p zilla-http-kafka-sync exec kcat kafkacat -C -b localhost:$KAFKA_PORT -t items-requests -J -u | jq -r '.headers | index("zilla:correlation-id") as $index | .[$index + 1]')
   if [ -n "$CORRELATION_ID" ]; then
     break
   fi
@@ -42,21 +42,16 @@ fi
 
 # push response to kafka with kcat
 echo "{\"greeting\":\"$GREETING_DATE\"}" | \
-    kcat -P \
+docker compose -p zilla-http-kafka-sync exec kcat \
+    kafkacat -P \
          -b localhost:$KAFKA_PORT \
          -t items-responses \
          -k "$ITEM_ID" \
          -H ":status=200" \
          -H "zilla:correlation-id=$CORRELATION_ID"
 
-# fetch the output of zilla request; retry until ready
-for i in $(seq 1 20); do
-  OUTPUT=$(cat .testoutput)
-  if [ -n "$OUTPUT" ]; then
-    break
-  fi
-  sleep 10
-done
+# fetch the output of zilla request
+OUTPUT=$(cat .testoutput)
 echo
 echo OUTPUT="$OUTPUT"
 

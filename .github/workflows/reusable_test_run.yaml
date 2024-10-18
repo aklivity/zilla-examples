@@ -1,0 +1,36 @@
+name: Reusable Workflow for running tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      example-dir:
+        required: true
+        description: Directory name for the example to test
+        type: string
+      
+  workflow_call:
+    inputs:
+      example-dir:
+        required: true
+        type: string
+
+
+jobs:
+
+  run-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        working-directory: ${{ inputs.example-dir }}
+        run: ./setup.sh
+      - name: Execute Test
+        working-directory: ${{ inputs.example-dir }}
+        run: |
+          set -o pipefail
+          ./test.sh | tee $GITHUB_STEP_SUMMARY
+      - name: Teardown
+        if: always()
+        working-directory: ${{ inputs.example-dir }}
+        run: ./teardown.sh

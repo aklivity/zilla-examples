@@ -5,16 +5,17 @@ services:
     pull_policy: always
     restart: unless-stopped
     ports:
-      - 7114:7114
+      - 23456:23456
     healthcheck:
       interval: 5s
       timeout: 3s
       retries: 5
-      test: ["CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/7114"]
+      test: ["CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/23456"]
     environment:
-      KAFKA_BOOTSTRAP_SERVER: kafka:29092
+      KEYSTORE_PASSWORD: generated
     volumes:
       - ./zilla.yaml:/etc/zilla/zilla.yaml
+      - ./tls:/etc/zilla/tls
     command: start -v -e
 
 networks:

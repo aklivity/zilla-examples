@@ -27,7 +27,7 @@ curl -vs \
   -H "Content-Type: application/json" \
   -d "{\"greeting\":\"$GREETING\"}" | tee .testoutput &
 
-# fetch correlation id from kafka with kcat; retry until ready
+# fetch correlation id from kafka with kcat
 CORRELATION_ID=$(docker compose -p zilla-http-kafka-sync exec kcat kafkacat -C -b localhost:$KAFKA_PORT -t items-requests -J -u | jq -r '.headers | index("zilla:correlation-id") as $index | .[$index + 1]')
 echo CORRELATION_ID="$CORRELATION_ID"
 if [ -z "$CORRELATION_ID" ]; then

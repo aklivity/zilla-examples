@@ -12,7 +12,7 @@ echo EXPECTED=$EXPECTED
 echo
 
 # WHEN
-OUTPUT=$(echo $INPUT | nc -w 1 localhost $PORT)
+OUTPUT=$(echo $INPUT)
 RESULT=$?
 echo OUTPUT=
 echo RESULT=

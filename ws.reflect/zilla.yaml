@@ -18,7 +18,6 @@ bindings:
     routes:
       - when:
           - headers:
-              :scheme: http
               upgrade: websocket
         exit: north_ws_server
   north_ws_server:

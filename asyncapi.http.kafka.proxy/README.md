@@ -166,7 +166,6 @@ echo '{"id":200000,"username":"fehguy","status":"approved","address":[{"street":
          -H "zilla:correlation-id={correlationId}"
 ```
 
-
 ### Teardown
 
 The `teardown.sh` script will remove any resources created.

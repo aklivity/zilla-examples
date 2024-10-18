@@ -1,11 +1,183 @@
 name: Test All Examples
 
 on:
+  push:
   pull_request:
   workflow_dispatch:
 
 jobs:
-  test-tcp-echo:
+  amqp-reflect:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: amqp.reflect
+
+  asyncapi-http-kafka-proxy:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: asyncapi.http.kafka.proxy
+
+  asyncapi-mqtt-kafka-proxy:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: asyncapi.mqtt.kafka.proxy
+
+  asyncapi-mqtt-proxy:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: asyncapi.mqtt.proxy
+
+  asyncapi-sse-kafka-proxy:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: asyncapi.sse.kafka.proxy
+
+  asyncapi-sse-proxy:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: asyncapi.sse.proxy
+
+  grpc-echo:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: grpc.echo
+
+  grpc-kafka-echo:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: grpc.kafka.echo
+
+  grpc-kafka-fanout:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: grpc.kafka.fanout
+
+  grpc-kafka-proxy:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: grpc.kafka.proxy
+
+  grpc-proxy:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: grpc.proxy
+
+  http-filesystem:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.filesystem
+
+  http-json-validate:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.json.validate
+
+  http-jwt:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.jwt
+
+  http-kafka-async:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.kafka.async
+
+  http-kafka-avro-json:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.kafka.avro.json
+
+  http-kafka-cache:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.kafka.cache
+
+  http-kafka-crud:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.kafka.crud
+
+  http-kafka-oneway:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.kafka.oneway
+
+  http-kafka-proto-json:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.kafka.proto.json
+
+  http-kafka-proto-oneway:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.kafka.proto.oneway
+
+  http-kafka-sync:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.kafka.sync
+
+  http-proxy:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.proxy
+
+  mqtt-jwt:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: mqtt.jwt
+
+  mqtt-kafka-broker:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: mqtt.kafka.broker
+
+  openapi-asyncapi-proxy:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: openapi.asyncapi.proxy
+
+  openapi-proxy:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: openapi.proxy
+
+  sse-jwt:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: sse.jwt
+
+  sse-kafka-fanout:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: sse.kafka.fanout
+
+  tcp-echo:
     uses: ./.github/workflows/reusable_test_run.yaml
     with:
       example-dir: tcp.echo
+
+  tcp-reflect:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: tcp.reflect
+
+  tls-echo:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: tls.echo
+
+  tls-reflect:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: tls.reflect
+
+  ws-echo:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: ws.echo
+
+  ws-reflect:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: ws.reflect
+

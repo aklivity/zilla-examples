@@ -26,6 +26,7 @@ jobs:
         working-directory: ${{ inputs.example-dir }}
         run: ./setup.sh
       - name: Wait for Zilla to be healthy
+        working-directory: ${{ inputs.example-dir }}
         run: timeout 60s sh -c 'until docker compose ps zilla --format "{{.Name}} {{.Health}}" | grep -q healthy; do echo "Waiting for container to be healthy..."; sleep 2; done'
       - name: Execute Test
         working-directory: ${{ inputs.example-dir }}

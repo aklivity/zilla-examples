@@ -1,7 +1,6 @@
 name: Test All Examples
 
 on:
-  push:
   pull_request:
   workflow_dispatch:
 

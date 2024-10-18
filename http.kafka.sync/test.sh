@@ -21,48 +21,42 @@ echo
 
 # WHEN
 # send request to zilla
-timeout 300 curl -vs \
-       -X "PUT" http://localhost:$ZILLA_PORT/items/$ITEM_ID \
-       -H "Idempotency-Key: 1" \
-       -H "Content-Type: application/json" \
-       -d "{\"greeting\":\"$GREETING\"}" | tee .testoutput &
+curl -vs \
+  -X "PUT" http://localhost:$ZILLA_PORT/items/$ITEM_ID \
+  -H "Idempotency-Key: 1" \
+  -H "Content-Type: application/json" \
+  -d "{\"greeting\":\"$GREETING\"}" | tee .testoutput &
 
 # fetch correlation id from kafka with kcat; retry until ready
-for i in $(seq 1 20); do
-  CORRELATION_ID=$(timeout 10 docker compose -p zilla-http-kafka-sync exec kcat kafkacat -C -b localhost:$KAFKA_PORT -t items-requests -J -u | jq -r '.headers | index("zilla:correlation-id") as $index | .[$index + 1]')
-  if [ -n "$CORRELATION_ID" ]; then
-    break
-  fi
-done
-echo CORRELATION_ID"=$CORRELATION_ID"
+CORRELATION_ID=$(docker compose -p zilla-http-kafka-sync exec kcat kafkacat -C -b localhost:$KAFKA_PORT -t items-requests -J -u | jq -r '.headers | index("zilla:correlation-id") as $index | .[$index + 1]')
+echo CORRELATION_ID="$CORRELATION_ID"
 if [ -z "$CORRELATION_ID" ]; then
   echo ❌
-  exit 1
+  EXIT=1
 fi
 
 # push response to kafka with kcat
-echo "{\"greeting\":\"$GREETING_DATE\"}" | \
-docker compose -p zilla-http-kafka-sync exec kcat \
+echo "{\"greeting\":\"$GREETING_DATE\"}" |
+  docker compose -p zilla-http-kafka-sync exec kcat \
     kafkacat -P \
-         -b localhost:$KAFKA_PORT \
-         -t items-responses \
-         -k "$ITEM_ID" \
-         -H ":status=200" \
-         -H "zilla:correlation-id=$CORRELATION_ID"
+    -b localhost:$KAFKA_PORT \
+    -t items-responses \
+    -k "$ITEM_ID" \
+    -H ":status=200" \
+    -H "zilla:correlation-id=$CORRELATION_ID"
 
 # fetch the output of zilla request
 OUTPUT=$(cat .testoutput)
 echo
 echo OUTPUT="$OUTPUT"
 
-
 # THEN
 rm .testoutput
 if [ "$OUTPUT" = "$EXPECTED" ]; then
-      echo ✅
+  echo ✅
 else
-    echo ❌
-    EXIT=1
+  echo ❌
+  EXIT=1
 fi
 
 exit $EXIT

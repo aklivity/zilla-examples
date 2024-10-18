@@ -12,7 +12,7 @@ echo EXPECTED=$EXPECTED
 echo
 
 # WHEN
-OUTPUT=$(echo $INPUT | timeout 2 openssl s_client -connect localhost:$PORT -CAfile test-ca.crt -quiet -alpn echo)
+OUTPUT=$(echo $INPUT | openssl s_client -connect localhost:$PORT -CAfile test-ca.crt -quiet -alpn echo)
 RESULT=$?
 echo OUTPUT=$OUTPUT
 echo RESULT=$RESULT
@@ -21,8 +21,8 @@ echo RESULT=$RESULT
 if [ $RESULT -eq 124 ] && [ "$OUTPUT" = "$EXPECTED" ]; then
     echo ✅
 else
-    echo ❌
-    EXIT=1
+  echo ❌
+  EXIT=1
 fi
 
 exit $EXIT

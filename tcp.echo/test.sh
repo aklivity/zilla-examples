@@ -19,10 +19,10 @@ echo RESULT=$RESULT
 
 # THEN
 if [ $RESULT -eq 0 ] && [ "$OUTPUT" = "$EXPECTED" ]; then
-      echo ✅
+  echo ✅
 else
-    echo ❌
-    EXIT=1
+  echo ❌
+  EXIT=1
 fi
 
 exit $EXIT

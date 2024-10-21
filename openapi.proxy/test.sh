@@ -1,4 +1,5 @@
 #!/bin/sh
+set -xe
 
 # GIVEN
 PORT="7114"
@@ -16,6 +17,9 @@ echo OUTPUT=$OUTPUT
 echo RESULT=$RESULT
 
 # THEN
+echo OUTPUT="$OUTPUT"
+echo EXPECTED="$EXPECTED"
+echo
 if [ $RESULT -eq 0 ] && [ "$OUTPUT" = "$EXPECTED" ]; then
   echo ✅
 else

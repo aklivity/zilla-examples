@@ -15,7 +15,6 @@ echo
 # WHEN
 OUTPUT=$(echo $INPUT | nc -w 1 localhost $PORT)
 RESULT=$?
-echo OUTPUT=$OUTPUT
 echo RESULT=$RESULT
 
 # THEN

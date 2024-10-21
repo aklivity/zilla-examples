@@ -22,6 +22,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Cache Docker images.
+        uses: ScribeMD/docker-cache@0.5.0
+        with:
+          key: docker-${{ runner.os }}-${{ hashFiles(format('{0}/compose.yaml', inputs.example-dir)) }}
+
       - name: Setup
         working-directory: ${{ inputs.example-dir }}
         run: ./setup.sh

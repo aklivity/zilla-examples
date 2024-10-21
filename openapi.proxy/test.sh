@@ -13,7 +13,6 @@ echo
 # WHEN
 OUTPUT=$(curl --silent --location "http://localhost:$PORT/pets" --header 'Accept: application/json')
 RESULT=$?
-echo OUTPUT=$OUTPUT
 echo RESULT=$RESULT
 
 # THEN

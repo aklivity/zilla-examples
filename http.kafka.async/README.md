@@ -135,7 +135,8 @@ output:
 Verify the request, then send the correlated response via the kafka `items-responses` topic.
 
 ```bash
-kcat -C -b localhost:9092 -t items-requests -J -u | jq .
+docker compose -p zilla-http-kafka-sync exec kcat \
+kafkacat -C -b localhost:9092 -t items-requests -J -u | jq .
 ```
 
 output:
@@ -201,7 +202,8 @@ The previous asynchronous request will complete with `200 OK` if done within `60
 Verify the response via the kafka `items-responses` topic.
 
 ```bash
-kcat -C -b localhost:9092 -t items-responses -J -u | jq .
+docker compose -p zilla-http-kafka-sync exec kcat \
+kafkacat -C -b localhost:9092 -t items-responses -J -u | jq .
 ```
 
 output:

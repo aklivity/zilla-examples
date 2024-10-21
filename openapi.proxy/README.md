@@ -1,9 +1,8 @@
 # openapi.proxy
+
+This example demonstrates creating an HTTP request proxy where the available endpoints are defined in an OpenAPI schema [petstore.yaml](./specs/petstore.yaml).
+
 ## Running locally
-
-This example runs using Docker compose. You will find the setup scripts in the [compose](./docker/compose) folder.
-
-### Setup
 
 The `setup.sh` script will:
 
@@ -11,19 +10,31 @@ The `setup.sh` script will:
 - Start openapi-mock
 
 ```bash
-./compose/setup.sh
+./setup.sh
 ```
 
-### Test
+- alternatively with the docker compose command:
+
+```bash
+docker compose up -d
+```
+
+## Test
 
 ```bash
 curl --location 'http://localhost:7114/pets' --header 'Accept: application/json'
 ```
 
-### Teardown
+## Teardown
 
 The `teardown.sh` script will remove any resources created.
 
 ```bash
-./compose/teardown.sh
+./teardown.sh
+```
+
+- alternatively with the docker compose command:
+
+```bash
+docker compose down --remove-orphans
 ```

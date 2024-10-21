@@ -6,7 +6,7 @@ catalogs:
     options:
       subjects:
         eventstore:
-          path: asyncapi/sse-asyncapi.yaml
+          path: specs/sse-asyncapi.yaml
 bindings:
   sse_proxy_server:
     type: asyncapi

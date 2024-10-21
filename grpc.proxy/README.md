@@ -1,6 +1,6 @@
 # grpc.proxy
 
-Listens on https port `7153` and will echo back whatever is published to `grpc-echo` on tcp port `50051`.
+Listens on https port `7151` and will echo back whatever is published to `grpc-echo` on tcp port `50051`.
 
 ### Requirements
 
@@ -40,12 +40,12 @@ NAMESPACE: zilla-grpc-proxy
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
-+ kubectl port-forward --namespace zilla-grpc-proxy service/zilla 7153
++ kubectl port-forward --namespace zilla-grpc-proxy service/zilla 7151
 + kubectl port-forward --namespace zilla-grpc-proxy service/grpc-echo 8080
-+ nc -z localhost 7153
++ nc -z localhost 7151
 + sleep 1
-+ nc -z localhost 7153
-Connection to localhost port 7153 [tcp/websm] succeeded!
++ nc -z localhost 7151
+Connection to localhost port 7151 [tcp/websm] succeeded!
 + nc -z localhost 8080
 Connection to localhost port 8080 [tcp/http-alt] succeeded!
 ```
@@ -57,7 +57,7 @@ Connection to localhost port 8080 [tcp/http-alt] succeeded!
 Echo `{"message":"Hello World"}` message via unary rpc.
 
 ```bash
-grpcurl -insecure -proto proto/echo.proto  -d '{"message":"Hello World"}' localhost:7153 grpc.examples.echo.Echo.UnaryEcho
+grpcurl -insecure -proto echo.proto  -d '{"message":"Hello World"}' localhost:7151 grpc.examples.echo.Echo.UnaryEcho
 ```
 
 output:
@@ -73,7 +73,7 @@ output:
 Echo messages via bidirectional streaming rpc.
 
 ```bash
-grpcurl -insecure -proto proto/echo.proto -d @ localhost:7153 grpc.examples.echo.Echo.BidirectionalStreamingEcho
+grpcurl -insecure -proto echo.proto -d @ localhost:7151 grpc.examples.echo.Echo.BidirectionalStreamingEcho
 ```
 
 Paste below message.

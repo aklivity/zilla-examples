@@ -1,10 +1,11 @@
-#!/bin/bash
+#!/bin/sh
 
 # GIVEN
 PORT="12345"
 INPUT="Hello, Zilla!"
 EXPECTED="Hello, Zilla!"
-echo \# Testing tcp.echo
+EXIT=0
+echo \# Testing tcp.echo/
 echo PORT=$PORT
 echo INPUT=$INPUT
 echo EXPECTED=$EXPECTED
@@ -17,9 +18,11 @@ echo OUTPUT=$OUTPUT
 echo RESULT=$RESULT
 
 # THEN
-if [[ $RESULT -eq 0 && "$OUTPUT" == "$EXPECTED" ]]; then
+if [ $RESULT -eq 0 ] && [ "$OUTPUT" = "$EXPECTED" ]; then
   echo ✅
 else
   echo ❌
-  exit 1
+  EXIT=1
 fi
+
+exit $EXIT

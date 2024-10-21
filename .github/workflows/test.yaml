@@ -1,97 +1,182 @@
-name: Test Examples
+name: Test All Examples
 
 on:
   pull_request:
   workflow_dispatch:
 
 jobs:
-  test-tcp-echo:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Create k8s Kind Cluster
-        uses: helm/kind-action@v1
-      - name: Setup
-        working-directory: tcp.echo
-        run: ./setup.sh
-      - name: Execute Test
-        working-directory: tcp.echo
-        run: |
-          set -o pipefail
-          ./test.sh | tee $GITHUB_STEP_SUMMARY
-      - name: Teardown
-        if: always()
-        working-directory: tcp.echo
-        run: ./teardown.sh
+  amqp-reflect:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: amqp.reflect
 
-  test-tls-echo:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Create k8s Kind Cluster
-        uses: helm/kind-action@v1
-      - name: Setup
-        working-directory: tls.echo
-        run: ./setup.sh
-      - name: Execute Test
-        working-directory: tls.echo
-        run: |
-          set -o pipefail
-          ./test.sh | tee $GITHUB_STEP_SUMMARY
-      - name: Teardown
-        if: always()
-        working-directory: tls.echo
-        run: ./teardown.sh
+  asyncapi-http-kafka-proxy:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: asyncapi.http.kafka.proxy
 
-  test-http-kafka-sync:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install apt packages
-        uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: librdkafka-dev libyajl-dev
-          version: 1.0
-      - name: Install kcat
-        working-directory: /tmp
-        run: |
-          set -x
-          curl -L -o kcat https://github.com/attilakreiner/kcat/releases/download/1.7.1/kcat-linux-$(arch)
-          chmod +x kcat
-          sudo mv kcat /usr/local/bin
-          kcat 2>&1 | grep "Version 1.7.1"
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Create k8s Kind Cluster
-        uses: helm/kind-action@v1
-      - name: Setup
-        working-directory: http.kafka.sync
-        run: ./setup.sh
-      - name: Execute Test
-        working-directory: http.kafka.sync
-        run: |
-          set -o pipefail
-          ./test.sh | tee $GITHUB_STEP_SUMMARY
-      - name: Teardown
-        if: always()
-        working-directory: http.kafka.sync
-        run: ./teardown.sh
+  asyncapi-mqtt-kafka-proxy:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: asyncapi.mqtt.kafka.proxy
 
-  test-openapi-proxy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup
-        working-directory: openapi.proxy/docker/compose
-        run: ./setup.sh
-      - name: Execute Test
-        working-directory: openapi.proxy
-        run: |
-          set -o pipefail
-          ./test.sh | tee $GITHUB_STEP_SUMMARY
-      - name: Teardown
-        if: always()
-        working-directory: openapi.proxy/docker/compose
-        run: ./teardown.sh
+  asyncapi-mqtt-proxy:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: asyncapi.mqtt.proxy
+
+  asyncapi-sse-kafka-proxy:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: asyncapi.sse.kafka.proxy
+
+  asyncapi-sse-proxy:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: asyncapi.sse.proxy
+
+  grpc-echo:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: grpc.echo
+
+  grpc-kafka-echo:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: grpc.kafka.echo
+
+  grpc-kafka-fanout:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: grpc.kafka.fanout
+
+  grpc-kafka-proxy:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: grpc.kafka.proxy
+
+  grpc-proxy:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: grpc.proxy
+
+  http-filesystem:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.filesystem
+
+  http-json-validate:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.json.validate
+
+  http-jwt:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.jwt
+
+  http-kafka-async:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.kafka.async
+
+  http-kafka-avro-json:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.kafka.avro.json
+
+  http-kafka-cache:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.kafka.cache
+
+  http-kafka-crud:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.kafka.crud
+
+  http-kafka-oneway:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.kafka.oneway
+
+  http-kafka-proto-json:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.kafka.proto.json
+
+  http-kafka-proto-oneway:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.kafka.proto.oneway
+
+  http-kafka-sync:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.kafka.sync
+
+  http-proxy:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: http.proxy
+
+  mqtt-jwt:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: mqtt.jwt
+
+  mqtt-kafka-broker:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: mqtt.kafka.broker
+
+  openapi-asyncapi-proxy:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: openapi.asyncapi.proxy
+
+  openapi-proxy:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: openapi.proxy
+
+  sse-jwt:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: sse.jwt
+
+  sse-kafka-fanout:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: sse.kafka.fanout
+
+  tcp-echo:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: tcp.echo
+
+  tcp-reflect:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: tcp.reflect
+
+  tls-echo:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: tls.echo
+
+  tls-reflect:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: tls.reflect
+
+  ws-echo:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: ws.echo
+
+  ws-reflect:
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: ws.reflect
+

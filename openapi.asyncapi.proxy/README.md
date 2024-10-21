@@ -1,9 +1,6 @@
 # openapi.asyncapi.proxy
-## Running locally
 
-This example runs using Docker compose. You will find the setup scripts in the [compose](./docker/compose) folder.
-
-### Setup
+## Setup
 
 The `setup.sh` script will:
 
@@ -16,6 +13,7 @@ The `setup.sh` script will:
 ### Test
 
 #### Create Pet
+
 ```bash
 curl -X POST --location 'http://localhost:7114/pets' \
      --header 'Content-Type: application/json' \
@@ -24,6 +22,7 @@ curl -X POST --location 'http://localhost:7114/pets' \
 ```
 
 #### Retrieve Pets
+
 ```bash
 curl --location 'http://localhost:7114/pets' --header 'Accept: application/json'
 ```

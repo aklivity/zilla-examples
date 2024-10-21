@@ -3,15 +3,9 @@
 In this guide, you create Kafka topics and use Zilla to implement an SSE API where Zilla listens on http port 7114 and will stream back whatever is published to the events topic in Kafka.
 Zilla is implementing the SSE endpoints defined in an AsyncAPI 3.x spec and proxying them onto Kafka topics defined in an AsyncAPI 3.x spec based on the operations defined in each spec.
 
-## Running locally
+## Setup
 
-This example can be run using Docker compose or Kubernetes. The setup scripts are in the [compose](./docker/compose) and [helm](./k8s/helm) folders respectively and work the same way.
-
-You will need a running kafka broker. To start one locally you will find instructions in the [kafka.broker](../kafka.broker) folder. Alternatively you can use the [redpanda.broker](../redpanda.broker) folder.
-
-### Setup
-
-Whether you chose [compose](./docker/compose) or [helm](./k8s/helm), the `setup.sh` script will:
+The `setup.sh` script will:
 
 - create the necessary kafka topics
 - create the Eventstore API at `http://localhost:7114`

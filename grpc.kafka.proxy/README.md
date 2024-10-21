@@ -1,6 +1,6 @@
 # grpc.kafka.proxy
 
-Listens on https port `7153` and uses kafka as proxy to talk to `grpc-echo` on tcp port `50051`.
+Listens on https port `7151` and uses kafka as proxy to talk to `grpc-echo` on tcp port `50051`.
 
 ## Requirements
 
@@ -44,13 +44,13 @@ TEST SUITE: None
 Created topic echo-requests.
 + kubectl exec --namespace zilla-grpc-kafka-proxy pod/kafka-74675fbb8-7knvx -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic echo-responses --if-not-exists
 Created topic echo-responses.
-+ kubectl port-forward --namespace zilla-grpc-kafka-proxy service/zilla 7153
++ kubectl port-forward --namespace zilla-grpc-kafka-proxy service/zilla 7151
 + kubectl port-forward --namespace zilla-grpc-kafka-proxy service/kafka 9092 29092
-+ nc -z localhost 7153
++ nc -z localhost 7151
 + kubectl port-forward --namespace zilla-grpc-kafka-proxy service/grpc-echo 8080
 + sleep 1
-+ nc -z localhost 7153
-Connection to localhost port 7153 [tcp/websm] succeeded!
++ nc -z localhost 7151
+Connection to localhost port 7151 [tcp/websm] succeeded!
 + nc -z localhost 9092
 Connection to localhost port 9092 [tcp/XmlIpcRegSvc] succeeded!
 + nc -z localhost 8080
@@ -64,7 +64,7 @@ Connection to localhost port 8080 [tcp/http-alt] succeeded!
 Echo `{"message":"Hello World"}` message via unary rpc.
 
 ```bash
-grpcurl -insecure -proto proto/echo.proto  -d '{"message":"Hello World"}' localhost:7153 grpc.examples.echo.Echo.UnaryEcho
+grpcurl -insecure -proto echo.proto  -d '{"message":"Hello World"}' localhost:7151 grpc.examples.echo.Echo.UnaryEcho
 ```
 
 output:
@@ -78,7 +78,8 @@ output:
 Verify the message payload, followed by a tombstone to mark the end of the request.
 
 ```bash
-kcat -C -b localhost:9092 -t echo-requests -J -u | jq .
+docker compose -p zilla-http-kafka-sync exec kcat \
+kafkacat -C -b localhost:9092 -t echo-requests -J -u | jq .
 ```
 
 output:
@@ -132,7 +133,7 @@ output:
 Echo messages via bidirectional streaming rpc.
 
 ```bash
-grpcurl -insecure -proto proto/echo.proto -d @ localhost:7153 grpc.examples.echo.Echo.BidirectionalStreamingEcho <<EOM
+grpcurl -insecure -proto echo.proto -d @ localhost:7151 grpc.examples.echo.Echo.BidirectionalStreamingEcho <<EOM
 {"message":"Hello World, first"}
 {"message":"Hello World, stream"}
 {"message":"Hello World, stream"}
@@ -164,7 +165,8 @@ output:
 Verify the message payloads arrived in order, followed by a tombstone to mark the end of the response.
 
 ```bash
-kcat -C -b localhost:9092 -t echo-responses -J -u | jq .
+docker compose -p zilla-http-kafka-sync exec kcat \
+kafkacat -C -b localhost:9092 -t echo-responses -J -u | jq .
 ```
 
 output:

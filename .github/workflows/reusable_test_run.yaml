@@ -30,7 +30,7 @@ jobs:
         run: timeout 60s sh -c 'until docker compose ps zilla --format "{{.Name}} {{.Health}}" | grep -q healthy; do echo "Waiting for container to be healthy..."; sleep 2; done'
 
       - name: Execute Test
-        if: ${{ hashFiles('${{ inputs.example-dir }}/test.sh') != '' }}
+        if: ${{ hashFiles(format('{0}/test.sh', inputs.example-dir)) != '' }}
         working-directory: ${{ inputs.example-dir }}
         run: |
           set -o pipefail
@@ -48,7 +48,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: logs.tgz
+          name: ${{ inputs.example-dir }}_logs.tgz
           path: ./logs.tgz
 
       - name: Teardown

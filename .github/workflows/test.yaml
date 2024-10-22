@@ -32,7 +32,7 @@ jobs:
         id: set-output
         run: echo "changed_directories={\"dir\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "$GITHUB_OUTPUT"
 
-  run-test:
+  testing:
     if: ${{ needs.find-out-changes.outputs.changed_directories != '' }}  # Without it, the strategy parser will fail if the changed_directories is empty.
     strategy:
       matrix: ${{fromJson(needs.find-out-changes.outputs.changed_directories)}}

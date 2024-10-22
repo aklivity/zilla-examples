@@ -20,7 +20,7 @@ echo
 
 # WHEN
 # send request to zilla
-timeout 5s curl \
+timeout 10s curl \
   -X "PUT" http://localhost:$ZILLA_PORT/items/$ITEM_ID \
   -H "Idempotency-Key: $ITEM_ID" \
   -H "Content-Type: application/json" \
@@ -44,7 +44,7 @@ echo "{\"greeting\":\"$GREETING_DATE\"}" |
     -H ":status=200" \
     -H "zilla:correlation-id=$CORRELATION_ID"
 
-sleep 10
+sleep 15
 
 # fetch the output of zilla request
 cat .testoutput

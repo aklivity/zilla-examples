@@ -24,7 +24,7 @@ jobs:
           exclude_submodules: true
           files_ignore: |
             *.md
-            .github
+            .github/**/*
           json: true
           quotepath: false
 

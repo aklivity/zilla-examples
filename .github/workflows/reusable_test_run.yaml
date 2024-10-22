@@ -22,7 +22,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          path: ${{ inputs.example-dir }}
           sparse-checkout: ${{ inputs.example-dir }}
 
       - run: ls -la
@@ -36,8 +35,9 @@ jobs:
 
       - name: Setup
         # if: ${{ hashFiles(format('{0}/setup.sh', inputs.example-dir)) != '' }}
-        working-directory: ${{ inputs.example-dir }}
-        run: ./setup.sh
+        # working-directory: ${{ inputs.example-dir }}
+        # run: ./setup.sh
+        run: ./startup.sh ${{ inputs.example-dir }}
       - name: Wait for Zilla to be healthy
         working-directory: ${{ inputs.example-dir }}
         run: timeout 60s sh -c 'until docker compose ps zilla --format "{{.Name}} {{.Health}}" | grep -q healthy; do echo "Waiting for container to be healthy..."; sleep 2; done'

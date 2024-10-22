@@ -36,6 +36,7 @@ jobs:
     if: ${{ needs.find-out-changes.outputs.changed_directories != '' }}  # Without it, the strategy parser will fail if the changed_directories is empty.
     strategy:
       matrix: ${{fromJson(needs.find-out-changes.outputs.changed_directories)}}
+      fail-fast: false
     needs:
       - find-out-changes
     uses: ./.github/workflows/reusable_test_run.yaml

@@ -15,8 +15,7 @@ echo
 # WHEN
 OUTPUT=$(echo $INPUT)
 RESULT=$?
-echo OUTPUT=
-echo RESULT=
+echo RESULT="$RESULT"
 
 # THEN
 echo OUTPUT="$OUTPUT"

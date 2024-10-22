@@ -33,8 +33,12 @@ bindings:
     kind: server
     options:
       host: 0.0.0.0
-      port: 7143
-    exit: north_tls_server
+      port:
+        - 7143
+    routes:
+      - when:
+          - port: 7143
+        exit: north_tls_server
   north_tls_server:
     type: tls
     kind: server

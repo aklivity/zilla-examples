@@ -16,6 +16,7 @@ services:
     volumes:
       - ./zilla.yaml:/etc/zilla/zilla.yaml
       - ./tls:/etc/zilla/tls
+      - ./www:/var/www/
     command: start -v -e
 
   sse-server:

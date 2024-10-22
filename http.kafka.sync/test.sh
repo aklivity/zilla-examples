@@ -20,7 +20,7 @@ echo
 
 # WHEN
 # send request to zilla
-timeout 5s curl \
+curl \
   -X "PUT" http://localhost:$ZILLA_PORT/items/$ITEM_ID \
   -H "Idempotency-Key: $ITEM_ID" \
   -H "Content-Type: application/json" \
@@ -44,13 +44,16 @@ echo "{\"greeting\":\"$GREETING_DATE\"}" |
     -H ":status=200" \
     -H "zilla:correlation-id=$CORRELATION_ID"
 
-sleep 10
 
 # fetch the output of zilla request
-cat .testoutput
-OUTPUT=$(cat .testoutput)
+for i in $(seq 1 15); do
+  sleep $i
+  OUTPUT=$(cat .testoutput)
+  if [ -n "$OUTPUT" ]; then
+    break
+  fi
+done
 rm .testoutput
-echo
 
 # THEN
 echo OUTPUT="$OUTPUT"

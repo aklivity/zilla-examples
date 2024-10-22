@@ -28,18 +28,20 @@ jobs:
         run: echo "changed_directories={\"dir\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "$GITHUB_OUTPUT"
 
   run-test:
-    runs-on: ubuntu-latest
     if: ${{ needs.find-out-changes.outputs.changed_directories != '' }}  # Without it, the strategy parser will fail if the changed_directories is empty.
     strategy:
       matrix: ${{fromJson(needs.find-out-changes.outputs.changed_directories)}}
     needs:
       - find-out-changes
-    steps:
-      - uses: actions/checkout@v4
-      - if: ${{ hashFiles(format('{0}/setup.sh', matrix.dir)) != '' }}
-        uses: ./.github/workflows/reusable_test_run.yaml
-        with:
-          example-dir: ${{ matrix.dir }}
+    uses: ./.github/workflows/reusable_test_run.yaml
+    with:
+      example-dir: ${{ matrix.dir }}
+    # steps:
+    #   - uses: actions/checkout@v4
+    #   - if: ${{ hashFiles(format('{0}/setup.sh', matrix.dir)) != '' }}
+    #     uses: ./.github/workflows/reusable_test_run.yaml
+    #     with:
+    #       example-dir: ${{ matrix.dir }}
   # amqp-reflect:
   #   uses: ./.github/workflows/reusable_test_run.yaml
   #   with:

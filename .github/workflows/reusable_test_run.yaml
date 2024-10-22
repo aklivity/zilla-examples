@@ -19,21 +19,20 @@ jobs:
   run-test:
     runs-on: ubuntu-latest
     steps:
-      # - name: Checkout
-      #   uses: actions/checkout@v4
-      #   with:
-      #     path: ${{ inputs.example-dir }}
-      #     sparse-checkout: ${{ inputs.example-dir }}
-
-      # - run: ls -la ../
-      # - run: ls -la
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: ${{ inputs.example-dir }}
+          sparse-checkout: ${{ inputs.example-dir }}
 
       - name: Cache Docker images.
+        if: ${{ hashFiles(format('{0}/compose.yaml', inputs.example-dir)) != '' }}
         uses: ScribeMD/docker-cache@0.5.0
         with:
           key: docker-${{ runner.os }}-${{ hashFiles(format('{0}/compose.yaml', inputs.example-dir)) }}
 
       - name: Setup
+        if: ${{ hashFiles(format('{0}/setup.sh', inputs.example-dir)) != '' }}
         working-directory: ${{ inputs.example-dir }}
         run: ./setup.sh
       - name: Wait for Zilla to be healthy
@@ -63,6 +62,6 @@ jobs:
           path: ./logs.tgz
 
       - name: Teardown
-        if: always()
+        if: always() && ${{ hashFiles(format('{0}/teardown.sh', inputs.example-dir)) != '' }}
         working-directory: ${{ inputs.example-dir }}
         run: ./teardown.sh

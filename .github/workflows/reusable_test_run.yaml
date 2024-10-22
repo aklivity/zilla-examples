@@ -25,6 +25,9 @@ jobs:
           path: ${{ inputs.example-dir }}
           sparse-checkout: ${{ inputs.example-dir }}
 
+      - run: ls -la
+        working-directory: ${{ inputs.example-dir }}
+
       - name: Cache Docker images.
         # if: ${{ hashFiles(format('{0}/compose.yaml', inputs.example-dir)) != '' }}
         uses: ScribeMD/docker-cache@0.5.0

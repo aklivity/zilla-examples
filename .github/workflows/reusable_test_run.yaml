@@ -26,13 +26,13 @@ jobs:
           sparse-checkout: ${{ inputs.example-dir }}
 
       - name: Cache Docker images.
-        if: ${{ hashFiles(format('{0}/compose.yaml', inputs.example-dir)) != '' }}
+        # if: ${{ hashFiles(format('{0}/compose.yaml', inputs.example-dir)) != '' }}
         uses: ScribeMD/docker-cache@0.5.0
         with:
           key: docker-${{ runner.os }}-${{ hashFiles(format('{0}/compose.yaml', inputs.example-dir)) }}
 
       - name: Setup
-        if: ${{ hashFiles(format('{0}/setup.sh', inputs.example-dir)) != '' }}
+        # if: ${{ hashFiles(format('{0}/setup.sh', inputs.example-dir)) != '' }}
         working-directory: ${{ inputs.example-dir }}
         run: ./setup.sh
       - name: Wait for Zilla to be healthy
@@ -40,7 +40,7 @@ jobs:
         run: timeout 60s sh -c 'until docker compose ps zilla --format "{{.Name}} {{.Health}}" | grep -q healthy; do echo "Waiting for container to be healthy..."; sleep 2; done'
 
       - name: Execute Test
-        if: ${{ hashFiles(format('{0}/test.sh', inputs.example-dir)) != '' }}
+        # if: ${{ hashFiles(format('{0}/test.sh', inputs.example-dir)) != '' }}
         working-directory: ${{ inputs.example-dir }}
         run: |
           set -o pipefail
@@ -62,6 +62,7 @@ jobs:
           path: ./logs.tgz
 
       - name: Teardown
-        if: always() && ${{ hashFiles(format('{0}/teardown.sh', inputs.example-dir)) != '' }}
+        # if: always() && ${{ hashFiles(format('{0}/teardown.sh', inputs.example-dir)) != '' }}
+        if: always()
         working-directory: ${{ inputs.example-dir }}
         run: ./teardown.sh

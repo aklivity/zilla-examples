@@ -3,15 +3,9 @@
 In this guide, you create Kafka topics and use Zilla to mediate MQTT broker messages onto those topics.
 Zilla implements MQTT API defined in AsyncAPI specifications and uses Kafka API defined AsyncAPI proxy MQTT messages to Kafka.
 
-## Running locally
+## Setup
 
-This example can be run using Docker compose or Kubernetes. The setup scripts are in the [compose](./docker/compose) and [helm](./k8s/helm) folders respectively and work the same way.
-
-You will need a running kafka broker. To start one locally you will find instructions in the [kafka.broker](../kafka.broker) folder. Alternatively you can use the [redpanda.broker](../redpanda.broker) folder.
-
-### Setup
-
-Whether you chose [compose](./docker/compose) or [helm](./k8s/helm), the `setup.sh` script will:
+The `setup.sh` script will:
 
 - create the necessary kafka topics
 - create an MQTT broker at `mqtt://localhost:7183`
@@ -30,7 +24,7 @@ Using eclipse-mosquitto subscribe to the `smartylighting/streetlights/1/0/event/
 
 output:
 
-```
+```text
 Client null sending CONNECT
 Client 26c02b9a-0e29-44c6-9f0e-277655c8d712 received CONNACK (0)
 Client 26c02b9a-0e29-44c6-9f0e-277655c8d712 sending SUBSCRIBE (Mid: 1, Topic: smartylighting/streetlights/1/0/event/+/lighting/measured, QoS: 0, Options: 0x00)

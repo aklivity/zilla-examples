@@ -61,45 +61,43 @@ Options:
 
 ## Examples
 
-| Name                                                               | Description                                                                                         |
-|--------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
-| [asyncapi.mqtt.proxy](asyncapi.mqtt.proxy)                         | Forwards validated MQTT publish messages and proxies subscribes to an MQTT broker                   |
-| [asyncapi.mqtt.kafka.proxy](asyncapi.mqtt.kafka.proxy)             | Forwards MQTT publish messages to Kafka, broadcasting to all subscribed MQTT clients                |
-| [asyncapi.http.kafka.proxy](asyncapi.http.kafka.proxy)             | Correlates HTTP requests and responses over separate Kafka topics                                   |
-| [asyncapi.sse.proxy](asyncapi.sse.proxy)                           | Proxies validated messages delivered by the SSE server                                              |
-| [asyncapi.sse.kafka.proxy](asyncapi.sse.kafka.proxy)               | Streams messages published to a Kafka topic over SSE                                                |
-| [tcp.echo](tcp.echo)                                               | Echoes bytes sent to the TCP server                                                                 |
-| [tcp.reflect](tcp.reflect)                                         | Echoes bytes sent to the TCP server, broadcasting to all TCP clients                                |
-| [tls.echo](tls.echo)                                               | Echoes encrypted bytes sent to the TLS server                                                       |
-| [tls.reflect](tls.reflect)                                         | Echoes encrypted bytes sent to the TLS server, broadcasting to all TLS clients                      |
-| [http.filesystem](http.filesystem)                                 | Serves files from a directory on the local filesystem                                               |
-| [http.filesystem.config.server](http.filesystem.config.server)     | Serves files from a directory on the local filesystem, getting the config from a http server        |
-| [http.echo](http.echo)                                             | Echoes request sent to the HTTP server from an HTTP client                                          |
-| [http.echo.jwt](http.echo.jwt)                                     | Echoes request sent to the HTTP server from a JWT-authorized HTTP client                            |
-| [http.proxy](http.proxy)                                           | Proxy request sent to the HTTP server from an HTTP client                                           |
-| [http.proxy.schema.inline](http.proxy.schema.inline)               | Proxy request sent to the HTTP server from an HTTP client with schema enforcement                   |
-| [http.kafka.sync](http.kafka.sync)                                 | Correlates HTTP requests and responses over separate Kafka topics                                   |
-| [http.kafka.async](http.kafka.async)                               | Correlates HTTP requests and responses over separate Kafka topics, asynchronously                   |
-| [http.kafka.cache](http.kafka.cache)                               | Serves cached responses from a Kafka topic, detect when updated                                     |
-| [http.kafka.oneway](http.kafka.oneway)                             | Sends messages to a Kafka topic, fire-and-forget                                                    |
-| [http.kafka.crud](http.kafka.crud)                                 | Exposes a REST API with CRUD operations where a log-compacted Kafka topic acts as a table           |
-| [http.kafka.sasl.scram](http.kafka.sasl.scram)                     | Sends messages to a SASL/SCRAM enabled Kafka                                                        |
-| [http.kafka.karapace](http.kafka.karapace)                         | Validate messages while produce and fetch to a Kafka topic                                          |
-| [http.redpanda.sasl.scram](http.redpanda.sasl.scram)               | Sends messages to a SASL/SCRAM enabled Redpanda Cluster                                             |
-| [kubernetes.prometheus.autoscale](kubernetes.prometheus.autoscale) | Demo Kubernetes Horizontal Pod Autoscaling feature based a on a custom metric with Prometheus       |
-| [grpc.echo](grpc.echo)                                             | Echoes messages sent to the gRPC server from a gRPC client                                          |
-| [grpc.kafka.echo](grpc.kafka.echo)                                 | Echoes messages sent to a Kafka topic via gRPC from a gRPC client                                   |
-| [grpc.kafka.fanout](grpc.kafka.fanout)                             | Streams messages published to a Kafka topic, applying conflation based on log compaction            |
-| [grpc.kafka.proxy](grpc.kafka.proxy)                               | Correlates gRPC requests and responses over separate Kafka topics                                   |
-| [grpc.proxy](grpc.proxy)                                           | Proxies gRPC requests and responses sent to the gRPC server from a gRPC client                      |
-| [amqp.reflect](amqp.reflect)                                       | Echoes messages published to the AMQP server, broadcasting to all receiving AMQP clients            |
-| [mqtt.kafka.broker](mqtt.kafka.broker)                             | Forwards MQTT publish messages to Kafka, broadcasting to all subscribed MQTT clients                |
-| [mqtt.kafka.broker.jwt](mqtt.kafka.broker.jwt)                     | Forwards MQTT publish messages to Kafka, broadcasting to all subscribed JWT-authorized MQTT clients |
-| [quickstart](quickstart)                                           | Starts endpoints for all protocols (HTTP, SSE, gRPC, MQTT)                                          |
-| [sse.kafka.fanout](sse.kafka.fanout)                               | Streams messages published to a Kafka topic, applying conflation based on log compaction            |
-| [sse.proxy.jwt](sse.proxy.jwt)                                     | Proxies messages delivered by the SSE server, enforcing streaming security constraints              |
-| [ws.echo](ws.echo)                                                 | Echoes messages sent to the WebSocket server                                                        |
-| [ws.reflect](ws.reflect)                                           | Echoes messages sent to the WebSocket server, broadcasting to all WebSocket clients                 |
+| Name                                                         | Description                                                                               |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| [amqp.reflect](amqp.reflect)                                 | Echoes messages published to the AMQP server, broadcasting to all receiving AMQP clients  |
+| [asyncapi.http.kafka.proxy](asyncapi.http.kafka.proxy)       | Forwards validated MQTT publish messages and proxies subscribes to an MQTT broker         |
+| [asyncapi.mqtt.kafka.proxy](asyncapi.mqtt.kafka.proxy)       | Forwards MQTT publish messages to Kafka, broadcasting to all subscribed MQTT clients      |
+| [asyncapi.mqtt.proxy](asyncapi.mqtt.proxy)                   | Correlates HTTP requests and responses over separate Kafka topics                         |
+| [asyncapi.sse.kafka.proxy](asyncapi.sse.kafka.proxy)         | Proxies validated messages delivered by the SSE server                                    |
+| [asyncapi.sse.proxy](asyncapi.sse.proxy)                     | Streams messages published to a Kafka topic over SSE                                      |
+| [grpc.echo](grpc.echo)                                       | Echoes messages sent to the gRPC server from a gRPC client                                |
+| [grpc.kafka.echo](grpc.kafka.echo)                           | Echoes messages sent to a Kafka topic via gRPC from a gRPC client                         |
+| [grpc.kafka.fanout](grpc.kafka.fanout)                       | Streams messages published to a Kafka topic, applying conflation based on log compaction  |
+| [grpc.kafka.proxy](grpc.kafka.proxy)                         | Correlates gRPC requests and responses over separate Kafka topics                         |
+| [grpc.proxy](grpc.proxy)                                     | Proxies gRPC requests and responses sent to the gRPC server from a gRPC client            |
+| [http.filesystem](http.filesystem)                           | Serves files from a directory on the local filesystem                                     |
+| [http.json.validate](http.json.validate)                     | Proxy request sent to the HTTP server from an HTTP client with schema enforcement         |
+| [http.jwt](http.jwt)                                         | Echoes request sent to the HTTP server from a JWT-authorized HTTP client                  |
+| [http.kafka.async](http.kafka.async)                         | Correlates HTTP requests and responses over separate Kafka topics, asynchronously         |
+| [http.kafka.avro.json](http.kafka.avro.json)                 | Validate messages while produce and fetch to a Kafka topic                                |
+| [http.kafka.cache](http.kafka.cache)                         | Serves cached responses from a Kafka topic, detect when updated                           |
+| [http.kafka.crud](http.kafka.crud)                           | Exposes a REST API with CRUD operations where a log-compacted Kafka topic acts as a table |
+| [http.kafka.oneway](http.kafka.oneway)                       | Sends messages to a Kafka topic, fire-and-forget                                          |
+| [http.kafka.proto.json](http.kafka.proto.json)               | Publish JSON over http and convert to a Protobuf serialized object onto a Kafka topic     |
+| [http.kafka.proto.oneway](http.kafka.proto.oneway)           | Publish a Protobuf serialized object over HTTP onto a Kafka topic                         |
+| [http.kafka.sync](http.kafka.sync)                           | Correlates HTTP requests and responses over separate Kafka topics                         |
+| [http.proxy](http.proxy)                                     | Proxy request sent to the HTTP server from an HTTP client                                 |
+| [mqtt.jwt](mqtt.jwt)                                         | Proxies request sent to the MQTT server from a JWT-authorized MQTT client                 |
+| [mqtt.kafka.broker](mqtt.kafka.broker)                       | Forwards MQTT publish messages to Kafka, broadcasting to all subscribed MQTT clients      |
+| [openapi.asyncapi.kakfa.proxy](openapi.asyncapi.kakfa.proxy) | Create an HTTP to Kafka REST proxy using OpenAPI and AsyncAPI schemas                     |
+| [openapi.proxy](openapi.proxy)                               | Proxy requests defined in an OpenAPI schema sent to the HTTP server from an HTTP client   |
+| [sse.jwt](sse.jwt)                                           | Proxies messages delivered by the SSE server, enforcing streaming security constraints    |
+| [sse.kafka.fanout](sse.kafka.fanout)                         | Streams messages published to a Kafka topic, applying conflation based on log compaction  |
+| [tcp.echo](tcp.echo)                                         | Echoes bytes sent to the TCP server                                                       |
+| [tcp.reflect](tcp.reflect)                                   | Echoes bytes sent to the TCP server, broadcasting to all TCP clients                      |
+| [tls.echo](tls.echo)                                         | Echoes encrypted bytes sent to the TLS server                                             |
+| [tls.reflect](tls.reflect)                                   | Echoes encrypted bytes sent to the TLS server, broadcasting to all TLS clients            |
+| [ws.echo](ws.echo)                                           | Echoes messages sent to the WebSocket server                                              |
+| [ws.reflect](ws.reflect)                                     | Echoes messages sent to the WebSocket server, broadcasting to all WebSocket clients       |
 
 Read the [docs][zilla-docs].
 Try the [examples][zilla-examples].

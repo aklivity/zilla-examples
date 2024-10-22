@@ -51,7 +51,6 @@ Connection to localhost port 8001 [tcp/vcom-tunnel] succeeded!
 Connection to localhost port 7001 [tcp/afs3-callback] succeeded!
 ```
 
-
 ### Verify behavior
 
 Connect `curl` client first to Zilla over SSE.

@@ -1,0 +1,117 @@
+name: zilla-kafka-karapace
+services:
+  zilla:
+    image: ghcr.io/aklivity/zilla:${ZILLA_VERSION:-latest}
+    pull_policy: ${ZILLA_PULL_POLICY:-always}
+    restart: unless-stopped
+    ports:
+      - 7114:7114
+      - 7190:7190
+    environment:
+      KAFKA_BOOTSTRAP_SERVER: ${KAFKA_BOOTSTRAP_SERVER:-bitnami:29092}
+    volumes:
+      - ./zilla.yaml:/etc/zilla/zilla.yaml
+    command: start -v -e -Pzilla.binding.kafka.client.produce.record.framing.size=1024
+
+  karapace-registry:
+    image: ghcr.io/aiven-open/karapace:3.15.2
+    profiles: [bitnami]
+    entrypoint:
+      - /bin/bash
+      - /opt/karapace/start.sh
+      - registry
+    depends_on:
+      - bitnami
+    ports:
+      - "8081:8081"
+    environment:
+      KARAPACE_ADVERTISED_HOSTNAME: karapace-registry
+      KARAPACE_BOOTSTRAP_URI: bitnami:29092
+      KARAPACE_SECURITY_PROTOCOL: SASL_PLAINTEXT
+      KARAPACE_SASL_MECHANISM: PLAIN
+      KARAPACE_SASL_PLAIN_USERNAME: user
+      KARAPACE_SASL_PLAIN_PASSWORD: bitnami
+      KARAPACE_PORT: 8081
+      KARAPACE_HOST: 0.0.0.0
+      KARAPACE_CLIENT_ID: karapace
+      KARAPACE_GROUP_ID: karapace-registry
+      KARAPACE_MASTER_ELIGIBILITY: "true"
+      KARAPACE_TOPIC_NAME: _schemas
+      KARAPACE_LOG_LEVEL: WARNING
+      KARAPACE_COMPATIBILITY: FULL
+      KARAPACE_STATSD_HOST: statsd-exporter
+      KARAPACE_STATSD_PORT: 8125
+      KARAPACE_KAFKA_SCHEMA_READER_STRICT_MODE: false
+      KARAPACE_KAFKA_RETRIABLE_ERRORS_SILENCED: true
+
+  bitnami:
+    image: bitnami/kafka:3.5
+    profiles: [bitnami]
+    restart: unless-stopped
+    ports:
+      - 9092:9092
+      - 29092:29092
+    environment:
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_CFG_NODE_ID: "1"
+      KAFKA_CFG_BROKER_ID: "1"
+      KAFKA_CFG_GROUP_INITIAL_REBALANCE_DELAY_MS: "0"
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: "1@127.0.0.1:9093"
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "CLIENT:PLAINTEXT,INTERNAL:SASL_PLAINTEXT,DOCKER:PLAINTEXT,CONTROLLER:PLAINTEXT"
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_CFG_LOG_DIRS: "/tmp/logs"
+      KAFKA_CFG_PROCESS_ROLES: "broker,controller"
+      KAFKA_CFG_LISTENERS: "CLIENT://:9092,INTERNAL://:29092,DOCKER://:19092,CONTROLLER://:9093"
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: "INTERNAL"
+      KAFKA_CFG_ADVERTISED_LISTENERS: "CLIENT://localhost:9092,INTERNAL://bitnami:29092,DOCKER://host.docker.internal:19092"
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_CFG_SASL_ENABLED_MECHANISMS: "PLAIN"
+      KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL: "PLAIN"
+  bitnami-init:
+    image: bitnami/kafka:3.5
+    profiles: [bitnami, init-bitnami]
+    user: root
+    deploy:
+      restart_policy:
+        condition: none
+        max_attempts: 0
+    environment:
+      KAFKA_BOOTSTRAP_SERVER: ${KAFKA_BOOTSTRAP_SERVER:-bitnami:29092}
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo -e "creating client.properties";
+        cat <<EOT >> client.properties
+        security.protocol=SASL_PLAINTEXT
+        sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="user" password="bitnami";
+        sasl.mechanism=PLAIN
+        EOT
+        echo -e "blocks until kafka is reachable";
+        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server $${KAFKA_BOOTSTRAP_SERVER} --command-config client.properties --list;
+        echo -e "Creating kafka topics";
+        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server $${KAFKA_BOOTSTRAP_SERVER} --command-config client.properties --create --if-not-exists --topic core-paymenthub-simple-pay-ipn-request --config cleanup.policy=compact
+        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server $${KAFKA_BOOTSTRAP_SERVER} --command-config client.properties --create --if-not-exists --topic core-paymenthub-simple-pay-ipn-response --config cleanup.policy=compact
+        echo -e "Successfully created the following topics:";
+        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server $${KAFKA_BOOTSTRAP_SERVER} --command-config client.properties --list;
+
+  kafka-ui:
+    image: ghcr.io/kafbat/kafka-ui:latest
+    profiles: [bitnami]
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    depends_on:
+      - bitnami
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: bitnami:29092
+
+  kcat:
+    image: confluentinc/cp-kafkacat:7.1.9
+    command: "bash"
+    stdin_open: true
+    tty: true
+
+networks:
+  default:
+    driver: bridge

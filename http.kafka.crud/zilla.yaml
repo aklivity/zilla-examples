@@ -1,13 +1,5 @@
 ---
 name: example
-vaults:
-  my_servers:
-    type: filesystem
-    options:
-      keys:
-        store: tls/localhost.p12
-        type: pkcs12
-        password: ${{env.KEYSTORE_PASSWORD}}
 bindings:
   north_tcp_server:
     type: tcp
@@ -15,28 +7,11 @@ bindings:
     options:
       host: 0.0.0.0
       port:
-        - 7143
         - 7114
     routes:
       - when:
-          - port: 7143
-        exit: north_tls_server
-      - when:
           - port: 7114
         exit: north_http_server
-  north_tls_server:
-    type: tls
-    kind: server
-    vault: my_servers
-    options:
-      keys:
-        - localhost
-      sni:
-        - localhost
-      alpn:
-        - http/1.1
-        - h2
-    exit: north_http_server
   north_http_server:
     type: http
     kind: server
@@ -44,10 +19,6 @@ bindings:
       - when:
           - headers:
               :scheme: http
-              :authority: localhost:7114
-          - headers:
-              :scheme: https
-              :authority: localhost:7143
         exit: north_http_kafka_mapping
   north_http_kafka_mapping:
     type: http-kafka
@@ -111,7 +82,7 @@ bindings:
     kind: client
     options:
       servers:
-        - kafka:29092
+        - ${{env.KAFKA_BOOTSTRAP_SERVER}}
     exit: south_tcp_client
   south_tcp_client:
     type: tcp

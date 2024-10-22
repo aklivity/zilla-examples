@@ -1,29 +1,29 @@
-#!/bin/bash
+#!/bin/sh
+set -x
 
 # GIVEN
 PORT="7114"
 EXPECTED='[{"id":1,"name":"string","tag":"string"}]'
-echo \# Testing openapi.proxy
+EXIT=0
+echo \# Testing openapi.proxy/
 echo PORT=$PORT
-echo EXPECTED=$EXPECTED
+echo EXPECTED="$EXPECTED"
 echo
 
 # WHEN
-for i in $(seq 1 30); do
-  OUTPUT=$(curl --silent --location "http://localhost:$PORT/pets" --header 'Accept: application/json')
-  RESULT=$?
-  if [[ ! -z "$OUTPUT" ]]; then
-    break
-  fi
-  sleep 1
-done
-echo OUTPUT=$OUTPUT
+OUTPUT=$(curl --silent --location "http://localhost:$PORT/pets" --header 'Accept: application/json')
+RESULT=$?
 echo RESULT=$RESULT
 
 # THEN
-if [[ $RESULT -eq 0 && "$OUTPUT" == "$EXPECTED" ]]; then
+echo OUTPUT="$OUTPUT"
+echo EXPECTED="$EXPECTED"
+echo
+if [ $RESULT -eq 0 ] && [ "$OUTPUT" = "$EXPECTED" ]; then
   echo ✅
 else
   echo ❌
-  exit 1
+  EXIT=1
 fi
+
+exit $EXIT

@@ -4,7 +4,6 @@ Listens on https port `7143` and will response back whatever is hosted in `nginx
 
 ### Requirements
 
-- bash, jq, nc
 - Kubernetes (e.g. Docker Desktop with Kubernetes enabled)
 - kubectl
 - helm 3.0+

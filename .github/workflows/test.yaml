@@ -1,4 +1,4 @@
-name: Test All Examples
+name: Test Examples
 
 on:
   pull_request:
@@ -40,6 +40,6 @@ jobs:
       fail-fast: false
     needs:
       - get-examples-with-changes
-    uses: ./.github/workflows/reusable_test_run.yaml
+    uses: ./.github/workflows/reusable_test_runner.yaml
     with:
       example-dir: ${{ matrix.dir }}

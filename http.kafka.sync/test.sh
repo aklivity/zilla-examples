@@ -18,6 +18,10 @@ echo GREETING="$GREETING"
 echo GREETING_DATE="$GREETING_DATE"
 echo
 
+docker compose ps zilla --format "{{.Name}} {{.Health}}"
+docker compose logs zilla
+docker compose logs kafka
+
 # WHEN
 # send request to zilla
 timeout 60s curl \

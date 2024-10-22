@@ -20,14 +20,14 @@ echo
 
 # WHEN
 # send request to zilla
-timeout 20s curl \
+timeout 5s curl \
   -X "PUT" http://localhost:$ZILLA_PORT/items/$ITEM_ID \
   -H "Idempotency-Key: $ITEM_ID" \
   -H "Content-Type: application/json" \
   -d "{\"greeting\":\"$GREETING\"}" | tee .testoutput &
 
 # fetch correlation id from kafka with kcat
-CORRELATION_ID=$(docker compose -p zilla-http-kafka-sync exec kcat kafkacat -C -c 1 -b $KAFKA_BOOTSTRAP_SERVER -t items-requests -J -u | jq -r '.headers | index("zilla:correlation-id") as $index | .[$index + 1]')
+CORRELATION_ID=$(docker compose -p zilla-http-kafka-sync exec -T kcat kafkacat -C -c 1 -b $KAFKA_BOOTSTRAP_SERVER -t items-requests -J -u | jq -r '.headers | index("zilla:correlation-id") as $index | .[$index + 1]')
 echo CORRELATION_ID="$CORRELATION_ID"
 if [ -z "$CORRELATION_ID" ]; then
   echo ❌
@@ -44,7 +44,7 @@ echo "{\"greeting\":\"$GREETING_DATE\"}" |
     -H ":status=200" \
     -H "zilla:correlation-id=$CORRELATION_ID"
 
-sleep 40
+sleep 10
 
 # fetch the output of zilla request
 cat .testoutput

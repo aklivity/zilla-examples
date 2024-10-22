@@ -14,7 +14,6 @@ on:
         required: true
         type: string
 
-
 jobs:
 
   run-test:
@@ -22,22 +21,28 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          path: ${{ inputs.example-dir }}
+          sparse-checkout: ${{ inputs.example-dir }}
 
+      - run: ls -la ../
+      - run: ls -la
+      
       - name: Cache Docker images.
         uses: ScribeMD/docker-cache@0.5.0
         with:
           key: docker-${{ runner.os }}-${{ hashFiles(format('{0}/compose.yaml', inputs.example-dir)) }}
 
       - name: Setup
-        working-directory: ${{ inputs.example-dir }}
+        # working-directory: ${{ inputs.example-dir }}
         run: ./setup.sh
       - name: Wait for Zilla to be healthy
-        working-directory: ${{ inputs.example-dir }}
+        # working-directory: ${{ inputs.example-dir }}
         run: timeout 60s sh -c 'until docker compose ps zilla --format "{{.Name}} {{.Health}}" | grep -q healthy; do echo "Waiting for container to be healthy..."; sleep 2; done'
 
       - name: Execute Test
         if: ${{ hashFiles(format('{0}/test.sh', inputs.example-dir)) != '' }}
-        working-directory: ${{ inputs.example-dir }}
+        # working-directory: ${{ inputs.example-dir }}
         run: |
           set -o pipefail
           ./test.sh | tee $GITHUB_STEP_SUMMARY

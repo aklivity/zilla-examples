@@ -11,6 +11,8 @@ services:
       timeout: 3s
       retries: 5
       test: ["CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/7172"]
+    environment:
+      ZILLA_INCUBATOR_ENABLED: "true"
     volumes:
       - ./zilla.yaml:/etc/zilla/zilla.yaml
     command: start -v -e

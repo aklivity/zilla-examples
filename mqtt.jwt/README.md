@@ -2,7 +2,6 @@
 
 Listens on mqtt port `7183` and will forward mqtt publish messages and proxies subscribes to mosquitto MQTT broker listening on `1883` for topic `smartylighting/streetlights/1/0/event/+/lighting/measured`.
 
-
 ### Requirements
 
 - bash, jq, nc

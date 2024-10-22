@@ -34,7 +34,6 @@ services:
       test: netstat -an | grep 8001 > /dev/null; if [ 0 != $? ]; then exit 1; fi;
     command: -v -p 8001 -i 7001
 
-
 networks:
   default:
     driver: bridge

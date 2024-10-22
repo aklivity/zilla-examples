@@ -6,9 +6,9 @@ catalogs:
     options:
       subjects:
         http:
-          path: http-openapi.yaml
+          path: specs/http-openapi.yaml
         kafka:
-          path: kafka-asyncapi.yaml
+          path: specs/kafka-asyncapi.yaml
 bindings:
   north_openapi_server:
     type: openapi
@@ -54,4 +54,3 @@ telemetry:
   exporters:
     stdout_logs_exporter:
       type: stdout
-

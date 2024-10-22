@@ -18,10 +18,6 @@ echo GREETING="$GREETING"
 echo GREETING_DATE="$GREETING_DATE"
 echo
 
-docker compose ps zilla --format "{{.Name}} {{.Health}}"
-docker compose logs zilla
-docker compose logs kafka
-
 # WHEN
 # send request to zilla
 timeout 60s curl \
@@ -30,8 +26,8 @@ timeout 60s curl \
   -H "Content-Type: application/json" \
   -d "{\"greeting\":\"$GREETING\"}" | tee .testoutput &
 
-# fetch correlation id from kafka with kcat
-for i in $(seq 1 10); do
+# fetch correlation id from kafka with kcat; try 10 times
+for i in $(seq 0 10); do
   sleep $i
   CORRELATION_ID=$(docker compose -p zilla-http-kafka-sync exec -T kcat kafkacat -C -c 1 -o-1 -b $KAFKA_BOOTSTRAP_SERVER -t items-requests -J -u | jq -r '.headers | index("zilla:correlation-id") as $index | .[$index + 1]')
   if [ -n "$CORRELATION_ID" ]; then
@@ -55,8 +51,8 @@ echo "{\"greeting\":\"$GREETING_DATE\"}" |
     -H "zilla:correlation-id=$CORRELATION_ID"
 
 
-# fetch the output of zilla request
-for i in $(seq 1 10); do
+# fetch the output of zilla request; try 10 times
+for i in $(seq 0 10); do
   sleep $i
   OUTPUT=$(cat .testoutput)
   if [ -n "$OUTPUT" ]; then

@@ -13,8 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Tar all examples
         run: for i in */; do tar -zcvf "${i%/}.tar.gz" "$i"; done

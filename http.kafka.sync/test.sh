@@ -1,5 +1,5 @@
 #!/bin/sh
-set -xe
+set -x
 
 # GIVEN
 ZILLA_PORT="7114"

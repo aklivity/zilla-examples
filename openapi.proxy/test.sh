@@ -1,5 +1,5 @@
 #!/bin/sh
-set -xe
+set -x
 
 # GIVEN
 PORT="7114"

@@ -1,70 +1,25 @@
 # http.kafka.async
 
-Listens on http port `7114` or https port `7143` and will correlate requests and responses over the `items-requests`
+Listens on http port `7114` and will correlate requests and responses over the `items-requests`
 and `items-responses` topics in Kafka, asynchronously.
 
-### Requirements
+## Requirements
 
-- bash, jq, nc
-- Kubernetes (e.g. Docker Desktop with Kubernetes enabled)
-- kubectl
-- helm 3.0+
-- kcat
+- jq, nc
+- Compose compatible host\
 
-### Install kcat client
+## Setup
 
-Requires Kafka client, such as `kcat`.
-
-```bash
-brew install kcat
-```
-
-### Setup
-
-The `setup.sh` script:
-
-- installs Zilla and Kafka to the Kubernetes cluster with helm and waits for the pods to start up
-- creates the `items-requests` and `items-responses` topics in Kafka
-- starts port forwarding
+The `setup.sh` script will install the Open Source Zilla image in a Compose stack along with any necessary services defined in the [compose.yaml](compose.yaml) file.
 
 ```bash
 ./setup.sh
 ```
 
-output:
+- alternatively with the docker compose command:
 
-```text
-+ ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
-+ helm upgrade --install zilla-http-kafka-async oci://ghcr.io/aklivity/charts/zilla --namespace zilla-http-kafka-async --create-namespace --wait [...]
-NAME: zilla-http-kafka-async
-LAST DEPLOYED: [...]
-NAMESPACE: zilla-http-kafka-async
-STATUS: deployed
-REVISION: 1
-NOTES:
-Zilla has been installed.
-[...]
-+ helm upgrade --install zilla-http-kafka-async-kafka chart --namespace zilla-http-kafka-async --create-namespace --wait
-NAME: zilla-http-kafka-async-kafka
-LAST DEPLOYED: [...]
-NAMESPACE: zilla-http-kafka-async
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-++ kubectl get pods --namespace zilla-http-kafka-async --selector app.kubernetes.io/instance=kafka -o name
-+ KAFKA_POD=pod/kafka-1234567890-abcde
-+ kubectl exec --namespace zilla-http-kafka-async pod/kafka-1234567890-abcde -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic items-requests --if-not-exists
-Created topic items-requests.
-+ kubectl exec --namespace zilla-http-kafka-async pod/kafka-1234567890-abcde -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic items-responses --if-not-exists
-Created topic items-responses.
-+ kubectl port-forward --namespace zilla-http-kafka-async service/zilla 7114 7143
-+ nc -z localhost 7114
-+ kubectl port-forward --namespace zilla-http-kafka-async service/kafka 9092 29092
-+ sleep 1
-+ nc -z localhost 7114
-Connection to localhost port 7114 [tcp/http-alt] succeeded!
-+ nc -z localhost 9092
-Connection to localhost port 9092 [tcp/XmlIpcRegSvc] succeeded!
+```bash
+docker compose up -d
 ```
 
 ### Verify behavior
@@ -117,8 +72,8 @@ Note that the response will not return until you complete the following step to 
 
 ```bash
 curl -v \
-       "http://localhost:7114/items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07;cid=<location_cid>" \
-       -H "Prefer: wait=60"
+  "http://localhost:7114/items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07;cid=<location_cid>" \
+  -H "Prefer: wait=60"
 ```
 
 output:
@@ -135,8 +90,8 @@ output:
 Verify the request, then send the correlated response via the kafka `items-responses` topic.
 
 ```bash
-docker compose -p zilla-http-kafka-sync exec kcat \
-kafkacat -C -b localhost:9092 -t items-requests -J -u | jq .
+docker compose -p zilla-http-kafka-async exec kcat \
+  kafkacat -C -b kafka:29092 -t items-requests -J -u | jq .
 ```
 
 output:
@@ -180,13 +135,13 @@ output:
 Make sure to propagate the request message `zilla:correlation-id` header verbatim as a response message `zilla:correlation-id` header.
 
 ```bash
-echo "{\"greeting\":\"Hello, world `date`\"}" | \
-    kcat -P \
-         -b localhost:9092 \
-         -t items-responses \
-         -k "5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07" \
-         -H ":status=200" \
-         -H "zilla:correlation-id=<location_cid>"
+echo "{\"greeting\":\"Hello, world `date`\"}" | docker compose -p zilla-http-kafka-async exec -T kcat \
+  kafkacat -P \
+    -b kafka:29092 \
+    -t items-responses \
+    -k "5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07" \
+    -H ":status=200" \
+    -H "zilla:correlation-id=<location_cid>"
 ```
 
 The previous asynchronous request will complete with `200 OK` if done within `60 seconds` window, otherwise `202 Accepted` is returned again.
@@ -202,8 +157,8 @@ The previous asynchronous request will complete with `200 OK` if done within `60
 Verify the response via the kafka `items-responses` topic.
 
 ```bash
-docker compose -p zilla-http-kafka-sync exec kcat \
-kafkacat -C -b localhost:9092 -t items-responses -J -u | jq .
+docker compose -p zilla-http-kafka-async exec kcat \
+  kafkacat -C -b kafka:29092 -t items-responses -J -u | jq .
 ```
 
 output:
@@ -228,24 +183,16 @@ output:
 % Reached end of topic items-responses [0] at offset 1
 ```
 
-### Teardown
+## Teardown
 
-The `teardown.sh` script stops port forwarding, uninstalls Zilla and Kafka and deletes the namespace.
+The `teardown.sh` script will remove any resources created.
 
 ```bash
 ./teardown.sh
 ```
 
-output:
+- alternatively with the docker compose command:
 
-```text
-+ pgrep kubectl
-99998
-99999
-+ killall kubectl
-+ helm uninstall zilla-http-kafka-async zilla-http-kafka-async-kafka --namespace zilla-http-kafka-async
-release "zilla-http-kafka-async" uninstalled
-release "zilla-http-kafka-async-kafka" uninstalled
-+ kubectl delete namespace zilla-http-kafka-async
-namespace "zilla-http-kafka-async" deleted
+```bash
+docker compose down --remove-orphans
 ```

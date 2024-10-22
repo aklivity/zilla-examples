@@ -1,67 +1,24 @@
 # http.kafka.oneway
 
-Listens on http port `7114` or https port `7143` and will produce messages to the `events` topic in Kafka, synchronously.
+Listens on http port `7114` or https port `7114` and will produce messages to the `events` topic in Kafka, synchronously.
 
-### Requirements
+## Requirements
 
-- bash, jq, nc
-- Kubernetes (e.g. Docker Desktop with Kubernetes enabled)
-- kubectl
-- helm 3.0+
-- kcat
+- jq, nc
+- Compose compatible host
 
-### Install kcat client
+## Setup
 
-Requires Kafka client, such as `kcat`.
-
-```bash
-brew install kcat
-```
-
-### Setup
-
-The `setup.sh` script:
-
-- installs Zilla and Kafka to the Kubernetes cluster with helm and waits for the pods to start up
-- creates the `events` topic in Kafka.
-- starts port forwarding
+The `setup.sh` script will install the Open Source Zilla image in a Compose stack along with any necessary services defined in the [compose.yaml](compose.yaml) file.
 
 ```bash
 ./setup.sh
 ```
 
-output:
+- alternatively with the docker compose command:
 
-```text
-+ ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
-+ helm upgrade --install zilla-http-kafka-oneway oci://ghcr.io/aklivity/charts/zilla --namespace zilla-http-kafka-oneway --create-namespace --wait [...]
-NAME: zilla-http-kafka-oneway
-LAST DEPLOYED: [...]
-NAMESPACE: zilla-http-kafka-oneway
-STATUS: deployed
-REVISION: 1
-NOTES:
-Zilla has been installed.
-[...]
-+ helm upgrade --install zilla-http-kafka-oneway-kafka chart --namespace zilla-http-kafka-oneway --create-namespace --wait
-NAME: zilla-http-kafka-oneway-kafka
-LAST DEPLOYED: [...]
-NAMESPACE: zilla-http-kafka-oneway
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-++ kubectl get pods --namespace zilla-http-kafka-oneway --selector app.kubernetes.io/instance=kafka -o name
-+ KAFKA_POD=pod/kafka-1234567890-abcde
-+ kubectl exec --namespace zilla-http-kafka-oneway pod/kafka-1234567890-abcde -- /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic events --if-not-exists
-Created topic events.
-+ kubectl port-forward --namespace zilla-http-kafka-oneway service/zilla 7114 7143
-+ nc -z localhost 7114
-+ kubectl port-forward --namespace zilla-http-kafka-oneway service/kafka 9092 29092
-+ sleep 1
-+ nc -z localhost 7114
-Connection to localhost port 7114 [tcp/http-alt] succeeded!
-+ nc -z localhost 9092
-Connection to localhost port 9092 [tcp/XmlIpcRegSvc] succeeded!
+```bash
+docker compose up -d
 ```
 
 ### Verify behavior
@@ -88,8 +45,8 @@ output:
 Verify that the event has been produced to the `events` Kafka topic.
 
 ```bash
-docker compose -p zilla-http-kafka-sync exec kcat \
-kafkacat -C -b localhost:9092 -t events -J -u | jq .
+docker compose -p zilla-http-kafka-oneway exec kcat \
+  kafkacat -C -b kafka:29092 -t events -J -u | jq .
 ```
 
 output:
@@ -111,24 +68,16 @@ output:
 % Reached end of topic events [0] at offset 1
 ```
 
-### Teardown
+## Teardown
 
-The `teardown.sh` script stops port forwarding, uninstalls Zilla and Kafka and deletes the namespace.
+The `teardown.sh` script will remove any resources created.
 
 ```bash
 ./teardown.sh
 ```
 
-output:
+- alternatively with the docker compose command:
 
-```text
-+ pgrep kubectl
-99998
-99999
-+ killall kubectl
-+ helm uninstall zilla-http-kafka-oneway zilla-http-kafka-oneway-kafka --namespace zilla-http-kafka-oneway
-release "zilla-http-kafka-oneway" uninstalled
-release "zilla-http-kafka-oneway-kafka" uninstalled
-+ kubectl delete namespace zilla-http-kafka-oneway
-namespace "zilla-http-kafka-oneway" deleted
+```bash
+docker compose down --remove-orphans
 ```

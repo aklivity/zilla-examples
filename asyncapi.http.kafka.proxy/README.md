@@ -4,13 +4,18 @@ In this guide, you create Kafka topics and use Zilla to implement the common Pet
 
 ## Setup
 
-The `setup.sh` script will:
+The `setup.sh` script will install the Open Source Zilla image in a Compose stack along with any necessary services defined in the [compose.yaml](compose.yaml) file.
 
-- create the necessary kafka topics
 - create the Petstore API at `http://localhost:7114`
 
 ```bash
 ./setup.sh
+```
+
+- alternatively with the docker compose command:
+
+```bash
+docker compose up -d
 ```
 
 ### Using this example
@@ -156,15 +161,15 @@ output:
 Using `kcat` and the copied `correlation-id` produce the correlated message:
 
 ```sh
-echo '{"id":200000,"username":"fehguy","status":"approved","address":[{"street":"437 Lytton","city":"Palo Alto","state":"CA","zip":"94301"}]}' | \
-    kcat -P \
-         -b localhost:29092 \
+echo '{"id":200000,"username":"fehguy","status":"approved","address":[{"street":"437 Lytton","city":"Palo Alto","state":"CA","zip":"94301"}]}' | docker compose -p zilla-asyncapi-http-kafka-proxy exec -T kcat \
+    kafkacat -P \
+         -b kafka:29092 \
          -k "c234d09b-2fdf-4538-9d31-27c8e2912d4e" \
          -t petstore-verified-customers \
          -H "zilla:correlation-id={correlationId}"
 ```
 
-### Teardown
+## Teardown
 
 The `teardown.sh` script will remove any resources created.
 

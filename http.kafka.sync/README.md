@@ -28,10 +28,10 @@ Note that the response will not return until you complete the following step to 
 
 ```bash
 curl -v \
-       -X "PUT" http://localhost:7114/items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07 \
-       -H "Idempotency-Key: 1" \
-       -H "Content-Type: application/json" \
-       -d "{\"greeting\":\"Hello, world\"}"
+  -X "PUT" http://localhost:7114/items/5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07 \
+  -H "Idempotency-Key: 1" \
+  -H "Content-Type: application/json" \
+  -d "{\"greeting\":\"Hello, world\"}"
 ```
 
 ```text
@@ -54,7 +54,7 @@ Fetch the request message, then send the correlated response via the Kafka UI [i
 
   ```bash
   docker compose -p zilla-http-kafka-sync exec kcat \
-  kafkacat -b kafka:29092 -C -f 'Key:Message | %k:%s\n Headers | %h \n\n' -t items-requests
+    kafkacat -b kafka:29092 -C -f 'Key:Message | %k:%s\n Headers | %h \n\n' -t items-requests
   ```
 
   ```text
@@ -101,10 +101,16 @@ Verify the response response via the Kafka UI [items-responses](http://localhost
    Headers | :status=200,zilla:correlation-id=1-f8f1c788ba786f691823098ee0505a1b
    ```
 
-### Teardown
+## Teardown
 
-The `teardown.sh` script stops port forwarding, uninstalls Zilla and Kafka and deletes the namespace.
+The `teardown.sh` script will remove any resources created.
 
 ```bash
 ./teardown.sh
+```
+
+- alternatively with the docker compose command:
+
+```bash
+docker compose down --remove-orphans
 ```

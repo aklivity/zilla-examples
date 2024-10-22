@@ -4,10 +4,16 @@ This example allows a protobuf object to be sent to a REST edpoint as JSON that 
 
 ## Setup
 
-The `setup.sh` script:
+The `setup.sh` script will install the Open Source Zilla image in a Compose stack along with any necessary services defined in the [compose.yaml](compose.yaml) file.
 
 ```bash
 ./setup.sh
+```
+
+- alternatively with the docker compose command:
+
+```bash
+docker compose up -d
 ```
 
 ## Watch kafka
@@ -15,8 +21,8 @@ The `setup.sh` script:
 Open the [Kafka UI](http://localhost:8080/ui/clusters/local/all-topics/my-requests/messages?limit=100&mode=TAILING) or run the kcat command:
 
 ```bash
-docker compose -p zilla-http-kafka-proto exec kcat \
-kafkacat -b kafka:29092 -C -f 'Key:Message | %k:%s\n Headers | %h \n\n' -t my-requests
+docker compose -p zilla-http-kafka-proto-oneway exec kcat \
+  kafkacat -b kafka:29092 -C -f 'Key:Message | %k:%s\n Headers | %h \n\n' -t my-requests
 ```
 
 ## Publish message with correct proto file

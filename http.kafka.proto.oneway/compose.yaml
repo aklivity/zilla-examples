@@ -1,4 +1,4 @@
-name: ${NAMESPACE:-zilla-http-kafka-proto}
+name: ${NAMESPACE:-zilla-http-kafka-proto-oneway}
 services:
   zilla:
     image: ghcr.io/aklivity/zilla:${ZILLA_VERSION:-0.9.87}

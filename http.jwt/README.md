@@ -3,12 +3,10 @@
 Listens on http port `7114` and will echo back whatever is sent to the server from an authorized client.
 Listens on https port `7143` and will echo back whatever is sent to the server from an authorized client.
 
-### Requirements
+## Requirements
 
-- bash, jq, nc
-- Kubernetes (e.g. Docker Desktop with Kubernetes enabled)
-- kubectl
-- helm 3.0+
+- jq, nc
+- Compose compatible host
 - jwt-cli
 - curl
 
@@ -20,35 +18,18 @@ Requires JWT command line client, such as `jwt-cli` version `2.0.0` or higher.
 brew install mike-engel/jwt-cli/jwt-cli
 ```
 
-### Setup
+## Setup
 
-The `setup.sh` script:
-
-- installs Zilla to the Kubernetes cluster with helm and waits for the pod to start up
-- starts port forwarding
+The `setup.sh` script will install the Open Source Zilla image in a Compose stack along with any necessary services defined in the [compose.yaml](compose.yaml) file.
 
 ```bash
 ./setup.sh
 ```
 
-output:
+- alternatively with the docker compose command:
 
-```text
-+ ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
-+ helm upgrade --install zilla-http-jwt oci://ghcr.io/aklivity/charts/zilla --namespace zilla-http-jwt --create-namespace --wait [...]
-NAME: zilla-http-jwt
-LAST DEPLOYED: [...]
-NAMESPACE: zilla-http-jwt
-STATUS: deployed
-REVISION: 1
-NOTES:
-Zilla has been installed.
-[...]
-+ nc -z localhost 7114
-+ kubectl port-forward --namespace zilla-http-jwt service/zilla 7114 7143
-+ sleep 1
-+ nc -z localhost 7114
-Connection to localhost port 7114 [tcp/http-alt] succeeded!
+```bash
+docker compose up -d
 ```
 
 ### Verify behavior
@@ -182,22 +163,16 @@ openssl rsa -in private.pem -pubout -noout -modulus | cut -d= -f2 | xxd -r -p | 
 
 The resulting base64 modulus is used to configure the `jwt` guard in `zilla.yaml` to validate the integrity of signed JWT tokens.
 
-### Teardown
+## Teardown
 
-The `teardown.sh` script stops port forwarding, uninstalls Zilla and deletes the namespace.
+The `teardown.sh` script will remove any resources created.
 
 ```bash
 ./teardown.sh
 ```
 
-output:
+- alternatively with the docker compose command:
 
-```text
-+ pgrep kubectl
-99999
-+ killall kubectl
-+ helm uninstall zilla-http-jwt --namespace zilla-http-jwt
-release "zilla-http-jwt" uninstalled
-+ kubectl delete namespace zilla-http-jwt
-namespace "zilla-http-jwt" deleted
+```bash
+docker compose down --remove-orphans
 ```

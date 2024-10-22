@@ -6,9 +6,9 @@ This repo contains a collection of [example folders](#examples) that can be used
 
 ## Prerequisites
 
-[![Docker]][docker-install][![Kubernetes]][kubernetes-install][![Kafka]][kafka-install][![Postman]][postman-url]
+[![Docker]][docker-install][![Postman]][postman-url]
 
-You will need an environment with [Docker][docker-install] or [Helm][helm-install] and [Kubernetes][kubernetes-install] installed. Check out our [Postman collections][postman-url] for more ways to interact with an example.
+You will need an environment with [Docker][docker-install] installed. Check out our [Postman collections][postman-url] for more ways to interact with an example.
 
 ## Getting Started
 
@@ -106,13 +106,8 @@ Join the [Slack community][community-join].
 [community-image]: https://img.shields.io/badge/slack-@aklivitycommunity-blue.svg?logo=slack
 [community-join]: https://join.slack.com/t/aklivitycommunity/shared_invite/zt-sy06wvr9-u6cPmBNQplX5wVfd9l2oIQ
 [Docker]: https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white
-[Kubernetes]: https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white
-[Kafka]: https://img.shields.io/badge/Apache%20Kafka-000?style=for-the-badge&logo=apachekafka
 [Postman]: https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white
 [zilla-docs]: https://docs.aklivity.io/zilla
 [zilla-examples]: https://github.com/aklivity/zilla-examples
 [docker-install]: https://docs.docker.com/compose/gettingstarted/
-[helm-install]: https://helm.sh/docs/intro/install/
-[kubernetes-install]: https://kubernetes.io/docs/tasks/tools/
-[kafka-install]: https://kafka.apache.org/
 [postman-url]: https://www.postman.com/aklivity-zilla/

@@ -2,12 +2,10 @@
 
 Listens on https port `7143` and will stream back whatever is published to `sse_server` on tcp port `7001`.
 
-### Requirements
+## Requirements
 
-- bash, jq, nc
-- Kubernetes (e.g. Docker Desktop with Kubernetes enabled)
-- kubectl
-- helm 3.0+
+- jq, nc
+- Compose compatible host
 - [jwt-cli](https://github.com/mike-engel/jwt-cli)
 
 ### Install jwt-cli client
@@ -18,50 +16,18 @@ Generates JWT tokens from the command line.
 brew install mike-engel/jwt-cli/jwt-cli
 ```
 
-### Setup
+## Setup
 
-The `setup.sh` script:
-
-- installs Zilla and SSE server to the Kubernetes cluster with helm and waits for the pods to start up
-- copies the contents of the www directory to the Zilla pod
-- starts port forwarding
+The `setup.sh` script will install the Open Source Zilla image in a Compose stack along with any necessary services defined in the [compose.yaml](compose.yaml) file.
 
 ```bash
 ./setup.sh
 ```
 
-output:
+- alternatively with the docker compose command:
 
-```text
-+ ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
-+ helm upgrade --install zilla-sse-proxy-jwt oci://ghcr.io/aklivity/charts/zilla --namespace zilla-sse-proxy-jwt --create-namespace --wait [...]
-NAME: zilla-sse-proxy-jwt
-LAST DEPLOYED: [...]
-NAMESPACE: zilla-sse-proxy-jwt
-STATUS: deployed
-REVISION: 1
-NOTES:
-Zilla has been installed.
-[...]
-+ helm upgrade --install zilla-sse-proxy-jwt-sse chart --namespace zilla-sse-proxy-jwt --create-namespace --wait
-NAME: zilla-sse-proxy-jwt-sse
-LAST DEPLOYED: [...]
-NAMESPACE: zilla-sse-proxy-jwt
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-++ kubectl get pods --namespace zilla-sse-proxy-jwt --selector app.kubernetes.io/instance=zilla -o json
-++ jq -r '.items[0].metadata.name'
-+ ZILLA_POD=zilla-1234567890-abcde
-+ kubectl cp --namespace zilla-sse-proxy-jwt www zilla-1234567890-abcde:/var/
-+ kubectl port-forward --namespace zilla-sse-proxy-jwt service/zilla 7143
-+ nc -z localhost 7143
-+ kubectl port-forward --namespace zilla-sse-proxy-jwt service/sse-server 8001 7001
-Connection to localhost port 7143 [tcp/websm] succeeded!
-+ nc -z localhost 8001
-+ sleep 1
-+ nc -z localhost 8001
-Connection to localhost port 8001 [tcp/vcom-tunnel] succeeded!
+```bash
+docker compose up -d
 ```
 
 ### Generate JWT token
@@ -166,23 +132,16 @@ The `challenge` event will show there, and the corresponding `fetch` request for
 
 Note: if you uncheck the `reauthorize` checkbox, then the `challenge` event will be ignored and the event stream will end with an error event logged to the console when the JWT token expires, as expected.
 
-### Teardown
+## Teardown
 
-The `teardown.sh` script stops port forwarding, uninstalls Zilla and deletes the namespace.
+The `teardown.sh` script will remove any resources created.
 
 ```bash
 ./teardown.sh
 ```
 
-output:
+- alternatively with the docker compose command:
 
-```text
-+ pgrep kubectl
-99999
-+ killall kubectl
-+ helm uninstall zilla-sse-proxy-jwt zilla-sse-proxy-jwt-sse --namespace zilla-sse-proxy-jwt
-release "zilla-sse-proxy-jwt" uninstalled
-release "zilla-sse-proxy-jwt-sse" uninstalled
-+ kubectl delete namespace zilla-sse-proxy-jwt
-namespace "zilla-sse-proxy-jwt" deleted
+```bash
+docker compose down --remove-orphans
 ```

@@ -2,60 +2,24 @@
 
 Listens on mqtt port `7183` and will forward mqtt publish messages and proxies subscribes to mosquitto MQTT broker listening on `1883` for topic `smartylighting/streetlights/1/0/event/+/lighting/measured`.
 
-### Requirements
+## Requirements
 
-- bash, jq, nc
-- Kubernetes (e.g. Docker Desktop with Kubernetes enabled)
-- kubectl
-- helm 3.0+
+- jq, nc
+- Compose compatible host
 - mosquitto
-- kcat
 
-### Setup
+## Setup
 
-The `setup.sh` script:
-
-- installs Zilla to the Kubernetes cluster with helm and waits for the pod to start up
-- installs mosquitto MQTT broker to the Kubernetes cluster with helm and waits for the pod to start up
-- starts port forwarding
+The `setup.sh` script will install the Open Source Zilla image in a Compose stack along with any necessary services defined in the [compose.yaml](compose.yaml) file.
 
 ```bash
 ./setup.sh
 ```
 
-```text
-+ ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
-+ helm upgrade --install asyncapi-mqtt-proxy oci://ghcr.io/aklivity/charts/zilla --namespace asyncapi-mqtt-proxy --create-namespace --wait --values values.yaml --set-file 'zilla\.yaml=zilla.yaml'
-NAME: asyncapi-mqtt-proxy
-LAST DEPLOYED: [...]
-NAMESPACE: asyncapi-mqtt-proxy
-STATUS: deployed
-REVISION: 1
-NOTES:
-Zilla has been installed.
-+ helm upgrade --install zilla-mqtt-kafka-reflect-kafka chart --namespace zilla-mqtt-kafka-reflect --create-namespace --wait
-NAME: zilla-mqtt-kafka-reflect-kafka
-LAST DEPLOYED: [...]
-NAMESPACE: zilla-mqtt-kafka-reflect
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-+ helm upgrade --install asyncapi-mqtt-proxy-mosquitto chart --namespace asyncapi-mqtt-proxy --create-namespace --wait
-NAME: asyncapi-mqtt-proxy-mosquitto
-LAST DEPLOYED: Tue Sep 19 18:15:07 2023
-NAMESPACE: asyncapi-mqtt-proxy
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-+ kubectl port-forward --namespace asyncapi-mqtt-proxy service/asyncapi-mqtt-proxy-zilla 7183
-+ nc -z localhost 7183
-+ kubectl port-forward --namespace asyncapi-mqtt-proxy service/mosquitto 1883
-+ sleep 1
-+ nc -z localhost 7183
-Connection to localhost port 7183 [tcp/ibm-mqisdp] succeeded!
-+ nc -z localhost 1883
-Connection to localhost port 1883 [tcp/idmaps] succeeded!
+- alternatively with the docker compose command:
 
+```bash
+docker compose up -d
 ```
 
 ### Install mqtt client
@@ -115,25 +79,11 @@ Error: The client is not currently connected.
 
 Note that the invalid message is rejected with error code `153` `payload format invalid`, and therefore not received by the subscriber.
 
-### Teardown
+## Teardown
 
-The `teardown.sh` script stops port forwarding, uninstalls Zilla and mosquitto broker and deletes the namespace.
+The `teardown.sh` script stops the compose stack.
 
 ```bash
 ./teardown.sh
 
-```
-
-output:
-
-```text
-+ + pgrep kubectl
-99998
-99999
-+ killall kubectl
-+ helm uninstall asyncapi-mqtt-proxy asyncapi-mqtt-proxy-mosquitto --namespace asyncapi-mqtt-proxy
-release "asyncapi-mqtt-proxy" uninstalled
-release "asyncapi-mqtt-proxy-mosquitto" uninstalled
-+ kubectl delete namespace asyncapi-mqtt-proxy
-namespace "asyncapi-mqtt-proxy" deleted
 ```

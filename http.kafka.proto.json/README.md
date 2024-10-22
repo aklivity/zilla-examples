@@ -4,10 +4,16 @@ This example allows a protobuf object to be sent to a REST edpoint as JSON that 
 
 ## Setup
 
-The `setup.sh` script:
+The `setup.sh` script will install the Open Source Zilla image in a Compose stack along with any necessary services defined in the [compose.yaml](compose.yaml) file.
 
 ```bash
 ./setup.sh
+```
+
+- alternatively with the docker compose command:
+
+```bash
+docker compose up -d
 ```
 
 ## Bug scenarios

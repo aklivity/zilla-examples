@@ -5,13 +5,18 @@ Zilla is implementing the SSE endpoints defined in an AsyncAPI 3.x spec and prox
 
 ## Setup
 
-The `setup.sh` script will:
+The `setup.sh` script will install the Open Source Zilla image in a Compose stack along with any necessary services defined in the [compose.yaml](compose.yaml) file.
 
-- create the necessary kafka topics
 - create the Eventstore API at `http://localhost:7114`
 
 ```bash
 ./setup.sh
+```
+
+- alternatively with the docker compose command:
+
+```bash
+docker compose up -d
 ```
 
 ### Verify behaviour
@@ -45,15 +50,15 @@ data:{ "id": 1, "name": "Hello World!"}
 
 In another terminal window use `kcat` to publish to the `events` Kafka topic
 ```bash
-echo '{ "id": 1, "name": "Hello World!"}' | \
-    kcat -P \
-         -b localhost:29092 \
-         -k "1" -t events
+echo '{ "id": 1, "name": "Hello World!"}' | docker compose -p zilla-asyncapi-sse-kafka-proxy exec -T kcat \
+    kafkacat -P \
+        -b kafka:29092 \
+        -k "1" -t events
 ```
 
 On the `curl` client, the event should appear.
 
-### Teardown
+## Teardown
 
 The `teardown.sh` script will remove any resources created.
 

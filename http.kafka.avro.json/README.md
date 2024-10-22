@@ -8,44 +8,16 @@ This example illustrates how to configure the Karapace Schema Registry in Zilla 
 
 ## Setup
 
-The `setup.sh` script:
-
-- installs Zilla, Kafka, and Karapace using a Compose stack
-- creates the `items-snapshots` topic in Kafka with the `cleanup.policy=compact` topic configuration
+The `setup.sh` script will install the Open Source Zilla image in a Compose stack along with any necessary services defined in the [compose.yaml](compose.yaml) file.
 
 ```bash
 ./setup.sh
 ```
 
-output:
+- alternatively with the docker compose command:
 
-```text
-+ ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
-+ NAMESPACE=zilla-http-kafka-schema-registry
-+ helm upgrade --install zilla oci://ghcr.io/aklivity/charts/zilla --namespace zilla-http-kafka-schema-registry --create-namespace --wait [...]
-NAME: zilla-http-kafka-crud
-LAST DEPLOYED: [...]
-NAMESPACE: zilla-http-kafka-schema-registry
-STATUS: deployed
-REVISION: 1
-NOTES:
-Zilla has been installed.
-[...]
-+ helm upgrade --install zilla-http-kafka-crud-kafka chart --namespace zilla-http-kafka-crud --create-namespace --wait
-NAME: zilla-http-kafka-crud-kafka
-LAST DEPLOYED: [...]
-NAMESPACE: zilla-http-kafka-crud
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-[...]
-Connection to localhost port 7114 [tcp/*] succeeded!
-+ nc -z localhost 7143
-Connection to localhost port 7143 [tcp/*] succeeded!
-+ nc -z localhost 8081
-Connection to localhost port 8081 [tcp/sunproxyadmin] succeeded!
-+ nc -z localhost 9092
-Connection to localhost port 9092 [tcp/XmlIpcRegSvc] succeeded!
+```bash
+docker compose up -d
 ```
 
 ### Register Schema
@@ -81,7 +53,7 @@ curl 'http://localhost:8081/subjects/items-snapshots-value/versions/latest'
 `POST` request
 
 ```bash
-curl -k -v -X POST https://localhost:7143/items -H 'Idempotency-Key: 1'  -H 'Content-Type: application/json' -d '{"id": "123","status": "OK"}'
+curl -k -v -X POST http://localhost:7114/items -H 'Idempotency-Key: 1'  -H 'Content-Type: application/json' -d '{"id": "123","status": "OK"}'
 ```
 
 output:
@@ -89,7 +61,7 @@ output:
 ```text
 ...
 > POST /items HTTP/2
-> Host: localhost:7143
+> Host: localhost:7114
 > User-Agent: curl/8.1.2
 > Accept: */*
 > Idempotency-Key: 1
@@ -103,7 +75,7 @@ output:
 `GET` request to fetch specific item.
 
 ```bash
-curl -k -v https://localhost:7143/items/1
+curl -k -v http://localhost7114/items/1
 ```
 
 output:
@@ -124,7 +96,7 @@ output:
 `POST` request.
 
 ```bash
-curl -k -v -X POST https://localhost:7143/items -H 'Idempotency-Key: 2'  -H 'Content-Type: application/json' -d '{"id": 123,"status": "OK"}'
+curl -k -v -X POST http://localhost7114/items -H 'Idempotency-Key: 2'  -H 'Content-Type: application/json' -d '{"id": 123,"status": "OK"}'
 ```
 
 output:
@@ -132,7 +104,7 @@ output:
 ```text
 ...
 > POST /items HTTP/2
-> Host: localhost:7143
+> Host: localhost:7114
 > User-Agent: curl/8.1.2
 > Accept: */*
 > Idempotency-Key: 1
@@ -146,7 +118,7 @@ output:
 `GET` request to verify whether Invalid event is produced
 
 ```bash
-curl -k -v https://localhost:7143/items/2
+curl -k -v http://localhost7114/items/2
 ```
 
 output:
@@ -154,7 +126,7 @@ output:
 ```text
 ...
 > GET /items/2 HTTP/2
-> Host: localhost:7143
+> Host: localhost:7114
 > User-Agent: curl/8.1.2
 > Accept: */*
 >
@@ -164,23 +136,14 @@ output:
 
 ## Teardown
 
-The `teardown.sh` script stops port forwarding, uninstalls Zilla and Kafka and deletes the namespace.
+The `teardown.sh` script will remove any resources created.
 
 ```bash
 ./teardown.sh
 ```
 
-output:
+- alternatively with the docker compose command:
 
-```text
-+ pgrep kubectl
-99998
-99999
-+ killall kubectl
-+ NAMESPACE=zilla-http-kafka-schema-registry
-+ helm uninstall zilla kafka --namespace zilla-http-kafka-schema-registry
-release "zilla" uninstalled
-release "kafka" uninstalled
-+ kubectl delete namespace zilla-http-kafka-schema-registry
-namespace "zilla-http-kafka-schema-registry" deleted
+```bash
+docker compose down --remove-orphans
 ```

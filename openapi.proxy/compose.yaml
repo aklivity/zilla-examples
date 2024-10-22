@@ -12,7 +12,7 @@ services:
       retries: 5
       test: ["CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/7114"]
     volumes:
-      - ./specs/petstore.yaml:/etc/zilla/petstore.yaml
+      - ./petstore-openapi.yaml:/etc/zilla/specs/petstore-openapi.yaml
       - ./zilla.yaml:/etc/zilla/zilla.yaml
     command: start -v -e
 
@@ -20,10 +20,10 @@ services:
     image: jormaechea/open-api-mocker:2.0.0
     container_name: openapi-mock
     volumes:
-      - ./specs:/app
+      - ./petstore-openapi.yaml:/app/petstore-openapi.yaml
     ports:
       - "8000:5000"
-    command: open-api-mocker -s /app/petstore.yaml
+    command: open-api-mocker -s /app/petstore-openapi.yaml
 
 networks:
   default:

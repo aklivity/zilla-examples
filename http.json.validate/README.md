@@ -2,23 +2,23 @@
 
 Listens on https port `7114` and will response back whatever is hosted in `nginx` on that path after enforcing validation.
 
-### Requirements
+## Requirements
 
-- bash, jq, nc
-- Kubernetes (e.g. Docker Desktop with Kubernetes enabled)
-- kubectl
-- helm 3.0+
+- jq, nc
+- Compose compatible host
 
-### Setup
+## Setup
 
-The `setup.sh` script:
-
-- installs Zilla and Nginx to the Kubernetes cluster with helm and waits for the pods to start up
-- copies the web contents to the Nginx pod
-- starts port forwarding
+The `setup.sh` script will install the Open Source Zilla image in a Compose stack along with any necessary services defined in the [compose.yaml](compose.yaml) file.
 
 ```bash
 ./setup.sh
+```
+
+- alternatively with the docker compose command:
+
+```bash
+docker compose up -d
 ```
 
 ### Verify behavior for valid content
@@ -48,10 +48,16 @@ output:
 curl: (18) transfer closed with 37 bytes remaining to read
 ```
 
-### Teardown
+## Teardown
 
-The `teardown.sh` script stops port forwarding, uninstalls Zilla and Nginx and deletes the namespace.
+The `teardown.sh` script will remove any resources created.
 
 ```bash
 ./teardown.sh
+```
+
+- alternatively with the docker compose command:
+
+```bash
+docker compose down --remove-orphans
 ```

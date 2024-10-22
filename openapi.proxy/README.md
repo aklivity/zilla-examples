@@ -1,13 +1,10 @@
 # openapi.proxy
 
-This example demonstrates creating an HTTP request proxy where the available endpoints are defined in an OpenAPI schema [petstore.yaml](./specs/petstore.yaml).
+This example demonstrates creating an HTTP request proxy where the available endpoints are defined in an OpenAPI schema [petstore-openapi.yaml](./petstore-openapi.yaml).
 
-## Running locally
+## Setup
 
-The `setup.sh` script will:
-
-- Configured Zilla instance
-- Start openapi-mock
+The `setup.sh` script will install the Open Source Zilla image in a Compose stack along with any necessary services defined in the [compose.yaml](compose.yaml) file.
 
 ```bash
 ./setup.sh

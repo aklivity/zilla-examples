@@ -34,7 +34,7 @@ echo 'message: "test"' | protoc --encode=example.FanoutMessage proto/fanout.prot
 Produce protobuf message to Kafka topic, repeat to produce multiple messages.
 
 ```bash
-docker compose -p zilla-grpc-kafka-fanout exec kcat \
+docker compose -p zilla-grpc-kafka-fanout exec kafkacat \
   kafkacat -P -b kafka:29092 -t messages -k -e ./binary.data
 ```
 
@@ -93,7 +93,7 @@ docker compose -p zilla-grpc-kafka-fanout start zilla
 Then produce another protobuf message to Kafka, repeat to produce multiple messages.
 
 ```bash
-docker compose -p zilla-grpc-kafka-fanout exec kcat \
+docker compose -p zilla-grpc-kafka-fanout exec kafkacat \
   kafkacat -P -b kafka:29092 -t messages -k -e ./binary.data
 ```
 

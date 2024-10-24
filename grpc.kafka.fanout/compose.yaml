@@ -76,7 +76,7 @@ services:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
 
-  kcat:
+  kafkacat:
     image: confluentinc/cp-kafkacat:7.1.9
     command: "bash"
     stdin_open: true

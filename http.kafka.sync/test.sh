@@ -26,10 +26,10 @@ timeout 60s curl \
   -H "Content-Type: application/json" \
   -d "{\"greeting\":\"$GREETING\"}" | tee .testoutput &
 
-# fetch correlation id from kafka with kcat; try 5 times
+# fetch correlation id from kafka with kafkacat; try 5 times
 for i in $(seq 0 5); do
   sleep $i
-  CORRELATION_ID=$(docker compose -p zilla-http-kafka-sync exec kcat kafkacat -C -c 1 -o-1 -b $KAFKA_BOOTSTRAP_SERVER -t items-requests -J -u | jq -r '.headers | index("zilla:correlation-id") as $index | .[$index + 1]')
+  CORRELATION_ID=$(docker compose -p zilla-http-kafka-sync exec kafkacat kafkacat -C -c 1 -o-1 -b $KAFKA_BOOTSTRAP_SERVER -t items-requests -J -u | jq -r '.headers | index("zilla:correlation-id") as $index | .[$index + 1]')
   if [ -n "$CORRELATION_ID" ]; then
     break
   fi
@@ -40,9 +40,9 @@ if [ -z "$CORRELATION_ID" ]; then
   EXIT=1
 fi
 
-# push response to kafka with kcat
+# push response to kafka with kafkacat
 echo "{\"greeting\":\"$GREETING_DATE\"}" |
-  docker compose -p zilla-http-kafka-sync exec -T kcat \
+  docker compose -p zilla-http-kafka-sync exec -T kafkacat \
     kafkacat -P \
     -b $KAFKA_BOOTSTRAP_SERVER \
     -t items-responses \

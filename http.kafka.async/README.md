@@ -68,7 +68,7 @@ output:
 ```
 
 Use the returned location with correlation id specified by the `cid` param to attempt completion of the asynchronous request within `60 seconds`.
-Note that the response will not return until you complete the following step to produce the response with `kcat`.
+Note that the response will not return until you complete the following step to produce the response with `kafkacat`.
 
 ```bash
 curl -v \
@@ -90,7 +90,7 @@ output:
 Verify the request, then send the correlated response via the kafka `items-responses` topic.
 
 ```bash
-docker compose -p zilla-http-kafka-async exec kcat \
+docker compose -p zilla-http-kafka-async exec kafkacat \
   kafkacat -C -b kafka:29092 -t items-requests -J -u | jq .
 ```
 
@@ -135,7 +135,7 @@ output:
 Make sure to propagate the request message `zilla:correlation-id` header verbatim as a response message `zilla:correlation-id` header.
 
 ```bash
-echo "{\"greeting\":\"Hello, world `date`\"}" | docker compose -p zilla-http-kafka-async exec -T kcat \
+echo "{\"greeting\":\"Hello, world `date`\"}" | docker compose -p zilla-http-kafka-async exec -T kafkacat \
   kafkacat -P \
     -b kafka:29092 \
     -t items-responses \
@@ -157,7 +157,7 @@ The previous asynchronous request will complete with `200 OK` if done within `60
 Verify the response via the kafka `items-responses` topic.
 
 ```bash
-docker compose -p zilla-http-kafka-async exec kcat \
+docker compose -p zilla-http-kafka-async exec kafkacat \
   kafkacat -C -b kafka:29092 -t items-responses -J -u | jq .
 ```
 

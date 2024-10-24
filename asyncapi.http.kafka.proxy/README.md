@@ -132,7 +132,7 @@ output:
 ```
 
 Copy the location, and create a `GET` async request using the location as the path.
-Note that the response will not return until you complete the following step to produce the response with `kcat`.
+Note that the response will not return until you complete the following step to produce the response with `kafkacat`.
 
 ```bash
 curl -v --location 'http://localhost:7114/customer;cid={correlationId}' \
@@ -158,15 +158,15 @@ output:
 {"id":200000,"username":"fehguy","status":"approved","address":[{"street":"437 Lytton","city":"Palo Alto","state":"CA","zip":"94301"}]}%
 ```
 
-Using `kcat` and the copied `correlation-id` produce the correlated message:
+Using `kafkacat` and the copied `correlation-id` produce the correlated message:
 
 ```sh
-echo '{"id":200000,"username":"fehguy","status":"approved","address":[{"street":"437 Lytton","city":"Palo Alto","state":"CA","zip":"94301"}]}' | docker compose -p zilla-asyncapi-http-kafka-proxy exec -T kcat \
-    kafkacat -P \
-         -b kafka:29092 \
-         -k "c234d09b-2fdf-4538-9d31-27c8e2912d4e" \
-         -t petstore-verified-customers \
-         -H "zilla:correlation-id={correlationId}"
+echo '{"id":200000,"username":"fehguy","status":"approved","address":[{"street":"437 Lytton","city":"Palo Alto","state":"CA","zip":"94301"}]}' | docker compose -p zilla-asyncapi-http-kafka-proxy exec -T kafkacat \
+  kafkacat -P \
+    -b kafka:29092 \
+    -k "c234d09b-2fdf-4538-9d31-27c8e2912d4e" \
+    -t petstore-verified-customers \
+    -H "zilla:correlation-id={correlationId}"
 ```
 
 ## Teardown

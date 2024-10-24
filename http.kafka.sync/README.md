@@ -24,7 +24,7 @@ This will:
 ## Verify behavior
 
 Send a `PUT` request for a specific item.
-Note that the response will not return until you complete the following step to produce the response with `kcat`.
+Note that the response will not return until you complete the following step to produce the response with `kafkacat`.
 
 ```bash
 curl -v \
@@ -53,7 +53,7 @@ Fetch the request message, then send the correlated response via the Kafka UI [i
 - or from the command line
 
   ```bash
-  docker compose -p zilla-http-kafka-sync exec kcat \
+  docker compose -p zilla-http-kafka-sync exec kafkacat \
     kafkacat -b kafka:29092 -C -f 'Key:Message | %k:%s\n Headers | %h \n\n' -t items-requests
   ```
 
@@ -67,7 +67,7 @@ Produce the the correlated response message via the Kafka UI [items-responses](h
 Make sure to propagate the request message `zilla:correlation-id` header, found in the request message, verbatim as a response message `zilla:correlation-id` header.
 
 ```bash
-echo "{\"greeting\":\"Hello, world `date`\"}" | docker compose -p zilla-http-kafka-sync exec -T kcat \
+echo "{\"greeting\":\"Hello, world `date`\"}" | docker compose -p zilla-http-kafka-sync exec -T kafkacat \
   kafkacat -P \
   -b kafka:29092 \
   -t items-responses \
@@ -92,7 +92,7 @@ Verify the response response via the Kafka UI [items-responses](http://localhost
 - or from the command line
 
   ```bash
-  docker compose -p zilla-http-kafka-sync exec kcat \
+  docker compose -p zilla-http-kafka-sync exec kafkacat \
   kafkacat -b kafka:29092 -C -f 'Key:Message | %k:%s\n Headers | %h \n\n' -t items-responses
   ```
 

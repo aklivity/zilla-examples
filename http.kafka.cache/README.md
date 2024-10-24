@@ -83,7 +83,7 @@ output:
 Produce an item snapshot to the kafka topic.
 
 ```bash
-echo "{\"greeting\":\"Hello, world `date`\"}" | docker compose -p zilla-http-kafka-cache exec -T kcat \
+echo "{\"greeting\":\"Hello, world `date`\"}" | docker compose -p zilla-http-kafka-cache exec -T kafkacat \
   kafkacat -P \
     -b kafka:29092 \
     -t items-snapshots \
@@ -181,7 +181,7 @@ Before the 60 seconds elapses, produce an updated item snapshot to the kafka top
 The prefer wait http request returns the new item snapshot with updated `etag` as shown above.
 
 ```bash
-echo "{\"greeting\":\"Hello, world `date`\"}" | docker compose -p zilla-http-kafka-cache exec -T kcat \
+echo "{\"greeting\":\"Hello, world `date`\"}" | docker compose -p zilla-http-kafka-cache exec -T kafkacat \
   kafkacat -P \
     -b kafka:29092 \
     -t items-snapshots \

@@ -43,7 +43,7 @@ output:
 Verify the message payload, followed by a tombstone to mark the end of the request.
 
 ```bash
-docker compose -p zilla-grpc-kafka-echo exec kcat \
+docker compose -p zilla-grpc-kafka-echo exec kafkacat \
   kafkacat -C -b kafka:29092 -t echo-messages -J -u | jq .
 ```
 
@@ -112,7 +112,7 @@ Paste below message.
 Verify the message payloads, followed by a tombstone to mark the end of each request.
 
 ```bash
-docker compose -p zilla-grpc-kafka-echo exec kcat \
+docker compose -p zilla-grpc-kafka-echo exec kafkacat \
   kafkacat -C -b kafka:29092 -t echo-messages -J -u | jq .
 ```
 

@@ -42,7 +42,7 @@ output:
 Verify the message payload, followed by a tombstone to mark the end of the request.
 
 ```bash
-docker compose -p zilla-grpc-kafka-proxy exec kcat \
+docker compose -p zilla-grpc-kafka-proxy exec kafkacat \
   kafkacat -C -b kafka:29092 -t echo-requests -J -u | jq .
 ```
 
@@ -129,7 +129,7 @@ output:
 Verify the message payloads arrived in order, followed by a tombstone to mark the end of the response.
 
 ```bash
-docker compose -p zilla-grpc-kafka-proxy exec kcat \
+docker compose -p zilla-grpc-kafka-proxy exec kafkacat \
   kafkacat -C -b kafka:29092 -t echo-responses -J -u | jq .
 ```
 

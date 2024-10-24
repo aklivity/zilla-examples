@@ -75,7 +75,7 @@ Options:
 | [grpc.kafka.proxy](grpc.kafka.proxy)                         | Correlates gRPC requests and responses over separate Kafka topics                         |
 | [grpc.proxy](grpc.proxy)                                     | Proxies gRPC requests and responses sent to the gRPC server from a gRPC client            |
 | [http.filesystem](http.filesystem)                           | Serves files from a directory on the local filesystem                                     |
-| [http.json.validate](http.json.validate)                     | Proxy request sent to the HTTP server from an HTTP client with schema enforcement         |
+| [http.json.schema](http.json.schema)                     | Proxy request sent to the HTTP server from an HTTP client with schema enforcement         |
 | [http.jwt](http.jwt)                                         | Echoes request sent to the HTTP server from a JWT-authorized HTTP client                  |
 | [http.kafka.async](http.kafka.async)                         | Correlates HTTP requests and responses over separate Kafka topics, asynchronously         |
 | [http.kafka.avro.json](http.kafka.avro.json)                 | Validate messages while produce and fetch to a Kafka topic                                |

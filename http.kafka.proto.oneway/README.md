@@ -18,10 +18,10 @@ docker compose up -d
 
 ## Watch kafka
 
-Open the [Kafka UI](http://localhost:8080/ui/clusters/local/all-topics/my-requests/messages?limit=100&mode=TAILING) or run the kcat command:
+Open the [Kafka UI](http://localhost:8080/ui/clusters/local/all-topics/my-requests/messages?limit=100&mode=TAILING) or run the kafkacat command:
 
 ```bash
-docker compose -p zilla-http-kafka-proto-oneway exec kcat \
+docker compose -p zilla-http-kafka-proto-oneway exec kafkacat \
   kafkacat -b kafka:29092 -C -f 'Key:Message | %k:%s\n Headers | %h \n\n' -t my-requests
 ```
 

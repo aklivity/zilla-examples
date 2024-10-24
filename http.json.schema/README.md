@@ -1,4 +1,4 @@
-# http.json.validate
+# http.json.schema
 
 Listens on https port `7114` and will response back whatever is hosted in `nginx` on that path after enforcing validation.
 

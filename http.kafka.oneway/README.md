@@ -45,7 +45,7 @@ output:
 Verify that the event has been produced to the `events` Kafka topic.
 
 ```bash
-docker compose -p zilla-http-kafka-oneway exec kcat \
+docker compose -p zilla-http-kafka-oneway exec kafkacat \
   kafkacat -C -b kafka:29092 -t events -J -u | jq .
 ```
 

@@ -1,4 +1,4 @@
-name: ${NAMESPACE:-zilla-http-schema-validate}
+name: ${NAMESPACE:-zilla-http-json-schema}
 services:
   zilla:
     image: ghcr.io/aklivity/zilla:${ZILLA_VERSION:-latest}

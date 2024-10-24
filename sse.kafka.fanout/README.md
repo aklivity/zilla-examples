@@ -32,8 +32,8 @@ docker compose up -d
 
 ### Verify behavior
 
-Connect `sse-cat` client first, then send `Hello, world ...` from `kcat` producer client.
-Note that the `Hello, world ...` message will not arrive until after using `kcat` to produce the `Hello, world ...` message in the next step.
+Connect `sse-cat` client first, then send `Hello, world ...` from `kafkacat` producer client.
+Note that the `Hello, world ...` message will not arrive until after using `kafkacat` to produce the `Hello, world ...` message in the next step.
 
 ```bash
 sse-cat http://localhost:7114/events
@@ -46,7 +46,7 @@ Hello, world ...
 ```
 
 ```bash
-echo "Hello, world `date`" | docker compose -p zilla-sse-kafka-fanout exec -T kcat \
+echo "Hello, world `date`" | docker compose -p zilla-sse-kafka-fanout exec -T kafkacat \
   kafkacat -P -b kafka:29092 -t events -k 1
 ```
 

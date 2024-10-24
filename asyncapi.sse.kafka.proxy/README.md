@@ -22,6 +22,7 @@ docker compose up -d
 ### Verify behaviour
 
 Using `curl` client connect to the SSE stream.
+
 ```bash
 curl -N --http2 -H "Accept:text/event-stream" -v "http://localhost:7114/events"
 ```
@@ -48,12 +49,13 @@ id:AQIAAg==
 data:{ "id": 1, "name": "Hello World!"}
 ```
 
-In another terminal window use `kcat` to publish to the `events` Kafka topic
+In another terminal window use `kafkacat` to publish to the `events` Kafka topic.
+
 ```bash
-echo '{ "id": 1, "name": "Hello World!"}' | docker compose -p zilla-asyncapi-sse-kafka-proxy exec -T kcat \
-    kafkacat -P \
-        -b kafka:29092 \
-        -k "1" -t events
+echo '{ "id": 1, "name": "Hello World!"}' | docker compose -p zilla-asyncapi-sse-kafka-proxy exec -T kafkacat \
+  kafkacat -P \
+    -b kafka:29092 \
+    -k "1" -t events
 ```
 
 On the `curl` client, the event should appear.

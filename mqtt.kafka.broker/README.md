@@ -2,28 +2,27 @@
 
 This is the resource folder for the running the [MQTT Kafka broker guide](https://docs.aklivity.io/zilla/latest/how-tos/mqtt/mqtt.kafka.broker.html) found on our docs.
 
-## Running locally
+## Setup
 
-This example can be run using Docker compose or Kubernetes. The setup scripts are in the [compose](./docker/compose) and [helm](./k8s/helm) folders respectively and work the same way.
+The `setup.sh` script will install the Open Source Zilla image in a Compose stack along with any necessary services defined in the [compose.yaml](compose.yaml) file.
 
-You will need a running kafka broker. To start one locally you will find instructions in the [kafka.broker](../kafka.broker) folder. Alternatively you can use the [redpanda.broker](../redpanda.broker) folder.
-
-### Setup
-
-Whether you chose [compose](./docker/compose) or [helm](./k8s/helm), the `setup.sh` script will:
-
-- create the necessary kafka topics
 - create an MQTT broker at `mqtt://localhost:7183`
 
 ```bash
 ./setup.sh
 ```
 
+- alternatively with the docker compose command:
+
+```bash
+docker compose up -d
+```
+
 ### Using this example
 
 Follow the steps on our [MQTT Kafka broker guide](https://docs.aklivity.io/zilla/latest/how-tos/mqtt/mqtt.kafka.broker.html#send-a-greeting)
 
-### Teardown
+## Teardown
 
 The `teardown.sh` script will remove any resources created.
 

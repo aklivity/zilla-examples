@@ -6,7 +6,7 @@ catalogs:
     options:
       subjects:
         smartylighting:
-          path: asyncapi/mqtt-asyncapi.yaml
+          path: specs/mqtt-asyncapi.yaml
 bindings:
   mqtt_proxy_server:
     type: asyncapi

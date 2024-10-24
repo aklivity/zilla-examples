@@ -45,7 +45,6 @@ bindings:
       - when:
           - headers:
               :scheme: https
-              :authority: localhost:7143
               :path: /*
         exit: south_http_client
   south_http_client:

@@ -1,44 +1,25 @@
 # grpc.echo
 
-Listens on tcp port `7153` and will echo grpc message sent by client.
+Listens on tcp port `7151` and will echo grpc message sent by client.
 
-### Requirements
+## Requirements
 
-- bash, jq, nc, grpcurl
-- Kubernetes (e.g. Docker Desktop with Kubernetes enabled)
-- kubectl
-- helm 3.0+
+- jq, nc, grpcurl
+- Compose compatible host
 - [ghz](https://ghz.sh/docs/install)
 
-### Setup
+## Setup
 
-The `setup.sh` script:
-
-- installs Zilla to the Kubernetes cluster with helm and waits for the pod to start up
-- starts port forwarding
+The `setup.sh` script will install the Open Source Zilla image in a Compose stack along with any necessary services defined in the [compose.yaml](compose.yaml) file.
 
 ```bash
 ./setup.sh
 ```
 
-output:
+- alternatively with the docker compose command:
 
-```text
-+ ZILLA_CHART=oci://ghcr.io/aklivity/charts/zilla
-+ helm upgrade --install zilla-grpc-echo oci://ghcr.io/aklivity/charts/zilla --namespace zilla-grpc-echo --wait [...]
-NAME: zilla-grpc-echo
-LAST DEPLOYED: [...]
-NAMESPACE: zilla-grpc-echo
-STATUS: deployed
-REVISION: 1
-NOTES:
-Zilla has been installed.
-[...]
-+ nc -z localhost 7153
-+ kubectl port-forward --namespace zilla-grpc-echo service/zilla 7153
-+ sleep 1
-+ nc -z localhost 7153
-Connection to localhost port 7153 [tcp/italk] succeeded!
+```bash
+docker compose up -d
 ```
 
 ### Verify behavior
@@ -48,7 +29,7 @@ Connection to localhost port 7153 [tcp/italk] succeeded!
 Echo `{"message":"Hello World"}` message via unary rpc using `grpcurl` command.
 
 ```bash
-grpcurl -insecure -proto proto/echo.proto  -d '{"message":"Hello World"}' localhost:7153 example.EchoService.EchoUnary
+grpcurl -insecure -proto echo.proto  -d '{"message":"Hello World"}' localhost:7151 example.EchoService.EchoUnary
 ```
 
 output:
@@ -64,7 +45,7 @@ output:
 Echo messages via bidirectional streaming rpc.
 
 ```bash
-grpcurl -insecure -proto proto/echo.proto -d @ localhost:7153 example.EchoService.EchoBidiStream
+grpcurl -insecure -proto echo.proto -d @ localhost:7151 example.EchoService.EchoBidiStream
 ```
 
 Paste below message.
@@ -79,27 +60,21 @@ Paste below message.
 
 ```bash
 ghz --config bench.json \
-    --proto proto/echo.proto \
+    --proto echo.proto \
     --call example.EchoService/EchoBidiStream \
-    localhost:7153
+    localhost:7151
 ```
 
-### Teardown
+## Teardown
 
-The `teardown.sh` script stops port forwarding, uninstalls Zilla and deletes the namespace.
+The `teardown.sh` script will remove any resources created.
 
 ```bash
 ./teardown.sh
 ```
 
-output:
+- alternatively with the docker compose command:
 
-```text
-+ pgrep kubectl
-99999
-+ killall kubectl
-+ helm uninstall zilla-grpc-echo --namespace zilla-grpc-echo
-release "zilla-grpc-echo" uninstalled
-+ kubectl delete namespace zilla-grpc-echo
-namespace "zilla-grpc-echo" deleted
+```bash
+docker compose down --remove-orphans
 ```

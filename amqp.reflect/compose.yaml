@@ -1,0 +1,22 @@
+name: ${NAMESPACE:-zilla-amqp-reflect}
+services:
+  zilla:
+    image: ghcr.io/aklivity/zilla:${ZILLA_VERSION:-latest}
+    pull_policy: always
+    restart: unless-stopped
+    ports:
+      - 7172:7172
+    healthcheck:
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      test: ["CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/7172"]
+    environment:
+      ZILLA_INCUBATOR_ENABLED: "true"
+    volumes:
+      - ./zilla.yaml:/etc/zilla/zilla.yaml
+    command: start -v -e
+
+networks:
+  default:
+    driver: bridge

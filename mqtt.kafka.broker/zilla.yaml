@@ -1,7 +1,6 @@
 ---
 name: zilla-mqtt-kafka-broker
 bindings:
-
   # Proxy service entrypoint
   north_tcp_server:
     type: tcp
@@ -52,7 +51,7 @@ bindings:
     kind: client
     options:
       servers:
-        -  ${{env.KAFKA_BOOTSTRAP_SERVER}}
+        - ${{env.KAFKA_BOOTSTRAP_SERVER}}
     exit: south_tcp_client
   south_tcp_client:
     type: tcp

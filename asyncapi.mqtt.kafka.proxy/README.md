@@ -61,6 +61,7 @@ mosquitto_pub -V '5' -t 'smartylighting/streetlights/1/0/event/1/lighting/measur
 ```
 
 output:
+
 ```
 Client null sending CONNECT
 Client 30157eed-0ea7-42c6-91e8-466d1dd0ab66 received CONNACK (0)

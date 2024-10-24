@@ -23,9 +23,9 @@ bindings:
       port:
         - 7183
     routes:
-        - when:
-            - port: 7183
-          exit: north_mqtt_server
+      - when:
+          - port: 7183
+        exit: north_mqtt_server
   north_mqtt_server:
     type: mqtt
     kind: server

@@ -13,11 +13,11 @@ operations:
   onStreetlightData:
     action: receive
     channel:
-      $ref: '#/channels/streetlightData'
+      $ref: "#/channels/streetlightData"
   toStreetlightData:
     action: send
     channel:
-      $ref: '#/channels/streetlightData'
+      $ref: "#/channels/streetlightData"
 
 channels:
   streetlightData:
@@ -25,7 +25,7 @@ channels:
     address: streetlights
     messages:
       streetlightData:
-        $ref: '#/components/messages/streetlightData'
+        $ref: "#/components/messages/streetlightData"
   mqttSessions:
     description: This channel contains MQTT sessions.
     address: mqtt-sessions

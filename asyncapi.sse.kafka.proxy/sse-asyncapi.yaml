@@ -15,13 +15,13 @@ channels:
     address: /events
     messages:
       event:
-        $ref: '#/components/messages/event'
+        $ref: "#/components/messages/event"
 
 operations:
   receiveEvents:
     action: receive
     channel:
-      $ref: '#/channels/events'
+      $ref: "#/channels/events"
 
 components:
   schemas:
@@ -46,4 +46,4 @@ components:
         Inform about Event.
       contentType: application/json
       payload:
-        $ref: '#/components/schemas/eventPayload'
+        $ref: "#/components/schemas/eventPayload"

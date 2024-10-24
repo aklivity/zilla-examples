@@ -8,7 +8,7 @@ jobs:
   get-examples-with-changes:
     runs-on: ubuntu-latest
     outputs:
-      changed_directories: ${{ steps.set-output.outputs.changed_directories }}  # The `dirs` doesn't exist in the outputs of changed-files@v35 action.
+      changed_directories: ${{ steps.set-output.outputs.changed_directories }} # The `dirs` doesn't exist in the outputs of changed-files@v35 action.
     steps:
       - uses: actions/checkout@v4
         with:
@@ -20,7 +20,7 @@ jobs:
         with:
           # only get the top level example dirs that have changes
           dir_names: true
-          dir_names_max_depth: 1 
+          dir_names_max_depth: 1
           dir_names_exclude_current_dir: true
           exclude_submodules: true
           files_ignore: |
@@ -29,7 +29,7 @@ jobs:
           json: true
           quotepath: false
 
-      - name: 'Set output in the matrix format'
+      - name: "Set output in the matrix format"
         id: set-output
         run: echo "changed_directories={\"dir\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "$GITHUB_OUTPUT"
 

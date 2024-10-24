@@ -99,7 +99,7 @@ Verify the response response via the Kafka UI [items-responses](http://localhost
   ```text
   Key:Message | 6cf7a1d5-3772-49ef-86e7-ba6f2c7d7d0:{"greeting":"Hello, world Thu Sep 19 15:30:48 EDT 2024"}
    Headers | :status=200,zilla:correlation-id=1-f8f1c788ba786f691823098ee0505a1b
-   ```
+  ```
 
 ## Teardown
 

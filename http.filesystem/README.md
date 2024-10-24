@@ -32,12 +32,12 @@ output:
 
 ```html
 <html>
-<head>
-<title>Welcome to Zilla!</title>
-</head>
-<body>
-<h1>Welcome to Zilla!</h1>
-</body>
+  <head>
+    <title>Welcome to Zilla!</title>
+  </head>
+  <body>
+    <h1>Welcome to Zilla!</h1>
+  </body>
 </html>
 ```
 
@@ -49,12 +49,12 @@ output:
 
 ```html
 <html>
-<head>
-<title>Welcome to Zilla!</title>
-</head>
-<body>
-<h1>Welcome to Zilla!</h1>
-</body>
+  <head>
+    <title>Welcome to Zilla!</title>
+  </head>
+  <body>
+    <h1>Welcome to Zilla!</h1>
+  </body>
 </html>
 ```
 

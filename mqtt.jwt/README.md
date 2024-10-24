@@ -34,6 +34,7 @@ brew install mosquitto
 ### Verify behavior
 
 Connect a subscribing client to mosquitto broker to port `1883`. Using mosquitto_pub client publish `{"id":"1","status":"on"}` to Zilla on port `7183`. Verify that the message arrived to on the first client.
+
 ```bash
 mosquitto_sub -V '5' -t 'smartylighting/streetlights/1/0/event/+/lighting/measured' -d
 ```

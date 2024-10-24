@@ -24,7 +24,7 @@ servers:
   plain:
     host: localhost:7114
     protocol: http
-    protocolVersion: '2.0'
+    protocolVersion: "2.0"
 defaultContentType: application/json
 
 channels:
@@ -32,12 +32,12 @@ channels:
     address: /pets
     messages:
       pet:
-        $ref: '#/components/messages/pet'
+        $ref: "#/components/messages/pet"
   showPetById:
     address: /pets/{id}
     messages:
       pet:
-        $ref: '#/components/messages/pet'
+        $ref: "#/components/messages/pet"
   customers:
     address: /customer
     messages:
@@ -56,14 +56,14 @@ operations:
       http:
         method: POST
     channel:
-      $ref: '#/channels/pets'
+      $ref: "#/channels/pets"
   listPets:
     action: receive
     bindings:
       http:
         method: GET
     channel:
-      $ref: '#/channels/pets'
+      $ref: "#/channels/pets"
   getPets:
     action: receive
     bindings:
@@ -75,7 +75,7 @@ operations:
             limit:
               type: number
     channel:
-      $ref: '#/channels/showPetById'
+      $ref: "#/channels/showPetById"
   createCustomer:
     action: send
     bindings:
@@ -101,11 +101,11 @@ operations:
             limit:
               type: number
     channel:
-      $ref: '#/channels/verifiedCustomers'
+      $ref: "#/channels/verifiedCustomers"
 components:
   correlationIds:
     customerCorrelationId:
-      location: '$message.header#/CorrelId'
+      location: "$message.header#/CorrelId"
   schemas:
     petPayload:
       type: object
@@ -166,14 +166,14 @@ components:
         Inform about Pet.
       contentType: application/json
       payload:
-        $ref: '#/components/schemas/petPayload'
+        $ref: "#/components/schemas/petPayload"
     customer:
       name: Customer
       title: Customer
       summary: Information about a Customer.
       contentType: application/json
       correlationId:
-        $ref: '#/components/correlationIds/customerCorrelationId'
+        $ref: "#/components/correlationIds/customerCorrelationId"
       headers:
         type: object
         properties:

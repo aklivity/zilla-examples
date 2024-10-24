@@ -7,7 +7,7 @@ on:
         required: true
         description: Directory name for the example to test
         type: string
-      
+
   workflow_call:
     inputs:
       example-dir:
@@ -15,7 +15,6 @@ on:
         type: string
 
 jobs:
-
   runner:
     runs-on: ubuntu-latest
     steps:
@@ -47,7 +46,7 @@ jobs:
         if: failure()
         uses: jwalton/gh-docker-logs@v2
         with:
-          dest: './logs'
+          dest: "./logs"
       - name: Tar logs
         if: failure()
         run: tar cvzf ./logs.tgz ./logs

@@ -91,12 +91,12 @@ output:
 > user-agent: curl/7.79.1
 > accept: */*
 > authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImV4YW1wbGUifQ.eyJhdWQiOiJodHRwczovL2FwaS5leGFtcGxlLmNvbSIsImV4cCI6MTY2MTc5MDM1MCwiaXNzIjoiaHR0cHM6Ly9hdXRoLmV4YW1wbGUuY29tIiwic2NvcGUiOiJwcm94eTpzdHJlYW0iLCJzdWIiOiJleGFtcGxlIn0.XAugWfUFa-oU4Hx7Nn00zq9K9oTEkSknQvmiiAtJCRouIRXyl4qCAlQmOeI35JhN_RLj4p9EgoyCVtlZNWXKVcTeAxaAQrNeKywQ58wsn0VFdKHB2LXR0oxHXOtJIkl9oJWaM4IvUenKAfs2g-yHQtKNryhu9q8TgOPEW7JeqfCaV3J_xjn7WjMILggLde6lu8haGNa1ePDMxJwZ2Z9AQd-5Gcfyx9lQj_G7VQBHR5j8c5LrXx4U8E5f4KOYFUI7xs2wSuTApZyQdmetIRpFkIfsqVcH_rtdqs6ZuCTwmaKwXt-9KNvvg3n0joN1jqdtE7XhnW19-LQK62RgrEV6ZA
-> 
+>
 * Connection state changed (MAX_CONCURRENT_STREAMS == 2147483647)!
-< HTTP/2 200 
+< HTTP/2 200
 < content-type: text/event-stream
 < access-control-allow-origin: *
-< 
+<
 data:Hello, world Wed Aug 29 9:05:52 PDT 2022
 ```
 

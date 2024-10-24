@@ -44,8 +44,8 @@ bindings:
           content:
             model: json
             catalog:
-               my_catalog:
-                 - subject: my_subject
+              my_catalog:
+                - subject: my_subject
         - path: /invalid.json
           method: PUT
           content-type:
@@ -53,8 +53,8 @@ bindings:
           content:
             model: json
             catalog:
-               my_catalog:
-                 - subject: my_subject
+              my_catalog:
+                - subject: my_subject
     exit: south_http_client
   south_http_client:
     type: http
@@ -71,7 +71,7 @@ bindings:
             - text/plain
           responses:
             - status: 200
-              content-type: 
+              content-type:
                 - application/json
               content:
                 model: json
@@ -81,7 +81,7 @@ bindings:
             - status:
                 - 401
                 - 404
-              content-type: 
+              content-type:
                 - text/plain
               content:
                 model: string
@@ -92,7 +92,7 @@ bindings:
             - text/plain
           responses:
             - status: 200
-              content-type: 
+              content-type:
                 - application/json
               content:
                 model: json
@@ -102,7 +102,7 @@ bindings:
             - status:
                 - 401
                 - 404
-              content-type: 
+              content-type:
                 - text/plain
               content:
                 model: string

@@ -25,7 +25,7 @@ docker compose up -d
 ### Endpoints
 
 | Protocol | Method | Endpoint    | Topic           | Description             |
-|----------|--------|-------------|-----------------|-------------------------|
+| -------- | ------ | ----------- | --------------- | ----------------------- |
 | HTTP     | POST   | /items      | items-snapshots | Create an item.         |
 | HTTP     | PUT    | /items/{id} | items-snapshots | Update item by the key. |
 | HTTP     | DELETE | /items/{id} | items-snapshots | Delete item by the key. |

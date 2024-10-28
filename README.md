@@ -34,6 +34,9 @@ Alternatively, you can run this script the same way without cloning the repo.
 wget -qO- https://raw.githubusercontent.com/aklivity/zilla-examples/main/startup.sh | sh -s -- -m example.name
 ```
 
+> [!NOTE]
+Make sure you have the `latest` version of Zilla by running the `docker pull ghcr.io/aklivity/zilla:latest` command. To specify a specific Zilla image version you can use the `startup.sh -v` flag or set the `ZILLA_VERSION` environment variable before running an example.
+
 ### Usage
 
 ```bash

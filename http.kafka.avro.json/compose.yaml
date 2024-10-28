@@ -2,7 +2,6 @@ name: ${NAMESPACE:-zilla-http-kafka-schema-registry}
 services:
   zilla:
     image: ghcr.io/aklivity/zilla:${ZILLA_VERSION:-latest}
-    pull_policy: always
     restart: unless-stopped
     ports:
       - 7114:7114

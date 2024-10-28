@@ -2,7 +2,6 @@ name: ${NAMESPACE:-zilla-http-kafka-proto-oneway}
 services:
   zilla:
     image: ghcr.io/aklivity/zilla:${ZILLA_VERSION:-0.9.87}
-    pull_policy: always
     restart: unless-stopped
     ports:
       - 7114:7114

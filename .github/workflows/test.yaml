@@ -8,7 +8,7 @@ jobs:
   get-examples-with-changes:
     runs-on: ubuntu-latest
     outputs:
-      changed_directories: ${{ steps.set-output.outputs.changed_directories }} # The `dirs` doesn't exist in the outputs of changed-files@v35 action.
+      changed_directories: ${{ steps.set-output.outputs.changed_directories }}
     steps:
       - uses: actions/checkout@v4
         with:

@@ -17,7 +17,6 @@ services:
 
   openapi-mock:
     image: jormaechea/open-api-mocker:2.0.0
-    container_name: openapi-mock
     volumes:
       - ./petstore-openapi.yaml:/app/petstore-openapi.yaml
     ports:

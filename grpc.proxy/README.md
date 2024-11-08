@@ -4,8 +4,8 @@ Listens on https port `7151` and will echo back whatever is published to `grpc-e
 
 ## Requirements
 
-- jq, nc, grpcurl
 - Compose compatible host
+- [grpcurl](https://github.com/fullstorydev/grpcurl)
 
 ## Setup
 

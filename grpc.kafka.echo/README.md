@@ -4,8 +4,9 @@ Listens on https port `7151` and will exchange grpc message in protobuf format t
 
 ## Requirements
 
-- jq, nc, grpcurl
+- jq
 - Compose compatible host
+- [grpcurl](https://github.com/fullstorydev/grpcurl)
 - [ghz](https://ghz.sh/docs/install)
 
 ## Setup
@@ -29,7 +30,7 @@ docker compose up -d
 Echo `{"message":"Hello World"}` message via unary rpc using `grpcurl` client.
 
 ```bash
-grpcurl -insecure -proto echo.proto  -d '{"message":"Hello World"}' localhost:7151 grpc.examples.echo.Echo.UnaryEcho
+grpcurl -plaintext -proto echo.proto  -d '{"message":"Hello World"}' localhost:7151 grpc.examples.echo.Echo.UnaryEcho
 ```
 
 output:
@@ -98,7 +99,7 @@ output:
 Echo messages via bidirectional streaming rpc.
 
 ```bash
-grpcurl -insecure -proto echo.proto -d @ localhost:7151 grpc.examples.echo.Echo.BidirectionalStreamingEcho
+grpcurl -plaintext -proto echo.proto -d @ localhost:7151 grpc.examples.echo.Echo.BidirectionalStreamingEcho
 ```
 
 Paste below message.

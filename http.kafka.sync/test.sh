@@ -4,7 +4,7 @@ set -x
 EXIT=0
 
 # GIVEN
-ZILLA_PORT="7114"
+PORT="7114"
 KAFKA_BOOTSTRAP_SERVER="kafka:29092"
 ITEM_ID="$(date +%s)"
 GREETING="Hello, World! $ITEM_ID"
@@ -12,7 +12,7 @@ GREETING_DATE="Hello, World! $(date)"
 EXPECTED="{\"greeting\":\"$GREETING_DATE\"}"
 
 echo \# Testing http.kafka.sync/
-echo ZILLA_PORT="$ZILLA_PORT"
+echo PORT="$PORT"
 echo KAFKA_BOOTSTRAP_SERVER="$KAFKA_BOOTSTRAP_SERVER"
 echo ITEM_ID="$ITEM_ID"
 echo GREETING="$GREETING"
@@ -22,7 +22,7 @@ echo
 # WHEN
 # send request to zilla
 timeout 60s curl \
-  -X "PUT" http://localhost:$ZILLA_PORT/items/$ITEM_ID \
+  -X "PUT" http://localhost:$PORT/items/$ITEM_ID \
   -H "Idempotency-Key: $ITEM_ID" \
   -H "Content-Type: application/json" \
   -d "{\"greeting\":\"$GREETING\"}" | tee .testoutput &

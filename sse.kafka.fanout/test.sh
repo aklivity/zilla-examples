@@ -4,25 +4,23 @@ set -x
 EXIT=0
 
 # GIVEN
-ZILLA_PORT="7114"
+PORT="7114"
 KAFKA_BOOTSTRAP_SERVER="kafka:29092"
 INPUT='{"id": 1,"name":"Hello World!"}'
 EXPECTED='data:{ "id": 1, "name": "Hello World!"}'
-
-echo \# Testing http.kafka.sync/
-echo ZILLA_PORT="$ZILLA_PORT"
+echo \# Testing sse.kafka.fanout/
+echo PORT="$PORT"
 echo KAFKA_BOOTSTRAP_SERVER="$KAFKA_BOOTSTRAP_SERVER"
-echo ITEM_ID="$ITEM_ID"
-echo GREETING="$GREETING"
-echo GREETING_DATE="$GREETING_DATE"
+echo INPUT="$GREETING"
+echo EXPECTED="$GREETING_DATE"
 echo
 
 # WHEN
 # send request to zilla
-timeout 3s curl -N --http2 -H "Accept:text/event-stream" "http://localhost:$ZILLA_PORT/events" | tee .testoutput &
+timeout 3s curl -N --http2 -H "Accept:text/event-stream" "http://localhost:$PORT/events" | tee .testoutput &
 
 # push response to kafka with kafkacat
-echo $INPUT |
+echo "$INPUT" |
   docker compose -p zilla-http-kafka-sync exec -T kafkacat \
     kafkacat -P \
     -b $KAFKA_BOOTSTRAP_SERVER \

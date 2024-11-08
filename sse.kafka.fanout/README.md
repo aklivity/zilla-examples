@@ -32,29 +32,26 @@ docker compose up -d
 
 ### Verify behavior
 
-Connect `sse-cat` client first, then send `Hello, world ...` from `kafkacat` producer client.
-Note that the `Hello, world ...` message will not arrive until after using `kafkacat` to produce the `Hello, world ...` message in the next step.
+Open a `text/event-stream` from the sse endpoint in a terminal.
 
 ```bash
-sse-cat http://localhost:7114/events
+curl -N --http2 -H "Accept:text/event-stream" "http://localhost:7114/events"
 ```
 
-output:
-
-```text
-Hello, world ...
-```
+In a new terminal send a text payload from the `kafkacat` producer client.
 
 ```bash
-echo "Hello, world `date`" | docker compose -p zilla-sse-kafka-fanout exec -T kafkacat \
-  kafkacat -P -b kafka:29092 -t events -k 1
+echo '{ "id": 1, "name": "Hello World!"}' | docker compose -p zilla-sse-kafka-fanout exec -T kafkacat \
+  kafkacat -P -b kafka:29092 -t events -k "1"
 ```
+
+The text payload will be the `data:` of the sse message seen in the `text/event-stream` terminal session.
 
 Note that only the latest messages with distinct keys are guaranteed to be retained by a compacted Kafka topic, so use different values for `-k` above to retain more than one message in the `events` topic.
 
 ### Browser
 
-Browse to `http://localhost7114/index.html` and make sure to visit the `localhost` site and trust the `localhost` certificate.
+Browse to [http://localhost:7114/index.html]() and make sure to visit the `localhost` site and trust the `localhost` certificate.
 
 Click the `Go` button to attach the browser SSE event source to Kafka via Zilla.
 

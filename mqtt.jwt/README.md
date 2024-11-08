@@ -23,20 +23,13 @@ The `setup.sh` script will install the Open Source Zilla image in a Compose stac
 docker compose up -d
 ```
 
-### Install mqtt client
-
-Requires MQTT 5.0 client, such as Mosquitto clients.
-
-```bash
-brew install mosquitto
-```
-
 ### Verify behavior
 
 Connect a subscribing client to mosquitto broker to port `1883`. Using mosquitto_pub client publish `{"id":"1","status":"on"}` to Zilla on port `7183`. Verify that the message arrived to on the first client.
 
 ```bash
-mosquitto_sub -V '5' -t 'smartylighting/streetlights/1/0/event/+/lighting/measured' -d
+docker compose -p zilla-mqtt-proxy exec -T mosquitto-cli \
+mosquitto_sub --url mqtt://zilla:7183/smartylighting/streetlights/1/0/event/+/lighting/measured --debug
 ```
 
 output:
@@ -51,7 +44,8 @@ Subscribed (mid: 1): 0
 ```
 
 ```bash
-mosquitto_pub -V '5' -t 'smartylighting/streetlights/1/0/event/1/lighting/measured' -m '{"id":"1","status":"on"}' -d -p 7183
+docker compose -p zilla-mqtt-proxy exec -T mosquitto-cli \
+mosquitto_sub --url mqtt://zilla:7183/smartylighting/streetlights/1/0/event/1/lighting/measured --message '{"id":"1","status":"on"}' --debug
 ```
 
 output:
@@ -66,7 +60,7 @@ Client 244684c7-fbaf-4e08-b382-a1a2329cf9ec sending DISCONNECT
 Now attempt to publish an invalid message, with property `stat` instead of `status`.
 
 ```bash
-mosquitto_pub -V '5' -t 'smartylighting/streetlights/1/0/event/1/lighting/measured' -m '{"id":"1","stat":"off"}' -d -p 7183 --repeat 2 --repeat-delay 3
+mosquitto_pub -V '5' -t 'smartylighting/streetlights/1/0/event/1/lighting/measured' -m '{"id":"1","stat":"off"}' -p 7183 --repeat 2 --repeat-delay 3 --debug
 ```
 
 output:
@@ -87,5 +81,4 @@ The `teardown.sh` script stops the compose stack.
 
 ```bash
 ./teardown.sh
-
 ```

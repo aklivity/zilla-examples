@@ -24,7 +24,7 @@ docker compose up -d
 Using `curl` client connect to the SSE stream.
 
 ```bash
-curl -N --http2 -H "Accept:text/event-stream" -v "http://localhost:7114/events"
+curl -N --http2 -H "Accept:text/event-stream" "http://localhost:7114/events"
 ```
 
 output:

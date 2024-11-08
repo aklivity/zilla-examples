@@ -4,10 +4,10 @@ set -x
 EXIT=0
 
 # GIVEN
-PORT="12345"
+PORT="7183"
 INPUT="Hello, Zilla!"
 EXPECTED="Hello, Zilla!"
-echo \# Testing tcp.echo/
+echo \# Testing asyncapi.sse.kafka.proxy/
 echo PORT="$PORT"
 echo INPUT="$INPUT"
 echo EXPECTED="$EXPECTED"
@@ -28,5 +28,9 @@ else
   echo ❌
   EXIT=1
 fi
+
+# TODO remove once fixed
+echo '❌ Tested on main. and does not work with described instructions'
+EXIT=1
 
 exit $EXIT

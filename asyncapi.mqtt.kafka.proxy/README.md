@@ -24,8 +24,14 @@ docker compose up -d
 Using eclipse-mosquitto subscribe to the `smartylighting/streetlights/1/0/event/+/lighting/measured` topic.
 
 ```bash
- mosquitto_sub -V '5' -t 'smartylighting/streetlights/1/0/event/+/lighting/measured' -d -p 7183
+docker compose -p zilla-asyncapi-mqtt-kafka-proxy exec -T mosquitto-cli \
+mosquitto_sub --url mqtt://zilla:7183/smartylighting/streetlights/1/0/event/+/lighting/measured --debug
 ```
+
+> [!CAUTION]
+> Tested on main. crash loops with:
+> 
+> Throws: org.agrona.concurrent.AgentTerminationException: java.lang.NullPointerException: Cannot invoke "io.aklivity.zilla.runtime.binding.asyncapi.internal.types.stream.AsyncapiBeginExFW.apiId()" because "beginEx" is null
 
 output:
 
@@ -42,7 +48,8 @@ Client 26c02b9a-0e29-44c6-9f0e-277655c8d712 received PUBLISH (d0, q0, r0, m0, 's
 In a separate session, publish a valid message on the `smartylighting/streetlights/1/0/event/1/lighting/measured` topic.
 
 ```bash
-mosquitto_pub -V '5' -t 'smartylighting/streetlights/1/0/event/1/lighting/measured' -m '{"lumens":50,"sentAt":"2024-06-07T12:34:32.000Z"}' -d -p 7183
+docker compose -p zilla-asyncapi-mqtt-kafka-proxy exec -T mosquitto-cli \
+mosquitto_pub --url mqtt://zilla:7183/smartylighting/streetlights/1/0/event/1/lighting/measured --message '{"lumens":50,"sentAt":"2024-06-07T12:34:32.000Z"}' --debug
 ```
 
 output:
@@ -57,7 +64,8 @@ Client a1f4ad8c-c9e8-4671-ad46-69030d4f1c9a sending DISCONNECT
 Now attempt to publish an invalid message by setting `lumens` property to a negative value.
 
 ```bash
-mosquitto_pub -V '5' -t 'smartylighting/streetlights/1/0/event/1/lighting/measured' -m '{"lumens":-1,"sentAt":"2024-06-07T12:34:32.000Z"}' -d -p 7183 --repeat 2 --repeat-delay 3
+docker compose -p zilla-asyncapi-mqtt-kafka-proxy exec -T mosquitto-cli \
+mosquitto_pub --url mqtt://zilla:7183/smartylighting/streetlights/1/0/event/1/lighting/measured -m '{"lumens":-1,"sentAt":"2024-06-07T12:34:32.000Z"}' --repeat 2 --repeat-delay 3 --debug
 ```
 
 output:

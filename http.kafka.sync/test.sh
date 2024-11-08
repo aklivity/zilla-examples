@@ -1,6 +1,8 @@
 #!/bin/sh
 set -x
 
+EXIT=0
+
 # GIVEN
 ZILLA_PORT="7114"
 KAFKA_BOOTSTRAP_SERVER="kafka:29092"
@@ -8,7 +10,6 @@ ITEM_ID="$(date +%s)"
 GREETING="Hello, World! $ITEM_ID"
 GREETING_DATE="Hello, World! $(date)"
 EXPECTED="{\"greeting\":\"$GREETING_DATE\"}"
-EXIT=0
 
 echo \# Testing http.kafka.sync/
 echo ZILLA_PORT="$ZILLA_PORT"

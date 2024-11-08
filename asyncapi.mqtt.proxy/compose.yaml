@@ -19,13 +19,19 @@ services:
     command: start -v -e
 
   mosquitto:
-    image: eclipse-mosquitto
+    image: eclipse-mosquitto:2.0
     restart: unless-stopped
     ports:
       - 1883:1883
     configs:
       - source: mosquitto.conf
         target: /mosquitto/config/mosquitto.conf
+
+  mosquitto-cli:
+    image: eclipse-mosquitto:2.0
+    command: "/bin/sh"
+    stdin_open: true
+    tty: true
 
 configs:
   mosquitto.conf:

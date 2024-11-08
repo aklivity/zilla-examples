@@ -6,7 +6,7 @@ info:
     name: Aklivity Community License
 servers:
   plain:
-    host: host.docker.internal:9092
+    host: kafka:29092
     protocol: kafka
 
 operations:

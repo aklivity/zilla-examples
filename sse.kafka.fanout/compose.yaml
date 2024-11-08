@@ -14,6 +14,7 @@ services:
       KAFKA_BOOTSTRAP_SERVER: kafka:29092
     volumes:
       - ./zilla.yaml:/etc/zilla/zilla.yaml
+      - ./www:/var/www
     command: start -v -e
 
   kafka:
@@ -56,13 +57,12 @@ services:
     command:
       - |
         echo -e "Creating kafka topic";
-        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic items-requests
-        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic items-responses --config cleanup.policy=compact
+        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic events --config cleanup.policy=compact
         echo -e "Successfully created the following topics:";
         /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --list;
 
   kafka-ui:
-    image: ghcr.io/kafbat/kafka-ui:latest
+    image: ghcr.io/kafbat/kafka-ui:v1.0.0
     restart: unless-stopped
     ports:
       - 8080:8080

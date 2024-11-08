@@ -61,7 +61,7 @@ services:
         /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --list;
 
   kafka-ui:
-    image: ghcr.io/kafbat/kafka-ui:latest
+    image: ghcr.io/kafbat/kafka-ui:v1.0.0
     restart: unless-stopped
     ports:
       - 8080:8080

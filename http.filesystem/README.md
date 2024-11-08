@@ -4,9 +4,7 @@ Listens on http port `7114` and serves files from the Zilla container's `/var/ww
 
 ## Requirements
 
-- jq, nc
 - Compose compatible host
-- curl
 
 ## Setup
 
@@ -26,23 +24,6 @@ docker compose up -d
 
 ```bash
 curl http://localhost:7114/index.html
-```
-
-output:
-
-```html
-<html>
-  <head>
-    <title>Welcome to Zilla!</title>
-  </head>
-  <body>
-    <h1>Welcome to Zilla!</h1>
-  </body>
-</html>
-```
-
-```bash
-curl --cacert test-ca.crt http://localhost:7114/index.html
 ```
 
 output:

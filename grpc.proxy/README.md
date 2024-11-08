@@ -28,7 +28,7 @@ docker compose up -d
 Echo `{"message":"Hello World"}` message via unary rpc.
 
 ```bash
-grpcurl -insecure -proto echo.proto  -d '{"message":"Hello World"}' localhost:7151 grpc.examples.echo.Echo.UnaryEcho
+grpcurl -insecure -proto echo.proto  -d '{"message":"Hello World"}' localhost:7153 grpc.examples.echo.Echo.UnaryEcho
 ```
 
 output:
@@ -44,7 +44,7 @@ output:
 Echo messages via bidirectional streaming rpc.
 
 ```bash
-grpcurl -insecure -proto echo.proto -d @ localhost:7151 grpc.examples.echo.Echo.BidirectionalStreamingEcho
+grpcurl -insecure -proto echo.proto -d @ localhost:7153 grpc.examples.echo.Echo.BidirectionalStreamingEcho
 ```
 
 Paste below message.

@@ -22,7 +22,7 @@ echo RESULT="$RESULT"
 echo OUTPUT="$OUTPUT"
 echo EXPECTED="$EXPECTED"
 echo
-if [ "$RESULT" -eq 0 ] && [ "$OUTPUT" -eq "$EXPECTED" ]; then
+if [ "$RESULT" -eq 0 ] && [ "$OUTPUT" = "$EXPECTED" ]; then
   echo ✅
 else
   echo ❌

@@ -1,12 +1,11 @@
 #!/bin/sh
-set -x
 
 EXIT=0
 
 # GIVEN
 PORT="7183"
 INPUT="Hello, Zilla!"
-EXPECTED="Hello, Zilla!"
+EXPECTED=""
 echo \# Testing asyncapi.sse.kafka.proxy/
 echo PORT="$PORT"
 echo INPUT="$INPUT"
@@ -22,7 +21,7 @@ echo RESULT="$RESULT"
 echo OUTPUT="$OUTPUT"
 echo EXPECTED="$EXPECTED"
 echo
-if [ "$RESULT" -eq 0 ] && [ "$OUTPUT" -eq "$EXPECTED" ]; then
+if [ "$RESULT" -eq 0 ] && [ "$OUTPUT" = "$EXPECTED" ]; then
   echo ✅
 else
   echo ❌

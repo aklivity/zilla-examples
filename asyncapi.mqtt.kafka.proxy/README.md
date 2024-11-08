@@ -28,11 +28,6 @@ docker compose -p zilla-asyncapi-mqtt-kafka-proxy exec -T mosquitto-cli \
 mosquitto_sub --url mqtt://zilla:7183/smartylighting/streetlights/1/0/event/+/lighting/measured --debug
 ```
 
-> [!CAUTION]
-> Tested on main. crash loops with:
-> 
-> Throws: org.agrona.concurrent.AgentTerminationException: java.lang.NullPointerException: Cannot invoke "io.aklivity.zilla.runtime.binding.asyncapi.internal.types.stream.AsyncapiBeginExFW.apiId()" because "beginEx" is null
-
 output:
 
 ```text

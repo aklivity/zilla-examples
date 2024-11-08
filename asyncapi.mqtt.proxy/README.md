@@ -31,9 +31,6 @@ docker compose -p zilla-asyncapi-mqtt-proxy exec -T mosquitto-cli \
 mosquitto_sub --url mqtt://zilla:7183/smartylighting/streetlights/1/0/event/+/lighting/measured --debug
 ```
 
-> [!CAUTION]
-> Tested on main. and doesn't work with described instructions.
-
 output:
 
 ```

@@ -8,7 +8,7 @@ PORT="7114"
 KAFKA_BOOTSTRAP_SERVER="kafka:29092"
 INPUT='{"id": 1,"name":"Hello World!"}'
 EXPECTED='data:{ "id": 1, "name": "Hello World!"}'
-echo \# Testing sse.kafka.fanout/
+echo \# Testing asyncapi.sse.kafka.proxy/
 echo PORT="$PORT"
 echo KAFKA_BOOTSTRAP_SERVER="$KAFKA_BOOTSTRAP_SERVER"
 echo INPUT="$INPUT"
@@ -47,5 +47,9 @@ else
   echo ❌
   EXIT=1
 fi
+
+# TODO remove once fixed
+echo '❌ curl: (52) Empty reply from server. Tested on main. and does not work with described instructions'
+EXIT=1
 
 exit $EXIT

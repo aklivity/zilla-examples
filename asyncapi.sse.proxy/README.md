@@ -4,7 +4,7 @@ Listens on http port `7114` and will stream back whatever is published to `sse_s
 
 ## Requirements
 
-- jq, nc
+- nc
 - Compose compatible host
 
 ## Setup

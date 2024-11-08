@@ -55,7 +55,7 @@ output:
 List all the pets using `GET` request for the `/pets` endpoint
 
 ```bash
-curl --location 'http://localhost:7114/pets' \
+curl 'http://localhost:7114/pets' \
 --header 'Accept: application/json'
 ```
 

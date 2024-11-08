@@ -19,7 +19,7 @@ docker compose up -d
 ## Test
 
 ```bash
-curl --location 'http://localhost:7114/pets' --header 'Accept: application/json'
+curl 'http://localhost:7114/pets' --header 'Accept: application/json'
 ```
 
 ## Teardown

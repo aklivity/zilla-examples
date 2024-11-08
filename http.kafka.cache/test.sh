@@ -5,18 +5,15 @@ EXIT=0
 
 # GIVEN
 PORT="7114"
-INPUT='{"name": "Rocky","id": 1}'
-EXPECTED="204"
-echo \# Testing asyncapi.http.kafka.proxy/POST
+EXPECTED="[]"
+echo \# Testing http.kafka.cache/
 echo PORT="$PORT"
 echo INPUT="$INPUT"
 echo EXPECTED="$EXPECTED"
 echo
 
 # WHEN
-OUTPUT=$(curl -w "%{http_code}" --location "http://localhost:$PORT/pets" \
-  --header 'Content-Type: application/json' \
-  --data "$INPUT")
+OUTPUT=$(curl http://localhost:$PORT/items)
 RESULT=$?
 echo RESULT="$RESULT"
 
@@ -34,17 +31,23 @@ fi
 
 # GIVEN
 PORT="7114"
-INPUT=''
-EXPECTED="[{"name": "Rocky","id": 1}]"
-echo \# Testing asyncapi.http.kafka.proxy/GET
+INPUT='{"message":"Hello World"}'
+EXPECTED='[{"message":"Hello World"}]'
+echo \# Testing http.kafka.cache/
 echo PORT="$PORT"
 echo INPUT="$INPUT"
 echo EXPECTED="$EXPECTED"
 echo
 
+echo "$INPUT" | docker compose -p zilla-http-kafka-cache exec -T kafkacat \
+  kafkacat -P \
+    -b kafka:29092 \
+    -t items-snapshots \
+    -k "5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07" \
+    -H "content-type=application/json"
+
 # WHEN
-OUTPUT=$(curl "http://localhost:$PORT/pets" \
-  --header 'Content-Type: application/json')
+OUTPUT=$(curl http://localhost:$PORT/items)
 RESULT=$?
 echo RESULT="$RESULT"
 

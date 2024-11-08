@@ -4,7 +4,7 @@ Listens on https port `7143` and will stream back whatever is published to `sse_
 
 ## Requirements
 
-- jq, nc
+- nc
 - Compose compatible host
 - [jwt-cli](https://github.com/mike-engel/jwt-cli)
 

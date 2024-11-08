@@ -4,7 +4,6 @@ Listens on https port `7114` and will response back whatever is hosted in `nginx
 
 ## Requirements
 
-- jq, nc
 - Compose compatible host
 
 ## Setup

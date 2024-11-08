@@ -4,7 +4,6 @@ Listens on mqtt port `7183` and will forward mqtt publish messages and proxies s
 
 ## Requirements
 
-- jq, nc
 - Compose compatible host
 - mosquitto
 

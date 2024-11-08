@@ -4,7 +4,6 @@ Listens on http port `7114` or https port `7114` and will serve cached responses
 
 ## Requirements
 
-- jq, nc
 - Compose compatible host
 
 ## Setup

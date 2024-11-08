@@ -5,7 +5,6 @@ Listens on amqps port `7171` and will echo back whatever is sent to the server, 
 
 ## Requirements
 
-- jq, nc
 - Compose compatible host
 - cli-rhea
 

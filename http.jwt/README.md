@@ -5,10 +5,8 @@ Listens on https port `7143` and will echo back whatever is sent to the server f
 
 ## Requirements
 
-- jq, nc
 - Compose compatible host
 - jwt-cli
-- curl
 
 ### Install jwt-cli client
 

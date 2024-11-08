@@ -23,7 +23,7 @@ docker compose up -d
 ### Register Schema
 
 ```bash
-curl 'http://localhost:8081/subjects/core-paymenthub-simple-pay-ipn-request-value/versions' \
+curl 'http://localhost:8081/subjects/items-snapshots-value/versions' \
 --header 'Content-Type: application/json' \
 --data '{
   "schema":
@@ -53,7 +53,7 @@ curl 'http://localhost:8081/subjects/items-snapshots-value/versions/latest'
 `POST` request
 
 ```bash
-curl -k -v -X POST http://localhost:7114/items -H 'Idempotency-Key: 1'  -H 'Content-Type: application/json' -d '{"id": "123","status": "OK"}'
+curl -k -v http://localhost:7114/items -H 'Idempotency-Key: 1'  -H 'Content-Type: application/json' -d '{"id": "123","status": "OK"}'
 ```
 
 output:
@@ -75,7 +75,7 @@ output:
 `GET` request to fetch specific item.
 
 ```bash
-curl -k -v http://localhost7114/items/1
+curl -k http://localhost:7114/items/1
 ```
 
 output:
@@ -96,7 +96,7 @@ output:
 `POST` request.
 
 ```bash
-curl -k -v -X POST http://localhost7114/items -H 'Idempotency-Key: 2'  -H 'Content-Type: application/json' -d '{"id": 123,"status": "OK"}'
+curl -k -v http://localhost:7114/items -H 'Idempotency-Key: 2'  -H 'Content-Type: application/json' -d '{"id": 123,"status": "OK"}'
 ```
 
 output:
@@ -118,7 +118,7 @@ output:
 `GET` request to verify whether Invalid event is produced
 
 ```bash
-curl -k -v http://localhost7114/items/2
+curl -k -v http://localhost:7114/items/2
 ```
 
 output:

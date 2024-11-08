@@ -1,7 +1,13 @@
 ---
 name: zilla-mqtt-jwt
----
-name: example
+vaults:
+  my_servers:
+    type: filesystem
+    options:
+      keys:
+        store: tls/localhost.p12
+        type: pkcs12
+        password: ${{env.KEYSTORE_PASSWORD}}
 guards:
   authn_jwt:
     type: jwt
@@ -22,10 +28,24 @@ bindings:
       host: 0.0.0.0
       port:
         - 7183
+        - 7883
     routes:
-      - when:
-          - port: 7183
-        exit: north_mqtt_server
+        - when:
+            - port: 7183
+          exit: north_mqtt_server
+        - when:
+            - port: 7883
+          exit: north_tls_server
+  north_tls_server:
+    type: tls
+    kind: server
+    vault: my_servers
+    options:
+      keys:
+        - localhost
+      sni:
+        - localhost
+    exit: north_mqtt_server
   north_mqtt_server:
     type: mqtt
     kind: server
@@ -39,8 +59,8 @@ bindings:
       - guarded:
           authn_jwt:
             - mqtt:stream
-        exit: north_mqtt_kafka_mapping
-  north_mqtt_kafka_mapping:
+        exit: north_mqtt_client
+  north_mqtt_client:
     type: mqtt
     kind: client
     exit: south_tcp_client

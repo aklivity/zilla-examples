@@ -1,4 +1,4 @@
-name: ${NAMESPACE:-zilla-mqtt-proxy}
+name: ${NAMESPACE:-zilla-mqtt-jwt}
 services:
   zilla:
     image: ghcr.io/aklivity/zilla:${ZILLA_VERSION:-latest}
@@ -15,7 +15,7 @@ services:
       MOSQUITTO_BROKER_PORT: 1883
     volumes:
       - ./zilla.yaml:/etc/zilla/zilla.yaml
-      - ./mqtt-asyncapi.yaml:/etc/zilla/specs/mqtt-asyncapi.yaml
+      - ./tls:/etc/zilla/tls
     command: start -v -e
 
   mosquitto:

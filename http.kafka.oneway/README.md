@@ -4,7 +4,7 @@ Listens on http port `7114` or https port `7114` and will produce messages to th
 
 ## Requirements
 
-- jq, nc
+- jq
 - Compose compatible host
 
 ## Setup
@@ -26,10 +26,7 @@ docker compose up -d
 Send a `POST` request with an event body.
 
 ```bash
-curl -v \
-       -X "POST" http://localhost:7114/events \
-       -H "Content-Type: application/json" \
-       -d "{\"greeting\":\"Hello, world\"}"
+curl -v http://localhost:7114/events -H "Content-Type: application/json" -d '{"greeting":"Hello, world"}'
 ```
 
 output:

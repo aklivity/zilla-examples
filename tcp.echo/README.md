@@ -4,7 +4,7 @@ Listens on tcp port `12345` and will echo back whatever is sent to the server.
 
 ## Requirements
 
-- jq, nc
+- nc
 - Compose compatible host
 
 ## Setup

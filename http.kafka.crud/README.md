@@ -5,7 +5,6 @@ deletes and reads messages in `items-snapshots` log-compacted Kafka topic acting
 
 ## Requirements
 
-- jq, nc
 - Compose compatible host
 
 ## Setup
@@ -39,7 +38,7 @@ docker compose up -d
 Note: You can remove `-H 'Idempotency-Key: 1'` to generate random key.
 
 ```bash
-curl -k -v -X POST http://localhost7114/items -H 'Idempotency-Key: 1'  -H 'Content-Type: application/json' -d '{"greeting":"Hello, world1"}'
+curl -k -v -X POST http://localhost:7114/items -H 'Idempotency-Key: 1'  -H 'Content-Type: application/json' -d '{"greeting":"Hello, world1"}'
 ```
 
 output:
@@ -61,7 +60,7 @@ HTTP/2 204
 `GET` request to fetch specific item.
 
 ```bash
-curl -k -v http://localhost7114/items/1
+curl -k -v http://localhost:7114/items/1
 ```
 
 output:
@@ -81,7 +80,7 @@ output:
 `PUT` request to update specific item.
 
 ```bash
-curl -k -v -X PUT http://localhost7114/items/1 -H 'Content-Type: application/json' -d '{"greeting":"Hello, world2"}'
+curl -k -v -X PUT http://localhost:7114/items/1 -H 'Content-Type: application/json' -d '{"greeting":"Hello, world2"}'
 ```
 
 output:
@@ -103,7 +102,7 @@ HTTP/2 204
 `DELETE` request to delete specific item.
 
 ```bash
-curl -k -v -X DELETE http://localhost7114/items/1
+curl -k -v -X DELETE http://localhost:7114/items/1
 ```
 
 output:

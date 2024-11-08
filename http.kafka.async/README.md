@@ -5,7 +5,7 @@ and `items-responses` topics in Kafka, asynchronously.
 
 ## Requirements
 
-- jq, nc
+- jq
 - Compose compatible host\
 
 ## Setup

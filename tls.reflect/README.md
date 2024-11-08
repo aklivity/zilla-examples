@@ -4,7 +4,6 @@ Listens on tls port `23456` and will echo back whatever is sent to the server, b
 
 ## Requirements
 
-- jq, nc
 - Compose compatible host
 - openssl
 

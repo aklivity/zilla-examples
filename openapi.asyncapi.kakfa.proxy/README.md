@@ -19,7 +19,7 @@ docker compose up -d
 #### Create Pet
 
 ```bash
-curl -X POST --location 'http://localhost:7114/pets' \
+curl 'http://localhost:7114/pets' \
      --header 'Content-Type: application/json' \
      --header 'Idempotency-Key: 1' \
      --data '{ "id": 1, "name": "Spike" }'
@@ -28,7 +28,7 @@ curl -X POST --location 'http://localhost:7114/pets' \
 #### Retrieve Pets
 
 ```bash
-curl --location 'http://localhost:7114/pets' --header 'Accept: application/json'
+curl 'http://localhost:7114/pets' --header 'Accept: application/json'
 ```
 
 ## Teardown

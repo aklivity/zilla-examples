@@ -5,18 +5,16 @@ EXIT=0
 
 # GIVEN
 PORT="7114"
-INPUT='{"name": "Rocky","id": 1}'
+INPUT='{ "message": "hello world", "count": 10 }'
 EXPECTED="204"
-echo \# Testing asyncapi.http.kafka.proxy/POST
+echo \# Testing http.kafka.proto.json/valid
 echo PORT="$PORT"
 echo INPUT="$INPUT"
 echo EXPECTED="$EXPECTED"
 echo
 
 # WHEN
-OUTPUT=$(curl -w "%{http_code}" --location "http://localhost:$PORT/pets" \
-  --header 'Content-Type: application/json' \
-  --data "$INPUT")
+OUTPUT=$(curl -w "%{http_code}" http://localhost:$PORT/requests -H "Content-Type: application/json" -d "$INPUT")
 RESULT=$?
 echo RESULT="$RESULT"
 
@@ -31,20 +29,18 @@ else
   EXIT=1
 fi
 
-
 # GIVEN
 PORT="7114"
-INPUT=''
-EXPECTED="[{"name": "Rocky","id": 1}]"
-echo \# Testing asyncapi.http.kafka.proxy/GET
+INPUT='{ "message": "hello world", "count": 10, "invalid": "field" }'
+EXPECTED="400"
+echo \# Testing http.kafka.proto.json/invalid
 echo PORT="$PORT"
 echo INPUT="$INPUT"
 echo EXPECTED="$EXPECTED"
 echo
 
 # WHEN
-OUTPUT=$(curl "http://localhost:$PORT/pets" \
-  --header 'Content-Type: application/json')
+OUTPUT=$(curl -w "%{http_code}" http://localhost:$PORT/requests -H "Content-Type: application/json" -d "$INPUT")
 RESULT=$?
 echo RESULT="$RESULT"
 

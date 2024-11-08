@@ -4,7 +4,7 @@ Listens on https port `7151` and fanout messages from `messages` topic in Kafka.
 
 ## Requirements
 
-- jq, protoc
+- protoc
 - Compose compatible host
 - [grpcurl](https://github.com/fullstorydev/grpcurl)
 

@@ -1,6 +1,6 @@
 # mqtt.jwt
 
-Listens on mqtt port `7183` and will forward mqtt publish messages and proxies subscribes to mosquitto MQTT broker listening on `1883` for topic `smartylighting/streetlights/1/0/event/+/lighting/measured`.
+Listens on mqtt port `7183` and `7883` forwarding mqtt publish messages and proxies subscribes to mosquitto MQTT broker listening on `1883`.
 
 ## Requirements
 
@@ -23,61 +23,127 @@ The `setup.sh` script will install the Open Source Zilla image in a Compose stac
 docker compose up -d
 ```
 
+### Install jwt-cli client
+
+Requires JWT command line client, such as `jwt-cli` version `2.0.0` or higher.
+
+```bash
+brew install mike-engel/jwt-cli/jwt-cli
+```
+
 ### Verify behavior
 
-Connect a subscribing client to mosquitto broker to port `1883`. Using mosquitto_pub client publish `{"id":"1","status":"on"}` to Zilla on port `7183`. Verify that the message arrived to on the first client.
+Create a token without `mqtt:stream` scope.
 
 ```bash
-docker compose -p zilla-mqtt-proxy exec -T mosquitto-cli \
-mosquitto_sub --url mqtt://zilla:7183/smartylighting/streetlights/1/0/event/+/lighting/measured --debug
+export MQTT_USERNAME="Bearer $(jwt encode \
+    --alg "RS256" \
+    --kid "example" \
+    --iss "https://auth.example.com" \
+    --aud "https://api.example.com" \
+    --exp=+1d \
+    --no-iat \
+    --secret @private.pem)"
 ```
 
-output:
+Create a token that is valid until 2032, with `mqtt:stream` scope.
 
+See the signed JWT token, without `mqtt:stream` scope, print the `MQTT_USERNAME` var.
+
+```bash
+$ jwt encode \
+echo $MQTT_USERNAME
 ```
+
+Use the signed JWT token, without `mqtt:stream` scope, to attempt an authorized request. Provide the JWT token in the MQTT_USERNAME field.
+
+```bash
+docker compose -p zilla-mqtt-jwt exec mosquitto-cli \
+  mosquitto_sub --url mqtt://zilla:7183/zilla --debug -u $MQTT_USERNAME
+```
+
+The request is rejected as expected, and without leaking any information about failed security checks.
+
+```text
 Client null sending CONNECT
-Client auto-5A1C0A41-0D16-497D-6C3B-527A93E421E6 received CONNACK (0)
-Client auto-5A1C0A41-0D16-497D-6C3B-527A93E421E6 sending SUBSCRIBE (Mid: 1, Topic: smartylighting/streetlights/1/0/event/+/lighting/measured, QoS: 0, Options: 0x00)
-Client auto-5A1C0A41-0D16-497D-6C3B-527A93E421E6 received SUBACK
+Client null sending CONNECT
+Client null sending CONNECT
+```
+
+Create a token with the `mqtt:stream` scope.
+
+```bash
+export MQTT_USERNAME="Bearer $(jwt encode \
+    --alg "RS256" \
+    --kid "example" \
+    --iss "https://auth.example.com" \
+    --aud "https://api.example.com" \
+    --exp=+1d \
+    --no-iat \
+    --payload "scope=mqtt:stream" \
+    --secret @private.pem)"
+```
+
+See the signed JWT token with `mqtt:stream` scope print the `MQTT_USERNAME` var.
+
+```bash
+echo $MQTT_USERNAME
+```
+
+Use the signed JWT token, with `mqtt:stream` scope, to attempt an authorized request.
+
+```bash
+docker compose -p zilla-mqtt-jwt exec mosquitto-cli \
+  mosquitto_sub --url mqtt://zilla:7183/zilla --debug -u $MQTT_USERNAME
+```
+
+The connection is authorized.
+
+```text
+Client null sending CONNECT
+Client a0b72aaa-3d12-4d1d-8fc3-4971d1973763 received CONNACK (0)
+Client a0b72aaa-3d12-4d1d-8fc3-4971d1973763 sending SUBSCRIBE (Mid: 1, Topic: zilla, QoS: 0, Options: 0x00)
+Client a0b72aaa-3d12-4d1d-8fc3-4971d1973763 received SUBACK
 Subscribed (mid: 1): 0
-{"id":"1","status":"on"}
+Client 2b77314a-163f-4f18-908c-2913645e4f56 received PUBLISH (d0, q0, r0, m0, 'zilla', ... (12 bytes))
+Hello, world
 ```
 
+Use the signed JWT token, with `mqtt:stream` scope, publish a message.
+
 ```bash
-docker compose -p zilla-mqtt-proxy exec -T mosquitto-cli \
-mosquitto_sub --url mqtt://zilla:7183/smartylighting/streetlights/1/0/event/1/lighting/measured --message '{"id":"1","status":"on"}' --debug
+docker compose -p zilla-mqtt-jwt exec mosquitto-cli \
+  mosquitto_pub --url mqtt://zilla:7183/zilla --message 'Hello, world' --debug -u $MQTT_USERNAME
 ```
 
 output:
 
-```
+```text
 Client null sending CONNECT
-Client 244684c7-fbaf-4e08-b382-a1a2329cf9ec received CONNACK (0)
-Client 244684c7-fbaf-4e08-b382-a1a2329cf9ec sending PUBLISH (d0, q0, r0, m1, 'smartylighting/streetlights/1/0/event/1/lighting/measured', ... (24 bytes))
-Client 244684c7-fbaf-4e08-b382-a1a2329cf9ec sending DISCONNECT
+Client 44181407-f1bc-4a6b-b94d-9f37d37ea395 received CONNACK (0)
+Client 44181407-f1bc-4a6b-b94d-9f37d37ea395 sending PUBLISH (d0, q0, r0, m1, 'zilla', ... (12 bytes))
+Client 44181407-f1bc-4a6b-b94d-9f37d37ea395 sending DISCONNECT
 ```
 
-Now attempt to publish an invalid message, with property `stat` instead of `status`.
+### Note
+
+The `private.pem` key was generated using `openssl` as follows.
 
 ```bash
-mosquitto_pub -V '5' -t 'smartylighting/streetlights/1/0/event/1/lighting/measured' -m '{"id":"1","stat":"off"}' -p 7183 --repeat 2 --repeat-delay 3 --debug
+openssl genrsa -out private.pem 2048
 ```
 
-output:
+Then the RSA key modulus is extracted in base64 format.
 
-```
-Client null sending CONNECT
-Client e7e9ddb0-f8c9-43a0-840f-dab9981a9de3 received CONNACK (0)
-Client e7e9ddb0-f8c9-43a0-840f-dab9981a9de3 sending PUBLISH (d0, q0, r0, m1, 'smartylighting/streetlights/1/0/event/1/lighting/measured', ... (23 bytes))
-Received DISCONNECT (153)
-Error: The client is not currently connected.
+```bash
+openssl rsa -in private.pem -pubout -noout -modulus | cut -h 'localhost' -p 7183 --debug= -f2 | xxd -r -p | base64
 ```
 
-Note that the invalid message is rejected with error code `153` `payload format invalid`, and therefore not received by the subscriber.
+The resulting base64 modulus is used to configure the `jwt` guard in `zilla.yaml` to validate the integrity of signed JWT tokens.
 
-## Teardown
+### Teardown
 
-The `teardown.sh` script stops the compose stack.
+The `teardown.sh` script stops port forwarding, uninstalls Zilla and deletes the namespace.
 
 ```bash
 ./teardown.sh

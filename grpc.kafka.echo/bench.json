@@ -1,5 +1,5 @@
 {
-    "skipTLS": true,
+    "insecure": true,
     "stream-interval": "5ms",
     "total": 50,
     "concurrency": 8,

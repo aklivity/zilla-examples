@@ -1,6 +1,6 @@
 # http.kafka.oneway
 
-Listens on http port `7114` or https port `7114` and will produce messages to the `events` topic in Kafka, synchronously.
+Listens on http port `7114` or https port `7114` and will produce messages to the `events` topic in Kafka, synchronously. Zilla connects to Kafka using SASL-SCRAM over an SSL encrypted connection.
 
 ## Requirements
 

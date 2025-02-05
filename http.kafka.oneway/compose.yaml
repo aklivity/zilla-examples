@@ -11,14 +11,17 @@ services:
       retries: 5
       test: ["CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/7114"]
     environment:
-      KAFKA_BOOTSTRAP_SERVER: kafka:29092
+      KAFKA_BOOTSTRAP_SERVER: kafka:9092
+      KEYSTORE_PASSWORD: generated
+      SASL_USERNAME: alice
+      SASL_PASSWORD: alice-secret
     volumes:
       - ./zilla.yaml:/etc/zilla/zilla.yaml
+      - ./truststore:/etc/zilla/tls
     command: start -v -e
 
   kafka:
     image: bitnami/kafka:3.5
-    restart: unless-stopped
     ports:
       - 9092:9092
     healthcheck:
@@ -27,19 +30,33 @@ services:
       timeout: 60s
       retries: 60
     environment:
-      ALLOW_PLAINTEXT_LISTENER: "yes"
-      KAFKA_CFG_NODE_ID: "1"
-      KAFKA_CFG_BROKER_ID: "1"
-      KAFKA_CFG_GROUP_INITIAL_REBALANCE_DELAY_MS: "0"
-      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: "1@127.0.0.1:9093"
-      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "CLIENT:PLAINTEXT,INTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT"
-      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
-      KAFKA_CFG_LOG_DIRS: "/tmp/logs"
-      KAFKA_CFG_PROCESS_ROLES: "broker,controller"
-      KAFKA_CFG_LISTENERS: "CLIENT://:9092,INTERNAL://:29092,CONTROLLER://:9093"
-      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: "INTERNAL"
-      KAFKA_CFG_ADVERTISED_LISTENERS: "CLIENT://localhost:9092,INTERNAL://kafka:29092"
-      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      # KRaft
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      # Listeners
+      - KAFKA_CFG_LISTENERS=SASL_SSL://:9092,INTERNAL://:29092,CONTROLLER://:9093
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:SASL_PLAINTEXT,SASL_SSL:SASL_SSL,INTERNAL:PLAINTEXT
+      - KAFKA_CFG_ADVERTISED_LISTENERS=SASL_SSL://kafka:9092,INTERNAL://kafka:29092
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=SASL_SSL
+      - KAFKA_CLIENT_LISTENER_NAME=SASL_SSL
+      # SASL
+      - KAFKA_CFG_SASL_MECHANISM_CONTROLLER_PROTOCOL=PLAIN
+      - KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL=PLAIN
+      - KAFKA_CONTROLLER_USER=controller_user
+      - KAFKA_CONTROLLER_PASSWORD=controller_password
+      - KAFKA_INTER_BROKER_USER=interbroker_user
+      - KAFKA_INTER_BROKER_PASSWORD=interbroker_password
+      - KAFKA_CLIENT_USERS=user
+      - KAFKA_CLIENT_PASSWORDS=password
+      # SSL
+      - KAFKA_TLS_TYPE=JKS
+      - KAFKA_CERTIFICATE_PASSWORD=generated
+    volumes:
+      - './keystore/kafka.keystore.jks:/opt/bitnami/kafka/config/certs/kafka.keystore.jks:ro'
+      - './truststore/kafka.truststore.jks:/opt/bitnami/kafka/config/certs/kafka.truststore.jks:ro'
 
   kafka-init:
     image: bitnami/kafka:3.5
@@ -59,6 +76,13 @@ services:
         /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic events
         echo -e "Successfully created the following topics:";
         /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --list;
+        echo -e "Creating user";
+        /opt/bitnami/kafka/bin/kafka-configs.sh \
+        --bootstrap-server kafka:29092 \
+        --alter \
+        --add-config 'SCRAM-SHA-512=[iterations=4096,password=alice-secret]' \
+        --entity-type users \
+        --entity-name alice;
 
   kafka-ui:
     image: ghcr.io/kafbat/kafka-ui:v1.0.0

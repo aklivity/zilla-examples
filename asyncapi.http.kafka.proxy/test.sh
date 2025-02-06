@@ -35,7 +35,7 @@ fi
 # GIVEN
 PORT="7114"
 INPUT=''
-EXPECTED="[{"name": "Rocky","id": 1}]"
+EXPECTED='{"name": "Rocky","id": 1}'
 echo \# Testing asyncapi.http.kafka.proxy/GET
 echo PORT="$PORT"
 echo INPUT="$INPUT"

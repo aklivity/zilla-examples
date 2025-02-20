@@ -5,16 +5,30 @@ EXIT=0
 
 # GIVEN
 PORT="7183"
-INPUT="Hello, Zilla!"
-EXPECTED=""
-echo \# Testing asyncapi.sse.kafka.proxy/
+INPUT='{"lumens":50,"sentAt":"2024-06-07T12:34:32.000Z"}'
+EXPECTED='{"lumens":50,"sentAt":"2024-06-07T12:34:32.000Z"}'
+echo \# Testing asyncapi.mqtt.kafka.proxy
 echo PORT="$PORT"
 echo INPUT="$INPUT"
 echo EXPECTED="$EXPECTED"
 echo
 
 # WHEN
-OUTPUT=$(echo "$INPUT" | nc -w 1 localhost $PORT)
+
+OUTPUT=$(
+  docker compose -p zilla-asyncapi-mqtt-kafka-proxy exec -T mosquitto-cli \
+    timeout 5s mosquitto_sub --url mqtt://zilla:"$PORT"/smartylighting/streetlights/1/0/event/+/lighting/measured &
+
+  SUB_PID=$!
+
+  sleep 1
+
+  docker compose -p zilla-asyncapi-mqtt-kafka-proxy exec -T mosquitto-cli \
+    mosquitto_pub --url mqtt://zilla:"$PORT"/smartylighting/streetlights/1/0/event/1/lighting/measured --message "$INPUT"
+
+  wait $SUB_PID
+)
+
 RESULT=$?
 echo RESULT="$RESULT"
 
@@ -28,9 +42,3 @@ else
   echo ❌
   EXIT=1
 fi
-
-# TODO remove once fixed
-echo '❌ Throws: org.agrona.concurrent.AgentTerminationException: java.lang.NullPointerException: Cannot invoke "io.aklivity.zilla.runtime.binding.asyncapi.internal.types.stream.AsyncapiBeginExFW.apiId()" because "beginEx" is null'
-EXIT=1
-
-exit $EXIT

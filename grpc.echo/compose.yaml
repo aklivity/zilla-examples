@@ -13,6 +13,8 @@ services:
     volumes:
       - ./zilla.yaml:/etc/zilla/zilla.yaml
       - ./echo.proto:/etc/zilla/protos/echo.proto
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     command: start -v -e
 
 networks:

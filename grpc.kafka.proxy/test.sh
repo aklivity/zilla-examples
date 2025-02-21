@@ -16,7 +16,7 @@ echo EXPECTED="$EXPECTED"
 echo
 
 # WHEN
-OUTPUT=$(docker run --rm -v ./echo.proto:/echo.proto fullstorydev/grpcurl -plaintext -proto echo.proto  -d "$INPUT" host.docker.internal:$PORT grpc.examples.echo.Echo.UnaryEcho)
+OUTPUT=$(docker run --network zilla-grpc-kafka-proxy_default --rm -v ./echo.proto:/echo.proto fullstorydev/grpcurl -plaintext -proto echo.proto  -d "$INPUT" zilla:$PORT grpc.examples.echo.Echo.UnaryEcho)
 RESULT=$?
 echo RESULT="$RESULT"
 # THEN
@@ -70,7 +70,7 @@ echo EXPECTED="$EXPECTED"
 echo
 
 # WHEN
-OUTPUT=$(docker run --rm -v ./echo.proto:/echo.proto fullstorydev/grpcurl -plaintext -proto echo.proto  -d "$INPUT" host.docker.internal:$PORT grpc.examples.echo.Echo.ServerStreamingEcho)
+OUTPUT=$(docker run --network zilla-grpc-kafka-proxy_default --rm -v ./echo.proto:/echo.proto fullstorydev/grpcurl -plaintext -proto echo.proto  -d "$INPUT" zilla:$PORT grpc.examples.echo.Echo.ServerStreamingEcho)
 RESULT=$?
 echo RESULT="$RESULT"
 # THEN
@@ -98,7 +98,7 @@ echo EXPECTED="$EXPECTED"
 echo
 
 # WHEN
-OUTPUT=$(docker run --rm -v ./echo.proto:/echo.proto fullstorydev/grpcurl -plaintext -proto echo.proto  -d "$INPUT" host.docker.internal:$PORT grpc.examples.echo.Echo.BidirectionalStreamingEcho)
+OUTPUT=$(docker run --network zilla-grpc-kafka-proxy_default --rm -v ./echo.proto:/echo.proto fullstorydev/grpcurl -plaintext -proto echo.proto  -d "$INPUT" zilla:$PORT grpc.examples.echo.Echo.BidirectionalStreamingEcho)
 RESULT=$?
 echo RESULT="$RESULT"
 # THEN

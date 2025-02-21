@@ -3,7 +3,6 @@ services:
   zilla:
     image: ghcr.io/aklivity/zilla:${ZILLA_VERSION:-latest}
     restart: unless-stopped
-    network_mode: host
     ports:
       - 7151:7151
     healthcheck:

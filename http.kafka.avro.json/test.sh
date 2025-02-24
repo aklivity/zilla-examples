@@ -26,7 +26,6 @@ echo
 curl -k http://localhost:7114/items -H 'Idempotency-Key: 1'  -H 'Content-Type: application/json' -d "$INPUT"
 
 # WHEN
-sleep 2
 OUTPUT=$(curl -k http://localhost:$PORT/items/1)
 RESULT=$?
 echo RESULT="$RESULT"
@@ -56,7 +55,6 @@ echo
 curl -k http://localhost:7114/items -H 'Idempotency-Key: 2'  -H 'Content-Type: application/json' -d "$INPUT"
 
 # WHEN
-sleep 2
 OUTPUT=$(curl -w "%{http_code}" http://localhost:$PORT/items/2)
 RESULT=$?
 echo RESULT="$RESULT"

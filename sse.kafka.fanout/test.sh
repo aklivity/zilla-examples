@@ -19,13 +19,7 @@ echo
 
 # Ensure topic exists
 docker compose -p zilla-sse-kafka-fanout exec -T kafka \
-  kafka-topics.sh --describe --topic "$TOPIC" --bootstrap-server $KAFKA_BOOTSTRAP_SERVER > /dev/null 2>&1
-if [ $? -ne 0 ]; then
-  echo "Creating topic: $TOPIC..."
-  docker compose -p zilla-sse-kafka-fanout exec -T kafka \
-    kafka-topics.sh --create --topic "$TOPIC" --partitions 1 --replication-factor 1 --bootstrap-server $KAFKA_BOOTSTRAP_SERVER
-  sleep 5  # Give Kafka time to register the topic
-fi
+  kafka-topics.sh --describe --topic events --bootstrap-server $KAFKA_BOOTSTRAP_SERVER
 
 # push response to kafka with kafkacat
 echo "$INPUT" |

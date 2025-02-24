@@ -20,7 +20,8 @@ catalogs:
               "required": [
                 "id",
                 "status"
-              ]
+              ],
+              "additionalProperties": false
             }
 bindings:
   north_tcp_server:
@@ -38,7 +39,7 @@ bindings:
         policy: cross-origin
       requests:
         - path: /valid.json
-          method: POST
+          method: GET
           content-type:
             - application/json
           content:
@@ -47,7 +48,7 @@ bindings:
               my_catalog:
                 - subject: my_subject
         - path: /invalid.json
-          method: PUT
+          method: GET
           content-type:
             - application/json
           content:

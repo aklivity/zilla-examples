@@ -1,4 +1,4 @@
 #!/bin/sh
 set -e
 
-docker compose -p "${NAMESPACE:-zilla-mqtt-proxy}" down --remove-orphans
+docker compose -p "${NAMESPACE:-zilla-mqtt-jwt}" down --remove-orphans

@@ -22,7 +22,10 @@ echo RESULT="$RESULT"
 echo OUTPUT="$OUTPUT"
 echo EXPECTED="$EXPECTED"
 echo
-if [ "$RESULT" -eq 0 ] && [ "$OUTPUT" = "$EXPECTED" ]; then
+
+# RESULT=124 (timeout) is a valid case, as we are timeout openssl command explicity
+
+if [ "$RESULT" -eq 124 ] && [ "$OUTPUT" = "$EXPECTED" ]; then
   echo ✅
 else
   echo ❌

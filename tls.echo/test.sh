@@ -23,7 +23,7 @@ echo OUTPUT="$OUTPUT"
 echo EXPECTED="$EXPECTED"
 echo
 
-# RESULT=124 (timeout) is a valid case, as we are timeout openssl command explicity
+# RESULT=124 (timeout) is a valid case, as we timeout openssl command explicity
 
 if [ "$RESULT" -eq 124 ] && [ "$OUTPUT" = "$EXPECTED" ]; then
   echo ✅

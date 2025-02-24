@@ -16,8 +16,6 @@ echo EXPECTED="$EXPECTED"
 echo
 
 # WHEN
-# send request to zilla
-timeout 3s curl -N --http2 -H "Accept:text/event-stream" "http://localhost:$PORT/events" | tee .testoutput &
 
 # push response to kafka with kafkacat
 echo "$INPUT" |
@@ -27,15 +25,8 @@ echo "$INPUT" |
     -t events \
     -k "1"
 
-# fetch the output of zilla request; try 5 times
-for i in $(seq 0 2); do
-  sleep $i
-  OUTPUT=$(cat .testoutput | grep "^data:")
-  if [ -n "$OUTPUT" ]; then
-    break
-  fi
-done
-rm .testoutput
+# send request to zilla
+OUTPUT=$(timeout 3s curl -N --http2 -H "Accept:text/event-stream" "http://localhost:$PORT/events" | grep "^data:")
 
 # THEN
 echo OUTPUT="$OUTPUT"

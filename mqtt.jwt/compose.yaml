@@ -13,6 +13,7 @@ services:
     environment:
       MOSQUITTO_BROKER_HOST: mosquitto
       MOSQUITTO_BROKER_PORT: 1883
+      KEYSTORE_PASSWORD: generated
     volumes:
       - ./zilla.yaml:/etc/zilla/zilla.yaml
       - ./tls:/etc/zilla/tls

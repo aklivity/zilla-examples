@@ -25,7 +25,7 @@ echo "$INPUT" |
     -t events \
     -k "1"
 
-sleep 5
+sleep 15
 # send request to zilla
 OUTPUT=$(timeout 3s curl -N --http2 -H "Accept:text/event-stream" "http://localhost:$PORT/events" | grep "^data:")
 

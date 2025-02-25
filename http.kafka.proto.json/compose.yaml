@@ -1,7 +1,7 @@
 name: ${NAMESPACE:-zilla-http-kafka-proto-json}
 services:
   zilla:
-    image: ghcr.io/aklivity/zilla:${ZILLA_VERSION:-0.9.87}
+    image: ghcr.io/aklivity/zilla:${ZILLA_VERSION:-latest}
     restart: unless-stopped
     ports:
       - 7114:7114

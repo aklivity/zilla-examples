@@ -26,18 +26,6 @@ docker compose up -d
 
 #### Unreliable server streaming
 
-Prepare protobuf message to send to Kafka topic.
-
-```bash
-echo 'message: "test"' | protoc --encode=example.FanoutMessage fanout.proto > binary.data
-```
-
-Copy the binary file into the `kafkacat` service.
-
-```bash
-docker compose -p zilla-grpc-kafka-fanout cp binary.data kafkacat:/tmp/binary.data
-```
-
 Produce protobuf message to Kafka topic, repeat to produce multiple messages.
 
 ```bash

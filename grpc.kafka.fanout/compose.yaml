@@ -79,6 +79,8 @@ services:
     command: "bash"
     stdin_open: true
     tty: true
+    volumes:
+      - ./binary.data:/tmp/binary.data
 
 networks:
   default:

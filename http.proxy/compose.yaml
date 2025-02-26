@@ -27,6 +27,12 @@ services:
       - ./ssl:/etc/nginx/ssl
       - ./www:/usr/share/nginx/html
 
+  nghttp:
+    image: dajobe/nghttpx
+    command: sleep infinity
+    stdin_open: true
+    tty: true
+
 networks:
   default:
     driver: bridge

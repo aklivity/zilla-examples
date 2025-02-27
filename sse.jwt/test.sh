@@ -5,7 +5,7 @@ EXIT=0
 PORT="7143"
 STREAM_URL="https://localhost:$PORT/events"
 NC_PORT="7001"
-MESSAGE="Hello, world $(date)"
+MESSAGE="Hello, world"
 
 echo \# Testing sse.jwt
 echo "PORT=$PORT"
@@ -30,7 +30,7 @@ OUTPUT=$(timeout 5s curl --cacert test-ca.crt --no-buffer -N "$STREAM_URL?access
 
   sleep 1
 
-  echo '{ "data": "'"$MESSAGE"'" }' | nc localhost $NC_PORT
+  echo '{ "data": "Hello, world" }' | nc localhost $NC_PORT
 )
 
 if echo "$OUTPUT" | grep -q "$MESSAGE"; then

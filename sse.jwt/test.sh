@@ -26,11 +26,11 @@ JWT_TOKEN=$(docker run -i --rm \
     --payload "scope=proxy:stream" \
     --secret @/private.pem | tr -d '\r\n')
 
-OUTPUT=$(timeout 5s curl --cacert test-ca.crt --no-buffer -N "$STREAM_URL?access_token=${JWT_TOKEN}" &
+OUTPUT=$(curl --cacert test-ca.crt --no-buffer -N --max-time 5 "$STREAM_URL?access_token=${JWT_TOKEN}" &
 
   sleep 1
 
-  echo '{ "data": "Hello, world" }' | nc localhost $NC_PORT
+  echo '{ "data": "Hello, world" }' | timeout 5s nc localhost $NC_PORT
 )
 
 if echo "$OUTPUT" | grep -q "$MESSAGE"; then

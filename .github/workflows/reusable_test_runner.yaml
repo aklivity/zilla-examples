@@ -37,6 +37,12 @@ jobs:
         with:
           sparse-checkout: ${{ inputs.example-dir }}
 
+      - name: Install NPM Package (if ws.echo or ws.reflect)
+        if: ${{ inputs.example-dir == 'ws.echo' || inputs.example-dir == 'ws.reflect' }}
+        run: |
+          echo "Installing NPM package for example: ${{ inputs.example-dir }}"
+          npm install wscat -g
+
       - name: Cache Docker images.
         if: ${{ hashFiles(format('{0}/compose.yaml', inputs.example-dir)) != '' }}
         uses: ScribeMD/docker-cache@0.5.0

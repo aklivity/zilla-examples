@@ -13,12 +13,8 @@ echo INPUT="$INPUT"
 echo EXPECTED="$EXPECTED"
 echo
 
-docker compose -p zilla-ws-echo exec -T wscat which wscat
-
-docker compose -p zilla-ws-echo exec -T wscat wscat -c ws://zilla:7114/ -x "Test Message"
-
 # WHEN
-OUTPUT=$(docker compose -p zilla-ws-echo exec -T wscat wscat -c ws://zilla:7114/ -s echo -x "$INPUT")
+OUTPUT=$(wscat -c ws://localhost:7114/ -s echo -x "$INPUT")
 RESULT=$?
 echo RESULT="$RESULT"
 # THEN

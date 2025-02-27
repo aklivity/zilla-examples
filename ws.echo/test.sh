@@ -6,15 +6,18 @@ EXIT=0
 # GIVEN
 PORT="7114"
 INPUT="Hello, world"
-EXPECTED='Hello, world'
+EXPECTED="Hello, world"
 echo \# Testing ws.echo
 echo PORT="$PORT"
 echo INPUT="$INPUT"
 echo EXPECTED="$EXPECTED"
 echo
 
+docker compose -p zilla-ws-echo exec -T wscat which wscat
+
+docker compose -p zilla-ws-echo exec -T wscat wscat -c ws://zilla:7114/ -x "Test Message"
+
 # WHEN
-sleep 10
 OUTPUT=$(docker compose -p zilla-ws-echo exec -T wscat wscat -c ws://zilla:7114/ -s echo -x "$INPUT")
 RESULT=$?
 echo RESULT="$RESULT"

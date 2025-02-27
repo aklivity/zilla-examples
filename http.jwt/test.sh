@@ -1,0 +1,56 @@
+#!/bin/sh
+set -x
+
+EXIT=0
+PORT="7114"
+MESSAGE="Hello, world"
+
+echo "# Testing http.jwt"
+echo "PORT=$PORT"
+
+# Generate JWT token without echo:stream scope
+export JWT_TOKEN_NO_SCOPE=$(jwt encode \
+    --alg "RS256" \
+    --kid "example" \
+    --iss "https://auth.example.com" \
+    --aud "https://api.example.com" \
+    --exp=+1d \
+    --no-iat \
+    --secret @private.pem)
+
+UNAUTHORIZED_RESPONSE=$(curl -w "%{http_code}" http://localhost:$PORT/ \
+    -H "Authorization: Bearer $JWT_TOKEN_NO_SCOPE" \
+    -H "Content-Type: text/plain" \
+    -d "$MESSAGE")
+
+if [ "$UNAUTHORIZED_RESPONSE" = "404" ]; then
+  echo ✅
+else
+  echo ❌
+  EXIT=1
+fi
+
+# Generate JWT token with echo:stream scope
+export JWT_TOKEN_WITH_SCOPE=$(jwt encode \
+    --alg "RS256" \
+    --kid "example" \
+    --iss "https://auth.example.com" \
+    --aud "https://api.example.com" \
+    --exp=+1d \
+    --no-iat \
+    --payload "scope=echo:stream" \
+    --secret @private.pem)
+
+AUTHORIZED_RESPONSE=$(curl "http://localhost:$PORT/" \
+    -H "Authorization: Bearer $JWT_TOKEN_WITH_SCOPE" \
+    -H "Content-Type: text/plain" \
+    -d "$MESSAGE")
+
+if [ "$AUTHORIZED_RESPONSE" = "$MESSAGE" ]; then
+  echo ✅
+else
+  echo ❌
+  EXIT=1
+fi
+
+exit $EXIT

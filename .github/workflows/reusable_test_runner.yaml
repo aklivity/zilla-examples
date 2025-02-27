@@ -37,11 +37,17 @@ jobs:
         with:
           sparse-checkout: ${{ inputs.example-dir }}
 
-      - name: Install NPM Package (if ws.echo or ws.reflect)
+      - name: Install NPM Package
         if: ${{ inputs.example-dir == 'ws.echo' || inputs.example-dir == 'ws.reflect' }}
         run: |
           echo "Installing NPM package for example: ${{ inputs.example-dir }}"
-          npm install wscat -g
+          npm install -g wscat
+
+      - name: Install jwt-cli
+        if: ${{ inputs.example-dir == 'http.jwt' || inputs.example-dir == 'mqtt.jwt' || inputs.example-dir == 'sse.jwt'}}
+        run: |
+          echo "Installing jwt-cli for example: ${{ inputs.example-dir }}"
+          npm install -g jwt-cli
 
       - name: Cache Docker images.
         if: ${{ hashFiles(format('{0}/compose.yaml', inputs.example-dir)) != '' }}

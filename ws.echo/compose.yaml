@@ -14,11 +14,6 @@ services:
       - ./zilla.yaml:/etc/zilla/zilla.yaml
     command: start -v -e
 
-  wscat:
-    image: monotykamary/wscat
-    entrypoint: ["/bin/sh", "-c"]
-    command: ["while true; do sleep 3600; done"]
-
 networks:
   default:
     driver: bridge

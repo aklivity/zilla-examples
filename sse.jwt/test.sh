@@ -26,13 +26,13 @@ JWT_TOKEN=$(docker run -i --rm \
     --payload "scope=proxy:stream" \
     --secret @/private.pem | tr -d '\r\n')
 
-OUTPUT=$(timeout 5s curl --cacert test-ca.crt --no-buffer -N "$STREAM_URL?access_token=${JWT_TOKEN}" &
+OUTPUT=$(timeout 2s curl --cacert test-ca.crt --no-buffer -N "$STREAM_URL?access_token=${JWT_TOKEN}" &
 
   SUB_PID=$!
 
   sleep 1
 
-  echo '{ "data": "'"$MESSAGE"'" }' | nc -c localhost $NC_PORT
+  echo '{ "data": "'"$MESSAGE"'" }' | nc localhost $NC_PORT
 
   wait $SUB_PID
 )

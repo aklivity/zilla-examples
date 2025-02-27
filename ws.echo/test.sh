@@ -14,6 +14,7 @@ echo EXPECTED="$EXPECTED"
 echo
 
 # WHEN
+sleep 5
 OUTPUT=$(docker compose -p zilla-ws-echo exec -T wscat wscat -c ws://zilla:7114/ -s echo -x "$INPUT")
 RESULT=$?
 echo RESULT="$RESULT"

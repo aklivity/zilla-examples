@@ -16,7 +16,7 @@ export JWT_TOKEN_NO_SCOPE=$(jwt encode \
     --aud "https://api.example.com" \
     --exp=+1d \
     --no-iat \
-    --secret @private.pem)
+    --secret @./private.pem)
 
 UNAUTHORIZED_RESPONSE=$(curl -w "%{http_code}" http://localhost:$PORT/ \
     -H "Authorization: Bearer $JWT_TOKEN_NO_SCOPE" \

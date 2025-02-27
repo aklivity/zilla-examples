@@ -9,14 +9,17 @@ echo "# Testing http.jwt"
 echo "PORT=$PORT"
 
 # Generate JWT token without echo:stream scope
-export JWT_TOKEN_NO_SCOPE=$(jwt encode \
+JWT_TOKEN_NO_SCOPE=$(docker run -it --rm \
+    --name jwt-cli \
+    -v "./private.pem:/private.pem" \
+    bitnami/jwt-cli encode \
     --alg "RS256" \
     --kid "example" \
     --iss "https://auth.example.com" \
     --aud "https://api.example.com" \
     --exp=+1d \
     --no-iat \
-    --secret @./private.pem)
+    --secret @/private.pem | tr -d '\r\n')
 
 UNAUTHORIZED_RESPONSE=$(curl -w "%{http_code}" http://localhost:$PORT/ \
     -H "Authorization: Bearer $JWT_TOKEN_NO_SCOPE" \
@@ -31,7 +34,10 @@ else
 fi
 
 # Generate JWT token with echo:stream scope
-export JWT_TOKEN_WITH_SCOPE=$(jwt encode \
+JWT_TOKEN_WITH_SCOPE=$(docker run -it --rm \
+    --name jwt-cli \
+    -v "./private.pem:/private.pem" \
+    bitnami/jwt-cli encode \
     --alg "RS256" \
     --kid "example" \
     --iss "https://auth.example.com" \
@@ -39,7 +45,7 @@ export JWT_TOKEN_WITH_SCOPE=$(jwt encode \
     --exp=+1d \
     --no-iat \
     --payload "scope=echo:stream" \
-    --secret @private.pem)
+    --secret @/private.pem | tr -d '\r\n')
 
 AUTHORIZED_RESPONSE=$(curl "http://localhost:$PORT/" \
     -H "Authorization: Bearer $JWT_TOKEN_WITH_SCOPE" \

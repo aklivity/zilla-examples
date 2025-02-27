@@ -12,10 +12,8 @@ echo \# Testing ws.reflect
 echo PORT="$PORT"
 echo INPUT1="$INPUT1"
 echo INPUT2="$INPUT2"
-echo
 
 # WHEN
-sleep 5
 OUTPUT1=$(docker compose -p zilla-ws-reflect exec -T wscat wscat -c ws://zilla:$PORT/ -s echo -x "$INPUT1" | tee client1.out) &
 PID1=$!
 OUTPUT2=$(docker compose -p zilla-ws-reflect exec -T wscat wscat -c ws://zilla:$PORT/ -s echo -x "$INPUT2" | tee client2.out) &

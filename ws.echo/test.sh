@@ -11,10 +11,9 @@ echo \# Testing ws.echo
 echo PORT="$PORT"
 echo INPUT="$INPUT"
 echo EXPECTED="$EXPECTED"
-echo
 
 # WHEN
-OUTPUT=$(wscat -c ws://localhost:7114/ -s echo -x "$INPUT")
+OUTPUT=$(docker compose -p zilla-ws-echo exec -T wscat wscat -c ws://zilla:7114/ -s echo -x "$INPUT")
 RESULT=$?
 echo RESULT="$RESULT"
 # THEN

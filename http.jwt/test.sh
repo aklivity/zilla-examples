@@ -9,7 +9,7 @@ echo "# Testing http.jwt"
 echo "PORT=$PORT"
 
 # Generate JWT token without echo:stream scope
-JWT_TOKEN_NO_SCOPE=$(docker run -it --rm \
+JWT_TOKEN_NO_SCOPE=$(docker run -i --rm \
     --name jwt-cli \
     -v "./private.pem:/private.pem" \
     bitnami/jwt-cli encode \
@@ -34,7 +34,7 @@ else
 fi
 
 # Generate JWT token with echo:stream scope
-JWT_TOKEN_WITH_SCOPE=$(docker run -it --rm \
+JWT_TOKEN_WITH_SCOPE=$(docker run -i --rm \
     --name jwt-cli \
     -v "./private.pem:/private.pem" \
     bitnami/jwt-cli encode \

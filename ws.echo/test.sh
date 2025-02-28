@@ -13,7 +13,7 @@ echo INPUT="$INPUT"
 echo EXPECTED="$EXPECTED"
 
 # WHEN
-OUTPUT=$(docker compose -p zilla-ws-echo exec -T wscat wscat -w 5 -c ws://zilla:7114/ -s echo -x "$INPUT")
+OUTPUT=$(echo "Hello, world" | docker compose -p zilla-ws-echo exec -T websocat websocat --protocol echo ws://zilla:7114/)
 RESULT=$?
 echo RESULT="$RESULT"
 # THEN

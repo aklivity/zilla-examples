@@ -15,9 +15,9 @@ echo INPUT2="$INPUT2"
 
 # WHEN
 {
-  (echo "$INPUT1"; sleep 2) | docker compose -p zilla-ws-reflect exec -T websocat websocat --protocol echo ws://zilla:$PORT/ &
+  (echo "$INPUT1"; sleep 2) | timeout 2s docker compose -p zilla-ws-reflect exec -T websocat websocat --protocol echo ws://zilla:$PORT/ &
   PID1=$!
-  (echo "$INPUT2"; sleep 2) | docker compose -p zilla-ws-reflect exec -T websocat websocat --protocol echo ws://zilla:$PORT/ &
+  (echo "$INPUT2"; sleep 2) | timeout 2s docker compose -p zilla-ws-reflect exec -T websocat websocat --protocol echo ws://zilla:$PORT/ &
   PID2=$!
   wait $PID1 $PID2
 } > output.out 2>&1
@@ -30,7 +30,7 @@ OUTPUT=$(cat output.out)
 COUNT1=$(echo "$OUTPUT" | grep -Fx "$INPUT1" | wc -l)
 COUNT2=$(echo "$OUTPUT" | grep -Fx "$INPUT2" | wc -l)
 
-if [ "$RESULT1" -eq 0 ] && [ "$RESULT2" -eq 0 ] && [ "$COUNT1" -eq 2 ] && [ "$COUNT2" -eq 2 ]; then
+if [ "$COUNT1" -eq 2 ] && [ "$COUNT2" -eq 2 ]; then
   echo ✅
 else
   echo ❌

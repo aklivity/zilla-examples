@@ -4,13 +4,19 @@ set -x
 EXIT=0
 
 # create schema
-curl 'http://localhost:8081/subjects/items-snapshots-value/versions' \
---header 'Content-Type: application/json' \
---data '{
-  "schema":
-    "{\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"status\",\"type\":\"string\"}],\"name\":\"Event\",\"namespace\":\"io.aklivity.example\",\"type\":\"record\"}",
-  "schemaType": "AVRO"
-}'
+for i in $(seq 1 5); do
+  RESPONSE=$(curl -s --header "Content-Type: application/json" --data '{
+    "schema":
+      "{\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"status\",\"type\":\"string\"}],\"name\":\"Event\",\"namespace\":\"io.aklivity.example\",\"type\":\"record\"}",
+    "schemaType": "AVRO"
+  }' "http://localhost:8081/subjects/items-snapshots-value/versions")
+
+  if [ "$RESPONSE" = '{"id":1}' ]; then
+    break
+  fi
+
+  sleep 2
+done
 
 # GIVEN
 PORT="7114"

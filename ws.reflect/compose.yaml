@@ -18,6 +18,10 @@ services:
     image: solsson/websocat
     entrypoint: ["/bin/sh", "-c"]
     command: ["while true; do sleep 3600; done"]
+    depends_on:
+      zilla:
+        condition: service_healthy
+        restart: true
 
 networks:
   default:

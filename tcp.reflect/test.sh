@@ -5,6 +5,7 @@ EXIT=0
 
 # GIVEN
 PORT="12345"
+INPUT="Hello!"
 INPUT1="Hello from client 1"
 INPUT2="Hello from client 2"
 

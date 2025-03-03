@@ -5,6 +5,7 @@ EXIT=0
 
 # GIVEN
 PORT="23456"
+INPUT="Hello!"
 INPUT1="Hello, Zilla!"
 INPUT2="Bye, Zilla!"
 EXPECTED="Hello, Zilla!
@@ -17,6 +18,8 @@ echo EXPECTED="$EXPECTED"
 echo
 
 # WHEN
+echo "$INPUT" | timeout 2 openssl s_client -connect localhost:$PORT -CAfile test-ca.crt -quiet -alpn echo
+
 OUTPUT=$(
 echo "$INPUT1" | timeout 2 openssl s_client -connect localhost:$PORT -CAfile test-ca.crt -quiet -alpn echo
 echo "$INPUT2" | timeout 2 openssl s_client -connect localhost:$PORT -CAfile test-ca.crt -quiet -alpn echo)

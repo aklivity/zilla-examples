@@ -16,24 +16,30 @@ The `setup.sh` script will install the Open Source Zilla image in a Compose stac
 docker compose up -d
 ```
 
-## Bug scenarios
-
-Each of the below scenarios are run from a fresh install of zilla and kafka
-
-### Sending invalid JSON breaks subsequent requests
-
-1. `POST` a valid request getting a `204` back
+### Verify behavior for a valid event
 
 ```bash
 curl 'http://localhost:7114/requests' \
 --header 'Content-Type: application/json' \
 --data '{
-    "message": "hello world",
+    "message": "hello message",
     "count": 10
 }' -v
 ```
 
-1. `POST` an invalid request getting a `400` back and logs `MODEL_PROTOBUF_VALIDATION_FAILED A message payload failed validation. Cannot find field: invalid in message Request.` to stdout
+Output:
+
+```bash
+* Host localhost:7114 was resolved.
+...
+> Content-Type: application/json
+> Content-Length: 51
+>
+* upload completely sent off: 51 bytes
+< HTTP/1.1 204 No Content
+```
+
+### Verify behavior for Invalid event
 
 ```bash
 curl 'http://localhost:7114/requests' \
@@ -45,47 +51,16 @@ curl 'http://localhost:7114/requests' \
 }' -v
 ```
 
-1. `POST` a valid request getting a `400` back and logs `MODEL_PROTOBUF_VALIDATION_FAILED A message payload failed validation. Field Request.message has already been set..` to stdout
+Output:
 
 ```bash
-curl 'http://localhost:7114/requests' \
---header 'Content-Type: application/json' \
---data '{
-    "message": "hello world",
-    "count": 10
-}' -v
-```
-
-### Sending an invalid `message` field
-
-Sending an invalid `message` field causes subsequent requests to take ~10 min to get a `204` but the message doesn't show up onto kafka
-
-1. `POST` a valid request getting a `204` back
-
-```bash
-curl 'http://localhost:7114/requests' \
---header 'Content-Type: application/json' \
---data '{
-    "message": "hello message",
-    "count": 10
-}' -v
-```
-
-1. `POST` an invalid `"messages"` field request getting a `400` back and immediately post the correct payload after. Run both curl commands at the same time and sometimes the second one works and other times it will hang until it gets a `204` back after ~10min and the message is not on the Kafka topic
-
-```bash
-curl 'http://localhost:7114/requests' \
---header 'Content-Type: application/json' \
---data '{
-    "messages": "hello messages",
-    "count": 10
-}' -v
-curl 'http://localhost:7114/requests' \
---header 'Content-Type: application/json' \
---data '{
-    "message": "hello messages",
-    "count": 10
-}' -v
+* Host localhost:7114 was resolved.
+...
+> Content-Type: application/json
+> Content-Length: 73
+>
+* upload completely sent off: 73 bytes
+< HTTP/1.1 400 Bad Request
 ```
 
 ## Teardown

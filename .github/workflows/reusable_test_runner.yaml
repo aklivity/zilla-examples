@@ -56,11 +56,9 @@ jobs:
           docker load --input /tmp/${{ inputs.zilla-image-artifact-name }}.tar
           docker image ls -a
 
-      - name: Setup
-        run: ./startup.sh ${{ inputs.example-dir }}
-      - name: Wait for Zilla to be healthy
+      - name: Start Zilla and wait for it to be healthy
         working-directory: ${{ inputs.example-dir }}
-        run: timeout 60s sh -c 'until docker compose ps zilla --format "{{.Name}} {{.Health}}" | grep -q healthy; do echo "Waiting for container to be healthy..."; sleep 2; done'
+        run: docker compose up -d --wait
 
       - name: Execute Test
         if: ${{ hashFiles(format('{0}/test.sh', inputs.example-dir)) != '' }}

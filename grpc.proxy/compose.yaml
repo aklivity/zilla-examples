@@ -27,9 +27,9 @@ services:
     ports:
       - 50051:50051
     healthcheck:
-      test: ["CMD", "bash", "-c", "echo > /dev/tcp/127.0.0.1/50051"]
-      interval: 5s
-      timeout: 3s
+      test: ["CMD", "nc", "-z", "127.0.0.1", "50051"]
+      interval: 10s
+      timeout: 5s
       retries: 5
 
 networks:

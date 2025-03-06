@@ -14,18 +14,6 @@ echo INPUT1="$INPUT1"
 echo INPUT2="$INPUT2"
 
 # WHEN
-
-for i in $(seq 1 5); do
-  echo "$INPUT1" | docker compose -p zilla-ws-reflect exec -T websocat websocat --one-message --protocol echo ws://zilla:7114/
-
-  if [ $? -eq 0 ]; then
-    echo "✅ Zilla is reachable."
-    break
-  fi
-
-  sleep 2
-done
-
 {
   docker compose -p zilla-ws-reflect exec -T websocat websocat --one-message --no-close --protocol echo ws://zilla:$PORT/ &
   PID1=$!

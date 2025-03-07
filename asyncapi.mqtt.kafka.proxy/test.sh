@@ -42,3 +42,5 @@ else
   echo ❌
   EXIT=1
 fi
+
+exit $EXIT

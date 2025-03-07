@@ -89,7 +89,7 @@ Options:
 | [http.kafka.proto.oneway](http.kafka.proto.oneway)           | Publish a Protobuf serialized object over HTTP onto a Kafka topic                         |
 | [http.kafka.sync](http.kafka.sync)                           | Correlates HTTP requests and responses over separate Kafka topics                         |
 | [http.proxy](http.proxy)                                     | Proxy request sent to the HTTP server from an HTTP client                                 |
-| [mqtt.jwt](mqtt.jwt)                                         | Proxies request sent to the MQTT server from a JWT-authorized MQTT client                 |
+| [mqtt.proxy.jwt](mqtt.proxy.jwt)                                         | Proxies request sent to the MQTT server from a JWT-authorized MQTT client                 |
 | [mqtt.kafka.broker](mqtt.kafka.broker)                       | Forwards MQTT publish messages to Kafka, broadcasting to all subscribed MQTT clients      |
 | [openapi.asyncapi.kakfa.proxy](openapi.asyncapi.kakfa.proxy) | Create an HTTP to Kafka REST proxy using OpenAPI and AsyncAPI schemas                     |
 | [openapi.proxy](openapi.proxy)                               | Proxy requests defined in an OpenAPI schema sent to the HTTP server from an HTTP client   |

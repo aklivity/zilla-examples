@@ -5,7 +5,7 @@ Zilla is implementing the SSE endpoints defined in an AsyncAPI 3.x spec and prox
 
 ## Setup
 
-The `setup.sh` script will install the Open Source Zilla image in a Compose stack along with any necessary services defined in the [compose.yaml](compose.yaml) file.
+The `setup.sh` script starts the docker compose stack defined in the [compose.yaml](compose.yaml) file.
 
 - create the Eventstore API at `http://localhost:7114`
 

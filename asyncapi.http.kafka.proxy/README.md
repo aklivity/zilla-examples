@@ -4,7 +4,7 @@ In this guide, you create Kafka topics and use Zilla to implement the common Pet
 
 ## Setup
 
-The `setup.sh` script will install the Open Source Zilla image in a Compose stack along with any necessary services defined in the [compose.yaml](compose.yaml) file.
+The `setup.sh` script starts the docker compose stack defined in the [compose.yaml](compose.yaml) file.
 
 - create the Petstore API at `http://localhost:7114`
 

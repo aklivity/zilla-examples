@@ -1,4 +1,4 @@
-# mqtt.jwt
+# mqtt.proxy.jwt
 
 Listens on mqtt port `7183` and `7883` forwarding mqtt publish messages and proxies subscribes to mosquitto MQTT broker listening on `1883`.
 
@@ -11,7 +11,7 @@ Listens on mqtt port `7183` and `7883` forwarding mqtt publish messages and prox
 
 ## Setup
 
-The `setup.sh` script will install the Open Source Zilla image in a Compose stack along with any necessary services defined in the [compose.yaml](compose.yaml) file.
+The `setup.sh` script starts the docker compose stack defined in the [compose.yaml](compose.yaml) file.
 
 ```bash
 ./setup.sh
@@ -58,7 +58,7 @@ echo $MQTT_USERNAME
 Use the signed JWT token, without `mqtt:stream` scope, to attempt an authorized request. Provide the JWT token in the MQTT_USERNAME field.
 
 ```bash
-docker compose -p zilla-mqtt-jwt exec mosquitto-cli \
+docker compose -p zilla-mqtt-proxy-jwt exec mosquitto-cli \
   mosquitto_sub --url mqtt://zilla:7183/zilla --debug -u $MQTT_USERNAME
 ```
 
@@ -93,7 +93,7 @@ echo $MQTT_USERNAME
 Use the signed JWT token, with `mqtt:stream` scope, to attempt an authorized request.
 
 ```bash
-docker compose -p zilla-mqtt-jwt exec mosquitto-cli \
+docker compose -p zilla-mqtt-proxy-jwt exec mosquitto-cli \
   mosquitto_sub --url mqtt://zilla:7183/zilla --debug -u $MQTT_USERNAME
 ```
 
@@ -112,7 +112,7 @@ Hello, world
 Use the signed JWT token, with `mqtt:stream` scope, publish a message.
 
 ```bash
-docker compose -p zilla-mqtt-jwt exec mosquitto-cli \
+docker compose -p zilla-mqtt-proxy-jwt exec mosquitto-cli \
   mosquitto_pub --url mqtt://zilla:7183/zilla --message 'Hello, world' --debug -u $MQTT_USERNAME
 ```
 

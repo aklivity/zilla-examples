@@ -10,7 +10,7 @@ Listens on tcp port `7151` and will echo grpc message sent by client.
 
 ## Setup
 
-The `setup.sh` script will install the Open Source Zilla image in a Compose stack along with any necessary services defined in the [compose.yaml](compose.yaml) file.
+The `setup.sh` script starts the docker compose stack defined in the [compose.yaml](compose.yaml) file.
 
 ```bash
 ./setup.sh

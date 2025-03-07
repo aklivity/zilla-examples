@@ -1,4 +1,4 @@
-name: ${NAMESPACE:-zilla-mqtt-jwt}
+name: ${NAMESPACE:-zilla-mqtt-proxy-jwt}
 services:
   zilla:
     image: ghcr.io/aklivity/zilla:${ZILLA_VERSION:-latest}

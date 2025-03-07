@@ -8,7 +8,7 @@ Listens on http port `7114` and serves files from the Zilla container's `/var/ww
 
 ## Setup
 
-The `setup.sh` script will install the Open Source Zilla image in a Compose stack along with any necessary services defined in the [compose.yaml](compose.yaml) file.
+The `setup.sh` script starts the docker compose stack defined in the [compose.yaml](compose.yaml) file.
 
 ```bash
 ./setup.sh

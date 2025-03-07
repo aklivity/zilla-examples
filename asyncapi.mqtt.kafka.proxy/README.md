@@ -5,7 +5,7 @@ Zilla implements MQTT API defined in AsyncAPI specifications and uses Kafka API 
 
 ## Setup
 
-The `setup.sh` script will install the Open Source Zilla image in a Compose stack along with any necessary services defined in the [compose.yaml](compose.yaml) file.
+The `setup.sh` script starts the docker compose stack defined in the [compose.yaml](compose.yaml) file.
 
 - create an MQTT broker at `mqtt://localhost:7183`
 

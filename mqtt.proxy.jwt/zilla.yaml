@@ -1,5 +1,5 @@
 ---
-name: zilla-mqtt-jwt
+name: zilla-mqtt-proxy-jwt
 vaults:
   my_servers:
     type: filesystem

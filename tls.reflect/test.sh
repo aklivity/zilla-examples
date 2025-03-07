@@ -18,11 +18,21 @@ echo EXPECTED="$EXPECTED"
 echo
 
 # WHEN
-echo "$INPUT" | timeout 2 openssl s_client -connect localhost:$PORT -CAfile test-ca.crt -quiet -alpn echo
+
+for i in $(seq 1 5); do
+  echo "$INPUT" | openssl s_client -connect localhost:$PORT -CAfile test-ca.crt -quiet -alpn echo -no_ign_eof
+
+  if [ $? -eq 0 ]; then
+    echo "✅ Zilla is reachable."
+    break
+  fi
+
+  sleep 2
+done
 
 OUTPUT=$(
-echo "$INPUT1" | timeout 2 openssl s_client -connect localhost:$PORT -CAfile test-ca.crt -quiet -alpn echo
-echo "$INPUT2" | timeout 2 openssl s_client -connect localhost:$PORT -CAfile test-ca.crt -quiet -alpn echo)
+echo "$INPUT1"; sleep 2 | openssl s_client -connect localhost:$PORT -CAfile test-ca.crt -quiet -alpn echo -no_ign_eof
+echo "$INPUT2"; sleep 2 | openssl s_client -connect localhost:$PORT -CAfile test-ca.crt -quiet -alpn echo -no_ign_eof)
 RESULT=$?
 echo RESULT="$RESULT"
 
@@ -31,9 +41,7 @@ echo OUTPUT="$OUTPUT"
 echo EXPECTED="$EXPECTED"
 echo
 
-# RESULT=124 (timeout) is a valid case, as we timeout openssl command explicity
-
-if [ "$RESULT" -eq 124 ] && [ "$OUTPUT" = "$EXPECTED" ]; then
+if [ "$RESULT" -eq 0 ] && [ "$OUTPUT" = "$EXPECTED" ]; then
   echo ✅
 else
   echo ❌

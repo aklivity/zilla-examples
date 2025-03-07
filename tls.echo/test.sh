@@ -14,7 +14,7 @@ echo EXPECTED="$EXPECTED"
 echo
 
 # WHEN
-OUTPUT=$(echo "$INPUT" | timeout 2 openssl s_client -connect localhost:$PORT -CAfile test-ca.crt -quiet -alpn echo)
+OUTPUT=$(echo "$INPUT"; sleep 2 | openssl s_client -connect localhost:$PORT -CAfile test-ca.crt -quiet -alpn echo -no_ign_eof)
 RESULT=$?
 echo RESULT="$RESULT"
 
@@ -23,9 +23,7 @@ echo OUTPUT="$OUTPUT"
 echo EXPECTED="$EXPECTED"
 echo
 
-# RESULT=124 (timeout) is a valid case, as we timeout openssl command explicity
-
-if [ "$RESULT" -eq 124 ] && [ "$OUTPUT" = "$EXPECTED" ]; then
+if [ "$RESULT" -eq 0 ] && [ "$OUTPUT" = "$EXPECTED" ]; then
   echo ✅
 else
   echo ❌

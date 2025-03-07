@@ -15,6 +15,18 @@ echo
 
 # WHEN
 
+for i in $(seq 1 5); do
+  docker compose -p zilla-mqtt-kafka-proxy exec -T mosquitto-cli \
+      mosquitto_pub --url mqtt://zilla:"$PORT"/zilla --message "Test"
+
+  if [ $? -eq 0 ]; then
+    echo "✅ Zilla is reachable."
+    break
+  fi
+
+  sleep 2
+done
+
 OUTPUT=$(
   docker compose -p zilla-mqtt-kafka-proxy exec -T mosquitto-cli \
     timeout 5s mosquitto_sub --url mqtt://zilla:"$PORT"/zilla &

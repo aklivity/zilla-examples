@@ -5,7 +5,7 @@ EXIT=0
 PORT="7114"
 MESSAGE="Hello, world"
 
-echo "# Testing http.jwt"
+echo "# Testing http.proxy.jwt"
 echo "PORT=$PORT"
 
 # Generate JWT token without echo:stream scope

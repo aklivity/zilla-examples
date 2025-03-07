@@ -1,4 +1,4 @@
-# http.jwt
+# http.proxy.jwt
 
 Listens on http port `7114` and will echo back whatever is sent to the server from an authorized client.
 Listens on https port `7143` and will echo back whatever is sent to the server from an authorized client.

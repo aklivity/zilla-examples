@@ -17,6 +17,11 @@ services:
       - ./http-openapi.yaml:/etc/zilla/specs/http-openapi.yaml
       - ./kafka-asyncapi.yaml:/etc/zilla/specs/kafka-asyncapi.yaml
       - ./etc:/etc/zilla
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./etc
+          target: /etc/zilla
     command: start -v -e
 
   kafka:

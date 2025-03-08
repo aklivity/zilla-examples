@@ -15,6 +15,11 @@ services:
     volumes:
       - ./etc:/etc/zilla
       - ./fanout.proto:/etc/zilla/protos/fanout.proto
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./etc
+          target: /etc/zilla
     command: start -v -e
 
   kafka:

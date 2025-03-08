@@ -15,6 +15,11 @@ services:
     volumes:
       - ./etc:/etc/zilla
       - ./request.proto:/etc/zilla/protos/request.proto
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./etc
+          target: /etc/zilla
     command: start -v -e
 
   kafka:

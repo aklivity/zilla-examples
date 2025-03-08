@@ -18,6 +18,11 @@ services:
     volumes:
       - ./etc:/etc/zilla
       - ./echo.proto:/etc/zilla/protos/echo.proto
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./etc
+          target: /etc/zilla
     command: start -v -e
 
   grpc-echo:

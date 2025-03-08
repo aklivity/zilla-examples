@@ -12,6 +12,11 @@ services:
       test: ["CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/12345"]
     volumes:
       - ./etc:/etc/zilla
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./etc
+          target: /etc/zilla
     command: start -v -e
 
 networks:

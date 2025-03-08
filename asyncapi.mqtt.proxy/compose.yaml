@@ -16,6 +16,11 @@ services:
     volumes:
       - ./etc:/etc/zilla
       - ./mqtt-asyncapi.yaml:/etc/zilla/specs/mqtt-asyncapi.yaml
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./etc
+          target: /etc/zilla
     command: start -v -e
 
   mosquitto:

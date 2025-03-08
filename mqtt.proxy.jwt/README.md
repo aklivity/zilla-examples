@@ -5,9 +5,8 @@ Listens on mqtt port `7183` and `7883` forwarding mqtt publish messages and prox
 ## Requirements
 
 - jq, nc
-- Compose compatible host
+- docker compose
 - mosquitto
-- kafkacat
 
 ## Setup
 

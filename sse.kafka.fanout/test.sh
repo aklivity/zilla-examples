@@ -8,7 +8,7 @@ PORT="7114"
 KAFKA_BOOTSTRAP_SERVER="kafka:29092"
 INPUT='{"id":1,"name":"Hello World!"}'
 EXPECTED='data:{"id":1,"name":"Hello World!"}'
-echo \# Testing sse.kafka.fanout/
+echo \# Testing sse.kafka.fanout
 echo PORT="$PORT"
 echo KAFKA_BOOTSTRAP_SERVER="$KAFKA_BOOTSTRAP_SERVER"
 echo INPUT="$INPUT"
@@ -21,7 +21,7 @@ echo
 docker compose -p zilla-sse-kafka-fanout exec -T kafka \
   kafka-topics.sh --describe --topic events --bootstrap-server $KAFKA_BOOTSTRAP_SERVER
 
-# push response to kafka with kafkacat
+# push messages to sse server
 echo "$INPUT" |
   docker compose -p zilla-sse-kafka-fanout exec -T kafkacat \
     kafkacat -P \

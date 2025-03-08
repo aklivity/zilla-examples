@@ -4,7 +4,7 @@ Listens on http port `7114` and serves files from the Zilla container's `/var/ww
 
 ## Requirements
 
-- Compose compatible host
+- docker compose
 
 ## Setup
 

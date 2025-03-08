@@ -5,7 +5,7 @@ Listens on https port `7151` and uses kafka as proxy to talk to `grpc-echo` on t
 ## Requirements
 
 - jq
-- Compose compatible host
+- docker compose
 - [grpcurl](https://github.com/fullstorydev/grpcurl)
 
 ## Setup
@@ -29,7 +29,8 @@ docker compose up -d
 Echo `{"message":"Hello World"}` message via unary rpc.
 
 ```bash
-grpcurl -plaintext -proto echo.proto  -d '{"message":"Hello World"}' localhost:7151 grpc.examples.echo.Echo.UnaryEcho
+grpcurl -plaintext -proto echo.proto -d '{"message":"Hello World"}' \
+    localhost:7151 grpc.examples.echo.Echo.UnaryEcho
 ```
 
 output:
@@ -98,7 +99,8 @@ output:
 Echo messages via bidirectional streaming rpc.
 
 ```bash
-grpcurl -plaintext -proto echo.proto -d @ localhost:7151 grpc.examples.echo.Echo.BidirectionalStreamingEcho <<EOM
+grpcurl -plaintext -proto echo.proto -d @ \
+    localhost:7151 grpc.examples.echo.Echo.BidirectionalStreamingEcho <<EOM
 {"message":"Hello World, first"}
 {"message":"Hello World, stream"}
 {"message":"Hello World, stream"}

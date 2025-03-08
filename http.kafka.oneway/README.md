@@ -5,7 +5,7 @@ Listens on http port `7114` or https port `7114` and will produce messages to th
 ## Requirements
 
 - jq
-- Compose compatible host
+- docker compose
 
 ## Setup
 

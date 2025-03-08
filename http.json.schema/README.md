@@ -4,7 +4,7 @@ Listens on https port `7114` and will response back whatever is hosted in `nginx
 
 ## Requirements
 
-- Compose compatible host
+- docker compose
 
 ## Setup
 

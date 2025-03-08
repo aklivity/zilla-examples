@@ -5,7 +5,7 @@ Listens on https port `7143` and will echo back whatever is sent to the server f
 
 ## Requirements
 
-- Compose compatible host
+- docker compose
 - jwt-cli
 
 ### Install jwt-cli client

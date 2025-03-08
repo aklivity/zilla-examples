@@ -22,7 +22,7 @@ Open the [Kafka UI](http://localhost:8080/ui/clusters/local/all-topics/my-reques
 
 ```bash
 docker compose -p zilla-http-kafka-proto-oneway exec kafkacat \
-  kafkacat -b kafka:29092 -C -f 'Key:Message | %k:%s\n Headers | %h \n\n' -t my-requests
+    kafkacat -b kafka:29092 -C -f 'Key:Message | %k:%s\n Headers | %h \n\n' -t my-requests
 ```
 
 ## Publish message with correct proto file

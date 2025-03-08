@@ -4,7 +4,7 @@ This example illustrates how to configure the Karapace Schema Registry in Zilla 
 
 ## Requirements
 
-- Compose compatible host
+- docker compose
 
 ## Setup
 

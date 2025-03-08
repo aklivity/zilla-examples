@@ -6,7 +6,7 @@ and `items-responses` topics in Kafka, asynchronously.
 ## Requirements
 
 - jq
-- Compose compatible host\
+- docker compose
 
 ## Setup
 

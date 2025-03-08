@@ -4,7 +4,7 @@ Listens on tls port `23456` and will echo back whatever is sent to the server, b
 
 ## Requirements
 
-- Compose compatible host
+- docker compose
 - openssl
 
 ## Setup

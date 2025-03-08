@@ -4,7 +4,7 @@ Listens on https port `7143` and will response back whatever is hosted in `nginx
 
 ## Requirements
 
-- Compose compatible host
+- docker compose
 - [nghttp2](https://nghttp2.org/)
 
 ### Install nghttp2 client

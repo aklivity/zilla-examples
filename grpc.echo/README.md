@@ -4,7 +4,7 @@ Listens on tcp port `7151` and will echo grpc message sent by client.
 
 ## Requirements
 
-- Compose compatible host
+- docker compose
 - [grpcurl](https://github.com/fullstorydev/grpcurl)
 - [ghz](https://ghz.sh/docs/install)
 
@@ -29,7 +29,8 @@ docker compose up -d
 Echo `{"message":"Hello World"}` message via unary rpc using `grpcurl` command.
 
 ```bash
-grpcurl -plaintext -proto echo.proto  -d '{"message":"Hello World"}' localhost:7151 example.EchoService.EchoUnary
+grpcurl -plaintext -proto echo.proto -d '{"message":"Hello World"}' \
+    localhost:7151 example.EchoService.EchoUnary
 ```
 
 output:
@@ -45,7 +46,8 @@ output:
 Echo messages via bidirectional streaming rpc.
 
 ```bash
-grpcurl -plaintext -proto echo.proto -d @ localhost:7151 example.EchoService.EchoBidiStream
+grpcurl -plaintext -proto echo.proto -d @ \
+    localhost:7151 example.EchoService.EchoBidiStream
 ```
 
 Paste below message.

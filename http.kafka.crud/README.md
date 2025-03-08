@@ -5,7 +5,7 @@ deletes and reads messages in `items-snapshots` log-compacted Kafka topic acting
 
 ## Requirements
 
-- Compose compatible host
+- docker compose
 
 ## Setup
 

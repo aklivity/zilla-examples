@@ -87,13 +87,13 @@ The previous `PUT` request will complete.
 {"greeting":"Hello, world Thu Sep 19 15:30:48 EDT 2024"}%
 ```
 
-Verify the response response via the Kafka UI [items-responses](http://localhost:8080/ui/clusters/local/all-topics/items-responses) topic..
+Verify the response via the Kafka UI [items-responses](http://localhost:8080/ui/clusters/local/all-topics/items-responses) topic.
 
 - or from the command line
 
   ```bash
   docker compose -p zilla-http-kafka-sync exec kafkacat \
-  kafkacat -b kafka:29092 -C -f 'Key:Message | %k:%s\n Headers | %h \n\n' -t items-responses
+    kafkacat -b kafka:29092 -C -f 'Key:Message | %k:%s\n Headers | %h \n\n' -t items-responses
   ```
 
   ```text

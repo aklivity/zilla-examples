@@ -5,7 +5,7 @@ Listens on tcp port `12345` and will echo back whatever is sent to the server.
 ## Requirements
 
 - nc
-- Compose compatible host
+- docker compose
 
 ## Setup
 

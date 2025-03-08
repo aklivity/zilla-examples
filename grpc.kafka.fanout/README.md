@@ -5,7 +5,7 @@ Listens on https port `7151` and fanout messages from `messages` topic in Kafka.
 ## Requirements
 
 - protoc
-- Compose compatible host
+- docker compose
 - [grpcurl](https://github.com/fullstorydev/grpcurl)
 
 ## Setup
@@ -36,7 +36,8 @@ docker compose -p zilla-grpc-kafka-fanout exec kafkacat \
 Stream messages via server streaming rpc.
 
 ```bash
-grpcurl -plaintext -proto fanout.proto -d '' localhost:7151 example.FanoutService.FanoutServerStream
+grpcurl -plaintext -proto fanout.proto -d '' \
+    localhost:7151 example.FanoutService.FanoutServerStream
 ```
 
 output:

@@ -4,7 +4,7 @@ Listens on http port `7114` or https port `7114` and will serve cached responses
 
 ## Requirements
 
-- Compose compatible host
+- docker compose
 
 ## Setup
 

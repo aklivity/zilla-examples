@@ -4,7 +4,7 @@ Listens on ws port `7114` and will echo back whatever is sent to the server, bro
 
 ## Requirements
 
-- Compose compatible host
+- docker compose
 - wscat
 
 ## Setup

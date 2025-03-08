@@ -4,7 +4,7 @@ Listens on http port `7114` or https port `7114` and will stream back whatever i
 
 ## Requirements
 
-- Compose compatible host
+- docker compose
 - sse-cat
 
 ### Install sse-cat client

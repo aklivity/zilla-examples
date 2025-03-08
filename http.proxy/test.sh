@@ -21,7 +21,7 @@ echo EXPECTED="$EXPECTED"
 echo
 
 # WHEN
-OUTPUT=$(docker compose -p zilla-http-proxy exec nghttp nghttp --no-verify https://zilla:$PORT/demo.html)
+OUTPUT=$(docker compose -p zilla-http-proxy exec nghttp nghttp --no-verify https://zilla.examples.dev:$PORT/demo.html)
 RESULT=$?
 echo RESULT="$RESULT"
 

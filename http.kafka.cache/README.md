@@ -84,7 +84,7 @@ Produce an item snapshot to the kafka topic.
 ```bash
 echo "{\"greeting\":\"Hello, world `date`\"}" | docker compose -p zilla-http-kafka-cache exec -T kafkacat \
   kafkacat -P \
-    -b kafka:29092 \
+    -b kafka.examples.dev:29092 \
     -t items-snapshots \
     -k "5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07" \
     -H "content-type=application/json"
@@ -182,7 +182,7 @@ The prefer wait http request returns the new item snapshot with updated `etag` a
 ```bash
 echo "{\"greeting\":\"Hello, world `date`\"}" | docker compose -p zilla-http-kafka-cache exec -T kafkacat \
   kafkacat -P \
-    -b kafka:29092 \
+    -b kafka.examples.dev:29092 \
     -t items-snapshots \
     -k "5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07" \
     -H "content-type=application/json"

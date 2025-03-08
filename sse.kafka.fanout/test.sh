@@ -5,7 +5,7 @@ EXIT=0
 
 # GIVEN
 PORT="7114"
-KAFKA_BOOTSTRAP_SERVER="kafka:29092"
+KAFKA_BOOTSTRAP_SERVER="kafka.examples.dev:29092"
 INPUT='{"id":1,"name":"Hello World!"}'
 EXPECTED='data:{"id":1,"name":"Hello World!"}'
 echo \# Testing sse.kafka.fanout

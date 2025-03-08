@@ -27,7 +27,7 @@ JWT_TOKEN_NO_SCOPE=$(docker run -i --rm \
 # WHEN
 OUTPUT=$(
   docker compose -p zilla-mqtt-proxy-jwt exec -T mosquitto-cli \
-    timeout 5s mosquitto_sub --url mqtt://zilla:"$PORT"/zilla -u "Bearer $JWT_TOKEN_NO_SCOPE" || echo "Unauthorized"
+    timeout 5s mosquitto_sub --url mqtt://zilla.examples.dev:"$PORT"/zilla -u "Bearer $JWT_TOKEN_NO_SCOPE" || echo "Unauthorized"
 )
 
 RESULT=$?
@@ -61,7 +61,7 @@ JWT_TOKEN_WITH_SCOPE=$(docker run -i --rm \
 # WHEN
 OUTPUT=$(
   docker compose -p zilla-mqtt-proxy-jwt exec -T mosquitto-cli \
-    timeout 5s mosquitto_sub --url mqtt://zilla:"$PORT"/zilla -u "Bearer $JWT_TOKEN_WITH_SCOPE" &
+    timeout 5s mosquitto_sub --url mqtt://zilla.examples.dev:"$PORT"/zilla -u "Bearer $JWT_TOKEN_WITH_SCOPE" &
 
   SUB_PID=$!
 
@@ -69,7 +69,7 @@ OUTPUT=$(
 
   # Publish a message
   docker compose -p zilla-mqtt-proxy-jwt exec -T mosquitto-cli \
-    mosquitto_pub --url mqtt://zilla:"$PORT"/zilla --message "$MESSAGE" -u "Bearer $JWT_TOKEN_WITH_SCOPE"
+    mosquitto_pub --url mqtt://zilla.examples.dev:"$PORT"/zilla --message "$MESSAGE" -u "Bearer $JWT_TOKEN_WITH_SCOPE"
 
   wait $SUB_PID
 )

@@ -27,7 +27,7 @@ Connect a subscribing client to mosquitto broker to port `1883`. Using mosquitto
 
 ```bash
 docker compose -p zilla-asyncapi-mqtt-proxy exec -T mosquitto-cli \
-mosquitto_sub --url mqtt://zilla:7183/smartylighting/streetlights/1/0/event/+/lighting/measured --debug
+    mosquitto_sub --url mqtt://zilla.examples.dev:7183/smartylighting/streetlights/1/0/event/+/lighting/measured --debug
 ```
 
 output:
@@ -43,7 +43,7 @@ Subscribed (mid: 1): 0
 
 ```bash
 docker compose -p zilla-asyncapi-mqtt-proxy exec -T mosquitto-cli \
-mosquitto_pub --url mqtt://zilla:7183/smartylighting/streetlights/1/0/event/1/lighting/measured --message '{"id":"1","status":"on"}' --debug
+    mosquitto_pub --url mqtt://zilla.examples.dev:7183/smartylighting/streetlights/1/0/event/1/lighting/measured --message '{"id":"1","status":"on"}' --debug
 ```
 
 output:
@@ -59,7 +59,7 @@ Now attempt to publish an invalid message, with property `stat` instead of `stat
 
 ```bash
 docker compose -p zilla-asyncapi-mqtt-proxy exec -T mosquitto-cli \
-mosquitto_pub --url mqtt://zilla:7183/smartylighting/streetlights/1/0/event/1/lighting/measured --message '{"id":"1","stat":"off"}' --repeat 2 --repeat-delay 3 --debug
+    mosquitto_pub --url mqtt://zilla.examples.dev:7183/smartylighting/streetlights/1/0/event/1/lighting/measured --message '{"id":"1","stat":"off"}' --repeat 2 --repeat-delay 3 --debug
 ```
 
 output:

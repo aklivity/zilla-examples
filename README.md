@@ -25,7 +25,7 @@ Install and run any of the [examples](#examples) using the `startup.sh` script:
 You can specify your own Kafka host and port or the working directory where you want the examples to be downloaded. Existing example directories will `not` be overwritten.
 
 ```bash
-./startup.sh -m -k kafka:9092 -d /tmp example.name
+./startup.sh -m -k kafka.examples.dev:9092 -d /tmp example.name
 ```
 
 Alternatively, you can run this script the same way without cloning the repo.

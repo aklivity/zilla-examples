@@ -36,7 +36,7 @@ info:
 defaultContentType: application/json
 servers:
   plain:
-    host: kafka:29092
+    host: kafka.examples.dev:29092
     protocol: kafka
 channels:
   pets:

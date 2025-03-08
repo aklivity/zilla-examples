@@ -24,7 +24,7 @@ Using `mosquitto-cli` subscribe to the `zilla` topic.
 
 ```bash
 docker compose -p zilla-mqtt-kafka-proxy exec -T mosquitto-cli \
-mosquitto_sub --url mqtt://zilla:7183/zilla --debug
+    mosquitto_sub --url mqtt://zilla.examples.dev:7183/zilla --debug
 ```
 
 output:
@@ -43,7 +43,7 @@ In a separate session, publish a valid message on the `zilla` topic.
 
 ```bash
 docker compose -p zilla-mqtt-kafka-proxy exec -T mosquitto-cli \
-mosquitto_pub --url mqtt://zilla:7183/zilla --message 'Hello Zilla!' --debug
+    mosquitto_pub --url mqtt://zilla.examples.dev:7183/zilla --message 'Hello Zilla!' --debug
 ```
 
 output:

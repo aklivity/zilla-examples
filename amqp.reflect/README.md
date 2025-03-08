@@ -35,7 +35,7 @@ npm install cli-rhea -g
 Connect two receiving clients first, then send `Hello, world` from sending client.
 
 ```bash
-cli-rhea-receiver --address 'zilla' --log-lib 'TRANSPORT_DRV' --log-msgs 'body' --broker localhost:7171 --conn-ssl-trust-store test-ca.crt
+cli-rhea-receiver --address 'zilla' --log-lib 'TRANSPORT_DRV' --log-msgs 'body' --broker localhost:7172
 ```
 
 output:

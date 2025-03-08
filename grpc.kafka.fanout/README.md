@@ -30,7 +30,7 @@ Produce protobuf message to Kafka topic, repeat to produce multiple messages.
 
 ```bash
 docker compose -p zilla-grpc-kafka-fanout exec kafkacat \
-  kafkacat -P -b kafka:29092 -t messages -k -e /tmp/binary.data
+  kafkacat -P -b kafka.examples.dev:29092 -t messages -k -e /tmp/binary.data
 ```
 
 Stream messages via server streaming rpc.
@@ -90,7 +90,7 @@ Then produce another protobuf message to Kafka, repeat to produce multiple messa
 
 ```bash
 docker compose -p zilla-grpc-kafka-fanout exec kafkacat \
-  kafkacat -P -b kafka:29092 -t messages -k -e /tmp/binary.data
+  kafkacat -P -b kafka.examples.dev:29092 -t messages -k -e /tmp/binary.data
 ```
 
 The reliable streaming client will recover and zilla deliver only the new message.

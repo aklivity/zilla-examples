@@ -6,7 +6,7 @@ info:
     name: Aklivity Community License
 servers:
   plain:
-    host: kafka:29092
+    host: kafka.examples.dev:29092
     protocol: kafka
 
 operations:

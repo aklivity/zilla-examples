@@ -54,7 +54,7 @@ Fetch the request message, then send the correlated response via the Kafka UI [i
 
   ```bash
   docker compose -p zilla-http-kafka-sync exec kafkacat \
-    kafkacat -b kafka:29092 -C -f 'Key:Message | %k:%s\n Headers | %h \n\n' -t items-requests
+    kafkacat -b kafka.examples.dev:29092 -C -f 'Key:Message | %k:%s\n Headers | %h \n\n' -t items-requests
   ```
 
   ```text
@@ -69,7 +69,7 @@ Make sure to propagate the request message `zilla:correlation-id` header, found 
 ```bash
 echo "{\"greeting\":\"Hello, world `date`\"}" | docker compose -p zilla-http-kafka-sync exec -T kafkacat \
   kafkacat -P \
-  -b kafka:29092 \
+  -b kafka.examples.dev:29092 \
   -t items-responses \
   -k "6cf7a1d5-3772-49ef-86e7-ba6f2c7d7d0" \
   -H ":status=200" \
@@ -93,7 +93,7 @@ Verify the response via the Kafka UI [items-responses](http://localhost:8080/ui/
 
   ```bash
   docker compose -p zilla-http-kafka-sync exec kafkacat \
-    kafkacat -b kafka:29092 -C -f 'Key:Message | %k:%s\n Headers | %h \n\n' -t items-responses
+    kafkacat -b kafka.examples.dev:29092 -C -f 'Key:Message | %k:%s\n Headers | %h \n\n' -t items-responses
   ```
 
   ```text

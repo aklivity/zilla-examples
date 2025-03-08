@@ -54,7 +54,7 @@ In another terminal window use `kafkacat` to publish to the `events` Kafka topic
 ```bash
 echo '{ "id": 1, "name": "Hello World!"}' | docker compose -p zilla-asyncapi-sse-kafka-proxy exec -T kafkacat \
   kafkacat -P \
-    -b kafka:29092 \
+    -b kafka.examples.dev:29092 \
     -k "1" -t events
 ```
 

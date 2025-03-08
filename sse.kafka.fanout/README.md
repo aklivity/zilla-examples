@@ -41,7 +41,7 @@ In a new terminal send a text payload from the `kafkacat` producer client.
 
 ```bash
 echo '{ "id": 1, "name": "Hello World!"}' | docker compose -p zilla-sse-kafka-fanout exec -T kafkacat \
-  kafkacat -P -b kafka:29092 -t events -k "1"
+  kafkacat -P -b kafka.examples.dev:29092 -t events -k "1"
 ```
 
 The text payload will be the `data:` of the sse message seen in the `text/event-stream` terminal session.

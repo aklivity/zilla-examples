@@ -91,7 +91,7 @@ Verify the request, then send the correlated response via the kafka `items-respo
 
 ```bash
 docker compose -p zilla-http-kafka-async exec kafkacat \
-  kafkacat -C -b kafka:29092 -t items-requests -J -u | jq .
+  kafkacat -C -b kafka.examples.dev:29092 -t items-requests -J -u | jq .
 ```
 
 output:
@@ -137,7 +137,7 @@ Make sure to propagate the request message `zilla:correlation-id` header verbati
 ```bash
 echo "{\"greeting\":\"Hello, world `date`\"}" | docker compose -p zilla-http-kafka-async exec -T kafkacat \
   kafkacat -P \
-    -b kafka:29092 \
+    -b kafka.examples.dev:29092 \
     -t items-responses \
     -k "5cf7a1d5-3772-49ef-86e7-ba6f2c7d7d07" \
     -H ":status=200" \
@@ -158,7 +158,7 @@ Verify the response via the kafka `items-responses` topic.
 
 ```bash
 docker compose -p zilla-http-kafka-async exec kafkacat \
-  kafkacat -C -b kafka:29092 -t items-responses -J -u | jq .
+  kafkacat -C -b kafka.examples.dev:29092 -t items-responses -J -u | jq .
 ```
 
 output:

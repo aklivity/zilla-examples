@@ -163,7 +163,7 @@ Using `kafkacat` and the copied `correlation-id` produce the correlated message:
 ```sh
 echo '{"id":200000,"username":"fehguy","status":"approved","address":[{"street":"437 Lytton","city":"Palo Alto","state":"CA","zip":"94301"}]}' | docker compose -p zilla-asyncapi-http-kafka-proxy exec -T kafkacat \
   kafkacat -P \
-    -b kafka:29092 \
+    -b kafka.examples.dev:29092 \
     -k "c234d09b-2fdf-4538-9d31-27c8e2912d4e" \
     -t petstore-verified-customers \
     -H "zilla:correlation-id={correlationId}"

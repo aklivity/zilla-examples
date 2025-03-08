@@ -25,7 +25,7 @@ Using eclipse-mosquitto subscribe to the `smartylighting/streetlights/1/0/event/
 
 ```bash
 docker compose -p zilla-asyncapi-mqtt-kafka-proxy exec -T mosquitto-cli \
-mosquitto_sub --url mqtt://zilla:7183/smartylighting/streetlights/1/0/event/+/lighting/measured --debug
+    mosquitto_sub --url mqtt://zilla.examples.dev:7183/smartylighting/streetlights/1/0/event/+/lighting/measured --debug
 ```
 
 output:
@@ -44,7 +44,7 @@ In a separate session, publish a valid message on the `smartylighting/streetligh
 
 ```bash
 docker compose -p zilla-asyncapi-mqtt-kafka-proxy exec -T mosquitto-cli \
-mosquitto_pub --url mqtt://zilla:7183/smartylighting/streetlights/1/0/event/1/lighting/measured --message '{"lumens":50,"sentAt":"2024-06-07T12:34:32.000Z"}' --debug
+    mosquitto_pub --url mqtt://zilla.examples.dev:7183/smartylighting/streetlights/1/0/event/1/lighting/measured --message '{"lumens":50,"sentAt":"2024-06-07T12:34:32.000Z"}' --debug
 ```
 
 output:
@@ -60,7 +60,7 @@ Now attempt to publish an invalid message by setting `lumens` property to a nega
 
 ```bash
 docker compose -p zilla-asyncapi-mqtt-kafka-proxy exec -T mosquitto-cli \
-mosquitto_pub --url mqtt://zilla:7183/smartylighting/streetlights/1/0/event/1/lighting/measured -m '{"lumens":-1,"sentAt":"2024-06-07T12:34:32.000Z"}' --repeat 2 --repeat-delay 3 --debug
+    mosquitto_pub --url mqtt://zilla.examples.dev:7183/smartylighting/streetlights/1/0/event/1/lighting/measured -m '{"lumens":-1,"sentAt":"2024-06-07T12:34:32.000Z"}' --repeat 2 --repeat-delay 3 --debug
 ```
 
 output:

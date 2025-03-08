@@ -58,7 +58,7 @@ Use the signed JWT token, without `mqtt:stream` scope, to attempt an authorized 
 
 ```bash
 docker compose -p zilla-mqtt-proxy-jwt exec mosquitto-cli \
-  mosquitto_sub --url mqtt://zilla:7183/zilla --debug -u $MQTT_USERNAME
+  mosquitto_sub --url mqtt://zilla.examples.dev:7183/zilla --debug -u $MQTT_USERNAME
 ```
 
 The request is rejected as expected, and without leaking any information about failed security checks.
@@ -93,7 +93,7 @@ Use the signed JWT token, with `mqtt:stream` scope, to attempt an authorized req
 
 ```bash
 docker compose -p zilla-mqtt-proxy-jwt exec mosquitto-cli \
-  mosquitto_sub --url mqtt://zilla:7183/zilla --debug -u $MQTT_USERNAME
+  mosquitto_sub --url mqtt://zilla.examples.dev:7183/zilla --debug -u $MQTT_USERNAME
 ```
 
 The connection is authorized.
@@ -112,7 +112,7 @@ Use the signed JWT token, with `mqtt:stream` scope, publish a message.
 
 ```bash
 docker compose -p zilla-mqtt-proxy-jwt exec mosquitto-cli \
-  mosquitto_pub --url mqtt://zilla:7183/zilla --message 'Hello, world' --debug -u $MQTT_USERNAME
+  mosquitto_pub --url mqtt://zilla.examples.dev:7183/zilla --message 'Hello, world' --debug -u $MQTT_USERNAME
 ```
 
 output:

@@ -17,7 +17,7 @@ echo
 
 for i in $(seq 1 5); do
   docker compose -p zilla-asyncapi-mqtt-kafka-proxy exec -T mosquitto-cli \
-      mosquitto_pub --url mqtt://zilla:"$PORT"/zilla --message "Test"
+      mosquitto_pub --url mqtt://zilla.examples.dev:"$PORT"/zilla --message "Test"
 
   if [ $? -eq 0 ]; then
     echo "✅ Zilla is reachable."
@@ -29,14 +29,14 @@ done
 
 OUTPUT=$(
   docker compose -p zilla-asyncapi-mqtt-kafka-proxy exec -T mosquitto-cli \
-    timeout 5s mosquitto_sub --url mqtt://zilla:"$PORT"/smartylighting/streetlights/1/0/event/+/lighting/measured &
+    timeout 5s mosquitto_sub --url mqtt://zilla.examples.dev:"$PORT"/smartylighting/streetlights/1/0/event/+/lighting/measured &
 
   SUB_PID=$!
 
   sleep 1
 
   docker compose -p zilla-asyncapi-mqtt-kafka-proxy exec -T mosquitto-cli \
-    mosquitto_pub --url mqtt://zilla:"$PORT"/smartylighting/streetlights/1/0/event/1/lighting/measured --message "$INPUT"
+    mosquitto_pub --url mqtt://zilla.examples.dev:"$PORT"/smartylighting/streetlights/1/0/event/1/lighting/measured --message "$INPUT"
 
   wait $SUB_PID
 )

@@ -5,7 +5,7 @@ EXIT=0
 
 # GIVEN
 PORT="7114"
-KAFKA_BOOTSTRAP_SERVER="kafka:29092"
+KAFKA_BOOTSTRAP_SERVER="kafka.examples.dev:29092"
 ITEM_ID="$(date +%s)"
 GREETING="Hello, World! $ITEM_ID"
 GREETING_DATE="Hello, World! $(date)"

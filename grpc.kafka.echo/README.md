@@ -46,7 +46,7 @@ Verify the message payload, followed by a tombstone to mark the end of the reque
 
 ```bash
 docker compose -p zilla-grpc-kafka-echo exec kafkacat \
-  kafkacat -C -b kafka:29092 -t echo-messages -J -u | jq .
+  kafkacat -C -b kafka.examples.dev:29092 -t echo-messages -J -u | jq .
 ```
 
 output:
@@ -116,7 +116,7 @@ Verify the message payloads, followed by a tombstone to mark the end of each req
 
 ```bash
 docker compose -p zilla-grpc-kafka-echo exec kafkacat \
-  kafkacat -C -b kafka:29092 -t echo-messages -J -u | jq .
+  kafkacat -C -b kafka.examples.dev:29092 -t echo-messages -J -u | jq .
 ```
 
 output:

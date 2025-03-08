@@ -3,6 +3,7 @@ services:
   zilla:
     image: ghcr.io/aklivity/zilla:${ZILLA_VERSION:-latest}
     restart: unless-stopped
+    hostname: zilla.examples.dev
     ports:
       - 7114:7114
     healthcheck:
@@ -11,7 +12,7 @@ services:
       retries: 5
       test: ["CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/7114"]
     environment:
-      KAFKA_BOOTSTRAP_SERVER: kafka:29092
+      KAFKA_BOOTSTRAP_SERVER: kafka.examples.dev:29092
     volumes:
       - ./etc:/etc/zilla
       - ./www:/var/www
@@ -25,10 +26,11 @@ services:
   kafka:
     image: bitnami/kafka:3.5
     restart: unless-stopped
+    hostname: kafka.examples.dev
     ports:
       - 9092:9092
     healthcheck:
-      test: /opt/bitnami/kafka/bin/kafka-cluster.sh cluster-id --bootstrap-server kafka:29092 || exit 1
+      test: /opt/bitnami/kafka/bin/kafka-cluster.sh cluster-id --bootstrap-server kafka.examples.dev:29092 || exit 1
       interval: 1s
       timeout: 60s
       retries: 60
@@ -44,7 +46,7 @@ services:
       KAFKA_CFG_PROCESS_ROLES: "broker,controller"
       KAFKA_CFG_LISTENERS: "CLIENT://:9092,INTERNAL://:29092,CONTROLLER://:9093"
       KAFKA_CFG_INTER_BROKER_LISTENER_NAME: "INTERNAL"
-      KAFKA_CFG_ADVERTISED_LISTENERS: "CLIENT://localhost:9092,INTERNAL://kafka:29092"
+      KAFKA_CFG_ADVERTISED_LISTENERS: "CLIENT://localhost:9092,INTERNAL://kafka.examples.dev:29092"
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
 
   kafka-init:
@@ -62,9 +64,9 @@ services:
     command:
       - |
         echo -e "Creating kafka topic";
-        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic events --config cleanup.policy=compact
+        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka.examples.dev:29092 --create --if-not-exists --topic events --config cleanup.policy=compact
         echo -e "Successfully created the following topics:";
-        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --list;
+        /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka.examples.dev:29092 --list;
 
   kafka-ui:
     image: ghcr.io/kafbat/kafka-ui:v1.0.0
@@ -77,7 +79,7 @@ services:
         restart: true
     environment:
       KAFKA_CLUSTERS_0_NAME: local
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka.examples.dev:29092
 
   kafkacat:
     image: confluentinc/cp-kafkacat:7.1.9

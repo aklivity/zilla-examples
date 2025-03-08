@@ -19,9 +19,9 @@ echo
 
 sleep 5
 
-(docker compose -p zilla-grpc-kafka-fanout exec kafkacat kafkacat -P -b kafka:29092 -t messages -k -e /tmp/binary.data)
+(docker compose -p zilla-grpc-kafka-fanout exec kafkacat kafkacat -P -b kafka.examples.dev:29092 -t messages -k -e /tmp/binary.data)
 
-OUTPUT=$(timeout 3s docker run --network zilla-grpc-kafka-fanout_default --rm -v ./fanout.proto:/fanout.proto fullstorydev/grpcurl -plaintext -proto fanout.proto  -d '' zilla:$PORT example.FanoutService.FanoutServerStream)
+OUTPUT=$(timeout 3s docker run --network zilla-grpc-kafka-fanout_default --rm -v ./fanout.proto:/fanout.proto fullstorydev/grpcurl -plaintext -proto fanout.proto  -d '' zilla.examples.dev:$PORT example.FanoutService.FanoutServerStream)
 RESULT=$?
 echo RESULT="$RESULT"
 # THEN

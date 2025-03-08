@@ -3,6 +3,7 @@ services:
   zilla:
     image: ghcr.io/aklivity/zilla:${ZILLA_VERSION:-latest}
     restart: unless-stopped
+    hostname: zilla.examples.dev
     ports:
       - 12345:12345
     healthcheck:

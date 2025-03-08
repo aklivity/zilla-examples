@@ -13,7 +13,7 @@ services:
     environment:
       KAFKA_BOOTSTRAP_SERVER: kafka:29092
     volumes:
-      - ./zilla.yaml:/etc/zilla/zilla.yaml
+      - ./etc:/etc/zilla
       - ./mqtt-asyncapi.yaml:/etc/zilla/specs/mqtt-asyncapi.yaml
       - ./kafka-asyncapi.yaml:/etc/zilla/specs/kafka-asyncapi.yaml
     command: start -v -e

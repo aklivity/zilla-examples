@@ -13,7 +13,7 @@ services:
     environment:
       KAFKA_BOOTSTRAP_SERVER: kafka:29092
     volumes:
-      - ./zilla.yaml:/etc/zilla/zilla.yaml
+      - ./etc:/etc/zilla
       - ./echo.proto:/etc/zilla/protos/echo.proto
     command: start -v -e
 

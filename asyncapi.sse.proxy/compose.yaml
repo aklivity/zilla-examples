@@ -14,7 +14,7 @@ services:
       SSE_SERVER_HOST: sse-server
       SSE_SERVER_PORT: 8001
     volumes:
-      - ./zilla.yaml:/etc/zilla/zilla.yaml
+      - ./etc:/etc/zilla
       - ./sse-asyncapi.yaml:/etc/zilla/specs/sse-asyncapi.yaml
     command: start -v -e
 

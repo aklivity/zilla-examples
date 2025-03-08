@@ -16,7 +16,7 @@ services:
       SASL_USERNAME: alice
       SASL_PASSWORD: alice-secret
     volumes:
-      - ./zilla.yaml:/etc/zilla/zilla.yaml
+      - ./etc:/etc/zilla
       - ./truststore:/etc/zilla/tls
     command: start -v -e
 

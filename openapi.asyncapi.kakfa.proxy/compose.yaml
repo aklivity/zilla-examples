@@ -16,7 +16,7 @@ services:
     volumes:
       - ./http-openapi.yaml:/etc/zilla/specs/http-openapi.yaml
       - ./kafka-asyncapi.yaml:/etc/zilla/specs/kafka-asyncapi.yaml
-      - ./zilla.yaml:/etc/zilla/zilla.yaml
+      - ./etc:/etc/zilla
     command: start -v -e
 
   kafka:

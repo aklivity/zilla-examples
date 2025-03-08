@@ -13,8 +13,7 @@ services:
     environment:
       KEYSTORE_PASSWORD: generated
     volumes:
-      - ./zilla.yaml:/etc/zilla/zilla.yaml
-      - ./tls:/etc/zilla/tls
+      - ./etc:/etc/zilla
       - ./www:/var/www/
     command: start -v -e
 

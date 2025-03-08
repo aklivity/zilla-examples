@@ -13,7 +13,7 @@ services:
     environment:
       ZILLA_INCUBATOR_ENABLED: "true"
     volumes:
-      - ./zilla.yaml:/etc/zilla/zilla.yaml
+      - ./etc:/etc/zilla
     command: start -v -e
 
 networks:

@@ -12,7 +12,7 @@ services:
       test: ["CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/7114"]
     volumes:
       - ./petstore-openapi.yaml:/etc/zilla/specs/petstore-openapi.yaml
-      - ./zilla.yaml:/etc/zilla/zilla.yaml
+      - ./etc:/etc/zilla
     command: start -v -e
 
   openapi-mock:

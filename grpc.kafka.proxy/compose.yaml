@@ -15,7 +15,7 @@ services:
       ECHO_SERVER_HOST: grpc-echo
       ECHO_SERVER_PORT: 50051
     volumes:
-      - ./zilla.yaml:/etc/zilla/zilla.yaml
+      - ./etc:/etc/zilla
       - ./echo.proto:/etc/zilla/protos/echo.proto
     command: start -v -e
 

@@ -27,7 +27,7 @@ The `/pet` endpoint proxies to Kafka synchronously meaning they will behave like
 Create a pet using the `/pets` endpoint in the implemented API.
 
 ```bash
-curl -v --location --location 'http://localhost:7114/pets' \
+curl -v --location 'http://localhost:7114/pets' \
 --header 'Content-Type: application/json' \
 --data '{
   "name": "Rocky",

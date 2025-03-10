@@ -75,6 +75,8 @@ services:
         condition: none
         max_attempts: 0
     entrypoint: ["/bin/sh", "-c"]
+    environment:
+      KAFKA_BOOTSTRAP_SERVER: kafka.examples.dev:29092
     command:
       - |
         echo -e "Creating kafka topic";

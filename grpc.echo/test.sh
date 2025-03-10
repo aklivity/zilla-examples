@@ -16,7 +16,7 @@ echo EXPECTED="$EXPECTED"
 echo
 
 # WHEN
-OUTPUT=$(docker run --network zilla-grpc-echo_default --rm -v ./etc/protos/echo.proto:/echo.proto fullstorydev/grpcurl -plaintext -proto echo.proto  -d "$INPUT" zilla.examples.dev:$PORT example.EchoService.EchoUnary)
+OUTPUT=$(docker compose run --rm grpcurl -plaintext -proto echo.proto  -d "$INPUT" zilla.examples.dev:$PORT example.EchoService.EchoUnary)
 RESULT=$?
 echo RESULT="$RESULT"
 # THEN
@@ -43,7 +43,7 @@ echo EXPECTED="$EXPECTED"
 echo
 
 # WHEN
-OUTPUT=$(docker run --network zilla-grpc-echo_default --rm -v ./etc/protos/echo.proto:/echo.proto fullstorydev/grpcurl -plaintext -proto echo.proto  -d "$INPUT" zilla.examples.dev:$PORT example.EchoService.EchoBidiStream)
+OUTPUT=$(docker compose run --rm grpcurl -plaintext -proto echo.proto  -d "$INPUT" zilla.examples.dev:$PORT example.EchoService.EchoBidiStream)
 RESULT=$?
 echo RESULT="$RESULT"
 # THEN

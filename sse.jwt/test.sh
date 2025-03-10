@@ -13,10 +13,8 @@ echo "STREAM_URL=$STREAM_URL"
 echo "NC_PORT=$NC_PORT"
 echo "MESSAGE=$MESSAGE"
 
-JWT_TOKEN=$(docker run -i --rm \
-    --name jwt-cli \
-    -v "./private.pem:/private.pem" \
-    bitnami/jwt-cli encode \
+JWT_TOKEN=$(docker compose run --rm \
+    jwt-cli encode \
     --alg "RS256" \
     --kid "example" \
     --iss "https://auth.example.com" \

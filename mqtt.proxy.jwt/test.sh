@@ -12,10 +12,8 @@ echo MESSAGE="$MESSAGE"
 echo
 
 # Generate JWT token without mqtt:stream scope
-JWT_TOKEN_NO_SCOPE=$(docker run -i --rm \
-    --name jwt-cli \
-    -v "./private.pem:/private.pem" \
-    bitnami/jwt-cli encode \
+JWT_TOKEN_NO_SCOPE=$(docker compose run --rm \
+    jwt-cli encode \
     --alg "RS256" \
     --kid "example" \
     --iss "https://auth.example.com" \
@@ -45,10 +43,8 @@ else
 fi
 
 # Generate JWT token with mqtt:stream scope
-JWT_TOKEN_WITH_SCOPE=$(docker run -i --rm \
-    --name jwt-cli \
-    -v "./private.pem:/private.pem" \
-    bitnami/jwt-cli encode \
+JWT_TOKEN_WITH_SCOPE=$(docker compose run --rm \
+    jwt-cli encode \
     --alg "RS256" \
     --kid "example" \
     --iss "https://auth.example.com" \

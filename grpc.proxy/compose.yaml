@@ -36,6 +36,15 @@ services:
       timeout: 5s
       retries: 5
 
+  grpcurl:
+    image: fullstorydev/grpcurl
+    stdin_open: true
+    tty: true
+    profiles:
+      - on-demand
+    volumes:
+      - ./etc/protos/echo.proto:/echo.proto
+
 networks:
   default:
     driver: bridge

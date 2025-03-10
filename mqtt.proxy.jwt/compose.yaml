@@ -39,6 +39,15 @@ services:
     stdin_open: true
     tty: true
 
+  jwt-cli:
+    image: bitnami/jwt-cli
+    stdin_open: true
+    tty: true
+    profiles:
+      - on-demand
+    volumes:
+      - ./private.pem:/private.pem
+
 configs:
   mosquitto.conf:
     content: |

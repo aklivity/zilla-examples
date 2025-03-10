@@ -38,6 +38,15 @@ services:
       test: netstat -an | grep 8001 > /dev/null; if [ 0 != $? ]; then exit 1; fi;
     command: -v -p 8001 -i 7001
 
+  jwt-cli:
+    image: bitnami/jwt-cli
+    stdin_open: true
+    tty: true
+    profiles:
+      - on-demand
+    volumes:
+      - ./private.pem:/private.pem
+
 networks:
   default:
     driver: bridge

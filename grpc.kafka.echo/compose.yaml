@@ -88,6 +88,15 @@ services:
     stdin_open: true
     tty: true
 
+  grpcurl:
+    image: fullstorydev/grpcurl
+    stdin_open: true
+    tty: true
+    profiles:
+      - on-demand
+    volumes:
+      - ./etc/protos/echo.proto:/echo.proto
+
 networks:
   default:
     driver: bridge

@@ -20,6 +20,15 @@ services:
           target: /etc/zilla
     command: start -v -e
 
+  jwt-cli:
+    image: bitnami/jwt-cli
+    stdin_open: true
+    tty: true
+    profiles:
+      - on-demand
+    volumes:
+      - ./private.pem:/private.pem
+
 networks:
   default:
     driver: bridge

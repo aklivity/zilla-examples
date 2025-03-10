@@ -24,6 +24,8 @@ services:
     image: fullstorydev/grpcurl
     stdin_open: true
     tty: true
+    profiles:
+      - on-demand
     volumes:
       - ./etc/protos/echo.proto:/echo.proto
 

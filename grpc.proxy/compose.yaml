@@ -18,7 +18,6 @@ services:
       ECHO_SERVER_PORT: 50051
     volumes:
       - ./etc:/etc/zilla
-      - ./echo.proto:/etc/zilla/protos/echo.proto
     develop:
       watch:
         - action: sync+restart

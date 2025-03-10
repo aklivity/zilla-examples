@@ -16,7 +16,7 @@ echo EXPECTED="$EXPECTED"
 echo
 
 # WHEN
-OUTPUT=$(docker run --network zilla-grpc-proxy_default --rm -v ./echo.proto:/echo.proto fullstorydev/grpcurl -insecure -proto echo.proto  -d "$INPUT" zilla.examples.dev:$PORT grpc.examples.echo.Echo.UnaryEcho)
+OUTPUT=$(docker run --network zilla-grpc-proxy_default --rm -v ./etc/protos/echo.proto:/echo.proto fullstorydev/grpcurl -insecure -proto echo.proto  -d "$INPUT" zilla.examples.dev:$PORT grpc.examples.echo.Echo.UnaryEcho)
 RESULT=$?
 echo RESULT="$RESULT"
 # THEN
@@ -70,7 +70,7 @@ echo EXPECTED="$EXPECTED"
 echo
 
 # WHEN
-OUTPUT=$(docker run --network zilla-grpc-proxy_default --rm -v ./echo.proto:/echo.proto fullstorydev/grpcurl -insecure -proto echo.proto  -d "$INPUT" zilla.examples.dev:$PORT grpc.examples.echo.Echo.ServerStreamingEcho)
+OUTPUT=$(docker run --network zilla-grpc-proxy_default --rm -v ./etc/protos/echo.proto:/echo.proto fullstorydev/grpcurl -insecure -proto echo.proto  -d "$INPUT" zilla.examples.dev:$PORT grpc.examples.echo.Echo.ServerStreamingEcho)
 RESULT=$?
 echo RESULT="$RESULT"
 # THEN

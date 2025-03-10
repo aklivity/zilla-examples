@@ -15,7 +15,6 @@ services:
       KAFKA_BOOTSTRAP_SERVER: kafka.examples.dev:29092
     volumes:
       - ./etc:/etc/zilla
-      - ./echo.proto:/etc/zilla/protos/echo.proto
     develop:
       watch:
         - action: sync+restart

@@ -13,7 +13,6 @@ services:
       test: ["CMD", "bash", "-c", "echo -n '' > /dev/tcp/127.0.0.1/7151"]
     volumes:
       - ./etc:/etc/zilla
-      - ./echo.proto:/etc/zilla/protos/echo.proto
     develop:
       watch:
         - action: sync+restart

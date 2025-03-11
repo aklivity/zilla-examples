@@ -85,6 +85,15 @@ services:
     volumes:
       - ./binary.data:/tmp/binary.data
 
+  grpcurl:
+    image: fullstorydev/grpcurl
+    stdin_open: true
+    tty: true
+    profiles:
+      - on-demand
+    volumes:
+      - ./etc/protos/fanout.proto:/fanout.proto
+
 networks:
   default:
     driver: bridge

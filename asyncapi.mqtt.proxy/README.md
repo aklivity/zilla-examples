@@ -73,5 +73,6 @@ Note that the invalid message is rejected with error code `153` `payload format 
 To remove any resources created by the Docker Compose stack, use:
 
 ```bash
-docker compose down
+docker compose down --remove-orphans
 ```
+

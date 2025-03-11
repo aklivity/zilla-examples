@@ -131,11 +131,5 @@ Note: if you uncheck the `reauthorize` checkbox, then the `challenge` event will
 To remove any resources created by the Docker Compose stack, use:
 
 ```bash
-docker compose down
-```
-
-- alternatively with the docker compose command:
-
-```bash
 docker compose down --remove-orphans
 ```

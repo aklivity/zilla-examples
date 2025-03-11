@@ -30,7 +30,7 @@ docker compose -p zilla-grpc-kafka-fanout exec kafkacat \
 Stream messages via server streaming rpc.
 
 ```bash
-grpcurl -plaintext -proto fanout.proto -d '' \
+grpcurl -plaintext -proto ./etc/protos/fanout.proto -d '' \
     localhost:7151 example.FanoutService.FanoutServerStream
 ```
 
@@ -100,12 +100,6 @@ This output repeats for each message produced to Kafka after the zilla service i
 ## Teardown
 
 To remove any resources created by the Docker Compose stack, use:
-
-```bash
-docker compose down
-```
-
-- alternatively with the docker compose command:
 
 ```bash
 docker compose down --remove-orphans

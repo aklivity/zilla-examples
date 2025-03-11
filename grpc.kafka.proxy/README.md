@@ -23,7 +23,7 @@ docker compose up -d
 Echo `{"message":"Hello World"}` message via unary rpc.
 
 ```bash
-grpcurl -plaintext -proto echo.proto -d '{"message":"Hello World"}' \
+grpcurl -plaintext -proto ./etc/protos/echo.proto -d '{"message":"Hello World"}' \
     localhost:7151 grpc.examples.echo.Echo.UnaryEcho
 ```
 
@@ -93,7 +93,7 @@ output:
 Echo messages via bidirectional streaming rpc.
 
 ```bash
-grpcurl -plaintext -proto echo.proto -d @ \
+grpcurl -plaintext -proto ./etc/protos/echo.proto -d @ \
     localhost:7151 grpc.examples.echo.Echo.BidirectionalStreamingEcho <<EOM
 {"message":"Hello World, first"}
 {"message":"Hello World, stream"}
@@ -225,12 +225,6 @@ output:
 ## Teardown
 
 To remove any resources created by the Docker Compose stack, use:
-
-```bash
-docker compose down
-```
-
-- alternatively with the docker compose command:
 
 ```bash
 docker compose down --remove-orphans

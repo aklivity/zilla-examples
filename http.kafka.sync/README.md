@@ -106,11 +106,5 @@ Verify the response via the Kafka UI [items-responses](http://localhost:8080/ui/
 To remove any resources created by the Docker Compose stack, use:
 
 ```bash
-docker compose down
-```
-
-- alternatively with the docker compose command:
-
-```bash
 docker compose down --remove-orphans
 ```

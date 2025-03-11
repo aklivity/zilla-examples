@@ -21,11 +21,5 @@ curl 'http://localhost:7114/pets' --header 'Accept: application/json'
 To remove any resources created by the Docker Compose stack, use:
 
 ```bash
-docker compose down
-```
-
-- alternatively with the docker compose command:
-
-```bash
 docker compose down --remove-orphans
 ```

@@ -59,6 +59,8 @@ Output:
 
 ## Teardown
 
+To remove any resources created by the Docker Compose stack, use:
+
 ```bash
-docker compose down
+docker compose down --remove-orphans
 ```

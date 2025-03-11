@@ -46,11 +46,5 @@ curl: (18) transfer closed with 37 bytes remaining to read
 To remove any resources created by the Docker Compose stack, use:
 
 ```bash
-docker compose down
-```
-
-- alternatively with the docker compose command:
-
-```bash
 docker compose down --remove-orphans
 ```

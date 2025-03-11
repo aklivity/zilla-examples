@@ -9,13 +9,7 @@ Listens on mqtt port `7183` and will forward mqtt publish messages and proxies s
 
 ## Setup
 
-The `setup.sh` script starts the docker compose stack defined in the [compose.yaml](compose.yaml) file.
-
-```bash
-./setup.sh
-```
-
-- alternatively with the docker compose command:
+To `start` the Docker Compose stack defined in the [compose.yaml](compose.yaml) file, use:
 
 ```bash
 docker compose up -d
@@ -76,8 +70,8 @@ Note that the invalid message is rejected with error code `153` `payload format 
 
 ## Teardown
 
-The `teardown.sh` script stops the compose stack.
+To remove any resources created by the Docker Compose stack, use:
 
 ```bash
-./teardown.sh
+docker compose down
 ```

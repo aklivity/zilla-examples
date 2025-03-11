@@ -14,11 +14,6 @@ services:
     volumes:
       - ./petstore-openapi.yaml:/etc/zilla/specs/petstore-openapi.yaml
       - ./etc:/etc/zilla
-    develop:
-      watch:
-        - action: sync+restart
-          path: ./etc
-          target: /etc/zilla
     command: start -v -e
 
   openapi-mock:

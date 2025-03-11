@@ -17,11 +17,6 @@ services:
       - ./etc:/etc/zilla
       - ./mqtt-asyncapi.yaml:/etc/zilla/specs/mqtt-asyncapi.yaml
       - ./kafka-asyncapi.yaml:/etc/zilla/specs/kafka-asyncapi.yaml
-    develop:
-      watch:
-        - action: sync+restart
-          path: ./etc
-          target: /etc/zilla
     command: start -v -e
 
   kafka:

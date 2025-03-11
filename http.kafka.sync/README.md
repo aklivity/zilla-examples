@@ -103,10 +103,10 @@ Verify the response via the Kafka UI [items-responses](http://localhost:8080/ui/
 
 ## Teardown
 
-The `teardown.sh` script will remove any resources created.
+To remove any resources created by the Docker Compose stack, use:
 
 ```bash
-./teardown.sh
+docker compose down
 ```
 
 - alternatively with the docker compose command:

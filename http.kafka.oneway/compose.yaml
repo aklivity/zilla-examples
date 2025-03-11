@@ -18,11 +18,6 @@ services:
     volumes:
       - ./etc:/etc/zilla
       - ./truststore:/etc/zilla/tls
-    develop:
-      watch:
-        - action: sync+restart
-          path: ./etc
-          target: /etc/zilla
     command: start -v -e
 
   kafka:

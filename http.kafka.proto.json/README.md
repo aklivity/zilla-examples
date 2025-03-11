@@ -4,13 +4,7 @@ This example allows a protobuf object to be sent to a REST endpoint as JSON that
 
 ## Setup
 
-The `setup.sh` script starts the docker compose stack defined in the [compose.yaml](compose.yaml) file.
-
-```bash
-./setup.sh
-```
-
-- alternatively with the docker compose command:
+To `start` the Docker Compose stack defined in the [compose.yaml](compose.yaml) file, use:
 
 ```bash
 docker compose up -d
@@ -66,5 +60,5 @@ Output:
 ## Teardown
 
 ```bash
-./teardown.sh
+docker compose down
 ```

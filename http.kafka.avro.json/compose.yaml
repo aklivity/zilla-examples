@@ -16,11 +16,6 @@ services:
       SCHEMA_REGISTRY_SERVER: http://karapace-registry:8081
     volumes:
       - ./etc:/etc/zilla
-    develop:
-      watch:
-        - action: sync+restart
-          path: ./etc
-          target: /etc/zilla
     command: start -v -e
 
   kafka:

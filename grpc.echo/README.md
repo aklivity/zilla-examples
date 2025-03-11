@@ -10,13 +10,7 @@ Listens on tcp port `7151` and will echo grpc message sent by client.
 
 ## Setup
 
-The `setup.sh` script starts the docker compose stack defined in the [compose.yaml](compose.yaml) file.
-
-```bash
-./setup.sh
-```
-
-- alternatively with the docker compose command:
+To `start` the Docker Compose stack defined in the [compose.yaml](compose.yaml) file, use:
 
 ```bash
 docker compose up -d
@@ -69,10 +63,10 @@ ghz --config bench.json \
 
 ## Teardown
 
-The `teardown.sh` script will remove any resources created.
+To remove any resources created by the Docker Compose stack, use:
 
 ```bash
-./teardown.sh
+docker compose down
 ```
 
 - alternatively with the docker compose command:

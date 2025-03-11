@@ -17,11 +17,6 @@ services:
       KEYSTORE_PASSWORD: generated
     volumes:
       - ./etc:/etc/zilla
-    develop:
-      watch:
-        - action: sync+restart
-          path: ./etc
-          target: /etc/zilla
     command: start -v -e
 
   mosquitto:

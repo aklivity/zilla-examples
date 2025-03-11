@@ -5,15 +5,7 @@ Zilla implements MQTT API defined in AsyncAPI specifications and uses Kafka API 
 
 ## Setup
 
-The `setup.sh` script starts the docker compose stack defined in the [compose.yaml](compose.yaml) file.
-
-- create an MQTT broker at `mqtt://localhost:7183`
-
-```bash
-./setup.sh
-```
-
-- alternatively with the docker compose command:
+To `start` the Docker Compose stack defined in the [compose.yaml](compose.yaml) file, use:
 
 ```bash
 docker compose up -d
@@ -75,8 +67,8 @@ Error: The client is not currently connected.
 
 ## Teardown
 
-The `teardown.sh` script will remove any resources created.
+To remove any resources created by the Docker Compose stack, use:
 
 ```bash
-./teardown.sh
+docker compose down
 ```

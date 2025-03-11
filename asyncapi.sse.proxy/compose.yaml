@@ -17,11 +17,6 @@ services:
     volumes:
       - ./etc:/etc/zilla
       - ./sse-asyncapi.yaml:/etc/zilla/specs/sse-asyncapi.yaml
-    develop:
-      watch:
-        - action: sync+restart
-          path: ./etc
-          target: /etc/zilla
     command: start -v -e
 
   sse-server:

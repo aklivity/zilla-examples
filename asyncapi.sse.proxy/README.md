@@ -9,13 +9,7 @@ Listens on http port `7114` and will stream back whatever is published to `sse_s
 
 ## Setup
 
-The `setup.sh` script starts the docker compose stack defined in the [compose.yaml](compose.yaml) file.
-
-```bash
-./setup.sh
-```
-
-- alternatively with the docker compose command:
+To `start` the Docker Compose stack defined in the [compose.yaml](compose.yaml) file, use:
 
 ```bash
 docker compose up -d
@@ -65,10 +59,10 @@ echo '{ "name": "event name", "data": { "id": 1, "name": "Hello World!" } }' | n
 
 ## Teardown
 
-The `teardown.sh` script will remove any resources created.
+To remove any resources created by the Docker Compose stack, use:
 
 ```bash
-./teardown.sh
+docker compose down
 ```
 
 - alternatively with the docker compose command:

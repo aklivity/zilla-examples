@@ -46,6 +46,7 @@ fi
 
 # TODO remove once fixed
 echo '❌ curl: (52) Empty reply from server. Tested on main. and does not work with described instructions'
+echo 'Refer: https://github.com/aklivity/zilla/issues/1417'
 EXIT=1
 
 exit $EXIT

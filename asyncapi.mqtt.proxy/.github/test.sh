@@ -31,6 +31,7 @@ fi
 
 # TODO remove once fixed
 echo '❌ Tested on main. and does not work with described instructions'
+echo 'Refer: https://github.com/aklivity/zilla/issues/1416'
 EXIT=1
 
 exit $EXIT

@@ -106,12 +106,13 @@ export EXAMPLE_DIR="$WORKDIR/$EXAMPLE_FOLDER"
 TEARDOWN_SCRIPT=""
 cd "$WORKDIR"/"$EXAMPLE_FOLDER"
 
-chmod u+x teardown.sh
-TEARDOWN_SCRIPT="$(pwd)/teardown.sh"
+TEARDOWN_SCRIPT="docker compose -f $WORKDIR/$EXAMPLE_FOLDER/compose.yaml down"
 printf "\n\n"
 echo "==== Starting Zilla $EXAMPLE_FOLDER. Use this script to teardown ===="
 printf '%s\n' "$TEARDOWN_SCRIPT"
-sh setup.sh
+printf "\n\n"
+
+docker compose -f "$WORKDIR"/"$EXAMPLE_FOLDER/compose.yaml" up -d
 
 printf "\n\n"
 echo "==== Check out the README to see how to use this example ==== "

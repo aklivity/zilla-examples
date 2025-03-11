@@ -160,5 +160,5 @@ The resulting base64 modulus is used to configure the `jwt` guard in `zilla.yaml
 To remove any resources created by the Docker Compose stack, use:
 
 ```bash
-docker compose down --remove-orphans
+docker compose down
 ```

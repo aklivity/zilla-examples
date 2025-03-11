@@ -62,5 +62,5 @@ you get `/style.css` response as push promise that nginx is configured with.
 To remove any resources created by the Docker Compose stack, use:
 
 ```bash
-docker compose down --remove-orphans
+docker compose down
 ```

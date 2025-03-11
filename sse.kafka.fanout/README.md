@@ -79,5 +79,5 @@ Additional messages produced to the `events` Kafka topic then arrive at the brow
 To remove any resources created by the Docker Compose stack, use:
 
 ```bash
-docker compose down --remove-orphans
+docker compose down
 ```

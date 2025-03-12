@@ -10,6 +10,8 @@ This repo contains a collection of [example folders](#examples) that can be used
 
 You will need an environment with [Docker][docker-install] installed. Check out our [Postman collections][postman-url] for more ways to interact with an example.
 
+![demo](.assets/demo.gif)
+
 ## Getting Started
 
 Install and run any of the [examples](#examples) using `docker compose`:

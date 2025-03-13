@@ -68,5 +68,3 @@ To remove any resources created by the Docker Compose stack, use:
 ```bash
 docker compose down
 ```
-
-# Dummy change

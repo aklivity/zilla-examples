@@ -23,6 +23,9 @@ jobs:
           omit: |
             ^\.github$
             ^\.assets$
+            
+      - name: Debug output
+        run: echo "all_directories=${{ steps.all-files.outputs.folders_no_base_path }}"
 
   testing:
     strategy:

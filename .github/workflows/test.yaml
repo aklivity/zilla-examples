@@ -32,7 +32,7 @@ jobs:
   testing:
     strategy:
       matrix:
-        dir: ["amqp.reflect","asyncapi.http.kafka.proxy"]
+        dir: [amqp.reflect,asyncapi.http.kafka.proxy,asyncapi.mqtt.kafka.proxy,asyncapi.mqtt.proxy,asyncapi.sse.kafka.proxy,asyncapi.sse.proxy,grpc.echo,grpc.kafka.echo,grpc.kafka.fanout,grpc.kafka.proxy,grpc.proxy,http.filesystem,http.json.schema,http.kafka.async,http.kafka.avro.json,http.kafka.cache,http.kafka.crud,http.kafka.oneway,http.kafka.proto.json,http.kafka.proto.oneway,http.kafka.sync,http.proxy,http.proxy.jwt,mqtt.kafka.proxy,mqtt.proxy.jwt,openapi.asyncapi.kakfa.proxy,openapi.proxy,sse.jwt,sse.kafka.fanout,tcp.echo,tcp.reflect,tls.echo,tls.reflect,ws.echo,ws.reflect]
       fail-fast: false
     needs:
       - get-examples-dirs

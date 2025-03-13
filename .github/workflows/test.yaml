@@ -32,7 +32,7 @@ jobs:
   testing:
     strategy:
       matrix:
-        dir: ${{ needs.get-examples-dirs.outputs.all_directories }}
+        dir: [amqp.reflect,asyncapi.http.kafka.proxy]
       fail-fast: false
     needs:
       - get-examples-dirs

@@ -5,31 +5,27 @@ on:
   workflow_dispatch:
 
 jobs:
-  list-examples-dirs:
+  get-examples-dirs:
     runs-on: ubuntu-latest
     outputs:
-      all_directories: ${{ steps.list-dirs.outputs.folders }}
+      all_directories: ${{ steps.all-files.outputs.folders }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: List all example directories
-        id: list-dirs
+      - name: Get examples dirs
+        id: all-files
         uses: philips-labs/list-folders-action@v1
         with:
           path: .
-          exclude: |
-            .github
-            .assets
 
   testing:
-    if: ${{ needs.list-examples-dirs.outputs.all_directories != '' }}
     strategy:
-      matrix: ${{fromJson(needs.list-examples-dirs.outputs.all_directories)}}
+      matrix: ${{fromJson(needs.get-examples-dirs.outputs.all_directories)}}
       fail-fast: false
     needs:
-      - list-examples-dirs
+      - get-examples-dirs
     uses: ./.github/workflows/reusable_test_runner.yaml
     with:
       example-dir: ${{ matrix.dir }}

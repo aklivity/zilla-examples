@@ -8,7 +8,7 @@ jobs:
   get-examples-dirs:
     runs-on: ubuntu-latest
     outputs:
-      all_directories: ${{ steps.list-dirs.outputs.folders_no_base_path }}
+      all_directories: ${{ steps.set-output.outputs.changed_directories }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -23,6 +23,10 @@ jobs:
             ^\.assets$
           separator: ","
 
+      - name: "Set output in the matrix format"
+        id: set-output
+        run: echo "changed_directories=${{ steps.list-dirs.outputs.folders_no_base_path }}" >> "$GITHUB_OUTPUT"
+
   testing:
     runs-on: ubuntu-latest
     needs: get-examples-dirs
@@ -30,6 +34,8 @@ jobs:
       matrix:
         dir: ${{ fromJson(needs.get-examples-dirs.outputs.all_directories) }}
       fail-fast: false
-    uses: ./.github/workflows/reusable_test_runner.yaml
-    with:
-      example-dir: ${{ matrix.dir }}
+    steps:
+      - name: Run reusable test runner
+        uses: ./.github/workflows/reusable_test_runner.yaml
+        with:
+          example-dir: ${{ matrix.dir }}

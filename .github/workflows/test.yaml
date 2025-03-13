@@ -3,6 +3,16 @@ name: Test Examples
 on:
   pull_request:
   workflow_dispatch:
+    inputs:
+      zilla-image-tag:
+        default: latest
+        description: Zilla Image tag
+        type: string
+
+  workflow_call:
+    inputs:
+      zilla-image-tag:
+        type: string
 
 jobs:
   get-examples-dirs:
@@ -26,9 +36,6 @@ jobs:
             ^\.git$
             ^\.vscode$
 
-      - name: Debug output
-        run: echo "all_directories=${{ steps.all-files.outputs.folders_no_base_path }}"
-
   testing:
     strategy:
       matrix:
@@ -38,7 +45,7 @@ jobs:
       - get-examples-dirs
     runs-on: ubuntu-latest
     env:
-      ZILLA_VERSION: latest
+      ZILLA_VERSION: ${{ inputs.zilla-image-tag }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

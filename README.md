@@ -1,4 +1,4 @@
-# Zilla Examples
+# ⚠️🚧⚠️🚧⚠️ Zilla Examples moved to [zilla/examples](https://github.com/aklivity/zilla/tree/develop/examples) ⚠️🚧⚠️🚧⚠️
 
 [![Slack Community][community-image]][community-join]
 

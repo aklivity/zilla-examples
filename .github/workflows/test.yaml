@@ -24,11 +24,12 @@ jobs:
           separator: ","
 
   testing:
+    runs-on: ubuntu-latest
+    needs: get-examples-dirs
     strategy:
-      matrix: ${{fromJson(needs.get-examples-dirs.outputs.all_directories)}}
+      matrix:
+        dir: ${{ fromJson(needs.get-examples-dirs.outputs.all_directories) }}
       fail-fast: false
-    needs:
-      - get-examples-dirs
     uses: ./.github/workflows/reusable_test_runner.yaml
     with:
       example-dir: ${{ matrix.dir }}

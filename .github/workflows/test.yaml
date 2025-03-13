@@ -18,7 +18,11 @@ jobs:
         id: all-files
         uses: Drafteame/list-folders-action@main
         with:
-          path: .
+          paths: |
+            .
+          omit: |
+            .github/**/*
+            .assets/**/*
 
   testing:
     strategy:

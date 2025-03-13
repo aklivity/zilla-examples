@@ -23,13 +23,15 @@ jobs:
           omit: |
             ^\.github$
             ^\.assets$
-            
+            ^\.git$
+            ^\.vscode$
+
       - name: Debug output
         run: echo "all_directories=${{ steps.all-files.outputs.folders_no_base_path }}"
 
   testing:
     strategy:
-      matrix: ${{fromJson(needs.get-examples-dirs.outputs.all_directories)}}
+      matrix: ${{ needs.get-examples-dirs.outputs.all_directories }}
       fail-fast: false
     needs:
       - get-examples-dirs

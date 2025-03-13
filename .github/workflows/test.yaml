@@ -3,80 +3,32 @@ name: Test Examples
 on:
   pull_request:
   workflow_dispatch:
-    inputs:
-      zilla-image-tag:
-        default: latest
-        description: Zilla Image tag
-        type: string
-
-  workflow_call:
-    inputs:
-      zilla-image-tag:
-        type: string
 
 jobs:
-  testing:
+  get-examples-dirs:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        dir: ${{ fromJson(steps.get-dirs.outputs.all_dirs) }}
-      fail-fast: false
-    env:
-      ZILLA_VERSION: ${{ inputs.zilla-image-tag }}
+    outputs:
+      all_directories: ${{ steps.list-dirs.outputs.folders_no_base_path }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Get all directories (excluding ignored ones)
-        id: get-dirs
-        run: |
-          dirs=$(find . -maxdepth 1 -type d \
-            -not -name ".github" \
-            -not -name ".assets" \
-            -not -name "." \
-            -exec test -n "$(find {} -type f ! -name '*.md' ! -path './.github/*' ! -path './.assets/*' -print -quit)" \; \
-            -exec basename {} \; | jq -R -s -c 'split("\n") | map(select(length > 0))')
-          echo "all_dirs=$dirs" >> "$GITHUB_OUTPUT"
-
-      - name: Checkout specific directory
-        uses: actions/checkout@v4
+      - name: List all example directories
+        id: list-dirs
+        uses: Drafteame/list-folders-action@main
         with:
-          sparse-checkout: ${{ matrix.dir }}
+          paths: .
+          omit: |
+            ^\.github$
+            ^\.assets$
+          separator: ","
 
-      - name: Cache Docker images
-        uses: ScribeMD/docker-cache@0.5.0
-        with:
-          key: docker-${{ runner.os }}-${{ matrix.dir }}-${{ hashFiles(format('{0}/compose.yaml', matrix.dir)) }}
-
-      - name: Start Zilla and wait for it to be healthy
-        working-directory: ${{ matrix.dir }}
-        run: docker compose up -d --wait
-
-      - name: Execute Test
-        if: ${{ hashFiles(format('{0}/.github/test.sh', matrix.dir)) != '' }}
-        working-directory: ${{ matrix.dir }}
-        run: |
-          set -o pipefail
-          ./.github/test.sh | tee $GITHUB_STEP_SUMMARY
-
-      - name: Collect docker logs on failure
-        if: failure()
-        uses: jwalton/gh-docker-logs@v2
-        with:
-          dest: "./logs"
-
-      - name: Tar logs
-        if: failure()
-        run: tar cvzf ./logs.tgz ./logs
-
-      - name: Upload logs to GitHub
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.dir }}_logs.tgz
-          path: ./logs.tgz
-
-      - name: Teardown
-        if: always() && ${{ hashFiles(format('{0}/teardown.sh', matrix.dir)) != '' }}
-        working-directory: ${{ matrix.dir }}
-        run: docker compose down --remove-orphans
+  testing:
+    strategy:
+      matrix: ${{fromJson(needs.get-examples-dirs.outputs.all_directories)}}
+      fail-fast: false
+    needs:
+      - get-examples-dir
+    uses: ./.github/workflows/reusable_test_runner.yaml
+    with:
+      example-dir: ${{ matrix.dir }}

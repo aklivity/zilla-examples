@@ -31,7 +31,7 @@ jobs:
 
   testing:
     strategy:
-      matrix: [ amqp.reflect, asyncapi.http.kafka.proxy ]
+      matrix: [ "amqp.reflect", "asyncapi.http.kafka.proxy" ]
       fail-fast: false
     needs:
       - get-examples-dirs

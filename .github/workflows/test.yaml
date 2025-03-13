@@ -28,7 +28,7 @@ jobs:
       matrix: ${{fromJson(needs.get-examples-dirs.outputs.all_directories)}}
       fail-fast: false
     needs:
-      - get-examples-dir
+      - get-examples-dirs
     uses: ./.github/workflows/reusable_test_runner.yaml
     with:
       example-dir: ${{ matrix.dir }}

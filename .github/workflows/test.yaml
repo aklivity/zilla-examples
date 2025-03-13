@@ -8,7 +8,7 @@ jobs:
   get-examples-dirs:
     runs-on: ubuntu-latest
     outputs:
-      all_directories: ${{ steps.all-files.outputs.folders }}
+      all_directories: ${{ steps.all-files.outputs.folders_no_base_path }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -16,7 +16,7 @@ jobs:
 
       - name: Get examples dirs
         id: all-files
-        uses: philips-labs/list-folders-action@v1
+        uses: Drafteame/list-folders-action@main
         with:
           path: .
 
